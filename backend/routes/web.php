@@ -19,6 +19,6 @@ Route::prefix('api/auth')->middleware(CookieOnly::class)->group(function (): voi
     Route::middleware('auth:sanctum')->group(function (): void {
         Route::get('me', [AuthController::class, 'me'])->name('auth.me');
         Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
-        Route::post('change-password', [AuthController::class, 'password'])->middleware('throttle:customer-login')->name('auth.password');
+        Route::post('change-password', [AuthController::class, 'password'])->middleware('throttle:customer-password')->name('auth.password');
     });
 });

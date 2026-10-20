@@ -46,6 +46,11 @@ class AuthRequest extends FormRequest
     public function after(): array
     {
         return [function (Validator $validator): void {
+            foreach (['password', 'oldPassword', 'newPassword'] as $field) {
+                if (is_string($this->input($field)) && strlen($this->input($field)) > 72) {
+                    $validator->errors()->add($field, 'Password exceeds the supported byte limit.');
+                }
+            }
             if (array_diff(array_keys($this->all()), [...array_keys($this->rules()), '_token']) !== []) {
                 $validator->errors()->add('request', 'Unknown input fields.');
             }

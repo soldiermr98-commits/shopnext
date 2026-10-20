@@ -85,6 +85,10 @@ class AppServiceProvider extends ServiceProvider
                 Limit::perMinute(5)->by('auth-id:'.hash('sha256', $identifier)),
             ];
         });
+        RateLimiter::for('customer-password', fn (Request $request): array => [
+            Limit::perMinute(10)->by('password-ip:'.$request->ip()),
+            Limit::perMinute(5)->by('password-user:'.($request->user()?->getAuthIdentifier() ?? 'guest')),
+        ]);
         RateLimiter::for('customer-otp', function (Request $request): array {
             $phone = $request->input('phone', '');
 

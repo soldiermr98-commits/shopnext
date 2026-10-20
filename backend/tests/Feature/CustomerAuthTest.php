@@ -129,3 +129,27 @@ it('requires current password, clears the initial-change flag and revokes other 
     browserCookies($changed);
     $this->getJson('/api/auth/me')->assertOk();
 });
+
+it('rejects excessive bcrypt byte lengths even when character counts fit', function () {
+    browserCsrf();
+    $this->postJson('/api/auth/login', ['identifier' => '09100000000', 'password' => str_repeat('ا', 37)])->assertUnprocessable()->assertJsonValidationErrors('password');
+});
+
+it('isolates password proof throttles by authenticated identity rather than a shared empty login identifier', function () {
+    $password = bin2hex(random_bytes(16));
+    $first = User::factory()->create(['password' => $password]);
+    $second = User::factory()->create(['password' => $password]);
+    browserCsrf();
+    $login = $this->postJson('/api/auth/login', ['identifier' => $first->phone, 'password' => $password]);
+    $login->assertOk();
+    browserCookies($login);
+    $input = ['oldPassword' => 'wrong', 'newPassword' => bin2hex(random_bytes(16))];
+    for ($i = 0; $i < 5; $i++) {
+        $this->postJson('/api/auth/change-password', $input)->assertUnprocessable();
+    }
+    $this->postJson('/api/auth/change-password', $input)->assertTooManyRequests();
+    $login = $this->postJson('/api/auth/login', ['identifier' => $second->phone, 'password' => $password]);
+    $login->assertOk();
+    browserCookies($login);
+    $this->postJson('/api/auth/change-password', $input)->assertUnprocessable();
+});
