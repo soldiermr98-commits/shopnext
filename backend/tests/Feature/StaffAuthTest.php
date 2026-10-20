@@ -23,6 +23,7 @@ it('uses a local-assets Filament login and no commercial resources', function ()
     $response->assertOk();
     expect($response->getContent())->not->toContain('fonts.bunny.net', 'fonts.googleapis.com', 'ui-avatars.com');
     expect(Filament::getPanel('admin')->getResources())->toBeEmpty();
+    Livewire::test(StaffLogin::class)->assertFormFieldIsHidden('remember');
     expect(is_file(public_path('images/staff-avatar.svg')))->toBeTrue();
 });
 

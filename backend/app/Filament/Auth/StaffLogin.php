@@ -9,8 +9,8 @@ use Filament\Schemas\Components\Component;
 
 final class StaffLogin extends Login
 {
-    protected function getRememberMeFormComponent(): Component
+    protected function getRememberFormComponent(): Component
     {
-        return parent::getRememberMeFormComponent()->hidden()->dehydrated(false);
+        return parent::getRememberFormComponent()->hidden()->dehydrated(false);
     }
 }

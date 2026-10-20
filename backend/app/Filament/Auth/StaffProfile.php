@@ -52,9 +52,9 @@ final class StaffProfile extends EditProfile
 
             return $user;
         });
-        request()->session()->invalidate();
+        session()->invalidate();
         Auth::guard('web')->login($user);
-        request()->session()->regenerateToken();
+        session()->regenerateToken();
 
         return $user;
     }
