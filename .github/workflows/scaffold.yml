@@ -41,7 +41,19 @@ jobs:
           tools: composer:v2
           coverage: none
       - name: Resolve and test official skeleton with actual Composer/MySQL
-        run: bash tools/ci/scaffold-laravel.sh
+        run: |
+          set +e
+          bash tools/ci/scaffold-laravel.sh > /tmp/scaffold-output.log 2>&1
+          result=$?
+          cat /tmp/scaffold-output.log
+          if [ "$result" -ne 0 ]; then
+            python3 - <<'PYERROR'
+          from pathlib import Path
+          text = '\n'.join(Path('/tmp/scaffold-output.log').read_text().splitlines()[-65:])[-10000:]
+          print('::error::' + text.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          PYERROR
+          fi
+          exit "$result"
       - name: Commit only tested scaffold to the fixed session branch
         run: |
           git config user.name 'github-actions[bot]'
