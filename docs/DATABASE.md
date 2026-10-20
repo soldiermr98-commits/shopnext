@@ -90,3 +90,43 @@ Test nullable uniques, multibyte strings, UTC/Toman round trips, dependency orde
 rollback, transaction failure and indexes. Test with direct SQL, not just validation.
 No Pest or MySQL constraints have been executed; current 171 sql.js tests do not
 count toward this acceptance. See [specification](SPEC_FROM_LEGACY.md).
+
+## L1a full-schema mapping — 2026-10-21
+
+The additive `2026_10_21_000002_complete_legacy_schema` migration fills every
+previously missing legacy field. `LEGACY_SCHEMA_MAP.json` explicitly maps all
+**175 declared columns of the14 original tables** to real target columns, including
+renamed password storage and normalized category membership/order/return lines.
+Tests re-read the legacy DDL and check every mapping against the actual database;
+a silently omitted column now fails. Original string IDs have nullable unique
+`legacy_id` columns for a future reviewed import; live keys are unsigned bigint.
+There is NO automatic data/default-account/provider-secret import.
+
+Normalized `order_items` and `return_items` retain immutable JSON snapshots; retained
+return header `items` is an archival snapshot, never the quantity authority. Variant
+lines use a composite product FK; returns use composite owner/order and line/order
+FKs. Financial deletion is RESTRICT. Address/session/pivot cascades are dependent
+only. SKU uniqueness is per products/variants table (separate namespaces); no
+cross-table global SKU promise is made. Categories use parent RESTRICT; cycle
+prevention remains application-level work, not something a self-FK guarantees.
+
+All canonical amounts, including transactions, are integer **Toman**; a SQL CHECK
+rejects RIAL in the old permissive transaction unit enum. Gateway conversion later
+must use a separate explicit Rial boundary, never reinterpret canonical amounts.
+All monetary fields are unsigned and JS-safe capped; rating/percentage/positive
+quantity checks are SQL-enforced. Sensitive details/raw_response/bank_iban fields
+must receive encrypted model casts before any application writes; schema presence
+alone is not an at-rest encryption claim.
+
+Portable choices: InnoDB, utf8mb4_unicode_ci, no JSON defaults/generated JSON indexes,
+no reliance on JSON binary storage or key ordering. Both families reject malformed
+JSON in tests. Indexed text stays within modern InnoDB3072-byte limits (largest
+composite text unique is gateway50 + authority255 =1220 bytes). MySQL8/MariaDB10.6
+and11.4 exercise the same invariants. CHECK removal uses each server's supported
+DDL grammar; no constraint is skipped. Downgrade retains extended return-status
+labels rather than silently rewriting historical statuses; removing tables/data
+requires backup/operator review, not a claim of lossless business rollback.
+
+The preceding L0/initial-slice descriptions are historical. L1a is only verified
+when the commit's entire six-way database/PHP matrix is green; see CI run evidence.
+Auth, model policies, encryption and business operations are separate L1b+ work.
