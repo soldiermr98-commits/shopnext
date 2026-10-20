@@ -45,8 +45,8 @@ it('denies every privileged matrix action to inactive and forced-change staff', 
 it('enforces owner reads without permitting financial mutations', function () {
     $owner = User::factory()->create();
     $other = User::factory()->create();
-    $order = new Order(['user_id' => $owner->id]);
-    $address = new Address(['user_id' => $owner->id]);
+    $order = (new Order)->forceFill(['user_id' => $owner->id]);
+    $address = (new Address)->forceFill(['user_id' => $owner->id]);
     expect(Gate::forUser($owner)->allows('view', $order))->toBeTrue();
     expect(Gate::forUser($other)->allows('view', $order))->toBeFalse();
     expect(Gate::forUser($owner)->allows('updateStatus', $order))->toBeFalse();
