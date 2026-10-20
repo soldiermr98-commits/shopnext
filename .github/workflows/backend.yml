@@ -131,7 +131,14 @@ jobs:
           cat /tmp/pest-result.log
           python3 - <<'PYRESULT'
           from pathlib import Path
-          text = Path('/tmp/pest-result.log').read_text()[-12000:]
-          print(('::notice::' if 'FAIL' not in text else '::error::') + text.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          import re
+          text = Path('/tmp/pest-result.log').read_text()
+          # Check annotation messages are truncated by GitHub; preserve root failures,
+          # omit repetitive stack frames, and split into readable bounded chunks.
+          text = re.sub(r'^#\d+.*(?:\n|$)', '', text, flags=re.M)
+          level = '::notice::' if 'FAIL' not in text else '::error::'
+          for offset in range(0, min(len(text), 60000), 2800):
+              chunk = text[offset:offset+2800]
+              print(level + chunk.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
           PYRESULT
           exit "$result"
