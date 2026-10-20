@@ -9,7 +9,7 @@ export const AuthModal: React.FC = () => {
   const { showToast } = useToastStore();
 
   const [mode, setMode] = useState<'password' | 'otp' | 'register'>('password');
-  const [phone, setPhone] = useState('09123456789');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [otpCode, setOtpCode] = useState('');
