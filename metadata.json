@@ -1,0 +1,6 @@
+{
+  "name": "دیجی‌استایل | فروشگاه آنلاین و پنل مدیریت ویستا",
+  "description": "فروشگاه آنلاین سبک زندگی و مد معاصر با پنل مدیریت پیشرفته، درگاه‌های پرداخت، رهگیری سفارشات و صدور فاکتور رسمی مالیاتی",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
