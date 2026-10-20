@@ -17,11 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        if (! app()->environment(['local', 'testing'])) {
+            throw new \RuntimeException('Development seeders are disabled outside local/testing.');
+        }
 
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => bin2hex(random_bytes(32)),
         ]);
     }
 }
