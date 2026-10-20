@@ -1,5 +1,11 @@
 # Architecture — actual state and approved replacement
 
+> **Current 2026-10-21:** full schema and customer/staff authentication/role policies
+> now exist. Sanctum transport replaces client JWT refresh; Filament has a gated
+> shell/password profile, no resources. See L1_AUTH.md and CI_RESULTS.md for executed
+> six-way CI evidence. Earlier L0-only architecture below is historical. Remaining
+> settings security/operations are still unimplemented; overall L1 remains incomplete.
+
 > **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
 > environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
 > initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not

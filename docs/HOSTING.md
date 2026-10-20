@@ -1,5 +1,11 @@
 # Shared-host deployment contract and runbook
 
+> **Current 2026-10-21:** Laravel/Sanctum/Filament auth now exists and is six-way CI
+> verified; publish local Filament assets with `php artisan filament:assets` and
+> provision first staff privately with `shopnext:provision-admin` (see L1_AUTH.md).
+> deploy-check, scheduler/heartbeat and bounded worker wiring below are STILL PLANS,
+> not implemented commands. Do not deploy this as a complete L1/production shop.
+
 > **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
 > environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
 > initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not

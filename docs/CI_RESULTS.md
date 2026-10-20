@@ -1,7 +1,52 @@
-# L1 verification infrastructure and first schema slice
+# CI evidence — current L1a/L1b slice and historical bootstrap
 
-Date: 2026-10-21. Branch: `arena/c101d8c3-shopnext`.
-**L1 IN PROGRESS; NOT COMPLETE. Launch NO-GO. L2 not started.**
+2026-10-21. **L1a and auth/role/Filament slice green; overall L1 NOT COMPLETE.**
+
+## Latest actual matrix result
+
+Code `531d4e9`, run https://github.com/soldiermr98-commits/shopnext/actions/runs/39506373318:
+all six DB/PHP jobs + frontend successful. **131 Pest tests/728 assertions per DB job.**
+Actual PHP8.2.34/8.3.35 with MySQL8.0.46, MariaDB10.6.28 and MariaDB11.4.13.
+Pint, fresh/down/up migrations, full175-column map, real customer CSRF/session,
+policy matrix and actual Filament components are executed. Frontend7 tests +171
+legacy tests/typecheck/build green. Machine-readable check evidence:
+[verified matrix](ci/l1a-l1b-verified-matrix.json).
+
+| Concern / verified commit | Green run |
+|---|---|
+| DB compatibility `cd5482a` | https://github.com/soldiermr98-commits/shopnext/actions/runs/39502642892 |
+| Full schema `aa8f121` | https://github.com/soldiermr98-commits/shopnext/actions/runs/39503509710 |
+| Actual Sanctum4.3.3 Composer solve | https://github.com/soldiermr98-commits/shopnext/actions/runs/39503712916 |
+| Sanctum lock full matrix `a2885b9` | https://github.com/soldiermr98-commits/shopnext/actions/runs/39503954818 |
+| Customer auth `6a40cb8` | https://github.com/soldiermr98-commits/shopnext/actions/runs/39504843743 |
+| Frontend transport `401a0a2` | https://github.com/soldiermr98-commits/shopnext/actions/runs/39505072417 |
+| Role policies `8a54faf` | https://github.com/soldiermr98-commits/shopnext/actions/runs/39505549833 |
+| Staff profile `cac5784` | https://github.com/soldiermr98-commits/shopnext/actions/runs/39506145383 |
+| Auth byte/limiter boundaries `531d4e9` | https://github.com/soldiermr98-commits/shopnext/actions/runs/39506373318 |
+
+After each concern's commit, full CI was inspected before proceeding. Red runs were
+read and fixed, not ignored: full-schema array parser keys (39503257391); customer
+auth (39504333653/39504555861) found Bearer fallback before middleware priority,
+JSON tests missing withCredentials and an invalid phone fixture; policy fixture
+(39505360069) respected guarded models; staff Livewire session attachment
+(39505905229) fixed with the shared Laravel session manager. All subsequent green
+runs linked above retain the assertions, no skip/continue-on-error.
+
+Sanctum was generated/locked by CI commit6f9c935; GITHUB_TOKEN pushes do not trigger
+push CI, and the sandbox workflow-dispatch API returned403. A no-op verification
+push a2885b9 therefore ran the exact generated code/lock on the full matrix before
+auth implementation. No claim of an unexecuted bot-triggered matrix.
+
+Remaining overall L1: encrypted settings/DTOs, activity logs, full security/upload/
+CORS/headers/proxy perimeter, deploy-check, bounded queue/scheduler/heartbeat widget
+and actual hosting/browser acceptance. 66 role/action cases are policy tests, not
+implemented11 business HTTP routes. See [precise scope](L1_AUTH.md).
+
+## Historical baseline (superseded counts/state)
+
+The sections below preserve the initial bootstrap evidence, including its failed
+runs and initial24-case limitations. Current state above and L1_AUTH.md supersede
+claims below that Sanctum, policies, full mapping or the Filament panel are absent.
 
 ## Real GitHub Actions runs
 

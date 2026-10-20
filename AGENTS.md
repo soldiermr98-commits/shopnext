@@ -1,86 +1,72 @@
-# Agent handoff — Shopnext / Digistyle
+# Shopnext handoff — current 2026-10-21
 
-## CURRENT OVERRIDE — 2026-10-21
-- CI is AVAILABLE, no longer blocked: .github/workflows/backend.yml, PHP8.2/8.3,
-  MySQL8 service, Composer cache/locked install, Pint, migrate:fresh, Pest; frontend
-  frozen Bun/typecheck/tests/build. Baseline green before bootstrapping Laravel.
-- CI-generated official Laravel12 skeleton committed159da40; actual Composer solve
-  selects framework12.70.0, Filament5.10.3, Pest3.8.7, Pint1.30.4. Real composer.lock.
-- Schema slice72f7cc2 green both PHP versions:24 Pest tests/42 assertions, including
-  FK/unique/CHECK/direct-SQL/rollback/migration lifecycle/seeder guards.
-- Native local PHP8.3.31/Pint1.30.4 acquired at /home/user/.cache/shopnext-tools;
-  local formatting/syntax work; still no local Composer/MySQL/pdo_mysql.
-- docs/CI_RESULTS.md supersedes older no-artisan/no-Laravel statements below. L1
-  IN PROGRESS, NOT complete; auth/roles/settings/ops/features still absent. No L2.
-- gh logs download is blocked at redirected results-receiver host; check annotations
-  expose actual Pest output. Read statuses/annotations via GitHub API.
-- One-time scaffold workflow is guarded against overwriting an existing backend;
-  normal verification now fails on missing app/lock, never silently skips Laravel.
-- All work/pushes remain on arena/c101d8c3-shopnext. No providers or real host access.
+## Rules / scope
+- Fixed branch arena/c101d8c3-shopnext only; no new/switch branches.
+- Owner approved L0+L1. Stop before L2; no pricing/checkout/payment/SMS/business
+  Filament resources. Current work: L1a + auth/roles/Filament slice of L1b verified.
+  Overall L1 remains incomplete; NO-GO. User's last message ended at Staff: Filament.
+- Small commits. AFTER EVERY COMMIT push and wait for full CI green BEFORE next
+  concern. Red: read actual failure annotations/logs and fix, don't bypass tests.
+- Read code first, never print secrets. English specifications/Persian conversation.
 
-## Active task / approval boundary
-- Fixed branch `arena/c101d8c3-shopnext`; never switch/create another branch.
-- Owner approved L0 + L1 Laravel migration, superseding old Phase B stop.
-- L0 source separation/docs/static asset preparation implemented; **L1 NOT started
-  as a Laravel application**. Stop before L2; no pricing/checkout/payment/SMS or
-  business Filament resources. Production remains NO-GO.
-- Read code before editing, English specs/Persian user communication, small commits,
-  real tests after changes. Never print secrets or count Node tests as MySQL/Pest.
+## Verified runtime and tests
+- .github/workflows/backend.yml: PHP8.2/8.3 × mysql8.0/mariadb10.6/mariadb11.4; real
+  services/extensions, cache+locked Composer, Pint, fresh migration and Pest. Frontend
+  frozen Bun, typecheck,7 Node tests +171 legacy tests, build. No skip/fail-optional.
+- Code531d4e9 green run39506373318:131 Pest/728 assertions in EACH six-way job.
+  Actual runtimes8.2.34/8.3.35; MySQL8.0.46, MariaDB10.6.28/11.4.13.
+- Actual lock framework12.70.0, Filament5.10.3, Sanctum4.3.3, Pest3.8.7, Pint1.30.4.
+- Local /home/user/.cache/shopnext-tools/{php,pint}: nativePHP8.3.31/Pint1.30.4,
+  syntax/format verified. Still no local Composer/MySQL/pdo_mysql. Tests run in CI.
+- gh run logs redirect blocked outside allowlist. Fetch /actions/runs/ID/jobs and
+  /check-runs/JOB_ID/annotations with gh api. Bounded annotations include full Pest
+  root failures, counts, runtime. Use start_process gh run watch then wait exit.
+- workflow_dispatch API403 from integration; normal git push works. CI-generated
+  lock was verified via a no-op push commit because GITHUB_TOKEN pushes don't start
+  push workflows. Never claim unexecuted automatic CI for bot commits.
 
-## Current layout / commands
-- client/: React/Vite storefront, shared/types.ts; no active React admin routes.
-- legacy/server/: archived Express/sql.js code (index.ts entry); legacy/shared copy.
-- legacy/tests/: 171 isolated Phase A regression cases, random fixture secrets.
-- legacy/client-admin/: archived UI, not compiled/runnable as a separate app.
-- backend/: README only; no artisan/composer.json/lock/vendor/migrations/Pest yet.
-- bun.lock only; Node22.22.3/Bun1.4.3 verified. bun install --frozen-lockfile.
-- npm run dev/build: storefront only. No root start/API backend/Filament yet.
-- npm run typecheck: client + legacy. lint alias is not ESLint/Pint.
-- npm test: 3 local-asset checks + 171 legacy tests. test:legacy selects old suite.
-- Latest build JS533.87kB/gzip136.61, CSS62.59/10.68, HTML2.00/0.88; >500kB warning.
-- No live preview, browser/TLS/RTL/a11y/provider verification has been performed.
+## Source map
+- backend/database/migrations/: ordered full schema; docs/LEGACY_SCHEMA_MAP.json maps
+  every175 legacy column, test re-reads original DDL and asserts actual DB columns.
+- app/Support/{Permissions,Phone}: fixed6-role matrix, phone normalization.
+- app/Policies/: all18 application models explicitly mapped; unknown actions denied,
+  no super_admin universal bypass; initial-change/inactive gates, owner read policies.
+- app/Http/{Controllers/AuthController,Requests/AuthRequest,Middleware/CookieOnly}:
+  actual auth endpoints; role/flags not fillable; global Sanctum token retrieval off.
+- app/Providers/Filament/AdminPanelProvider, app/Filament/: native staff login,
+  password-only profile and gated dashboard. No resources. Local avatar/default
+  bundled font; artisan filament:assets required (CI publishes, generated ignored).
+- app/Console/Commands/ProvisionAdmin: private env-only first admin, transactional
+  nonsecret settings lock, no resets/default passwords, must-change flag.
+- client/src/lib/authFetch.ts: Sanctum CSRF/credentials, one419 retry, no401 refresh;
+  client/tests/auth-transport.test.mjs + offline.test.mjs are7 native Node tests.
+- legacy/: archived Express/sql.js, frozen contracts,171 independent tests; admin
+  reference excluded from active build, not runnable separately. Never deploy.
 
-## L1 blocker / next step
-- System PHP, Composer and MySQL absent; temporary native PHP8.3.31 outside Git at
-  /home/user/.cache/l1-tools/php/php works but lacks pdo_mysql. Cache may not persist.
-- Allowed egress excludes Packagist/getcomposer.org; GitHub release-assets download
-  failed. No resolved Composer lock/vendor or MySQL service. Do not fake those.
-- Need usable PHP8.2/8.3+pdo_mysql, Composer dependency resolution/cache and isolated
-  MySQL/MariaDB test DB (or verified external CI execution). L1 remains incomplete
-  until scaffold/features/actual Pest tests exist. Do not deliver untested claims.
-- Laravel13 requires8.3, incompatible with mandated8.2 floor. Plan Laravel12 PHP^8.2
-  target8.3 + Filament5, subject to actual Composer resolution/platform matrix.
+## Critical invariants / limits
+- Money integer Toman throughout; CHECK rejects RIAL transactions. FK RESTRICT
+  financial history; immutable item snapshots; variants/returns have composite FKs.
+- SKU uniqueness per products/variants table (separate namespaces, not global).
+- Cookie __Host-shopnext_session HttpOnly/Secure/Strict/no Domain; readable XSRF.
+  Web CSRF stack always applies to auth routes; no Bearer or personal token issuance.
+  Test EnforcedCsrf overrides Laravel unit-test bypass. Session config120min idle,
+  not old JWT15min/refresh7days. Password14+chars,<=72bytes, old proof required.
+- Super_admin/admin/manager: dashboard/products/orders/customers; settings/logs only
+  super_admin/admin. content_editor/support/customer denied privileged matrix.
+  Filament admission only active first3 roles; first-login profile allowed, dashboard
+  and privileged models gated until change. Remember-me hidden/non-dehydrated.
+-66 independent POLICY matrix tests, NOT11 implemented business HTTP endpoints.
+  Native staff flood/browser TLS/network/RTL/a11y acceptance UNVERIFIED.
+- Secret model $hidden is NOT encryption. Settings casts/endpoints/masked newValue
+  DTOs, activity logging, security headers/CSP/CORS/proxy/upload perimeter, deploy-check,
+  bounded cron/queue/heartbeat widget STILL PENDING. No L1 completion claim.
+- Shared host target8.3/min8.2, confirmed extensions, real cron; no Redis/persistent
+  workers/Supervisor/Docker/root. CLI vs web PHP/proc_open/SSH/symlink unresolved.
+-23 original remote images NOT mirrored; placeholders explicit. Dynamic media/old
+  localStorage and catalog/account mocks remain. No real provider calls/data import/
+  credentials rotation/deletion. Admin env must be removed after provision.
 
-## Required constraints
-- Shared host: PHP/MySQL/real minute cron. No Redis, persistent workers, Supervisor,
-  Docker/root on deployment host. Database queue; bounded --stop-when-empty
-  --max-time=50 per minute, overlap lock. max-time is not a hard per-job timeout.
-- All required host extensions owner-confirmed (intl/mbstring/pdo_mysql/openssl/
-  ctype/json/tokenizer/xml/fileinfo/zip/curl/gd-or-imagick). SSH and proc_open unknown.
-- Discover full CLI binary via private cron; may differ from web PHP. App private,
-  only public exposed, host-agnostic terminal and no-SSH artifact/cron deployment.
-- Money integer Toman, gateway Rial conversion later. No invented tax/shipping rules.
-- Sanctum session/CSRF replaces legacy JWT/refresh; client transport not ported yet.
-- Six-role policy matrix: super_admin/admin all existing resources; shop_manager
-  dashboard/products/orders/customers, NOT settings/logs; remaining3 denied.
-- Settings encrypted, masked/isSet read DTO, explicit newValue writes, never log/echo.
-- OTP503 until real SMS; env-only bootstrap/no defaults/force password change.
-- MySQL FKs/uniques/checks/indexes, RESTRICT ordered product/customer, dev-only seeds.
-- deploy-check + real scheduler heartbeat + Filament shell widget required in L1.
-
-## Local assets / known limits
-- Vazirmatn and Material Symbols vendored, licenses/hash provenance in client/assets.
-- 23 original remote image URLs inventoried but NOT mirrored; active source uses
-  explicit local SVG placeholder (including former avatars/banners). Do not claim
-  photography preserved. Need licensed owner-approved local replacements.
-- Future API media/old persisted cart URLs still need same-origin validation.
-- Legacy financial/state/persistence flaws and mock business panels remain; no
-  Laravel launch, migration, providers, credential rotation or owner-data deletion.
-
-## References / precedence
-- docs/SPEC_FROM_LEGACY.md: full L1 contract + all29 audit findings as required tests.
-- docs/HOSTING.md: constraints/deploy/no-SSH/private cron/offline/deploy-check plan.
-- docs/ARCHITECTURE.md, DATABASE.md, SECURITY.md: actual vs target, ER, security.
-- docs/L0_RESULTS.md, CHANGELOG.md: executed evidence vs outstanding work.
-- *_LEGACY.md, AUDIT_REPORT.md, SECURITY_FOUNDATION.md: historical evidence. Old
-  server/src/test paths map into legacy/client; old approval wording is superseded.
+## References
+README.md and backend/README.md current; docs/L1_AUTH.md, CI_RESULTS.md,
+LEGACY_SCHEMA_MAP.json, DATABASE.md, HOSTING.md, SPEC_FROM_LEGACY.md.
+Older audit/Phase A/L0 evidence retained but path/stack/approval claims historical.

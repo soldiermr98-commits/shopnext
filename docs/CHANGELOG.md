@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-10-21 — L1a + auth/role/Filament slice, six-way CI
+
+- MySQL8 + MariaDB10.6/11.4 × PHP8.2/8.3, identical integrity tests/rollback.
+- Full14-table/175-column explicit mapping, missing legacy fields, canonical Toman,
+  composite owner/variant/return FKs, normalized lines, portable CHECK/JSON/utf8mb4.
+- Actual Sanctum4.3.3 solve; cookie-only auth/real CSRF/rate limits/password proof,
+  revoked sessions, frontend transport +4 tests (now7 Node cases total).
+- All18 application models default-deny policies, independent66-case6-role matrix.
+- Native Filament staff login/password-only profile and gated dashboard, env-only
+  first-admin provisioning/no resets; forced current-password rotation/no remember.
+- Code531d4e9 passes131 Pest/728 assertions on all6 jobs; frontend/legacy green.
+  Red failures read/fixed, retained in [CI evidence](CI_RESULTS.md).
+- Overall L1 still incomplete: settings security/perimeter/logging/operations/host
+  acceptance pending. No L2 pricing/payment/SMS/checkout/business resources.
+
 ## 2026-10-21 — Real CI, Composer-resolved Laravel skeleton and constrained schema
 
 - Green current-repo baseline on frontend and PHP8.2/8.3/MySQL8 before scaffolding.

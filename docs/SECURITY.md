@@ -1,53 +1,30 @@
-# Security status and replacement requirements
+# Security status — 2026-10-21
 
-> **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
-> environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
-> initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not
-> complete. Older statements below that no Laravel app exists describe the L0
-> checkpoint only. See [current CI evidence](CI_RESULTS.md).
+**L1a/auth slice verified; overall L1 incomplete. NO-GO.**
+[Current auth contract](L1_AUTH.md) · [Real CI evidence](CI_RESULTS.md) ·
+[Full replacement acceptance](SPEC_FROM_LEGACY.md).
 
-2026-10-20. **NO-GO. L1 has not been implemented/tested.**
-The [Phase A security contract](SECURITY_FOUNDATION.md) describes the archived Node
-code only. Its successful tests must not be attributed to the future Laravel app.
-The complete replacement acceptance is in [SPEC_FROM_LEGACY](SPEC_FROM_LEGACY.md).
+Verified: Sanctum cookie-only stateful SPA auth, real CSRF enforcement in tests,
+Secure/HttpOnly/Strict host-only session, no Bearer/JWT/demo/token issuance,
+password proof/rotation/byte bounds/session revocation, forced initial administrator
+change, input validation and distributed-compatible rate limits (DB cache tested).
+Six-role default-deny server policies cover every application model; independent
+66-case legacy role/action policy matrix, owner checks and inactive/must-change gates.
+Staff authenticate through actual Filament login/profile components; no business
+resources. Administrator bootstrap only from private env, guarded and no reset.
 
-Required L1: Sanctum stateful cookie+CSRF (not old JWT refresh), Secure/HttpOnly
-session, explicitly tested SameSite, session regeneration/revocation, password
-hashing/current-password proof/forced initial change, no bootstrap defaults or
-role mass assignment. XSRF cookie is intentionally readable; auth cookie is not.
-Reject unauthenticated protected API reads 401, wrong role 403, invalid stateful
-CSRF mutations 419. Test those separately with valid CSRF in permission tests.
+Pending / not certified: encrypted settings/newValue/masked DTOs, admin activity
+logging, explicit security headers/CSP/CORS/proxy/upload/body perimeter, operational
+deploy checks/cron/queue/heartbeat, actual host/browser/TLS/RTL/a11y acceptance. A
+model's hidden field does NOT encrypt stored values. Original legal/invoice/payment
+claims and non-auth demo panels are not trusted functionality. No production/provider
+credentials were used or rotated; inherited legacy accounts/data were not imported.
 
-Preserve all six roles and Phase A resource matrix. shop_manager cannot read/write
-settings or logs; content_editor/support/customer cannot use existing admin actions.
-Every model has default-deny policies; UI/navigation visibility never authorizes.
-FormRequests on every implemented route, bounded bodies/pagination/uploads, strict
-nested fields and safe errors; exact credentialed CORS whitelist, trusted proxies,
-security headers/CSP tested with self-hosted assets. Uploads are content/MIME/size
-validated, randomly named, non-executable and path-authorized. No public diagnostics
-or migration runner. Cache/session/limit state survives PHP request boundaries.
+The archived Node Phase A contract differs from Sanctum and is not the new backend.
+Passing171 legacy tests is not Laravel coverage. The new131-case Pest suite is a
+foundation, not financial correctness, provider certification or all deferred HTTP
+business action tests. Preserve APP_KEY securely; no public diagnostics or migration
+runner. Never publish env/password/session/provider/PII payloads in reports or logs.
 
-Settings encrypted with protected APP_KEY, safe DTO allowlist, only masked/isSet
-reads and explicit newValue writes, omitted secrets preserved, masks rejected;
-no decrypted model serialization/request logging. Log admin actor/action/object/time
-with redacted field names; never passwords/tokens/provider credentials/PII bodies.
-Back up the key separately and test decryption/restore; no implicit key rotation.
-
-OTP remains 503 until approved real SMS (still validate/throttle). No fake payment,
-provider call, SMS transport or domain resources in L1. Existing checkout/client
-prices/COD/wallet/state machine remain unsafe and must not be deployed. Original
-photo hotlinks removed from active source; dynamic API/localStorage media validation
-and browser network checks are still outstanding. Legal/invoice/review/SEO prototype
-claims remain unverified and must not be advertised as real capabilities.
-
-Required verification: isolated MySQL/Pest constraints/auth/policy/CSRF/secrecy/limits/
-password/upload/log tests, source/bundle secret review without printing values,
-platform/PHP8.2/8.3 checks, actual browser/TLS/host acceptance. Header unit tests
-are not a browser/XSS certification. No real credentials, provider requests or
-production database were used for current verification; legacy tests create random
-fixture secrets and disposable local databases. Historical provider-looking strings
-were not rotated or declared harmless. Never reset existing owner data implicitly.
-
-Reporting: share minimal redacted reproduction through the repository owner's
-private contact channel; do not open public issues containing tokens, env, payment
-payloads or customer data. Preserve evidence without publishing secret values.
+Security reports should go privately to the repository owner, with minimal redacted
+reproduction, not public issues containing tokens, env or customer/payment data.

@@ -1,28 +1,22 @@
-# Laravel backend — L1 in progress, NOT production ready
+# Laravel12 backend — L1a/auth slice verified, overall L1 incomplete
 
-Official Laravel 12 skeleton was generated and tested in GitHub Actions, not in
-the restricted local sandbox. Actual Composer solver on PHP 8.2 selected:
+Real Composer lock: framework12.70.0, Filament5.10.3, Sanctum4.3.3, Pest3.8.7,
+Pint1.30.4. Platform PHP8.2.0; target8.3. The6-job PHP8.2/8.3 × MySQL8/MariaDB10.6/
+11.4 matrix passes131 Pest tests/728 assertions, Pint and fresh/down/up migrations.
 
-- Laravel framework **v12.70.0**
-- Filament **v5.10.3** (resolved automatically, not preselected from constraints)
-- Pest **v3.8.7**, Pint **v1.30.4**
+Implemented: full14-table/175-column mapping and normalized relations, model
+policies/independent6-role matrix, customer Sanctum HttpOnly/Secure/Strict cookies
+and enforced CSRF, OTP503/limits, password/session lifecycle; staff Filament login,
+password-only profile and gated dashboard; guarded env-only admin provisioning.
+No business resources. Actual CI links/limitations: ../docs/CI_RESULTS.md and
+../docs/L1_AUTH.md. Schema mapping: ../docs/LEGACY_SCHEMA_MAP.json.
 
-Committed `composer.lock`, platform PHP8.2.0, strict PHP source, default migrations,
-Pest bootstrap and a MySQL-specific runtime assertion are present. Bootstrap run:
-https://github.com/soldiermr98-commits/shopnext/actions/runs/39500721877
-It ran actual Composer resolution, platform checks, migrate:fresh, Pint and Pest
-on PHP8.2/MySQL8. The separate matrix workflow must verify every subsequent commit
-on PHP8.2 and8.3. No Laravel result is inferred from the171 legacy tests.
+Build/deploy must publish local assets with `php artisan filament:assets`; generated
+files are ignored, never a runtime CDN. Private env/key, HTTPS, database sessions,
+file/database cache required. First admin: `shopnext:provision-admin` reads private
+ADMIN_* config, never default passwords/CLI arguments; initial rotation mandatory.
 
-Initial constrained domain tables and 24 Pest tests/42 assertions now pass on both
-PHP8.2/8.3 with MySQL8. See ../docs/CI_RESULTS.md for exact coverage/limitations.
-
-**Not implemented:** complete field mapping/models, Sanctum/CSRF/frontend
-transport, admin bootstrap/password gate, six-role policies, encrypted settings,
-security/upload perimeter, Filament panel/heartbeat, bounded queue/scheduler and
-deploy-check. No business resources/pricing/checkout/payment/SMS are authorized.
-The installed Filament package is NOT an operational admin panel.
-
-Target shared host: PHP8.3 minimum8.2, MySQL, minute cron/database queue, no Redis,
-Supervisor/Docker/root/persistent workers. See ../docs/HOSTING.md and
-../docs/SPEC_FROM_LEGACY.md. Do not run skeleton demo seeders on production.
+NOT implemented: settings encryption/write-only DTOs, complete security/header/CORS/
+upload perimeter, activity logs, deploy-check, bounded scheduler/queue/heartbeat.
+Browser/TLS/host acceptance UNVERIFIED. No pricing/payment/SMS/checkout services.
+Do not deploy as a complete shop; do not seed demo users on production.
