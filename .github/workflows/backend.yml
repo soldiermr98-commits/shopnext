@@ -33,27 +33,35 @@ jobs:
       - run: npm run build
 
   backend:
-    name: PHP ${{ matrix.php }} / MySQL 8
+    name: PHP ${{ matrix.php }} / ${{ matrix.db.image }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
         php: ['8.2', '8.3']
+        db:
+          - {image: 'mysql:8.0', series: '8.0.', family: mysql}
+          - {image: 'mariadb:10.6', series: '10.6.', family: mariadb}
+          - {image: 'mariadb:11.4', series: '11.4.', family: mariadb}
     services:
       mysql:
-        image: mysql:8.0
+        image: ${{ matrix.db.image }}
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+          MYSQL_ROOT_HOST: '%'
           MYSQL_DATABASE: shopnext_ci_test
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping --silent"
+          --health-cmd="mariadb-admin ping --silent || mysqladmin ping --silent"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=12
     env:
+      CI_DB_SERIES: ${{ matrix.db.series }}
+      CI_DB_FAMILY: ${{ matrix.db.family }}
       APP_ENV: testing
       APP_DEBUG: 'false'
       DB_CONNECTION: mysql
@@ -73,11 +81,11 @@ jobs:
           extensions: intl, mbstring, pdo_mysql, gd, zip, curl, bcmath
           tools: composer:v2
           coverage: none
-      - name: Verify actual PHP extensions and MySQL connection
+      - name: Verify actual PHP extensions and selected database
         run: |
           php --version
           composer --version
-          php -r 'foreach (["intl","mbstring","pdo_mysql","gd","zip","curl","bcmath"] as $ext) { if (!extension_loaded($ext)) { fwrite(STDERR, "Missing extension: $ext\n"); exit(1); } } $db = new PDO("mysql:host=127.0.0.1;port=3306;dbname=shopnext_ci_test", "root", ""); echo "MySQL ", $db->query("select version()")->fetchColumn(), PHP_EOL;'
+          php -r 'foreach (["intl","mbstring","pdo_mysql","gd","zip","curl","bcmath"] as $ext) { if (!extension_loaded($ext)) { fwrite(STDERR, "Missing extension: $ext\n"); exit(1); } } $db = new PDO("mysql:host=127.0.0.1;port=3306;dbname=shopnext_ci_test", "root", ""); echo "::notice::PHP ", PHP_VERSION, "; DB ", $db->query("select version()")->fetchColumn(), PHP_EOL;'
       - name: Require committed Laravel application and lock
         run: |
           test -f backend/composer.json
@@ -108,13 +116,13 @@ jobs:
       - name: Pint
         working-directory: backend
         run: vendor/bin/pint --test
-      - name: Migrate dedicated MySQL test database
+      - name: Migrate dedicated test database
         working-directory: backend
         run: |
           test "$APP_ENV" = testing
           test "$DB_DATABASE" = shopnext_ci_test
           php artisan migrate:fresh --force --no-interaction
-      - name: Pest on MySQL (not SQLite)
+      - name: Pest on selected real database (not SQLite)
         working-directory: backend
         run: |
           set +e
