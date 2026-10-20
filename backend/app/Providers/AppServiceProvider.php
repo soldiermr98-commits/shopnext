@@ -4,9 +4,37 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\ActivityLog;
+use App\Models\Address;
+use App\Models\Banner;
+use App\Models\BlogPost;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\CategoryProduct;
+use App\Models\Coupon;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\ReturnItem;
+use App\Models\ReturnRequest;
+use App\Models\SchedulerHeartbeat;
+use App\Models\Setting;
+use App\Models\Transaction;
+use App\Models\User;
+use App\Policies\ActivityLogPolicy;
+use App\Policies\AddressPolicy;
+use App\Policies\FoundationPolicy;
+use App\Policies\OrderPolicy;
+use App\Policies\ProductPolicy;
+use App\Policies\ProductVariantPolicy;
+use App\Policies\SettingPolicy;
+use App\Policies\UserPolicy;
+use App\Support\Permissions;
 use App\Support\Phone;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
@@ -26,6 +54,25 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::define('dashboard', fn (User $user): bool => Permissions::allows($user, 'dashboard'));
+        Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Address::class, AddressPolicy::class);
+        Gate::policy(Category::class, FoundationPolicy::class);
+        Gate::policy(Brand::class, FoundationPolicy::class);
+        Gate::policy(Product::class, ProductPolicy::class);
+        Gate::policy(ProductVariant::class, ProductVariantPolicy::class);
+        Gate::policy(Order::class, OrderPolicy::class);
+        Gate::policy(OrderItem::class, FoundationPolicy::class);
+        Gate::policy(Coupon::class, FoundationPolicy::class);
+        Gate::policy(BlogPost::class, FoundationPolicy::class);
+        Gate::policy(Banner::class, FoundationPolicy::class);
+        Gate::policy(ActivityLog::class, ActivityLogPolicy::class);
+        Gate::policy(Setting::class, SettingPolicy::class);
+        Gate::policy(Transaction::class, FoundationPolicy::class);
+        Gate::policy(ReturnRequest::class, FoundationPolicy::class);
+        Gate::policy(ReturnItem::class, FoundationPolicy::class);
+        Gate::policy(SchedulerHeartbeat::class, FoundationPolicy::class);
+        Gate::policy(CategoryProduct::class, FoundationPolicy::class);
         Sanctum::getAccessTokenFromRequestUsing(static fn (Request $request): ?string => null);
         RateLimiter::for('customer-login', function (Request $request): array {
             $identifier = $request->input('identifier', $request->input('phone', ''));

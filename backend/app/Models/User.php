@@ -12,6 +12,8 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    protected $attributes = ['role' => 'customer', 'is_active' => true, 'must_change_password' => false];
+
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
@@ -35,6 +37,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'national_code',
     ];
 
     /**
