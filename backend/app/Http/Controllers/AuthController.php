@@ -24,16 +24,16 @@ final class AuthController extends Controller
         $valid = Hash::check($data['password'], $user?->password ?? self::DUMMY_HASH);
         abort_unless($valid && $user?->is_active && $user?->role === 'customer', 401, 'Invalid credentials.');
         Auth::guard('web')->login($user);
-        $request->session()->regenerate();
+        $request->session()->regenerate(true);
 
         return $this->identity($user);
     }
 
     public function register(AuthRequest $request): JsonResponse
     {
-        $user = User::create($request->validated()); // role/flags are not fillable or accepted input.
+        $user = User::create($request->validated())->refresh(); // role/flags are not fillable or accepted input.
         Auth::guard('web')->login($user);
-        $request->session()->regenerate();
+        $request->session()->regenerate(true);
 
         return $this->identity($user)->setStatusCode(201);
     }

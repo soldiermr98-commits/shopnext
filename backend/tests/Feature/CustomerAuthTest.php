@@ -17,6 +17,7 @@ beforeEach(function () {
     config(['session.driver' => 'database', 'cache.default' => 'database']);
     $this->app->bind(ValidateCsrfToken::class, EnforcedCsrf::class);
     $this->withServerVariables(['HTTPS' => 'on']);
+    $this->withCredentials();
 });
 
 function browserCookies(TestResponse $response): void
@@ -73,7 +74,7 @@ it('logs a customer in with secure cookies, rotates session, reads identity then
 
 it('normalizes phone registration and rejects privilege injection', function () {
     browserCsrf();
-    $data = ['name' => 'مشتری', 'phone' => '+۹۸۹۱۰۰۰۰۰۰۰۰۱', 'password' => bin2hex(random_bytes(16))];
+    $data = ['name' => 'مشتری', 'phone' => '+۹۸۹۱۰۰۰۰۰۰۰۱', 'password' => bin2hex(random_bytes(16))];
     $this->postJson('/api/auth/register', [...$data, 'role' => 'super_admin'])->assertUnprocessable();
     $response = $this->postJson('/api/auth/register', $data);
     $response->assertCreated()->assertJsonPath('user.role', 'customer')->assertJsonPath('user.phone', '09100000001');

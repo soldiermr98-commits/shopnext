@@ -9,6 +9,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Sanctum::getAccessTokenFromRequestUsing(static fn (Request $request): ?string => null);
         RateLimiter::for('customer-login', function (Request $request): array {
             $identifier = $request->input('identifier', $request->input('phone', ''));
             $identifier = is_string($identifier) ? Phone::normalize(mb_strtolower($identifier)) : 'invalid';
