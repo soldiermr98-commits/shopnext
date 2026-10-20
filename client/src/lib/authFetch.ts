@@ -18,7 +18,8 @@ async function initializeCsrf(force = false): Promise<void> {
 export async function authFetch(url: string, init: RequestInit = {}): Promise<Response> {
   // Parse browser URL normalization too: slash+backslash/control characters can
   // become a protocol-relative URL even when a literal // check would pass.
-  if (!url.startsWith('/') || new URL(url, 'https://same-origin.invalid').origin !== 'https://same-origin.invalid') {
+  const origin = globalThis.location?.origin || 'https://same-origin.invalid';
+  if (!url.startsWith('/') || /^\/[\/\\\s]/u.test(url) || new URL(url, origin).origin !== origin) {
     throw new Error('Only same-origin relative API paths are supported.');
   }
   const unsafe = !['GET', 'HEAD', 'OPTIONS'].includes((init.method || 'GET').toUpperCase());
