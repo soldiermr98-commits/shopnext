@@ -43,5 +43,7 @@ test('failed CSRF bootstrap sends no mutation and external URLs are rejected',as
  await assert.rejects(authFetch('/api/auth/login',{method:'POST'}),/CSRF/);
  await assert.rejects(authFetch('https://external.invalid/api',{method:'POST'}),/same-origin/);
  await assert.rejects(authFetch('//external.invalid/api'),/same-origin/);
+ await assert.rejects(authFetch(String.raw`/\external.invalid/api`),/same-origin/);
+ await assert.rejects(authFetch('/\t/external.invalid/api'),/same-origin/);
  assert.deepEqual(calls,['/sanctum/csrf-cookie']);
 });
