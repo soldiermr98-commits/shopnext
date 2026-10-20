@@ -1,5 +1,23 @@
 # Agent handoff — Shopnext / Digistyle
 
+## CURRENT OVERRIDE — 2026-10-21
+- CI is AVAILABLE, no longer blocked: .github/workflows/backend.yml, PHP8.2/8.3,
+  MySQL8 service, Composer cache/locked install, Pint, migrate:fresh, Pest; frontend
+  frozen Bun/typecheck/tests/build. Baseline green before bootstrapping Laravel.
+- CI-generated official Laravel12 skeleton committed159da40; actual Composer solve
+  selects framework12.70.0, Filament5.10.3, Pest3.8.7, Pint1.30.4. Real composer.lock.
+- Schema slice72f7cc2 green both PHP versions:24 Pest tests/42 assertions, including
+  FK/unique/CHECK/direct-SQL/rollback/migration lifecycle/seeder guards.
+- Native local PHP8.3.31/Pint1.30.4 acquired at /home/user/.cache/shopnext-tools;
+  local formatting/syntax work; still no local Composer/MySQL/pdo_mysql.
+- docs/CI_RESULTS.md supersedes older no-artisan/no-Laravel statements below. L1
+  IN PROGRESS, NOT complete; auth/roles/settings/ops/features still absent. No L2.
+- gh logs download is blocked at redirected results-receiver host; check annotations
+  expose actual Pest output. Read statuses/annotations via GitHub API.
+- One-time scaffold workflow is guarded against overwriting an existing backend;
+  normal verification now fails on missing app/lock, never silently skips Laravel.
+- All work/pushes remain on arena/c101d8c3-shopnext. No providers or real host access.
+
 ## Active task / approval boundary
 - Fixed branch `arena/c101d8c3-shopnext`; never switch/create another branch.
 - Owner approved L0 + L1 Laravel migration, superseding old Phase B stop.

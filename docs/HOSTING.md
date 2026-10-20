@@ -1,5 +1,11 @@
 # Shared-host deployment contract and runbook
 
+> **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
+> environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
+> initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not
+> complete. Older statements below that no Laravel app exists describe the L0
+> checkpoint only. See [current CI evidence](CI_RESULTS.md).
+
 2026-10-20 — **Plan only until L1 is implemented and verified.** No `artisan`,
 `deploy-check`, migrations, queue worker or Filament dashboard exists yet. Commands
 below describe the required future release, not commands runnable in this checkout.

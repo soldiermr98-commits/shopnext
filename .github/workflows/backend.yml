@@ -78,34 +78,20 @@ jobs:
           php --version
           composer --version
           php -r 'foreach (["intl","mbstring","pdo_mysql","gd","zip","curl","bcmath"] as $ext) { if (!extension_loaded($ext)) { fwrite(STDERR, "Missing extension: $ext\n"); exit(1); } } $db = new PDO("mysql:host=127.0.0.1;port=3306;dbname=shopnext_ci_test", "root", ""); echo "MySQL ", $db->query("select version()")->fetchColumn(), PHP_EOL;'
-      - name: Determine application state without hiding a partial scaffold
-        id: app
-        shell: bash
+      - name: Require committed Laravel application and lock
         run: |
-          if [[ -f backend/composer.json ]]; then
-            test -f backend/composer.lock
-            test -f backend/artisan
-            echo 'ready=true' >> "$GITHUB_OUTPUT"
-          else
-            test ! -f backend/artisan
-            test ! -f backend/composer.lock
-            echo 'ready=false' >> "$GITHUB_OUTPUT"
-            echo '::warning::L0 only: PHP/MySQL runtime verified. Laravel/Pint/Pest/migrations NOT EXECUTED (UNVERIFIED).'
-            echo '### L0 baseline only — Laravel UNVERIFIED' >> "$GITHUB_STEP_SUMMARY"
-            echo 'PHP/MySQL runtime check only. No application exists; Pint, Pest and migrations are NOT EXECUTED. This is not L1 completion.' >> "$GITHUB_STEP_SUMMARY"
-          fi
+          test -f backend/composer.json
+          test -f backend/composer.lock
+          test -f backend/artisan
       - name: Composer cache directory
-        if: steps.app.outputs.ready == 'true'
         id: cache
         run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
-        if: steps.app.outputs.ready == 'true'
         with:
           path: ${{ steps.cache.outputs.dir }}
           key: composer-${{ runner.os }}-${{ matrix.php }}-${{ hashFiles('backend/composer.lock') }}
           restore-keys: composer-${{ runner.os }}-${{ matrix.php }}-
       - name: Install committed Composer lock
-        if: steps.app.outputs.ready == 'true'
         working-directory: backend
         run: |
           composer validate --strict
@@ -114,25 +100,21 @@ jobs:
           cp .env.example .env
           php artisan key:generate --force --no-interaction
       - name: Report resolved versions
-        if: steps.app.outputs.ready == 'true'
         working-directory: backend
         run: |
           composer show --locked laravel/framework
           composer show --locked filament/filament
           composer show --locked pestphp/pest
       - name: Pint
-        if: steps.app.outputs.ready == 'true'
         working-directory: backend
         run: vendor/bin/pint --test
       - name: Migrate dedicated MySQL test database
-        if: steps.app.outputs.ready == 'true'
         working-directory: backend
         run: |
           test "$APP_ENV" = testing
           test "$DB_DATABASE" = shopnext_ci_test
           php artisan migrate:fresh --force --no-interaction
       - name: Pest on MySQL (not SQLite)
-        if: steps.app.outputs.ready == 'true'
         working-directory: backend
         run: |
           set +e

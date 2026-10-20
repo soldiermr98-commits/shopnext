@@ -1,5 +1,10 @@
 # Shopnext / Digistyle — Laravel migration
 
+> **2026-10-21:** CI baseline and actual Laravel12 skeleton/MySQL schema slices are
+> green on PHP8.2 AND8.3. Composer selected Filament5.10.3; 24 Pest tests/42
+> assertions pass. L1 remains incomplete; older L0-only descriptions below are
+> historical. Read [current CI evidence and remaining work](docs/CI_RESULTS.md).
+
 Persian RTL React/Vite storefront retained from the Stitch prototype. The owner
 approved replacing Node/Express/sql.js with Laravel/MySQL + Filament on ordinary
 PHP shared hosting. **Launch: NO-GO. L2 is NOT approved.**

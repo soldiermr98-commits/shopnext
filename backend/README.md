@@ -14,7 +14,10 @@ It ran actual Composer resolution, platform checks, migrate:fresh, Pint and Pest
 on PHP8.2/MySQL8. The separate matrix workflow must verify every subsequent commit
 on PHP8.2 and8.3. No Laravel result is inferred from the171 legacy tests.
 
-**Not implemented:** corrected domain migrations/models, Sanctum/CSRF/frontend
+Initial constrained domain tables and 24 Pest tests/42 assertions now pass on both
+PHP8.2/8.3 with MySQL8. See ../docs/CI_RESULTS.md for exact coverage/limitations.
+
+**Not implemented:** complete field mapping/models, Sanctum/CSRF/frontend
 transport, admin bootstrap/password gate, six-role policies, encrypted settings,
 security/upload perimeter, Filament panel/heartbeat, bounded queue/scheduler and
 deploy-check. No business resources/pricing/checkout/payment/SMS are authorized.

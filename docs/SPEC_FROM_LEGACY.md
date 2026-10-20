@@ -1,5 +1,11 @@
 # Replacement contract derived from legacy
 
+> **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
+> environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
+> initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not
+> complete. Older statements below that no Laravel app exists describe the L0
+> checkpoint only. See [current CI evidence](CI_RESULTS.md).
+
 Date: 2026-10-20. **Specification, not implemented Laravel behavior.**
 L0 layout/archive exists; L1 runtime is blocked (see `backend/README.md`). L2 is
 not approved. Launch remains **NO-GO**. English terms describe required behavior,

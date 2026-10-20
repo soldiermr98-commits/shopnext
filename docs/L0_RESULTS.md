@@ -1,5 +1,11 @@
 # L0 execution evidence — 2026-10-20
 
+> **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
+> environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
+> initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not
+> complete. Older statements below that no Laravel app exists describe the L0
+> checkpoint only. See [current CI evidence](CI_RESULTS.md).
+
 Branch: `arena/c101d8c3-shopnext`. **L1 NOT implemented; launch NO-GO.**
 This is a redacted summary of real commands, not a Laravel test report.
 

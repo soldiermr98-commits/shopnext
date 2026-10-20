@@ -1,5 +1,11 @@
 # Database contract — target ER, not migrated schema
 
+> **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
+> environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
+> initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not
+> complete. Older statements below that no Laravel app exists describe the L0
+> checkpoint only. See [current CI evidence](CI_RESULTS.md).
+
 2026-10-20. **No Laravel migrations or MySQL database have been created/tested yet.**
 Exact historical 14-table/175-column inventory is preserved in
 [DATABASE_LEGACY](DATABASE_LEGACY.md). Phase A additionally introduced auth_sessions;

@@ -1,5 +1,11 @@
 # Security status and replacement requirements
 
+> **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
+> environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
+> initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not
+> complete. Older statements below that no Laravel app exists describe the L0
+> checkpoint only. See [current CI evidence](CI_RESULTS.md).
+
 2026-10-20. **NO-GO. L1 has not been implemented/tested.**
 The [Phase A security contract](SECURITY_FOUNDATION.md) describes the archived Node
 code only. Its successful tests must not be attributed to the future Laravel app.
