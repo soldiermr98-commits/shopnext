@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Filament\Auth\StaffLoginResponse;
 use App\Models\ActivityLog;
 use App\Models\Address;
 use App\Models\Banner;
@@ -32,6 +33,7 @@ use App\Policies\SettingPolicy;
 use App\Policies\UserPolicy;
 use App\Support\Permissions;
 use App\Support\Phone;
+use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -46,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(LoginResponse::class, StaffLoginResponse::class);
     }
 
     /**

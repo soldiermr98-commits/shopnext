@@ -107,6 +107,7 @@ jobs:
           composer check-platform-reqs
           cp .env.example .env
           php artisan key:generate --force --no-interaction
+          php artisan filament:assets --no-interaction
       - name: Report resolved versions
         working-directory: backend
         run: |
