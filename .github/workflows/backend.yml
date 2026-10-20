@@ -113,6 +113,13 @@ jobs:
           composer check-platform-reqs
           cp .env.example .env
           php artisan key:generate --force --no-interaction
+      - name: Report resolved versions
+        if: steps.app.outputs.ready == 'true'
+        working-directory: backend
+        run: |
+          composer show --locked laravel/framework
+          composer show --locked filament/filament
+          composer show --locked pestphp/pest
       - name: Pint
         if: steps.app.outputs.ready == 'true'
         working-directory: backend
@@ -127,4 +134,14 @@ jobs:
       - name: Pest on MySQL (not SQLite)
         if: steps.app.outputs.ready == 'true'
         working-directory: backend
-        run: vendor/bin/pest --ci
+        run: |
+          set +e
+          vendor/bin/pest --ci --colors=never > /tmp/pest-result.log 2>&1
+          result=$?
+          cat /tmp/pest-result.log
+          python3 - <<'PYRESULT'
+          from pathlib import Path
+          text = Path('/tmp/pest-result.log').read_text()[-12000:]
+          print(('::notice::' if 'FAIL' not in text else '::error::') + text.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          PYRESULT
+          exit "$result"
