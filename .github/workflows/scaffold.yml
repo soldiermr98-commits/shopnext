@@ -1,0 +1,52 @@
+name: One-time verified Laravel scaffold
+on:
+  push:
+    branches: [arena/c101d8c3-shopnext]
+permissions:
+  contents: read
+jobs:
+  scaffold:
+    if: contains(github.event.head_commit.message, '[bootstrap-laravel]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: shopnext_ci_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s --health-timeout=5s --health-retries=12
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '3306'
+      DB_DATABASE: shopnext_ci_test
+      DB_USERNAME: root
+      DB_PASSWORD: ''
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: intl, mbstring, pdo_mysql, gd, zip, curl, bcmath
+          tools: composer:v2
+          coverage: none
+      - name: Resolve and test official skeleton with actual Composer/MySQL
+        run: bash tools/ci/scaffold-laravel.sh
+      - name: Commit only tested scaffold to the fixed session branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add backend docs/ci/composer-resolve.json
+          git diff --cached --check
+          git commit -m 'build: add Composer-resolved and MySQL-tested Laravel 12 skeleton'
+          git push origin HEAD:arena/c101d8c3-shopnext
