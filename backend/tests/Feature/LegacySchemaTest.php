@@ -22,7 +22,7 @@ it('maps every one of the 175 declared legacy columns across all 14 tables', fun
         }
         $table = $match[1];
         $tables[] = $table;
-        $columns = array_map(fn (string $line) => preg_split('/\s+/', trim($line))[0], array_filter(explode("\n", $match[2]), fn (string $line) => trim($line) !== ''));
+        $columns = array_map(fn (string $line) => preg_split('/\s+/', trim($line))[0], array_values(array_filter(explode("\n", $match[2]), fn (string $line) => trim($line) !== '')));
         expect(array_keys($map[$table]))->toBe($columns);
         foreach ($columns as $column) {
             $count++;
