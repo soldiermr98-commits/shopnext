@@ -4,7 +4,7 @@ set -euo pipefail
 [[ "$GITHUB_REF" == refs/heads/arena/c101d8c3-shopnext ]]
 [[ ! -f backend/composer.json ]]
 [[ "$APP_ENV" == testing && "$DB_DATABASE" == shopnext_ci_test ]]
-composer create-project laravel/laravel /tmp/shopnext-laravel '^12.0' --no-install --no-interaction
+composer create-project laravel/laravel /tmp/shopnext-laravel '^12.0' --no-install --no-scripts --no-interaction
 cp -a /tmp/shopnext-laravel/. backend/
 cd backend
 composer config platform.php 8.2.0
