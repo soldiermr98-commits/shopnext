@@ -1,0 +1,64 @@
+name: Resolve and verify Sanctum dependency
+on:
+  push:
+    branches: [arena/c101d8c3-shopnext]
+permissions:
+  contents: read
+jobs:
+  resolve:
+    if: contains(github.event.head_commit.message, '[resolve-sanctum]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: shopnext_ci_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s --health-timeout=5s --health-retries=12
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '3306'
+      DB_DATABASE: shopnext_ci_test
+      DB_USERNAME: root
+      DB_PASSWORD: ''
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: intl, mbstring, pdo_mysql, gd, zip, curl, bcmath
+          tools: composer:v2
+          coverage: none
+      - name: Resolve Sanctum and run existing regression suite
+        run: |
+          set +e
+          bash tools/ci/add-sanctum.sh > /tmp/scaffold-output.log 2>&1
+          result=$?
+          cat /tmp/scaffold-output.log
+          if [ "$result" -ne 0 ]; then
+            python3 - <<'PYERROR'
+          from pathlib import Path
+          text = '\n'.join(Path('/tmp/scaffold-output.log').read_text().splitlines()[-65:])[-10000:]
+          print('::error::' + text.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          PYERROR
+          fi
+          exit "$result"
+      - name: Commit only verified dependency lock to the fixed branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add backend/composer.json backend/composer.lock docs/ci/sanctum-resolve.json
+          git diff --cached --check
+          git commit -m 'build(auth): lock Sanctum after actual PHP 8.2 Composer solve and tests'
+          git push origin HEAD:arena/c101d8c3-shopnext
