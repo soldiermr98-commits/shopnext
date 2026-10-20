@@ -1,100 +1,78 @@
-# دیجی‌استایل (ویستا استایل) | پلتفرم فروشگاه آنلاین و پنل مدیریت
+# Shopnext / Digistyle — Laravel migration
 
-پلتفرم پیشرفته تجارت الکترونیک پوشاک و سبک زندگی معاصر ایران با بازآفرینی دقیق و پیکسل‌به‌پیکسل طرح‌های Google Stitch، پشتیبانی کامل از زبان فارسی (RTL)، تقویم جلالی (شمسی)، واحد پولی تومان، پایگاه داده SQLite با قابلیت تعویض به PostgreSQL/MySQL، معماری تمیز و پنل مدیریت جامع.
+Persian RTL React/Vite storefront retained from the Stitch prototype. The owner
+approved replacing Node/Express/sql.js with Laravel/MySQL + Filament on ordinary
+PHP shared hosting. **Launch: NO-GO. L2 is NOT approved.**
 
----
+## Actual status (2026-10-20)
 
-## 🚀 ویژگی‌های کلیدی
+- **L0 preparation implemented:** history-preserving source relocation, legacy
+  regression suite retained, React admin archived, specifications/hosting runbook.
+- Storefront fonts/icons are self-hosted with upstream licenses and hash checks.
+  Original external photographs could not be downloaded; 23 distinct embedded
+  image URLs now use a visibly labeled local placeholder. This is **not** a full
+  image mirror or pixel-identical photography. See [asset inventory](client/assets/README.md).
+- **L1 NOT implemented / runtime blocked.** `backend/` contains a status README,
+  not a Laravel application. No Composer lock/vendor, MySQL migrations, Sanctum,
+  Filament, scheduler, deploy-check or Pest execution exists yet.
+- Sandbox has no system PHP/Composer/MySQL. A temporary PHP 8.3.31 was obtained
+  outside Git but lacks pdo_mysql; dependency resolution is blocked by network
+  access restrictions. Do not substitute legacy/SQLite results for MySQL tests.
 
-### ۱. ویترین فروشگاه (Storefront)
-- **صفحه اصلی (Home):** نوار اطلاعیه‌ها، هدر چسبان با جستجوی زنده (Live Search)، مگامنو، اسلایدر هیرو، دسته‌بندی‌های دایره‌ای، حراج‌های شگفت‌انگیز با تایمر شمارش معکوس جلالی، پرفروش‌ترین‌ها، بنرهای تبلیغاتی چندستونه، نوار برندهای رسمی (هاکوپیان، چرم مشهد، درسا، مارال چرم)، نمادهای اعتماد و الکترونیک، مجله سبک زندگی و عضویت خبرنامه.
-- **کاتالوگ و فروشگاه (Shop):** فیلترهای پیشرفته بر اساس دسته‌بندی درختی، برند، محدوده قیمت، موجودی انبار، مرتب‌سازی چندگانه، برچسب‌های تخفیف و کشوی فیلتر ریسپانسیو موبایل.
-- **جزئیات محصول (Product Details):** گالری تصاویر با زوم و انتخاب تصاویر بندانگشتی، انتخاب رنگ با دایره‌های Swatch، انتخاب سایز استاندارد با راهنمای سایز، برچسب اصالت کالا و ارسال رایگان، جدول مشخصات فنی، نقد و بررسی تخصصی، دیدگاه‌های خریداران با امتیازدهی ستاره‌ای، کالاهای مرتبط و نوار خرید چسبان موبایل.
-- **سبد خرید (Cart):** نوار پیشرفت ۳ مرحله‌ای تسویه حساب، محاسبه آنی سود خریدار از تخفیف‌ها، نوار پیشرفت ارسال رایگان (آستانه ۴ میلیون تومان)، اعمال و اعتبارسنجی زنده کدهای تخفیف، و کشوی شناور مینی‌کارت (Mini Cart Drawer).
-- **تسویه حساب و پرداخت (Checkout):** انتخاب استان و شهر با منوی آبشاری هوشمند شهرهای ایران، آدرس پستی دقیق و کد پستی ۱۰ رقمی، انتخاب روش ارسال (پست پیشتاز سراسری و پیک اکسپرس فوری با انتخاب بازه زمانی)، انتخاب درگاه‌های پرداخت شاپرک (سامان کیش SEP، زرین‌پال، پرداخت در محل COD، کیف پول نقدی دیجی‌استایل) و چک‌باکس صدور فاکتور رسمی مالیاتی با کد اقتصادی.
-- **فاکتور رسمی و پیگیری سفارش (Order Success & Tracking):** انیمیشن جشن خرید (Confetti)، کد رهگیری ۲۴ رقمی، شماره بارنامه پستی، پیش‌نمایش چاپی فاکتور رسمی فروش مطابق با استانداردهای دارایی، و رهگیری عمومی سفارش با تایم‌لاین مراحل انبار و پست.
-- **پروفایل کاربری (My Account):** نمایش نشان عضویت طلایی (Gold Member)، موجودی کیف پول و امتیازات دیجی‌کلاب، تاریخچه سفارش‌ها، مدیریت آدرس‌ها و تغییر کلمه عبور.
-- **احراز هویت دومرحله‌ای و OTP:** ورود با شماره موبایل و کد پیامکی یکبارمصرف (OTP آزمایشی: ۱۲۳۴۵)، ورود با کلمه عبور، و ثبت‌نام سریع.
-- **مجله مد دیجی‌استایل (Blog):** آرشیو مقالات سبک زندگی، زمان مطالعه و مطالعه کامل مقاله.
-- **صفحات استاتیک:** درباره ما، تماس با ما، پرسش‌های متداول (FAQ) و قوانین بازگشت کالا.
+## Layout
 
-### ۲. پنل مدیریت حرفه‌ای (/admin)
-- **داشبورد تحلیلی (Dashboard):** کارت‌های شاخص‌های کلیدی عملکرد (KPIs) شامل فروش روز/هفته/ماه، تعداد سفارش‌ها، مشتریان جدید، میانگین ارزش سفارش (AOV)، نرخ تبدیل و هشدارهای کمبود موجودی؛ نمودار خطی روند فروش بر اساس تقویم شمسی با کتابخانه Recharts؛ لیست سریع آخرین سفارش‌ها و کالاهای نیازمند تامین انبار.
-- **مدیریت محصولات (Products):** جدول کامل کالاها با فیلتر دسته‌بندی و جستجو، افزودن کالای جدید، ویرایش، حذف، کنترل موجودی انبار، قیمت‌گذاری حراج و کد SKU.
-- **مدیریت سفارش‌ها (Orders):** فیلتر وضعیت‌های سفارش (در انتظار پرداخت، پردازش انبار، تحویل به پست، تحویل نهایی، لغو شده)، ثبت کد رهگیری و بارنامه پستی و شبیه‌سازی ارسال خودکار پیامک اطلاع‌رسانی به خریدار.
-- **باشگاه مشتریان (Customers):** مشاهده مشخصات، شماره تماس، کد ملی، سطح عضویت طلایی و موجودی کیف پول.
-- **تنظیمات سامانه و درگاه‌ها (Settings):** تنظیم اطلاعات حقوقی شرکت (کد اقتصادی، شناسه ملی، شماره ثبت)، هزینه‌های حمل‌ونقل و سقف ارسال رایگان، کلیدهای محرمانه ماسک‌شده درگاه‌های پرداخت (••••1234) جهت امنیت حداکثری و ارائه‌دهندگان پیامکی.
-- **گزارش وقایع و لاگ‌ها (Audit Logs):** ثبت دقیق کلیه تغییرات، لاگین‌ها و عملیات مدیران همراه با تاریخ جلالی و آدرس IP.
+```text
+client/                React/Vite storefront + shared legacy client contracts
+backend/               reserved Laravel destination (not scaffolded)
+legacy/server/         archived Express/sql.js backend, entry index.ts
+legacy/tests/          isolated 171-case Phase A regression suite
+legacy/client-admin/   former React admin source; not a runnable build target
+legacy/shared/         frozen legacy TypeScript contracts
+client/assets/         font provenance and original external-image inventory
+client/public/         local fonts/licenses and explicit image placeholder
+```
 
----
-
-## 🛠 مشخصات فنی و معماری
-
-- **فرانت‌اند:** React 19 + TypeScript + Vite + Tailwind CSS v4 + React Router v7 + Zustand + Recharts + Canvas Confetti
-- **بک‌اند:** Node.js + Express + SQLite (sql.js) + JWT Authentication (httpOnly Cookies) + bcryptjs
-- **بومی‌سازی:** فونت وزیرمتن (Vazirmatn)، راست‌به‌چپ (RTL)، ارقام فارسی در قیمت‌ها و تقویم جلالی (Shamsi)
-- **حالت‌های نمایشی:** پوسته روشن (Light Mode) و پوسته تاریک (Dark Mode) با متغیرهای CSS توکن‌های رنگی
-
----
-
-## 🔑 اطلاعات ورود پیش‌فرض (Credentials)
-
-### مدیر ارشد سامانه (Super Admin):
-- **نام کاربری / شماره تماس:** `admin` (یا `09123456789`)
-- **کلمه عبور پیش‌فرض:** `change-me-123`
-- *سامانه در اولین ورود تغییر رمز را پیشنهاد می‌دهد.*
-
-### مشتری پیش‌فرض نمونه:
-- **شماره همراه:** `09123456789` (سهراب مظفری - عضویت طلایی)
-- **کد ورود یکبار مصرف پیامکی (OTP):** `12345`
-- **کلمه عبور ورود مستقیم:** `123456`
-
-### کدهای تخفیف فعال نمونه:
-- `VISTA2025` (۱۵۰,۰۰۰ تومان تخفیف برای خریدهای بالای ۱ میلیون تومان)
-- `WINTER25` (۲۰٪ تخفیف زمستانه تا سقف ۵۰۰,۰۰۰ تومان)
-- `FIRSTBUY` (۲۰۰,۰۰۰ تومان تخفیف خرید اول)
-
----
-
-## 📦 نحوه راه‌اندازی و اجرا
+Node 22.22.3 and Bun 1.4.3 were used. Only `bun.lock` is authoritative; do not
+introduce a second package lock. From the repo root:
 
 ```bash
-# ۱. نصب پیش‌نیازها
-npm install
-
-# ۲. اجرای سرور توسعه (پورت 3000)
-npm run dev
-
-# ۳. کامپایل و ساخت نسخه نهایی
-npm run build
-
-# ۴. اجرای نسخه پروداکشن
-npm start
+bun install --frozen-lockfile
+npm run typecheck       # both storefront + legacy; not PHP/static analysis
+npm test                # 3 static asset tests + 171 legacy tests; NOT Pest
+npm run build           # storefront only => client/dist/
+npm run dev             # Vite storefront only, 0.0.0.0; no API backend
+npm run test:legacy     # isolated legacy regression suite only
 ```
 
----
+`npm run lint` is an alias for TypeScript checking, not ESLint/Pint. There is no
+root production `start` command. The retained storefront still expects the legacy
+API/auth transport and has non-auth demo fallbacks: a rendered page is not a working
+Laravel shop. `/admin` is not yet Filament. Do not deploy the archived Node server.
 
-## 📂 ساختار پروژه‌
+Latest real code verification: **3 asset tests + 171 legacy tests passed**;
+both typechecks/build passed. JS 533.87 kB (gzip 136.61), CSS 62.59 kB (10.68),
+HTML 2.00 kB (0.88); one >500 kB chunk warning remains. No browser/TLS/RTL/provider
+or Laravel/MySQL acceptance is claimed.
 
-```
-├── server/
-│   ├── db/
-│   │   ├── database.ts      # لایه ایجاد جداول و داده‌های نمونه واقعی
-│   │   └── repository.ts    # الگو مخزن داده‌ها (Repository Pattern)
-│   └── api.ts               # کنترلر جامع REST API تحت مسیر /api
-├── src/
-│   ├── components/
-│   │   ├── layout/          # پوسته‌های StorefrontLayout و AdminLayout
-│   │   └── shared/          # هدر، فوتر، سبد شناور، فرم احراز هویت، نوار پیشرفت
-│   ├── pages/
-│   │   ├── storefront/      # صفحات اصلی، کاتالوگ، جزئیات کالا، سبد، تسویه، فاکتور، پیگیری، پروفایل و مقالات
-│   │   └── admin/           # صفحات داشبورد، محصولات، سفارش‌ها، مشتریان، تنظیمات و لاگ‌ها
-│   ├── lib/
-│   │   ├── api.ts           # کلاینت HTTP ارتباط با سرور
-│   │   └── persian.ts       # توابع تبدیل ارقام، فرمت تومان و تقویم جلالی
-│   └── store/               # استیت‌منیجمنت با Zustand (سبد خرید، احراز هویت، تم و اعلان‌ها)
-├── shared/
-│   └── types.ts             # اینترفیس‌ها و تایپ‌های مشترک کلاینت و سرور
-├── server.ts                # نقطه ورود اکسپرس با سوار کردن میدلورهای Vite
-└── package.json
-```
+## Required foundation (L1 outstanding)
+
+Target PHP **8.3**, minimum **8.2**: Laravel 12 compatibility line, Filament 5 subject
+to real Composer resolution. Laravel 13 requires 8.3 so cannot preserve the 8.2
+floor. MySQL/MariaDB with constrained migrations, integer **Toman**, Sanctum stateful
+cookie/CSRF auth, six-role server policies, encrypted settings, database queue and
+minute cron; no Redis/persistent workers/Docker/root on host. OTP remains 503 until
+real transport. No pricing/checkout/payment/SMS or business Filament resources now.
+
+## Read first
+
+- [Replacement specification / every audit finding as a required test](docs/SPEC_FROM_LEGACY.md)
+- [Shared-host deployment, no-SSH alternative, queue/cron and offline install](docs/HOSTING.md)
+- [Architecture and actual vs target state](docs/ARCHITECTURE.md)
+- [Database / proposed ER and deletion rules](docs/DATABASE.md)
+- [Security status and outstanding acceptance](docs/SECURITY.md)
+- [L0 verification evidence](docs/L0_RESULTS.md), [changelog](docs/CHANGELOG.md), [agent handoff](AGENTS.md)
+
+[Historical audit](docs/AUDIT_REPORT.md), [Phase A security](docs/SECURITY_FOUNDATION.md),
+[legacy architecture](docs/ARCHITECTURE_LEGACY.md) and
+[legacy schema](docs/DATABASE_LEGACY.md) are retained as evidence. Their old paths,
+Node JWT behavior and approval wording do not describe the new target stack.

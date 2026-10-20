@@ -1,0 +1,28 @@
+{
+  "sources": {
+    "vazirmatn": "@fontsource-variable/vazirmatn@5.3.0",
+    "icons": "material-symbols@0.48.0"
+  },
+  "files": [
+    {
+      "file": "vazirmatn-arabic-wght-normal.woff2",
+      "sha256": "84a382e46c30fb4f73d0e3800c16d0af15888e2731e57fa5f93e2c29a2c6a957",
+      "bytes": 46308
+    },
+    {
+      "file": "vazirmatn-latin-wght-normal.woff2",
+      "sha256": "d29c041cd4294af893cf3c01dfab6d47202c667ab55d702f68782599918c651d",
+      "bytes": 34524
+    },
+    {
+      "file": "vazirmatn-latin-ext-wght-normal.woff2",
+      "sha256": "21529facfd236f6be527e4353623bdb889c96a7ebb7db1e148e28406be0ea004",
+      "bytes": 21860
+    },
+    {
+      "file": "material-symbols-outlined.woff2",
+      "sha256": "66187cd42fe1d24d3ea6be77da7466c4fc6c1cd1d0870b685e041d8402680063",
+      "bytes": 4001276
+    }
+  ]
+}
