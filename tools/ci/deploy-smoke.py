@@ -1,6 +1,7 @@
 """Inspect real no-dev ZIP and exercise extracted public/private layout on CI only.
 Loopback HTTP simulates server HTTPS for runner authorization; real TLS is MANUAL.
 """
+import base64
 import json
 import os
 from pathlib import Path
@@ -41,7 +42,7 @@ with tempfile.TemporaryDirectory() as temp:
     with socket.socket() as reserve:
         reserve.bind(('127.0.0.1', 0))
         port = reserve.getsockname()[1]
-    env = dict(os.environ, APP_ENV='production', APP_DEBUG='false', APP_URL=f'http://localhost:{port}', ADMIN_INITIAL_PASSWORD='')
+    env = dict(os.environ, APP_ENV='production', APP_DEBUG='false', APP_KEY='base64:' + base64.b64encode(os.urandom(32)).decode(), APP_URL=f'http://localhost:{port}', ADMIN_INITIAL_PASSWORD='')
     router = root / 'router.php'
     router.write_text('''<?php
     $_SERVER['HTTPS'] = 'on'; // CI simulation ONLY, never included in upload zip.
@@ -87,6 +88,11 @@ with tempfile.TemporaryDirectory() as temp:
         subprocess.run(['php', '-r', probe], cwd=root / 'app', env=env, check=True, capture_output=True)
         print('PASS: no-dev zip, local SPA assets, private/public HTTP layout, API separation, Filament, authenticated pending migration, self-delete and replay denial. TLS simulated; actual host remains UNVERIFIED.')
     finally:
+        # Bounded safe diagnostics: exception class names, never messages/arguments.
+        for log in (root / 'app/storage/logs').glob('*.log'):
+            classes = re.findall(r'\[object\] \(([A-Za-z\\]+)\(', log.read_text(errors='replace'))
+            if classes:
+                print('Private runtime exception classes:', ', '.join(sorted(set(classes))))
         server.terminate()
         try:
             server.communicate(timeout=10)

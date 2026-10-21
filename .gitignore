@@ -15,3 +15,7 @@ data/
 backend/public/css/filament/
 backend/public/js/filament/
 backend/public/fonts/filament/
+
+# Local Python syntax-check artifacts.
+__pycache__/
+*.pyc
