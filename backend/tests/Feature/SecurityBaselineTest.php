@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 uses(RefreshDatabase::class);
 
 it('adds strict self-hosted storefront headers including on errors and isolates Filament CSP allowances', function () {
-    $response = $this->withServerVariables(['HTTPS' => 'on'])->get('/api/does-not-exist');
+    $response = $this->get('https://localhost/api/does-not-exist');
     $response->assertNotFound()->assertHeader('X-Content-Type-Options', 'nosniff')->assertHeader('X-Frame-Options', 'DENY')->assertHeader('Strict-Transport-Security', 'max-age=31536000');
     $policy = $response->headers->get('Content-Security-Policy');
     expect($policy)->toContain("script-src 'self';", "frame-ancestors 'none'", "object-src 'none'")->not->toContain('https:', 'unsafe-eval');
@@ -29,7 +29,7 @@ it('allows only configured CORS origins with explicit credentials and rejects wi
 });
 
 it('rejects unknown hosts and ignores forwarded hosts and schemes from untrusted proxies', function () {
-    $this->withServerVariables(['HTTP_HOST' => 'evil.example'])->get('/up')->assertStatus(400);
+    $this->get('http://evil.example/up')->assertStatus(400);
     $response = $this->withServerVariables(['HTTP_HOST' => 'localhost', 'REMOTE_ADDR' => '192.0.2.123', 'HTTPS' => 'off'])->withHeaders(['X-Forwarded-Host' => 'evil.example', 'X-Forwarded-Proto' => 'https'])->get('/up');
     $response->assertOk()->assertHeaderMissing('Strict-Transport-Security');
     config(['security.trusted_proxies' => ['192.0.2.123']]);
