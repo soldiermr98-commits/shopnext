@@ -232,3 +232,13 @@ methods remain unpaid. All snapshots (including signed adjustment) and actor tim
 are persisted; SQL triggers protect financial snapshots and timeline against mutation.
 Tests inject paid-audit failure after stock/quota/ledger writes and require full rollback.
 New code/schema/tests are UNVERIFIED until this change's full matrix executes.
+
+
+Checkout d532f0e: [CI39594655416](https://github.com/soldiermr98-commits/shopnext/actions/runs/39594655416)
+all seven jobs SUCCESS. New lifecycle change (not yet executed): actor-checked graph,
+strict paid no-op, once-only stock/quota release, actual-paid wallet refund, append-only
+journal/audit; scheduler queues bounded100-row expiry and100-row COD review, with each
+row revalidated under the same locks. Unpaid cancellation releases reserved coupon,
+paid cancellation/refund keeps redeemed usage. Receipt rejection leaves reservation
+until retry/expiry; receipt upload/storage/API still pending. Delivered COD is unpaid
+until explicit admin collection. No loyalty earning formula invented.
