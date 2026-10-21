@@ -6,6 +6,7 @@ use App\Financial\Money;
 use Illuminate\Validation\ValidationException;
 
 it('C02 rejects fractional negative overflow and noninteger money instead of silently casting', function () {
+    expect(PHP_INT_SIZE)->toBe(8);
     foreach ([-1, '1', '0.5', true, null, Money::MAX + 1] as $value) {
         expect(fn () => Money::integer($value))->toThrow(ValidationException::class);
     }

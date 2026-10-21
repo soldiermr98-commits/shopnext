@@ -39,4 +39,15 @@ final class CartRequest extends FormRequest
 
         return $rules;
     }
+
+    public function messages(): array
+    {
+        return [
+            'required' => 'وارد کردن :attribute الزامی است.', 'present' => 'فهرست اقلام الزامی است.',
+            'array' => 'ساختار سبد نامعتبر است.', 'list' => 'اقلام باید یک فهرست باشند.',
+            'integer' => 'فقط عدد صحیح مجاز است.', 'min' => 'مقدار کمتر از حد مجاز است.',
+            'max' => 'مقدار از سقف مجاز بیشتر است.', 'string' => 'نوع مقدار نامعتبر است.',
+            'regex' => 'قالب مقدار نامعتبر است.',
+        ];
+    }
 }

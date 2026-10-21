@@ -1,7 +1,9 @@
-# Architecture — implemented L1
+# Architecture — L1 complete; L2 in progress
 
 2026-10-21. L1 implementation is tested; real deployment acceptance remains
-UNVERIFIED. L2 is not approved. Historical Node architecture:
+UNVERIFIED. L2 is approved but NOT complete. Pricing/cart API and wallet primitives
+are executed checkpoints (PRICING.md); order/payment orchestration and concurrency
+are pending. No gateway/SMS/Filament business resources. Historical Node architecture:
 [ARCHITECTURE_LEGACY](ARCHITECTURE_LEGACY.md).
 
 ## Request and deployment boundaries

@@ -51,6 +51,15 @@ final class Rules
             throw ValidationException::withMessages(['settings' => 'گزینه تنظیمات مالی نامعتبر است.']);
         }
         $data = array_replace(self::DEFAULTS, $data);
+        try {
+            $size = strlen(json_encode($data, JSON_THROW_ON_ERROR));
+        } catch (\JsonException) {
+            throw ValidationException::withMessages(['settings' => 'ساختار تنظیمات مالی نامعتبر است.']);
+        }
+        // Encrypted base64 payload must fit the existing 65,535-byte TEXT column.
+        if ($size > 30000) {
+            throw ValidationException::withMessages(['settings' => 'حجم تنظیمات مالی از سقف مجاز بیشتر است.']);
+        }
         $int = function (string $attribute, mixed $value, \Closure $fail): void {
             if (! is_int($value)) {
                 $fail('مقدار باید عدد صحیح باشد.');

@@ -179,7 +179,7 @@ Fixed cart checkpoint8080bfe passed CI39583400561: all seven jobs success,187 te
 `docs/ci/l2-cart-primitives-verified-matrix.json`. No tests were disabled or assertions
 weakened; request-cookie fixture corrected using the actual locked Laravel source.
 
-## Cart/quote HTTP contracts (new change; CI pending)
+## Cart/quote HTTP contracts (verified checkpoint03238d6)
 
 Same-origin cookie/session/real-CSRF routes:
 - GET `/api/cart`: account or token-authorized guest snapshot. `pricing=null` and
@@ -203,3 +203,12 @@ GET, but a60/min limit correctly permits60 and rejects61. The preceding unauthor
 merge request is rejected by auth before consuming the route throttle. Fix the test
 to assert all60 requests succeed and the61st fails; do not change production limits.
 Full matrix rerun is mandatory before further concerns.
+
+Fixed API checkpoint03238d6 passed CI39584222988: all seven jobs SUCCESS, 192 tests /
+6615 assertions per EACH of the six real PHP/database jobs. Exact evidence recorded
+in `docs/ci/l2-cart-api-verified-matrix.json`. Production throttle remained unchanged.
+
+New hardening change: encrypted configuration plaintext is bounded to30,000 UTF-8
+JSON bytes before validation/storage, ensuring ciphertext fits existing TEXT. Money
+fails closed on non64-bit PHP, and deploy-check reports php.integer64. Cart validation
+messages are Persian. These changes need their own CI before the next concern.

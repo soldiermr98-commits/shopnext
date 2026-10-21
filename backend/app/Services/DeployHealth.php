@@ -15,6 +15,7 @@ final class DeployHealth
     public function checks(): array
     {
         $checks = ['php' => [version_compare(PHP_VERSION, '8.2.0', '>='), PHP_VERSION]];
+        $checks['php.integer64'] = [PHP_INT_SIZE >= 8, '64-bit integers required for canonical Toman'];
         foreach (self::EXTENSIONS as $extension) {
             $checks['extension.'.$extension] = [extension_loaded($extension), 'required'];
         }

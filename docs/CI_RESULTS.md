@@ -1,4 +1,20 @@
-# CI evidence — L1 implementation checkpoint
+# CI evidence — L1 complete, L2 checkpoints (NOT complete)
+
+
+## L2 executed checkpoints — NOT l2-complete
+
+- Pricing4a76d51: [39581254064](https://github.com/soldiermr98-commits/shopnext/actions/runs/39581254064),7/7 green,173/6437 each backend job.
+- Wallet primitives63088db: [39582169761](https://github.com/soldiermr98-commits/shopnext/actions/runs/39582169761),7/7 green,180/6482 each.
+- Cart/login8080bfe: [39583400561](https://github.com/soldiermr98-commits/shopnext/actions/runs/39583400561),7/7 green,187/6525 each.
+- Cart/quote API03238d6: [39584222988](https://github.com/soldiermr98-commits/shopnext/actions/runs/39584222988),7/7 green,192/6615 each.
+- Per-job evidence: docs/ci/l2-*-verified-matrix.json. Real SQL, no SQLite substitute.
+  Red39583138981 (JSON fixture missing cookies) and39583987683 (60/61 throttle test
+  off-by-one) were diagnosed; corrected tests rerun fully, no assertion bypass.
+- No order lifecycle/checkout orchestration/concurrency evidence yet; these are
+  sequential domain/API proofs, not parallel-spend or last-stock/coupon proofs.
+  No L2 tag, storefront financial wiring, host/browser/TLS acceptance or launch claim.
+
+## Historical L1 evidence
 
 2026-10-21. Code checkpoint **1c0d09c**, [run39539510764](https://github.com/soldiermr98-commits/shopnext/actions/runs/39539510764), SUCCESS:
 **all seven jobs green; 160 Pest tests / 1,028 assertions in EACH real DB job**.

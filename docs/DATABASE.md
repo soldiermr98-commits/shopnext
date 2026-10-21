@@ -73,3 +73,37 @@ Encrypted settings/DB backups are not sufficient without the retained APP_KEY.
 No live DB dump, sensitive seed, host test data or release ZIP is committed. The
 package smoke adds a temporary probe migration ONLY after extracting the ZIP into
 an ephemeral CI directory/database, never to the deliverable schema.
+
+## L2 financial migration / implemented primitives (IN PROGRESS)
+
+Migration `2026_10_21_000005_add_financial_core` is executed on the full matrix.
+The historical14/175 mapping above is NOT a count of the expanded financial schema.
+
+- products/product_variants: UTC sale/flash windows, flash price bounded by regular,
+  integer grams and nullable quantity caps. Addresses: explicit nullable zone_code;
+  missing/unknown zone does not invent a shipping tariff.
+- coupons: starts_at, per_user_limit, explicit auto-stacking flag and four JSON
+  include/exclude product/category scopes. Capacity CHECK used_count<=usage_limit.
+- orders: unique user/idempotency key +intent hash, separate payment_state,
+  payable_total, expiry/release/paid/refunded timestamps, pricing_snapshot/receipt path.
+  order_items: integer line_total and tax_amount alongside immutable-by-contract
+  snapshots. Creation/state/snapshot services still pending; schema is not a workflow.
+- coupon_usages: one/order, owner/coupon FKs RESTRICT, reserved/redeemed/released states,
+  indexed coupon/user/state. Atomic reserve/release/redemption logic still pending.
+- wallet_entries: signed nonzero bounded integer delta; credit/payment/refund/opening,
+  unique idempotency key and unique order/kind. UPDATE/DELETE SQL triggers reject
+  mutation. Positive preexisting users.wallet_balance migrated as opening entries;
+  legacy column rejects edits and nonzero new-user inserts. It is NOT a balance cache.
+  Live balance is SUM(delta); User accessor and auth DTO use Ledger. Credits/debits
+  and refunds serialize on user locks, current locking SUM, checked nonnegative funds
+  and aggregate bounds. End-to-end lifecycle and parallel-spend proof remain pending.
+- carts: nullable unique owner or nullable unique SHA256 token hash, optimistic version.
+  cart_items: unique cart/product/variant identity, positive qty, composite variant
+  ownership FK; no price column. Guest token random256-bit, never stored plaintext.
+  Login conflict rolls back complete merge; both carts and versions remain unchanged.
+
+Ledger triggers require the host's TRIGGER privilege; actual host privilege and web/
+CLI equivalence remain UNVERIFIED. Do not disable append-only constraints to deploy.
+Financial down-migration refuses to erase actual financial orders/nonopening entries;
+use forward repairs after commerce begins, not destructive rollback. Do not import
+old balances a second time or set users.wallet_balance as an operational shortcut.

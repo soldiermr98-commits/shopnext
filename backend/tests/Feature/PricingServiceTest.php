@@ -169,3 +169,11 @@ it('C01 financial settings enforce roles strict types validated tariffs encrypti
     $log = DB::table('activity_logs')->where('module', 'settings')->first();
     expect(json_decode($log->after, true)['value'])->toBe('[REDACTED]');
 });
+
+it('H09 bounds encrypted financial settings before writing the TEXT column', function () {
+    $rules = app(Rules::class);
+    $large = ['automatic' => array_fill(0, 10, ['type' => 'percentage', 'value' => 100, 'min_quantity' => 1, 'products' => range(1, 1000)])];
+    expect(fn () => $rules->validate($large))->toThrow(ValidationException::class);
+    financialRules();
+    expect(strlen(DB::table('settings')->where('key', Rules::KEY)->value('value')))->toBeLessThan(65536);
+});

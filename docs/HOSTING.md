@@ -2,12 +2,13 @@
 
 2026-10-21. Code/ZIP/HTTP smoke is CI-executed; **the actual host, browser and TLS
 remain UNVERIFIED**. Complete [ACCEPTANCE.md](ACCEPTANCE.md) before considering a
-launch. L2 is not authorized; this package is an infrastructure/auth checkpoint,
-not a pricing/checkout/payment/SMS application.
+launch. L1 is tagged; L2 is authorized but IN PROGRESS, not a completed commerce
+release. Use the intended verified tag, not an intermediate financial checkpoint.
+No gateway/SMS integration is implemented. See PRICING.md for outstanding L2 gates.
 
 ## 1. Discover the real runtime first
 
-Minimum PHP8.2, target8.3. CLI/cron PHP can differ from web PHP. Identify the actual
+Minimum PHP8.2, target8.3, **64-bit integer runtime required** for exact Toman. CLI/cron PHP can differ from web PHP. Identify the actual
 absolute CLI binary using the host's available terminal or cron/version-output
 facility; run that binary with `-v`, `--ini` and `-m` privately. Do not assume the
 shell's `php` is the selected web version. No public phpinfo page.

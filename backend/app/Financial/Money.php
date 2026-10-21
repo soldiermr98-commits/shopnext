@@ -13,6 +13,7 @@ final class Money
 
     public static function integer(mixed $value): int
     {
+        self::require64Bit();
         if (! is_int($value) || $value < 0 || $value > self::MAX) {
             throw ValidationException::withMessages(['money' => 'مبلغ نامعتبر یا خارج از محدوده است.']);
         }
@@ -22,6 +23,7 @@ final class Money
 
     public static function bounded(string $value): int
     {
+        self::require64Bit();
         if (! preg_match('/^[0-9]+$/D', $value) || bccomp($value, (string) self::MAX, 0) > 0) {
             throw ValidationException::withMessages(['money' => 'مبلغ نامعتبر یا خارج از محدوده است.']);
         }
@@ -95,5 +97,12 @@ final class Money
         }
 
         return $result;
+    }
+
+    private static function require64Bit(): void
+    {
+        if (PHP_INT_SIZE < 8) {
+            throw new \LogicException('Financial operations require 64-bit PHP.');
+        }
     }
 }

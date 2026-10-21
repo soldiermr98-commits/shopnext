@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-10-21 — L2 in progress (NOT l2-complete)
+
+- Exact rational shared pricing, scoped/time-limited coupons, automatic rules,
+  inclusive/exclusive VAT and fail-closed zone/method shipping; display-only integer
+  coupon allocation and explicit signed rounding adjustment.
+- Constrained financial schema, append-only ledger SQL triggers, authoritative
+  balance accessor, locked/idempotent full-debit/actual-paid-refund primitives.
+- Versioned server carts, token hashes, preserve-both atomic login merge and clear
+  conflict contract; CSRF-protected cart/quote/retry API and secure guest cookie.
+- Named regression/property tests, full six-way real SQL plus frontend CI evidence
+  in CI_RESULTS/ci/l2-*. No parallel/concurrency or complete order/payment proof yet.
+- Outstanding: checkout transaction/reservations/state machine/manual approvals,
+  expiry, order/owner APIs, storefront financial wiring, real parallel tests and
+  final per-finding/docs/tag gate. No gateways/SMS/business Filament resources.
+
+
 ## 2026-10-21 — L1c/L1d implementation checkpoint
 
 - Closed native staff flooding: persistent IP lockout before credential lookup,

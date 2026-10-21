@@ -31,10 +31,12 @@
 - Current change: CartRequest/CartController, named throttle and CSRF-protected
   GET/PUT /api/cart, POST /api/quote, authenticated POST /api/cart/merge retry;
   Secure HttpOnly host-only Strict guest cookie issued on first successful mutation.
-  Tests enforce real CSRF and browser cookie readback; new change CI still pending.
+  Tests enforce real CSRF and browser cookie readback.03238d6 passed CI39584222988
+  (7/7 SUCCESS, each matrix192/6615); evidence docs/ci/l2-cart-api-verified-matrix.json.
   Storefront financial wiring and order/checkout APIs remain NOT implemented.
-- Before final L2: bound financial settings encoded JSON to fit encrypted TEXT;
-  add 64-bit integer deployment check; complete exact concurrent wallet/stock/coupon
+- Current hardening: financial JSON bound30,000 bytes, Money requires64-bit PHP,
+  deploy-check integer64 and Persian cart validation messages; its CI is pending.
+- Before final L2: complete exact concurrent wallet/stock/coupon
   tests and all outstanding lifecycle/API/UI/docs. Do not create l2-complete early.
 - Actual browser/host/TLS/RTL/a11y/backup restore UNVERIFIED. The tag is an
   implementation checkpoint, NOT launch/commerce certification.
