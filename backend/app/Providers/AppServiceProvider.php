@@ -80,6 +80,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(SchedulerHeartbeat::class, FoundationPolicy::class);
         Gate::policy(CategoryProduct::class, FoundationPolicy::class);
         Sanctum::getAccessTokenFromRequestUsing(static fn (Request $request): ?string => null);
+        RateLimiter::for('financial-cart', fn (Request $request): array => [
+            Limit::perMinute(60)->by('cart-ip:'.$request->ip()),
+            Limit::perMinute(120)->by('cart-user:'.($request->user()?->id ?? $request->ip())),
+        ]);
         RateLimiter::for('customer-login', function (Request $request): array {
             $identifier = $request->input('identifier', $request->input('phone', ''));
             $identifier = is_string($identifier) ? Phone::normalize(mb_strtolower($identifier)) : 'invalid';

@@ -25,8 +25,14 @@
   Ledger does NOT mark paid/refunded or orchestrate stock/coupon/order transitions.
 - Current change: CartService +login/register merge (secure token HASH persistence,
   optimistic versions, all-or-nothing preserve-both conflict, explicit auth/cart DTO).
-  Cart domain and auth conflict tests added; CI pending. Cart/quote endpoints and
-  cookie issuance/UI remain NOT implemented. Forced password rotation defers merge.
+  Cart domain/login8080bfe passed CI39583400561 (7/7, each matrix187/6525).
+  First2202ee7 was red only because JSON test omitted withCredentials; fixed fixture,
+  not production cookie encryption or assertions. Forced password rotation defers merge.
+- Current change: CartRequest/CartController, named throttle and CSRF-protected
+  GET/PUT /api/cart, POST /api/quote, authenticated POST /api/cart/merge retry;
+  Secure HttpOnly host-only Strict guest cookie issued on first successful mutation.
+  Tests enforce real CSRF and browser cookie readback; new change CI still pending.
+  Storefront financial wiring and order/checkout APIs remain NOT implemented.
 - Before final L2: bound financial settings encoded JSON to fit encrypted TEXT;
   add 64-bit integer deployment check; complete exact concurrent wallet/stock/coupon
   tests and all outstanding lifecycle/API/UI/docs. Do not create l2-complete early.

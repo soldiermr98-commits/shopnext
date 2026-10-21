@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SpaController;
@@ -20,6 +21,14 @@ Route::prefix('api/auth')->middleware(CookieOnly::class)->group(function (): voi
         Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
         Route::post('change-password', [AuthController::class, 'password'])->middleware('throttle:customer-password')->name('auth.password');
     });
+});
+
+// No bearer fallback; even guest mutations retain the web CSRF/session stack.
+Route::middleware([CookieOnly::class, 'throttle:financial-cart'])->group(function (): void {
+    Route::get('api/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::put('api/cart', [CartController::class, 'replace'])->name('cart.replace');
+    Route::post('api/quote', [CartController::class, 'quote'])->name('cart.quote');
+    Route::post('api/cart/merge', [CartController::class, 'merge'])->middleware('auth:sanctum')->name('cart.merge');
 });
 
 Route::prefix('api/admin')->middleware([CookieOnly::class, 'auth:sanctum', 'throttle:30,1'])->group(function (): void {

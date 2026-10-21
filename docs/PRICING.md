@@ -144,7 +144,7 @@ Wallet checkpoint63088db passed CI39582169761: all seven jobs success,180 Pest t
 6482 assertions on EACH real PHP/database matrix. Exact evidence is recorded in
 `docs/ci/l2-wallet-primitives-verified-matrix.json`. This is not a concurrent-spend proof.
 
-## Server cart primitives / login integration (new change; CI pending)
+## Server cart primitives / login integration (verified checkpoint8080bfe)
 
 `CartService` stores only IDs and positive canonical quantities, never client prices.
 Guest identity uses a256-bit random token with only SHA256 persisted. HTTP issuance
@@ -173,3 +173,27 @@ not send its cookie (`MakesHttpRequests::prepareCookiesForJsonRequest` requires
 withCredentials). The actual domain preserve-both tests passed. Fix the browser
 fixture with withCredentials, WITHOUT relaxing cookie encryption or the conflict
 assertion. Full rerun after this fix is required before continuing another concern.
+
+Fixed cart checkpoint8080bfe passed CI39583400561: all seven jobs success,187 tests /
+6525 assertions per EACH PHP/database combination. Evidence recorded in
+`docs/ci/l2-cart-primitives-verified-matrix.json`. No tests were disabled or assertions
+weakened; request-cookie fixture corrected using the actual locked Laravel source.
+
+## Cart/quote HTTP contracts (new change; CI pending)
+
+Same-origin cookie/session/real-CSRF routes:
+- GET `/api/cart`: account or token-authorized guest snapshot. `pricing=null` and
+  explicit errors for stale/invalid catalog; no local or fake zero-price fallback.
+- PUT `/api/cart`: JSON `{items:[{product_id,variant_id?,quantity}],version}`.
+  Strict JSON integer quantities/IDs; optimistic version conflict409. Client prices,
+  payable/discount fields never affect persisted cart or pricing. A new guest cart
+  sets a Secure/HttpOnly/host-only/SameSite=Strict cookie; no raw token in JSON.
+- POST `/api/quote`: same items plus optional coupon, shipping_method, zone. Advisory
+  only; a supplied zone is NOT authorization for final checkout/address ownership.
+- POST `/api/cart/merge`: authenticated customer retry; conflict409 preserves both,
+  success expires guest cookie. Extra owner IDs never select another account cart.
+
+Named throttling bounds routes by IP and identity, no bearer fallback. Real-CSRF,
+secure-cookie persistence/reload, fractional input rejection, throttling and foreign
+owner-ID regressions added. These NEW tests still need execution; storefront wiring
+and full checkout/order APIs remain unimplemented.
