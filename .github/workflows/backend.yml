@@ -162,6 +162,13 @@ jobs:
         if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
         with:
           bun-version: '1.4.3'
+      - name: Publish real financial concurrency evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: financial-concurrency-php${{ matrix.php }}-${{ matrix.db.family }}-${{ matrix.db.series }}-proof
+          path: backend/storage/framework/testing/financial-concurrency-evidence.json
+          if-no-files-found: error
+          retention-days: 7
       - name: Build and exercise real no-dev upload package
         if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
         run: |

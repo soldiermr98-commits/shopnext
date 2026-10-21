@@ -257,3 +257,16 @@ RequestGuard cached the initial test actor across requests when only the web gua
 was replaced. Fixtures now forget guards before switching actors (as existing L1
 browser tests already do); ownership/receipt/cancel assertions and production checks
 are unchanged. Full matrix rerun required; this red is not accepted evidence.
+
+
+Order/receipt API9205c58 CI39596445555 passed all7 jobs. New concurrency concern:
+five REAL separate-PHP-process scenarios, distinct database connections on committed
+fixtures. A coordinator holds real owner rows until every child operation has started,
+then releases the gate; recorded start/end intervals must overlap, all connection IDs
+and PIDs must differ, and actual database fingerprints must match. Workers call the
+production Checkout/OrderLifecycle (wallet via Ledger), not a lock simulation. Wallet
+race uses distinct pending-wallet order fixtures and distinct administrators to avoid
+mistaking cart-version or a shared admin actor lock for a balance check. No RefreshDatabase
+transaction hides fixtures. proc_open absence or a barrier failure FAILS explicitly;
+there is no sequential fallback. Each matrix uploads safe proof JSON with no credentials.
+These five scenarios remain UNVERIFIED until the new full CI actually executes them.
