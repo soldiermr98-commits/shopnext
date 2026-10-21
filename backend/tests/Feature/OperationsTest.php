@@ -81,3 +81,23 @@ it('does not expose connection exception credentials in deploy-check output', fu
     Artisan::call('deploy-check');
     expect(Artisan::output())->toContain('database: FAIL')->not->toContain($secret);
 });
+
+it('fails readiness for stuck reserved jobs failed jobs unwritable paths and URL credentials', function () {
+    DB::table('jobs')->insert(['queue' => 'default', 'payload' => '{}', 'attempts' => 1, 'reserved_at' => now()->timestamp - 130, 'available_at' => now()->timestamp, 'created_at' => now()->timestamp]);
+    expect(app(DeployHealth::class)->checks()['queue.health'][0])->toBeFalse();
+    DB::table('jobs')->delete();
+    DB::table('failed_jobs')->insert(['uuid' => bin2hex(random_bytes(16)), 'connection' => 'database', 'queue' => 'default', 'payload' => '{}', 'exception' => 'Fixture failure', 'failed_at' => now()]);
+    expect(app(DeployHealth::class)->checks()['queue.health'][0])->toBeFalse();
+    config(['app.url' => 'https://operator@shop.example']);
+    expect(app(DeployHealth::class)->checks()['env.origin'][0])->toBeFalse();
+    $base = base_path();
+    try {
+        app()->setBasePath(storage_path('framework/testing/nonexistent-'.bin2hex(random_bytes(8))));
+        $checks = app(DeployHealth::class)->checks();
+        expect($checks['storage'][0])->toBeFalse();
+        expect($checks['bootstrap.cache'][0])->toBeFalse();
+        expect($checks['env.file'][0])->toBeFalse();
+    } finally {
+        app()->setBasePath($base);
+    }
+});

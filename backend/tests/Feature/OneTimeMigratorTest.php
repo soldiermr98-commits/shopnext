@@ -6,6 +6,7 @@ use App\Support\OneTimeMigrator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Process\Process;
 
 uses(RefreshDatabase::class);
 
@@ -76,4 +77,30 @@ it('refuses replay when another process has already claimed a still-present conf
     });
     expect($status)->toBe(410);
     expect($calls)->toBe(0);
+});
+
+it('activates offline with hash-only private config and refuses public token placement or activation overwrite', function () {
+    $app = $this->runnerDirectory.'/app';
+    $public = $this->runnerDirectory.'/public';
+    File::makeDirectory($app.'/storage/app/private', 0700, true);
+    File::makeDirectory($app.'/operations', 0700, true);
+    File::makeDirectory($public, 0700, true);
+    copy(base_path('operations/migrate-once.php.stub'), $app.'/operations/migrate-once.php.stub');
+    $tool = base_path('../tools/activate-runner.php');
+    $bad = new Process([PHP_BINARY, $tool, $app, $public, $public.'/leaked-token']);
+    $bad->run();
+    expect($bad->getExitCode())->toBe(1);
+    $tokenFile = $this->runnerDirectory.'/local-token';
+    $activate = new Process([PHP_BINARY, $tool, $app, $public, $tokenFile]);
+    $activate->mustRun();
+    $token = file_get_contents($tokenFile);
+    expect($token)->toMatch('/^[a-f0-9]{64}$/');
+    expect($activate->getOutput())->not->toContain($token);
+    $config = file_get_contents($app.'/storage/app/private/migration-runner.json');
+    expect($config)->not->toContain($token);
+    expect(json_decode($config, true)['hash'])->toBe(hash('sha256', $token));
+    $again = new Process([PHP_BINARY, $tool, $app, $public, $this->runnerDirectory.'/other-token']);
+    $again->run();
+    expect($again->getExitCode())->toBe(1);
+    expect(file_get_contents($app.'/storage/app/private/migration-runner.json'))->toBe($config);
 });
