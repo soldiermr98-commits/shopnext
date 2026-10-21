@@ -1,13 +1,25 @@
-# Shopnext handoff — L1 implementation checkpoint, 2026-10-21
+# Shopnext handoff — L2 in progress, 2026-10-21
 
 ## Standing rules / gate
 - Fixed branch arena/c101d8c3-shopnext ONLY. Small commits; push and inspect FULL
   green CI after EVERY commit before next concern. Read red logs/annotations and
   fix without test bypass. Unexecuted = UNVERIFIED. Never print secrets.
-- Owner approved L1a/L1b and explicitly requested full L1c/L1d. Implementation is
-  complete and code CI verified; final docs commit must pass before l1-complete tag.
-  STOP for owner L2 approval. No pricing/checkout/payments/SMS integrations or
-  Filament business resources. Dormant encrypted configuration slots are not providers.
+- L1 completed/tagged l1-complete on7acd649; owner explicitly APPROVED L2.
+  Implement the financial core/manual methods/API/minimal storefront financial wiring.
+  NO gateway adapters, SMS integrations or Filament business resources. Final L2
+  requires full matrix green and l2-complete tag, THEN stop for L3 approval.
+- Latest approved rounding: exact rationals through auto/fixed-coupon allocation/VAT;
+  round once per final line. Integer coupon allocation DISPLAY ONLY; signed explicit
+  rounding_adjustment. Two1-Toman lines auto50% +fixedcoupon1 ->final0, not1.
+- Latest approved merge: login succeeds on limit conflict; preserve BOTH carts,
+  all-or-nothing merge rejection and explicit conflict; checkout valid account cart only.
+- docs/PRICING.md records other approved pricing, full-wallet/manual/COD/expiry defaults.
+  No tariffs/zone mapping supplied: fail closed. L2 is NOT complete. Money04cdcab
+  CI39578549164 and schema66b2187 CI39579280000 both seven-job SUCCESS. This new pricing
+  checkpoint still needs its own full CI. Pending: cart/login merge, order/reservation,
+  append-only wallet read/write, manual payments, expiry, APIs/UI, real concurrency.
+- Legacy users.wallet_balance is an IMMUTABLE OPENING SNAPSHOT, not live balance.
+  Current AuthController/User still need ledger-backed balance before L2 completion.
 - Actual browser/host/TLS/RTL/a11y/backup restore UNVERIFIED. The tag is an
   implementation checkpoint, NOT launch/commerce certification.
 
