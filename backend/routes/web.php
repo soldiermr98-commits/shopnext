@@ -28,5 +28,5 @@ Route::prefix('api/admin')->middleware([CookieOnly::class, 'auth:sanctum', 'thro
 });
 
 Route::post('api/admin/media', [MediaController::class, 'store'])->middleware([CookieOnly::class, 'auth:sanctum', 'throttle:10,1']);
-Route::get('media/{file}', [MediaController::class, 'show'])->where('file', '[a-f0-9]{48}\.png');
+Route::get('media/{file}', [MediaController::class, 'show'])->where('file', '[a-f0-9]{48}\.png')->name('media.show');
 Route::get('/{path?}', SpaController::class)->where('path', '(?!(?:api|admin|sanctum|livewire|media|assets|fonts|storage|css|js|images|up)(?:/|$))[^.]*');

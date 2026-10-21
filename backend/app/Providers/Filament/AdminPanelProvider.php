@@ -8,6 +8,7 @@ use App\Filament\Auth\StaffLogin;
 use App\Filament\Auth\StaffProfile;
 use App\Filament\Pages\SecureSettings;
 use App\Filament\Pages\StaffDashboard;
+use App\Filament\Widgets\CronHeartbeat;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -27,7 +28,7 @@ final class AdminPanelProvider extends PanelProvider
     {
         return $panel->default()->id('admin')->path('admin')->authGuard('web')
             ->brandName('Shopnext')->login(StaffLogin::class)->profile(StaffProfile::class, isSimple: true)
-            ->pages([StaffDashboard::class, SecureSettings::class])
+            ->pages([StaffDashboard::class, SecureSettings::class])->widgets([CronHeartbeat::class])
             // Default Filament font provider uses locally published bundled fonts, not a CDN.
             ->middleware([
                 EncryptCookies::class, AddQueuedCookiesToResponse::class, StartSession::class,
