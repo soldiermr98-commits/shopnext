@@ -1,79 +1,89 @@
-# Architecture — actual state and approved replacement
+# Architecture — implemented L1
 
-> **Current 2026-10-21:** full schema and customer/staff authentication/role policies
-> now exist. Sanctum transport replaces client JWT refresh; Filament has a gated
-> shell/password profile, no resources. See L1_AUTH.md and CI_RESULTS.md for executed
-> six-way CI evidence. Earlier L0-only architecture below is historical. Remaining
-> settings security/operations are still unimplemented; overall L1 remains incomplete.
+2026-10-21. L1 implementation is tested; real deployment acceptance remains
+UNVERIFIED. L2 is not approved. Historical Node architecture:
+[ARCHITECTURE_LEGACY](ARCHITECTURE_LEGACY.md).
 
-> **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
-> environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
-> initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not
-> complete. Older statements below that no Laravel app exists describe the L0
-> checkpoint only. See [current CI evidence](CI_RESULTS.md).
+## Request and deployment boundaries
 
-2026-10-20. **L0 prepared; L1 not implemented. Launch NO-GO; stop before L2.**
-The earlier architecture is preserved in [ARCHITECTURE_LEGACY](ARCHITECTURE_LEGACY.md).
-[Specification](SPEC_FROM_LEGACY.md) and [hosting](HOSTING.md) define acceptance.
-
-## Current checkout
-
-Root npm workspaces are `client` and `legacy`. Vite compiles only React storefront;
-admin views/layout moved into `legacy/client-admin` and imports/routes removed
-from active App. Shared TS contracts are copied, not a Laravel domain implementation.
-`legacy/server/index.ts` retains Node server; `legacy/tests` verifies it against
-isolated sql.js. It is reference/regression evidence only, never a production
-backend. No old DB was deleted or migrated. `backend/README.md` explicitly reserves
-an empty application destination. No PHP runtime/vendor is checked into Git.
-
-The frontend is not switched to Sanctum yet: legacy cookie refresh transport and
-many catalog/account demo fallbacks remain. It cannot be called a Laravel integration
-or trusted checkout. Static fonts/icons are local; image placeholders are explicit.
-Future dynamic media/localStorage must also be constrained to safe local paths.
-
-## Target (all dashed boundary components below are outstanding)
-
-```mermaid
-flowchart TD
-    Browser[React Vite storefront / local assets]
-    Public[One HTTPS origin / public files + Laravel front controller]
-    Auth[Sanctum stateful cookie + CSRF / FormRequests / policies]
-    Panel[Filament shell + heartbeat widget / no business resources in L1]
-    Models[Eloquent models / encrypted settings / activity logging]
-    DB[(MySQL or MariaDB / InnoDB utf8mb4)]
-    Cron[Minute cron / full verified PHP CLI]
-    Scheduler[Scheduler heartbeat + overlap lock]
-    Worker[Bounded queue work / stop when empty / max time 50]
-    Browser --> Public
-    Public -. /api and /sanctum .-> Auth
-    Public -. /admin .-> Panel
-    Auth -.-> Models
-    Panel -. policies .-> Models
-    Models -.-> DB
-    Cron -. schedule run .-> Scheduler
-    Scheduler -.-> Worker
-    Scheduler -. heartbeat .-> DB
-    Worker -. database queue .-> DB
+```text
+HTTPS one canonical origin
+  /assets /fonts /css /js /images -> built local public assets
+  /api/auth/*                    -> web CSRF + cookie-only Sanctum + FormRequests
+  /api/admin/settings            -> staff permission + SettingsRequest + Settings DTO
+  /api/admin/media               -> staff permission + MediaRequest + safe raster service
+  /media/{random}.png            -> validated private-storage delivery fallback
+  /admin                         -> native Filament login/profile/settings/dashboard
+  /livewire /sanctum /up          -> framework infrastructure
+  other extensionless GET paths  -> private prebuilt SPA HTML, never /api or /admin errors
 ```
 
-Laravel 12 retains PHP 8.2 minimum, target 8.3; latest Laravel 13 cannot meet that
-minimum. Filament 5 root constraints permit the intended pairing; Composer lock
-and real compatibility tests still required. No Redis, daemon/Supervisor, Docker,
-root or Node on production host. Build off-host, expose only public files, preserve
-APP_KEY/private data. Database sessions/queue, file/database cache, safe minute cron.
-`--max-time` is not a per-job hard timeout; bounded jobs and overlap/retry tests
-are mandatory. All delayed work goes through scheduler/queue.
+Only `public/` is exposed. Private sibling `app/` contains vendor, .env, storage,
+application and SPA HTML. Public index explicitly sets its public path. CLI supports
+SHOPNEXT_PUBLIC_PATH when public is renamed to public_html. Missing SPA build is
+503, not the Laravel welcome page or a fabricated working shop.
 
-## Boundaries and change control
+Application-owned endpoint inputs use FormRequests; mutating auth/settings/media
+requests reject unknown fields. Read requests bound optional search text and do
+not use arbitrary query input. Native Filament/Livewire/Sanctum/health endpoints
+retain their framework validators and CSRF/auth stacks, not counterfeit business APIs.
+Global headers/trust/body controls also wrap errors and CORS preflights.
 
-L1 must separate HTTP/FormRequests, auth/policies, models/settings encryption,
-operational commands/scheduler and isolated tests. Default-deny every model action;
-Filament navigation is not a security boundary. Money primitives are integer Toman,
-no pricing policy invented. Environment secrets remain private; no frontend provider
-keys or direct provider calls. Scheduled heartbeat describes real started/completed
-runs; Filament visibility is operationally authorized, never public diagnostics.
+## Authentication / authorization
 
-L2 domain services/checkout/ledger/gateway/SMS/Filament resources require separate
-approval. All legacy financial audit blockers remain. Real MySQL/Pest verification,
-PHP version matrix, Sanctum browser integration and host deployment checks cannot
-be replaced by passing 171 Node tests. See `backend/README.md` for current blockers.
+Customer browser cookies and readable XSRF proof, no bearer token issuance or JWT
+refresh. Secure HttpOnly host-only Strict session cookie; authentication regenerates
+session identity, logout/password rotation revoke sessions. OTP is503 until an
+approved provider integration. All model policies default-deny unknown actions.
+66 independent legacy role/action policy cases are NOT66 HTTP business endpoints.
+
+Filament admits active super_admin/admin/shop_manager; initial-change users can
+access only their password profile, not the dashboard/settings. Native staff flood
+limiter is IP-wide, persistent database cache, five attempts/minute, uniform lockout
+before credential lookup. No remember-me or external avatar/font provider.
+
+## Settings and audit
+
+Settings allowlist: integration_secret, mail_password, sms_api_key, payment_api_key.
+These are dormant configuration slots, not integrations. Laravel `encrypted` cast
+protects each value at rest. The service exposes only key/isSet/constant masked DTOs;
+it has no secret getter. Explicit nonempty newValue is the only rotation path.
+Omitted/null/empty string means no write; secrets are not trimmed. Filament clears
+newValue in finally AND dehydrate, including validation payloads; deferred updates
+and save are tested in the same Livewire request. Never change this input to live
+sync without re-testing secrecy. Hidden model values are defense-in-depth, not encryption.
+
+Model observer records admin create/update/delete, model/table, subject, actor,
+IP/time and before/after. Only explicitly safe metadata values are retained; unknown
+fields default to [REDACTED]. Settings and password values are always redacted.
+Uploads explicitly record a safe media event and delete the file if audit fails.
+Settings writes/audit share a transaction. Bulk query-builder writes bypass model
+events: future L2 services MUST NOT use them to mutate admin-owned domain records
+without equivalent transaction-bound audit. Internal bootstrap/heartbeat SQL is not
+a business-admin mutation. No generic log reader/business resource is exposed.
+
+## Security and operational services
+
+- Strict storefront script CSP uses self only; native Filament/Livewire alone has
+  documented inline/eval exceptions. No runtime CDN/connect/font allowlist.
+- Exact CORS origins, host allowlist, explicit proxy IP/CIDR trust; wildcard proxy
+  trust is ignored. 3 MiB bodies; raster2 MiB/2048px, random names, re-encoded PNG.
+- RichText/SanitizedHtml use locked Symfony HTML sanitizer on content/description
+  model writes and reads. SVG/script/iframe/events/unsafe schemes are removed;
+  non-rich text must still be escaped by renderers.
+- Single scheduler callback uses database-cache overlap lock2min and calls the
+  bounded worker in process (no proc_open/Supervisor/Redis requirement).
+- Every tick enqueues QueuePulse and runs database queue:work --stop-when-empty
+  --max-time=50 --timeout=40 --tries=3; heartbeat separates cron and processed pulse.
+- deploy-check inspects actual runtime, config, DB, storage, queue and heartbeat.
+- ZIP builder installs no-dev vendor fresh; inactive runner template is outside
+  public. Offline activation uses hash-only private config, one-hour token and
+  atomic single-use claim; authorized execution unlinks itself before migrations.
+
+## Scope and acceptance
+
+No L2 services, external calls, commercial Filament resources or data import.
+Legacy Node/sql.js code is reference-only, excluded from releases. New encrypted
+settings are supported; legacy plaintext settings need an explicit future importer,
+not automatic decryption/fallback. Runtime CI is not browser, TLS or shared-host
+certification. See [acceptance](ACCEPTANCE.md) and [CI](CI_RESULTS.md).

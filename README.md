@@ -1,73 +1,75 @@
-# Shopnext / Digistyle — verified Laravel foundation in progress
+# Shopnext — L1 Laravel foundation
 
-Persian RTL React/Vite storefront; Laravel12/Filament5 replacement for PHP shared
-hosting. **Launch NO-GO. L1 is not complete; L2 is not approved.**
+Persian RTL React/Vite storefront with Laravel 12, Sanctum and Filament 5 for
+PHP shared hosting. **L1 implementation is CI-verified. L2 is NOT approved.**
+This is not a functioning commerce backend or a production launch approval.
+Actual host/browser/TLS acceptance is **UNVERIFIED**: [run the checklist](docs/ACCEPTANCE.md).
 
-## Current verified state — 2026-10-21
+## Implemented and executed
 
-- PHP8.2 AND8.3 × MySQL8.0/MariaDB10.6/MariaDB11.4 CI (six real DB jobs).
-- All14 legacy tables/175 columns explicitly mapped, normalized item/pivot tables,
-  FKs/deletion rules/unique/index/unsigned/CHECK integrity, integer **Toman**.
-- Sanctum cookie-only SPA auth/CSRF, password/session lifecycle, rate-limited login
-  and disabled503 OTP; frontend transport ported, no JWT refresh/demo identity.
-- Six-role policies for all application models, independent legacy permission matrix.
-- Filament staff login/password-only profile/dashboard shell, environment-only
-  one-time admin provisioning and forced password change. **No business resources.**
-- **131 Pest tests/728 assertions per matrix job**, Pint and migrations green;
-  frontend7 local-asset/transport tests +171 archived security tests/typecheck/build.
-- Actual lock: Laravel12.70.0, Filament5.10.3, Sanctum4.3.3, Pest3.8.7, Pint1.30.4.
-  Dependency resolution happened on real PHP8.2 in CI, not inferred from constraints.
+- Complete 14-table/175-column legacy schema mapping, normalized relations,
+  FK/deletion/unique/CHECK integrity, integer **Toman**, UTC application and DB sessions.
+- Customer cookie-only Sanctum/CSRF, login/password throttles, session revocation;
+  OTP fails closed with 503. No JWT/bearer issuance or demo identity fallback.
+- Six-role policies; native Filament staff login/flood lockout, forced initial
+  password change, current-password proof and other-session revocation.
+- Encrypted, write-only secret settings with constant masks/isSet; authorized
+  Filament settings page. Empty/omitted newValue preserves the old value.
+- Redacted admin model create/update/delete audit plus media-upload audit.
+- Self-hosted CSP/security headers, strict CORS/host/proxy trust, 3 MiB body limit,
+  validated/re-encoded raster uploads, SVG blocked, sanitized rich-text casts.
+- Single scheduler cron, bounded database worker, queued heartbeat and dashboard
+  stale warning; `php artisan deploy-check` with fail-closed readiness diagnostics.
+- No-dev upload ZIP builder and optional, token-protected, self-deleting migration runner.
 
-[Real run links/failures/results](docs/CI_RESULTS.md) · [Auth contract](docs/L1_AUTH.md)
-· [Full schema mapping](docs/LEGACY_SCHEMA_MAP.json) · [Hosting](docs/HOSTING.md).
+**160 Pest tests / 1,028 assertions in EACH of six real DB jobs**:
+PHP 8.2/8.3 × MySQL 8.0 / MariaDB 10.6 / MariaDB 11.4. Frontend typecheck,
+7 transport/local-asset tests +171 archived regressions and build pass separately.
+The PHP8.2/MySQL job also builds/extracts the real ZIP and runs HTTP/runner smoke.
+[CI links and evidence](docs/CI_RESULTS.md) · [Architecture](docs/ARCHITECTURE.md)
+· [Schema](docs/DATABASE.md) · [Security](docs/SECURITY.md).
 
-## Not done / UNVERIFIED
-
-Encrypted settings endpoints/casts/masking, full security/header/CORS/upload perimeter,
-admin activity logs, deploy-check, bounded queue/scheduler/heartbeat widget and actual
-host/browser/TLS/RTL/a11y acceptance. Provider/pricing/checkout/financial services and
-Filament business resources require L2 approval. Original photographs were NOT
-mirrored:23 embedded image URLs are inventoried and replaced with explicit local
-placeholders. Catalog/account mock fallbacks and storefront/API routing integration
-are not certified as a functioning shop. Green auth tests do not authorize launch.
-
-## Layout and commands
+## Layout and development
 
 ```text
-client/                React/Vite storefront, local assets and auth transport tests
-backend/               Laravel12 app, actual Composer lock, models/policies/Pest
-legacy/server/         archived unsafe Express/sql.js server; never deploy
-legacy/tests/          isolated171-case Phase A suite, NOT Laravel coverage
-legacy/client-admin/   archived React admin reference, not compiled
+client/     React/Vite storefront; local fonts/icons/image placeholders
+backend/    Laravel, actual Composer lock, policies, infrastructure and Pest
+legacy/     archived Express/sql.js/React-admin reference; NEVER deploy
+tools/     release builder, offline runner activation and CI smoke scripts
 ```
 
-Node22.22.3/Bun1.4.3; `bun.lock` is authoritative, no second npm lock:
-
 ```bash
-bun install --frozen-lockfile
+bun install --frozen-lockfile  # Bun1.4.3; Node22.22.3; bun.lock authoritative
 npm run typecheck
-npm test                 #7 frontend +171 legacy, NOT Pest
-npm run build            #client/dist; storefront only
-npm run dev              #Vite only; not a working backend/proxy integration
-```
-
-Backend (trusted PHP8.2/8.3 build environment, MySQL-family disposable test DB):
-
-```bash
+npm test
+npm run build                # client/dist only, not a deployable PHP package
 cd backend
-composer install --prefer-dist --no-interaction
-composer check-platform-reqs
-# Provision a PRIVATE .env and APP_KEY; HTTPS needed for Secure browser cookies.
-php artisan filament:assets --no-interaction
+composer install
 vendor/bin/pint --test
-# ONLY dedicated shopnext_ci_test + APP_ENV=testing (never production):
-php artisan migrate:fresh --force
+# Pest refuses any DB except dedicated MySQL-driver shopnext_ci_test/testing.
 vendor/bin/pest --ci
 ```
 
-CI config supplies the isolated database/runtime. Local sandbox has temporary PHP
-and Pint for syntax/formatting but no Composer/MySQL/pdo_mysql; local Pest execution
-is not claimed. Backend API uses same-origin relative URLs; deployment must serve
-`/api`, `/sanctum`, `/admin`, local public assets and storefront without exposing
-private backend files. Shared-host runbook still includes planned—not implemented—
-operational commands; read its status warning before deploying anything.
+Minimum PHP8.2; target8.3. Actual locks: Laravel12.70.0, Filament5.10.3,
+Sanctum4.3.3, Pest3.8.7, Pint1.30.4. Do not interpret Node/sql.js tests as PHP/DB proof.
+
+## Build and deploy
+
+```bash
+bash tools/build-deploy.sh build/shopnext-l1.zip
+```
+
+The builder uses committed HEAD, a fresh no-dev vendor, local SPA/Filament assets,
+private `app/` and sibling `public/`. No live .env, uploads, tests, Node runtime,
+legacy server or active migration runner is included. Generated ZIPs stay out of Git.
+[Terminal and no-terminal instructions](docs/HOSTING.md) include provisioning,
+cron, environment configuration and the optional one-hour offline runner activation.
+
+## Explicit non-goals / launch gate
+
+No pricing, checkout, payments, SMS integration or Filament business resources
+were built. The existing storefront's catalog/account/checkout mock UI is not a
+trusted business implementation. Original external photos remain explicit local
+placeholders, not a claim that photographs were mirrored. Real browser behavior,
+RTL/a11y, hosting permissions, CLI/web PHP equivalence, TLS and backups/restore
+remain UNVERIFIED until acceptance is recorded. Stop for owner approval before L2.

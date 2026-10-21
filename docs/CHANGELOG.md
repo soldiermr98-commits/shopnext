@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-10-21 — L1c/L1d implementation checkpoint
+
+- Closed native staff flooding: persistent IP lockout before credential lookup,
+  identical known/absent-account notification, correct-password blocking and expiry.
+- Encrypted Laravel setting casts, constant masked/isSet DTOs, explicit nonempty
+  newValue writes, preservation on omission/empty; Filament response clearing;
+  actual SQL/API/Livewire/exception/formatted-log secrecy tests.
+- Default-redacted create/update/delete admin activity plus safe media-upload audit.
+- Same-domain SPA/API routing, strict self-hosted headers/CSP, exact CORS/hosts,
+  trusted proxies/body cap; raster re-encoding with GD AND Imagick/SVG rejection;
+  sanitized rich HTML and actual UTC database session tests.
+- One minutely scheduler and bounded database worker/queued heartbeat/dashboard;
+  deploy-check with real runtime/DB/queue probes and unsafe/failure tests.
+- Committed-source no-dev ZIP builder, actual extracted HTTP/asset/migration smoke,
+  one-hour offline activation and POST/HTTPS/header-token self-deleting runner.
+- Code1c0d09c run39539510764:160 Pest/1028 assertions in each six-way DB job,
+  frontend/legacy/build and real upload-package smoke green. Failed intermediate
+  runs diagnosed/fixed; see CI_RESULTS. Final release marker l1-complete is applied
+  only AFTER final documentation CI is also green.
+- Hosting instructions for terminal/no-terminal; owner real-browser acceptance
+  checklist remains ALL UNVERIFIED. No launch/commerce claim or L2 implementation.
+
 ## 2026-10-21 — L1a + auth/role/Filament slice, six-way CI
 
 - MySQL8 + MariaDB10.6/11.4 × PHP8.2/8.3, identical integrity tests/rollback.

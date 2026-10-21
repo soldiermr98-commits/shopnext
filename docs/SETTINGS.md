@@ -1,3 +1,18 @@
+# Current L1 encrypted secret settings
+
+Implemented Laravel contract: app/Services/Settings + Data/SettingStatus,
+encrypted Setting.value, authorized /api/admin/settings GET/PUT and
+/admin/secure-settings. Four dormant credential slots, not active providers.
+GET returns only key/isSet/constant masked form. PUT accepts key and optional
+newValue; omitted/null/empty string preserves, explicit nonempty changes. No
+secret getter/clear/prefill. Filament clears newValue on every response, including
+validation, and tests inspect actual snapshots/effects/errors/formatted logs.
+See [SECURITY](SECURITY.md), [ARCHITECTURE](ARCHITECTURE.md), [CI](CI_RESULTS.md).
+The legacy general JSON settings below are NOT imported or exposed by this service.
+
+---
+## Archived Node / Phase-A reference (not current Laravel behavior)
+
 # Settings storage and propagation
 
 > **Historical baseline:** Phase A changed authentication, settings, validation and

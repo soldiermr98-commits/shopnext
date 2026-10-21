@@ -1,132 +1,75 @@
-# Database contract — target ER, not migrated schema
+# Database — implemented L1 schema and operational data
 
-> **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
-> environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
-> initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not
-> complete. Older statements below that no Laravel app exists describe the L0
-> checkpoint only. See [current CI evidence](CI_RESULTS.md).
+2026-10-21. Authoritative source: backend/database/migrations. The full mapping
+[LEGACY_SCHEMA_MAP.json](LEGACY_SCHEMA_MAP.json) covers ALL14 legacy tables and175
+columns; tests re-read the old DDL and assert actual columns/constraints on real
+MySQL8.0/MariaDB10.6/11.4, PHP8.2/8.3. [Evidence](CI_RESULTS.md).
+Historical source contract: [DATABASE_LEGACY](DATABASE_LEGACY.md). No production
+legacy data has been imported, renamed or deleted by this work.
 
-2026-10-20. **No Laravel migrations or MySQL database have been created/tested yet.**
-Exact historical 14-table/175-column inventory is preserved in
-[DATABASE_LEGACY](DATABASE_LEGACY.md). Phase A additionally introduced auth_sessions;
-its JWT schema will not be carried into Sanctum as an auth design. The following
-is the required L1 design, subject to ordered migrations and real constraint tests.
-
-## Proposed normalized relations
-
-`users` remain the authentication/customer parent; do not create an unrelated
-customer identity. Customer profile separation, if needed later, must use a unique
-user FK. Preserve immutable order/customer/address/item snapshots separately from
-live entities. Avoid duplicating financial authority in an editable JSON field.
+## Relations
 
 ```mermaid
 erDiagram
-    users ||--o{ addresses : owns
-    users ||--o{ orders : "RESTRICT delete"
-    users ||--o{ sessions : "dependent sessions"
-    users ||--o{ activity_logs : actor
-    users ||--o{ return_requests : requests
-    categories o|--o{ categories : parent
-    brands o|--o{ products : brand
-    categories ||--o{ category_product : membership
-    products ||--o{ category_product : membership
-    products ||--o{ product_variants : variants
-    products ||--o{ order_items : "RESTRICT delete"
-    product_variants o|--o{ order_items : "optional variant RESTRICT"
-    orders ||--|{ order_items : "retain financial snapshot"
-    orders ||--o{ transactions : "retain financial record"
-    orders ||--o{ return_requests : "retain return record"
-    coupons o|--o{ orders : "optional coupon reference and snapshot"
+    users ||--o{ addresses : "CASCADE"
+    users ||--o{ sessions : "CASCADE"
+    users ||--o{ orders : "RESTRICT"
+    users o|--o{ activity_logs : "SET NULL actor; retain snapshot"
+    users ||--o{ return_requests : "RESTRICT; order owner composite"
+    categories o|--o{ categories : "RESTRICT parent"
+    brands o|--o{ products : "RESTRICT"
+    categories ||--o{ category_product : "CASCADE membership"
+    products ||--o{ category_product : "CASCADE membership"
+    products ||--o{ product_variants : "RESTRICT"
+    orders ||--o{ order_items : "RESTRICT snapshots"
+    products ||--o{ order_items : "RESTRICT"
+    product_variants o|--o{ order_items : "RESTRICT product/variant composite"
+    coupons o|--o{ orders : "RESTRICT; snapshot retained"
+    orders ||--o{ transactions : "RESTRICT"
+    orders ||--o{ return_requests : "RESTRICT"
+    return_requests ||--o{ return_items : "RESTRICT"
+    order_items ||--o{ return_items : "RESTRICT; originating order composite"
 ```
 
-Settings, blog_posts, banners and operational jobs/failed_jobs/cache/heartbeat tables
-are standalone or have explicit optional author relations. Role/permission pivots
-or equivalent roles with validated policy coverage are added in L1. ER cardinality
-is a business contract, **not evidence that MySQL enforces it today**.
+Operational tables: database cache/locks, sessions, password_reset_tokens,
+jobs/job_batches/failed_jobs, scheduler_heartbeats. Settings, blog_posts and banners
+preserve their mapped legacy columns. No JWT auth_sessions or personal bearer-token
+issuance table is an authentication requirement. All18 application models have
+explicit default-deny policies; that is not18 exposed business endpoints.
 
-## Migration ordering / constraints
+## Invariants tested directly in SQL
 
-1. Identity + role/permission foundations; cache/session/queue/heartbeat tables.
-2. Category self-reference, brands; products; product variants; category_product.
-3. Addresses, coupons; orders with customer FK/snapshots; order_items with product
-   and optional variant FKs; transactions and returns.
-4. Settings, content/banners, activity logs; indexes/checks before app exposure.
-   Reverse dependencies in down migrations; test migrate/rollback/migrate on an
-   isolated database. Never run destructive rollback/fresh on production.
+InnoDB, utf8mb4_unicode_ci, matching FK column types, required indexes/uniques.
+Canonical nonnegative integer **Toman** (not Rial); JS-safe bounds where defined,
+positive line quantities, sale <= price, rating/discount/percentage CHECKs, valid
+JSON, gateway+authority uniqueness. Ordered products/users and financial history
+use RESTRICT, safe dependent addresses/sessions/membership use CASCADE. Composite
+FKs prevent cross-product variants, cross-owner returns and unrelated return lines.
+SKU namespaces are separately unique in products and product_variants, NOT globally
+shared. Legacy string identifiers map explicitly to nullable unique legacy_id or
+retained natural keys; no silent integer conversion or importer is implemented.
 
-InnoDB, explicit utf8mb4 collation (test Persian/case uniqueness behavior), matching
-FK column types. IDs/normalization choices must be encoded consistently in actual
-migrations rather than assumed from legacy TEXT IDs. Unique normalized phone and
-nullable email; unique per-entity slugs, SKU and coupon code; order_number uniqueness.
-Cross-product/variant SKU uniqueness needs a shared registry or another explicit
-enforced design if a single global namespace is chosen. Index FK columns and real
-lookup/status/time filters, with direct SQL metadata assertions.
+Laravel timezone UTC and MySQL/MariaDB SESSION time_zone=+00:00 are configured and
+asserted in every matrix job. Datetimes are UTC; display/Jalali formatting must not
+change storage meaning. Migration down/up is actually tested in an isolated DB.
+Never run migrate:fresh/rollback against production; use backups and reviewed
+forward migrations. DB constraints do not implement future pricing/stock/payment
+transaction workflows.
 
-Use nonnegative integer Toman (document maximum; JS-safe DTO amounts or exact string
-transport), unsigned/check stock and quantity; sale_price <= price; quantity > 0,
-percent/rating bounds. SQL modes and server version must enforce checks — not merely
-parse them. Require MySQL >=8.0.16 or an explicitly tested current MariaDB release;
-exact host version remains unverified. Store UTC timestamps, no localized strings.
+## L1c/d additions
 
-**RESTRICT:** order_items→products and optional variants, orders→users, financial
-children→orders. Archive/soft-delete instead of cascading order/payment evidence.
-Category children/brand references need RESTRICT or nullable SET NULL with deliberate
-semantics. CASCADE only proven-safe dependent nonfinancial rows/pivots/sessions;
-address cascade is safe only when orders retain snapshots and no other reference
-needs the live address. Add return-line normalization in the approved returns phase,
-not a fake financial implementation. Schema preparation does not authorize services.
+- settings.value: TEXT with Laravel encrypted cast; service values <=4096 bytes
+  before encryption. Constant masked/isSet DTO only. Internal nonsecret bootstrap
+  marker is reserved outside the supported credential-key allowlist.
+- activity_logs: existing user_id/user_name/user_role/ip_address preserved; new
+  JSON before/after complement action/module/subject_id/changed_fields/timestamps.
+  Snapshot values default-redact; legacy details remains hidden. No secret copies.
+- scheduler_heartbeats: name PK; started_at/completed_at/worker_completed_at and
+  worker_failed. `cron` row tracks bounded tick; `queue` row is written only by
+  actually processing QueuePulse. Age >3min, missing/future heartbeat or worker
+  failure warns. Database queue/cache mutexes need no Redis or new daemon.
 
-Settings use encrypted casts (APP_KEY outside DB) and explicit masked DTOs. Direct
-DB tests must prove no secret plaintext; API and audit-log tests must prove no echo.
-Do not migrate historical provider-looking values/default hashes without review.
-Dev-only seeders fail closed outside local/testing; production admin bootstrap is
-separate, explicit and environment-provisioned, never automatic demo data.
-
-## Required evidence
-
-Real disposable MySQL/MariaDB must reject duplicate email/phone/slugs/SKU/coupon,
-orphan FKs, negative quantities/stock/money and deletion of ordered products/customer.
-Test nullable uniques, multibyte strings, UTC/Toman round trips, dependency order,
-rollback, transaction failure and indexes. Test with direct SQL, not just validation.
-No Pest or MySQL constraints have been executed; current 171 sql.js tests do not
-count toward this acceptance. See [specification](SPEC_FROM_LEGACY.md).
-
-## L1a full-schema mapping — 2026-10-21
-
-The additive `2026_10_21_000002_complete_legacy_schema` migration fills every
-previously missing legacy field. `LEGACY_SCHEMA_MAP.json` explicitly maps all
-**175 declared columns of the14 original tables** to real target columns, including
-renamed password storage and normalized category membership/order/return lines.
-Tests re-read the legacy DDL and check every mapping against the actual database;
-a silently omitted column now fails. Original string IDs have nullable unique
-`legacy_id` columns for a future reviewed import; live keys are unsigned bigint.
-There is NO automatic data/default-account/provider-secret import.
-
-Normalized `order_items` and `return_items` retain immutable JSON snapshots; retained
-return header `items` is an archival snapshot, never the quantity authority. Variant
-lines use a composite product FK; returns use composite owner/order and line/order
-FKs. Financial deletion is RESTRICT. Address/session/pivot cascades are dependent
-only. SKU uniqueness is per products/variants table (separate namespaces); no
-cross-table global SKU promise is made. Categories use parent RESTRICT; cycle
-prevention remains application-level work, not something a self-FK guarantees.
-
-All canonical amounts, including transactions, are integer **Toman**; a SQL CHECK
-rejects RIAL in the old permissive transaction unit enum. Gateway conversion later
-must use a separate explicit Rial boundary, never reinterpret canonical amounts.
-All monetary fields are unsigned and JS-safe capped; rating/percentage/positive
-quantity checks are SQL-enforced. Sensitive details/raw_response/bank_iban fields
-must receive encrypted model casts before any application writes; schema presence
-alone is not an at-rest encryption claim.
-
-Portable choices: InnoDB, utf8mb4_unicode_ci, no JSON defaults/generated JSON indexes,
-no reliance on JSON binary storage or key ordering. Both families reject malformed
-JSON in tests. Indexed text stays within modern InnoDB3072-byte limits (largest
-composite text unique is gateway50 + authority255 =1220 bytes). MySQL8/MariaDB10.6
-and11.4 exercise the same invariants. CHECK removal uses each server's supported
-DDL grammar; no constraint is skipped. Downgrade retains extended return-status
-labels rather than silently rewriting historical statuses; removing tables/data
-requires backup/operator review, not a claim of lossless business rollback.
-
-The preceding L0/initial-slice descriptions are historical. L1a is only verified
-when the commit's entire six-way database/PHP matrix is green; see CI run evidence.
-Auth, model policies, encryption and business operations are separate L1b+ work.
+Encrypted settings/DB backups are not sufficient without the retained APP_KEY.
+No live DB dump, sensitive seed, host test data or release ZIP is committed. The
+package smoke adds a temporary probe migration ONLY after extracting the ZIP into
+an ephemeral CI directory/database, never to the deliverable schema.

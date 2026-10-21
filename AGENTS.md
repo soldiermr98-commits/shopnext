@@ -1,72 +1,90 @@
-# Shopnext handoff — current 2026-10-21
+# Shopnext handoff — L1 implementation checkpoint, 2026-10-21
 
-## Rules / scope
-- Fixed branch arena/c101d8c3-shopnext only; no new/switch branches.
-- Owner approved L0+L1. Stop before L2; no pricing/checkout/payment/SMS/business
-  Filament resources. Current work: L1a + auth/roles/Filament slice of L1b verified.
-  Overall L1 remains incomplete; NO-GO. User's last message ended at Staff: Filament.
-- Small commits. AFTER EVERY COMMIT push and wait for full CI green BEFORE next
-  concern. Red: read actual failure annotations/logs and fix, don't bypass tests.
-- Read code first, never print secrets. English specifications/Persian conversation.
+## Standing rules / gate
+- Fixed branch arena/c101d8c3-shopnext ONLY. Small commits; push and inspect FULL
+  green CI after EVERY commit before next concern. Read red logs/annotations and
+  fix without test bypass. Unexecuted = UNVERIFIED. Never print secrets.
+- Owner approved L1a/L1b and explicitly requested full L1c/L1d. Implementation is
+  complete and code CI verified; final docs commit must pass before l1-complete tag.
+  STOP for owner L2 approval. No pricing/checkout/payments/SMS integrations or
+  Filament business resources. Dormant encrypted configuration slots are not providers.
+- Actual browser/host/TLS/RTL/a11y/backup restore UNVERIFIED. The tag is an
+  implementation checkpoint, NOT launch/commerce certification.
 
-## Verified runtime and tests
-- .github/workflows/backend.yml: PHP8.2/8.3 × mysql8.0/mariadb10.6/mariadb11.4; real
-  services/extensions, cache+locked Composer, Pint, fresh migration and Pest. Frontend
-  frozen Bun, typecheck,7 Node tests +171 legacy tests, build. No skip/fail-optional.
-- Code531d4e9 green run39506373318:131 Pest/728 assertions in EACH six-way job.
-  Actual runtimes8.2.34/8.3.35; MySQL8.0.46, MariaDB10.6.28/11.4.13.
-- Actual lock framework12.70.0, Filament5.10.3, Sanctum4.3.3, Pest3.8.7, Pint1.30.4.
-- Local /home/user/.cache/shopnext-tools/{php,pint}: nativePHP8.3.31/Pint1.30.4,
-  syntax/format verified. Still no local Composer/MySQL/pdo_mysql. Tests run in CI.
-- gh run logs redirect blocked outside allowlist. Fetch /actions/runs/ID/jobs and
-  /check-runs/JOB_ID/annotations with gh api. Bounded annotations include full Pest
-  root failures, counts, runtime. Use start_process gh run watch then wait exit.
-- workflow_dispatch API403 from integration; normal git push works. CI-generated
-  lock was verified via a no-op push commit because GITHUB_TOKEN pushes don't start
-  push workflows. Never claim unexecuted automatic CI for bot commits.
+## Executed evidence
+- Code1c0d09c, run39539510764:7 jobs SUCCESS;160 Pest/1028 assertions per EACH
+  PHP8.2/8.3 × MySQL8.0/MariaDB10.6/11.4, Pint/fresh/down/up/real SQL.
+- Runtime8.2.34/8.3.35, DB8.0.46/10.6.28/11.4.13. GD+Imagick both exercised.
+- Frontend Node22.22.3/Bun1.4.3:7 tests +171 archived tests, typecheck/build.
+- PHP8.2/MySQL also fresh no-dev ZIP + extracted private/public HTTP + real pending
+  migration via runner/self-delete/replay. TLS SIMULATED, not browser acceptance.
+- docs/ci/l1-complete-verified-matrix.json and docs/CI_RESULTS.md contain exact
+  observed links/results; final tagged commit's checks are in workflow history.
+- Laravel12.70.0/Filament5.10.3/Sanctum4.3.3/Pest3.8.7/Pint1.30.4 actually resolved.
+- No local Composer/MySQL/pdo_mysql substitute. Native local PHP/Pint tools (when
+  available in /home/user/.cache/shopnext-tools) provide syntax/style only.
+- gh run watch --exit-status through start_process, then wait_for exit. Logs ZIP
+  redirect may be blocked; use gh api check-runs/JOB_ID/annotations (bounded output
+  includes failures/Pest summaries/runtime/migration/package smoke). Do not claim
+  success from workflow presence alone. workflow_dispatch permission previously403.
 
 ## Source map
-- backend/database/migrations/: ordered full schema; docs/LEGACY_SCHEMA_MAP.json maps
-  every175 legacy column, test re-reads original DDL and asserts actual DB columns.
-- app/Support/{Permissions,Phone}: fixed6-role matrix, phone normalization.
-- app/Policies/: all18 application models explicitly mapped; unknown actions denied,
-  no super_admin universal bypass; initial-change/inactive gates, owner read policies.
-- app/Http/{Controllers/AuthController,Requests/AuthRequest,Middleware/CookieOnly}:
-  actual auth endpoints; role/flags not fillable; global Sanctum token retrieval off.
-- app/Providers/Filament/AdminPanelProvider, app/Filament/: native staff login,
-  password-only profile and gated dashboard. No resources. Local avatar/default
-  bundled font; artisan filament:assets required (CI publishes, generated ignored).
-- app/Console/Commands/ProvisionAdmin: private env-only first admin, transactional
-  nonsecret settings lock, no resets/default passwords, must-change flag.
-- client/src/lib/authFetch.ts: Sanctum CSRF/credentials, one419 retry, no401 refresh;
-  client/tests/auth-transport.test.mjs + offline.test.mjs are7 native Node tests.
-- legacy/: archived Express/sql.js, frozen contracts,171 independent tests; admin
-  reference excluded from active build, not runnable separately. Never deploy.
+- backend/database/migrations + docs/LEGACY_SCHEMA_MAP.json:14 tables175 mapped
+  columns, normalized items/pivots/composite FKs, UTC DB sessions, canonical Toman.
+- Models/User, Support/Permissions, Policies: guarded role/flags, all18 default-deny
+  model policies,66 independent role/action POLICY cases (NOT business endpoints).
+- AuthController/AuthRequest/CookieOnly, client/src/lib/authFetch.ts: real cookie/
+  CSRF lifecycle, no bearer/JWT/demo fallback; separate login/OTP/password limits.
+- Filament/Auth: staff native login/hidden remember, forced proof/rotation/revoke.
+  StaffAuthTest includes persistent-cache flooding, same lockout before user lookup,
+  correct-password blocking and decay recovery. No external avatars/fonts.
+- Services/Settings, Data/SettingStatus, Models/Setting: encrypted cast; <=4096-byte
+  nonempty newValue only, omitted/null/empty preserves; no getter, constant DTO.
+  Reserved _admin_bootstrap_lock is a nonsecret SQL marker outside service keys.
+- Filament/Pages/SecureSettings: deferred wire:model and save must share a request;
+  finally+dehydrate clear secret. Never hydrate old values or use live input sync
+  without equivalent success/validation/error snapshot secrecy proofs.
+- Observers/AdminActivity: actor/IP/time/create-update-delete, safe-field allowlist,
+  default redact before/after. No request bodies/secret values. Bulk query-builder
+  mutations bypass events; future domain services MUST provide transaction audit.
+  MediaController explicitly audits upload, deletes file if logging fails.
+- Middleware: exact hosts, explicit proxy IP/CIDRs (no wildcard/forwarded Host),
+  StrictCors,3MiB body cap, CSP/error headers. Native admin/livewire CSP has scoped
+  inline/eval exception; storefront scripts self only. Never relax all routes.
+- MediaRequest/SafeUpload:2MiB/2048px raster MIME+extension+image validation,
+  re-encode GD or Imagick to random PNG in private storage, /media fallback.
+  SVG/executables blocked; no public upload execution. RichText/SanitizedHtml
+  protects rich content/description on write AND read, not arbitrary plain fields.
+- Console/CronTick, QueuePulse, Heartbeat, CronHeartbeat: one schedule:run cron,
+  DB overlap lock2min, in-process bounded worker50s/timeout40, actual queued pulse.
+  No Redis/proc_open/Supervisor/root/persistent-worker requirement. max-time is NOT
+  a hard kill of a hung job; L2 provider jobs need I/O deadlines/idempotency.
+- DeployHealth/DeployCheck: actual PHP/exts incl bcmath/gd-or-imagick, write probes,
+  env/key/debug/origin, DB/version, cron/pulse, failed/overdue/stuck queue, storage
+  symlink OR validated private delivery. Generic credential-safe diagnostics.
+- tools/build-deploy.sh: committed HEAD only, no-dev vendor, local SPA+Filament
+  assets, private app/public ZIP; real .env/uploads/test/legacy excluded.
+- OneTimeMigrator + operations stub + local activate/invoke helpers: POST/native
+  HTTPS/header256bit token/hash-only1h activation, atomic claim, unlink BEFORE
+  operation, consume on failure, no redirect/token stdout/query. Inactive by default.
+  Helper requires sibling app/public and local token outside both; no overwrite.
+- tools/ci/deploy-smoke.py: actual ZIP/HTTP/fixture migration proof; CI-only HTTPS
+  simulation never packaged. Generated ZIPs/cache/bytecode must stay ignored.
 
-## Critical invariants / limits
-- Money integer Toman throughout; CHECK rejects RIAL transactions. FK RESTRICT
-  financial history; immutable item snapshots; variants/returns have composite FKs.
-- SKU uniqueness per products/variants table (separate namespaces, not global).
-- Cookie __Host-shopnext_session HttpOnly/Secure/Strict/no Domain; readable XSRF.
-  Web CSRF stack always applies to auth routes; no Bearer or personal token issuance.
-  Test EnforcedCsrf overrides Laravel unit-test bypass. Session config120min idle,
-  not old JWT15min/refresh7days. Password14+chars,<=72bytes, old proof required.
-- Super_admin/admin/manager: dashboard/products/orders/customers; settings/logs only
-  super_admin/admin. content_editor/support/customer denied privileged matrix.
-  Filament admission only active first3 roles; first-login profile allowed, dashboard
-  and privileged models gated until change. Remember-me hidden/non-dehydrated.
--66 independent POLICY matrix tests, NOT11 implemented business HTTP endpoints.
-  Native staff flood/browser TLS/network/RTL/a11y acceptance UNVERIFIED.
-- Secret model $hidden is NOT encryption. Settings casts/endpoints/masked newValue
-  DTOs, activity logging, security headers/CSP/CORS/proxy/upload perimeter, deploy-check,
-  bounded cron/queue/heartbeat widget STILL PENDING. No L1 completion claim.
-- Shared host target8.3/min8.2, confirmed extensions, real cron; no Redis/persistent
-  workers/Supervisor/Docker/root. CLI vs web PHP/proc_open/SSH/symlink unresolved.
--23 original remote images NOT mirrored; placeholders explicit. Dynamic media/old
-  localStorage and catalog/account mocks remain. No real provider calls/data import/
-  credentials rotation/deletion. Admin env must be removed after provision.
+## Invariants / manual limits
+- Integer Toman/UTC; financial history RESTRICT; addresses/sessions/membership safe
+  cascade; SKU unique separately in product/variant namespaces. No live data import.
+- __Host session Secure/HttpOnly/Strict/Path=/, no Domain; readable XSRF.120min
+  session idle, NOT old JWT timing.14+ new password chars and <=72 bcrypt bytes.
+- Staff active first3 roles; settings/logs only super_admin/admin; forced users
+  profile only until proof. Customer /admin denied. No universal super_admin bypass.
+- Legacy plaintext settings cannot be inserted into encrypted contract; future
+  importer must be explicit. Persist/back up APP_KEY; never regenerate existing key.
+- Host CLI/web PHP equivalence, exact proxy IPs/TLS/permissions/PCNTL/process limits,
+  no-terminal FTP and key/DB/media restore are UNVERIFIED until owner checklist.
+-23 original photos were NOT mirrored: placeholders explicit. Existing storefront
+  catalog/account/checkout mocks are not trusted backend services. Legacy code is
+  reference-only, excluded from build. Never start/deploy the archived Node server.
 
-## References
-README.md and backend/README.md current; docs/L1_AUTH.md, CI_RESULTS.md,
-LEGACY_SCHEMA_MAP.json, DATABASE.md, HOSTING.md, SPEC_FROM_LEGACY.md.
-Older audit/Phase A/L0 evidence retained but path/stack/approval claims historical.
+Read README, ARCHITECTURE, DATABASE, SECURITY, HOSTING, ACCEPTANCE, CI_RESULTS and
+L1_AUTH before changing scope. Historical PhaseA/L0 docs are not current approval.

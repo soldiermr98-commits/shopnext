@@ -1,22 +1,27 @@
-# Laravel12 backend — L1a/auth slice verified, overall L1 incomplete
+# Laravel backend — L1 implementation checkpoint
 
-Real Composer lock: framework12.70.0, Filament5.10.3, Sanctum4.3.3, Pest3.8.7,
-Pint1.30.4. Platform PHP8.2.0; target8.3. The6-job PHP8.2/8.3 × MySQL8/MariaDB10.6/
-11.4 matrix passes131 Pest tests/728 assertions, Pint and fresh/down/up migrations.
+Laravel12.70.0 / Filament5.10.3 / Sanctum4.3.3; PHP minimum8.2, target8.3.
+Full schema, cookie auth/roles/staff lifecycle, encrypted write-only settings,
+redacted audit, security perimeter, safe uploads/rich text, bounded cron/database
+queue/heartbeat and deploy-check are implemented and CI-executed.
 
-Implemented: full14-table/175-column mapping and normalized relations, model
-policies/independent6-role matrix, customer Sanctum HttpOnly/Secure/Strict cookies
-and enforced CSRF, OTP503/limits, password/session lifecycle; staff Filament login,
-password-only profile and gated dashboard; guarded env-only admin provisioning.
-No business resources. Actual CI links/limitations: ../docs/CI_RESULTS.md and
-../docs/L1_AUTH.md. Schema mapping: ../docs/LEGACY_SCHEMA_MAP.json.
+160 Pest tests/1,028 assertions per PHP8.2/8.3 × MySQL8/MariaDB10.6/11.4 job.
+See [evidence](../docs/CI_RESULTS.md), [schema](../docs/DATABASE.md),
+[auth](../docs/L1_AUTH.md), [security](../docs/SECURITY.md),
+[deployment](../docs/HOSTING.md) and [manual acceptance](../docs/ACCEPTANCE.md).
 
-Build/deploy must publish local assets with `php artisan filament:assets`; generated
-files are ignored, never a runtime CDN. Private env/key, HTTPS, database sessions,
-file/database cache required. First admin: `shopnext:provision-admin` reads private
-ADMIN_* config, never default passwords/CLI arguments; initial rotation mandatory.
+`composer install`, `vendor/bin/pint --test`, `vendor/bin/pest --ci` locally require
+real supported PHP/extensions and dedicated mysql-driver shopnext_ci_test/testing.
+Never use SQLite or a production database as a substitute. CI is authoritative
+where local PHP pdo_mysql/Composer/database are unavailable.
 
-NOT implemented: settings encryption/write-only DTOs, complete security/header/CORS/
-upload perimeter, activity logs, deploy-check, bounded scheduler/queue/heartbeat.
-Browser/TLS/host acceptance UNVERIFIED. No pricing/payment/SMS/checkout services.
-Do not deploy as a complete shop; do not seed demo users on production.
+Build from repository root with `bash tools/build-deploy.sh`; do not upload this
+source tree into a public directory. Publish local Filament assets during build.
+First administrator comes only from private ADMIN_* environment values via
+`shopnext:provision-admin`; no default/reset password or production seed.
+
+Run one `schedule:run` cron each minute; it drains the bounded database worker
+in process and verifies a queued pulse. Do not add a second persistent worker.
+`deploy-check` returns nonzero for failed readiness; stale heartbeat is expected
+before the first successful cron. All host/browser acceptance remains UNVERIFIED.
+No L2 or commercial resources/services are authorized.

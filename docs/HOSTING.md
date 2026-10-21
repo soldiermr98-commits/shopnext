@@ -1,223 +1,233 @@
-# Shared-host deployment contract and runbook
+# Shared-host deployment — L1 runbook
 
-> **Current 2026-10-21:** Laravel/Sanctum/Filament auth now exists and is six-way CI
-> verified; publish local Filament assets with `php artisan filament:assets` and
-> provision first staff privately with `shopnext:provision-admin` (see L1_AUTH.md).
-> deploy-check, scheduler/heartbeat and bounded worker wiring below are STILL PLANS,
-> not implemented commands. Do not deploy this as a complete L1/production shop.
+2026-10-21. Code/ZIP/HTTP smoke is CI-executed; **the actual host, browser and TLS
+remain UNVERIFIED**. Complete [ACCEPTANCE.md](ACCEPTANCE.md) before considering a
+launch. L2 is not authorized; this package is an infrastructure/auth checkpoint,
+not a pricing/checkout/payment/SMS application.
 
-> **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8
-> environment. Laravel12/Filament5 were actually Composer-resolved; skeleton and
-> initial constrained schema are tested (24 Pest cases). L1 is IN PROGRESS, not
-> complete. Older statements below that no Laravel app exists describe the L0
-> checkpoint only. See [current CI evidence](CI_RESULTS.md).
+## 1. Discover the real runtime first
 
-2026-10-20 — **Plan only until L1 is implemented and verified.** No `artisan`,
-`deploy-check`, migrations, queue worker or Filament dashboard exists yet. Commands
-below describe the required future release, not commands runnable in this checkout.
+Minimum PHP8.2, target8.3. CLI/cron PHP can differ from web PHP. Identify the actual
+absolute CLI binary using the host's available terminal or cron/version-output
+facility; run that binary with `-v`, `--ini` and `-m` privately. Do not assume the
+shell's `php` is the selected web version. No public phpinfo page.
 
-## Confirmed host facts / unresolved checks
+Required extensions: intl, mbstring, pdo_mysql, openssl, ctype, json, tokenizer,
+xml, fileinfo, zip, curl, **bcmath**, plus gd OR imagick. bcmath and all CLI/web
+extension equivalence still require host verification. PHP extensions do not prove
+server limits, cron execution, SSH, symlinks or outbound provider connectivity.
+Supported CI DBs: MySQL8.0, MariaDB10.6 and11.4; use DB_CONNECTION=mysql for both
+server families (the tested PDO path). Application and DB session timezone are UTC.
 
-Owner confirmed selectable PHP 8.x (target **8.3**, minimum **8.2**), MySQL/MariaDB,
-real cron, and intl, mbstring, pdo_mysql, openssl, ctype, json, tokenizer, xml,
-fileinfo, zip, curl and gd/imagick. Shared hosting must NOT require Redis, Supervisor,
-Docker, root, persistent queue workers or a Node process. Frontend and vendor are
-built before upload; PHP serves requests. SSH/terminal is **UNCONFIRMED**.
+No Redis, Supervisor, Docker, root, persistent worker or Node process is required.
+The scheduler's worker runs in-process, so proc_open is not required to start it.
 
-Still UNVERIFIED on actual host: exact MySQL/MariaDB version, CHECK enforcement,
-CLI PHP path/version/extensions vs web PHP, cron overlap/time limits, disabled
-functions (`proc_open` especially), memory/file/upload limits, writable directories,
-symlink permission, mod_rewrite/front-controller routing, TLS, backups/restore and
-SMTP/SMS/gateway outbound reachability. Do not infer these from extension availability.
-No control-panel-brand assumptions are built into code or paths.
+## 2. Build OFF the host
 
-## Runtime and private layout
+Trusted Linux/macOS Bash or WSL build machine: Git, PHP8.2+ with extensions,
+Composer2, Python3, zip/tar, Node22.22.3 and Bun1.4.3. Check out the intended release
+commit/tag and use committed files; the script deliberately archives HEAD, not
+uncommitted edits or live server state.
+
+```bash
+bash tools/build-deploy.sh build/shopnext-l1.zip
+```
+
+The script installs a fresh locked **no-dev vendor**, builds the SPA, publishes
+local Filament assets, and produces:
 
 ```text
-/home/ACCOUNT/shopnext/backend/    # app, vendor, .env, storage, bootstrap outside webroot
-/home/ACCOUNT/public_html/         # ONLY public contents; no .env/vendor/private storage
+app/                    PRIVATE Laravel/vendor/storage/.env.example/SPA HTML
+public/                 ONLY webroot contents, Laravel index + local assets
+activate-runner.php      LOCAL offline helper; do not publish in webroot
+invoke-runner.php        LOCAL HTTPS client; do not publish in webroot
+REVISION                 commit identifier
 ```
 
-Preferred: document root points at `backend/public`. Otherwise copy public files
-(including `.htaccess`) to `public_html`; adjust **all relative bootstrap paths** in
-the release's actual public/index.php to the private application, including
-maintenance.php, vendor/autoload.php and bootstrap/app.php. Do not blindly paste an
-index.php from a different Laravel version. Deny dotfiles, directory listing and
-PHP execution under uploaded media. Never move the whole backend into webroot or
-rely only on `.htaccess` to hide secrets.
+No real .env, sessions, uploaded media, tests, Node server, legacy code or active
+migration runner is included. Keep the ZIP out of Git/public directories.
+The CI PHP8.2/MySQL job publishes artifact `shopnext-l1-upload` (7-day retention).
+The artifact is inspected/extracted and its actual public/private HTTP layout,
+local assets, Filament and pending-migration runner are exercised. TLS is simulated
+in that smoke test, not certified. To build where registries are unreliable, prewarm
+trusted Composer/Bun caches or configure an approved mirror on the build machine;
+retain both locks, TLS verification and frozen installs. Never fetch fonts/CDNs at
+runtime or regenerate a lock just to bypass a mirror failure.
 
-Use one HTTPS origin for storefront, `/api`, `/sanctum` and `/admin` where possible.
-Expose Laravel/Filament routes before the storefront SPA fallback; never route
-`/api` errors or `/admin` to SPA index. Serve frontend built files without replacing
-Laravel's front controller. Missing asset returns 404, not index.html. Exact SPA
-rewrite/fallback controller is part of L1 integration, not configured today.
-For a development preview bind Vite 0.0.0.0; browser uses relative URLs and Vite
-proxy targets the backend internally, never browser-facing localhost API URLs.
+## 3. Private/public layout and environment
 
-Protect APP_KEY, preserve it between deploys, back it up separately from encrypted
-DB. Restrict env/backup/log file permissions to account access (no 0777). Writable
-only `storage/` and `bootstrap/cache/`; executable application/upload permissions
-must follow host isolation. File/database cache; database sessions recommended;
-HttpOnly Secure session, tested SameSite and CSRF; exact CORS list, APP_DEBUG=false,
-APP_ENV=production, correct APP_URL/proxy trust. No secrets in logs, screenshots,
-CLI arguments pasted into support tickets, frontend VITE_* or release archives
-shared publicly. Never commit production env or export it in diagnostics.
+Use sibling directories, with the private directory named **app**:
 
-## Discover the CLI binary (terminal and no-SSH)
+```text
+/home/ACCOUNT/app/             private app, .env, vendor, storage, operations
+/home/ACCOUNT/public/          document root, OR public_html/ with these contents
+```
 
-In a terminal, `command -v php` and `php -v` are only starting points. Confirm full
-path, PHP_BINARY, version, loaded INI, modules and pdo_mysql; the web version can
-differ. Use `php -r 'echo PHP_BINARY," ",PHP_VERSION,PHP_EOL;'` and `php -m` privately.
-Ask host support for the selected PHP 8.3 **CLI** full path if needed.
+Point the document root at public when supported. Otherwise copy **only public
+contents**, including .htaccess, into sibling public_html; keep app outside it.
+The generated index and optional runner reference `../app`. Do not copy the whole
+archive into public_html. If the host cannot provide any private writable sibling
+or configurable document root, this layout is NO-GO; do not rely on hiding .env
+with rewrite rules. Public assets must not replace Laravel's index.php.
 
-Without SSH, configure a temporary private cron command with the candidate full
-path, e.g. `/FULL/PATH/php -v > /home/ACCOUNT/private/php-cli-check.log 2>&1` and
-`/FULL/PATH/php -m >> /home/ACCOUNT/private/php-cli-check.log 2>&1`. Read the private
-log through authenticated file manager/FTP, verify CLI version/extensions, then
-remove the diagnostic cron/log. Never publish phpinfo or `.env` diagnostics.
-Every production cron must use the verified full binary and application paths;
-cron PATH is not the interactive shell PATH. This discovery procedure is host-agnostic.
+Prepare private app/.env from .env.example. Example NONSECRET configuration:
 
-## Build a deterministic release off-host
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+APP_LOCALE=fa
+APP_FALLBACK_LOCALE=en
+APP_URL=https://shop.example
+DB_CONNECTION=mysql
+DB_HOST=HOST_PROVIDED_DATABASE_HOST
+DB_PORT=3306
+SESSION_DRIVER=database
+CACHE_STORE=database
+QUEUE_CONNECTION=database
+SANCTUM_STATEFUL_DOMAINS=shop.example
+CORS_ORIGINS=https://shop.example
+TRUSTED_HOSTS=
+TRUSTED_PROXIES=
+```
 
-On a trusted connected build machine (matching PHP floor/extensions), resolve
-Composer dependencies **once**, commit the real composer.lock, and run tests against
-isolated MySQL/MariaDB, Pint and platform checks. Production artifact installation:
-`composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction`,
-`composer check-platform-reqs --no-dev`. Never run `composer update` on production;
-never use `--ignore-platform-reqs` to hide incompatibility. Development/Pest belongs
-in build/test environment, not host. All authored PHP declares strict_types=1;
-Pint is a format check, not a static type checker or a security test.
+Fill DB_DATABASE/DB_USERNAME/DB_PASSWORD privately. Generate APP_KEY once on the
+trusted machine (or host terminal) with `php artisan key:generate --force
+--no-interaction` **for a NEW installation only**; it writes the private .env,
+not stdout. Preserve the old APP_KEY/.env on upgrades. Never regenerate a key for
+an existing encrypted settings DB. Do not cache development config or test keys.
 
-Current frontend lock is **bun.lock** (no package-lock): use the pinned Bun version
-from build evidence and `bun install --frozen-lockfile`, then `npm run typecheck`,
-`npm test`, `npm run build`. Tests require a compatible Node 22+ environment.
-Artifacts contain `client/dist/`, local fonts/icons/licenses, built Filament assets,
-backend vendor and app, not legacy/data, node_modules, test DBs or private env.
-Release manifest should record commit, runtime/tool versions, lock hashes, artifact
-hash and test evidence. Do not upload the unimplemented `backend/` as a release.
+One HTTPS domain for SPA, /api, /sanctum and /admin; no second CORS frontend origin.
+Secure/HttpOnly/host-only/Strict cookies are configured by code. Do not widen Domain
+or change SameSite as a workaround. Include a port in stateful/CORS origins only
+when genuinely using a nonstandard HTTPS port. TRUSTED_HOSTS extra values are exact
+hostnames; TRUSTED_PROXIES only provider-confirmed ingress IP/CIDRs, never */**.
+Forwarded Host is not trusted. Empty CORS config still permits normal same-origin
+requests; it grants no cross-origin access.
 
-## Iran / intermittent-network installation
+Provide ADMIN_NAME/PHONE/EMAIL/INITIAL_PASSWORD privately for first provisioning;
+password14+ chars and <=72 UTF-8 bytes, no defaults. Remove these initial bootstrap
+values after success; never pass passwords on CLI, commit them or paste them into
+chat/logs. No production demo seed. Set display_errors=Off and
+zend.exception_ignore_args=On at PHP/host level. Configure server request limit3 MiB,
+upload limit2 MiB and no directory listings/dotfile access before PHP parsing.
+New uploads are private/re-encoded PNG and served by /media, so no upload directory
+needs PHP execution. Confirm actual server rules manually, not just Laravel tests.
 
-- Runtime must not request external CDN scripts/styles/fonts/icons. Current fonts
-  are vendored with licenses/hashes; photography is a documented local placeholder,
-  **not** a completed image mirror. Validate future API/media/localStorage paths;
-  browser offline/network inspection remains required before claiming zero hotlinks.
-- Warm Composer's configured `cache-dir` and Bun/npm caches in a connected build
-  environment using the exact committed locks. Keep signed/hashed release archives
-  and dependency cache backups private. A warm cache is not proof of offline success:
-  test install in a clean workspace with networking disabled before promising it.
-- Prefer a trusted organization-controlled Composer/npm mirror, via user/build
-  configuration (not hard-coded runtime URLs). Verify upstream integrity/dist hashes,
-  license provenance and TLS; never disable TLS or use an untrusted public mirror
-  just to bypass outages. Verify an actual clean install before labeling a mirror
-  supported. Custom mirrors/caches are **not configured or tested in this sandbox**.
-- If the host has no dependency network/terminal, ship complete vendor/frontend ZIP
-  from that trusted build. Exclude env; provision privately on host. Node/Composer
-  are not required on the production host when the validated artifact is complete.
+Storage and bootstrap/cache must be writable by the web AND cron PHP identities;
+private .env/config should be owner-readable only. Use least privilege, not777.
+Verify owner/group requirements with the host. Do not recursively make vendor or
+application source writable. The /media private-storage route is the default
+symlink-free fallback. Optional storage:link must target only storage/app/public;
+never link all storage or private files.
 
-## Deployment with SSH / terminal (future implemented release)
+## 4A. With terminal (PHP only needed on host)
 
-1. Backup DB + private storage + APP_KEY securely; test restore in isolation. Record
-   maintenance/rollback window, schema compatibility and last known good artifact.
-2. Upload/extract private release, preserve env/storage, set selected web and CLI PHP.
-   Inspect platform requirements under host CLI; do not seed demo records.
-3. Enter maintenance, switch release atomically if possible (otherwise prevent
-   mixed-file requests), run `php artisan migrate --force` using full verified PHP.
-   Review migrations for MySQL implicit DDL commits; backup/restore may be required
-   instead of rollback, never promise transactional migration rollback.
-4. Build config/route/view caches only when compatible; rebuild per-host config so
-   cached local env/paths are not shipped. Run guarded one-time admin provisioning
-   from environment, remove its bootstrap secret after use; keep APP_KEY unchanged.
-5. Set public paths/rewrites, run `storage:link` if permitted, check local assets and
-   auth/CSRF, run `deploy-check`, exercise cron/queue, inspect private redacted logs.
-6. Leave maintenance only after smoke tests; retain previous artifact and backup.
-   Never run migrate:fresh, test fixtures or automatic seeders on production.
+Back up DB/.env/key/media and place the site in maintenance at the web-server level
+before an upgrade. Upload/extract the package; preserve existing private .env and
+storage data. Keep app/public sibling layout.
 
-### No SSH: private temporary cron alternative (no public migration runner)
+Using the DISCOVERED absolute PHP binary (substitute all paths):
 
-Build/upload complete artifact via authenticated FTP/file manager, including vendor.
-Use temporary **private cron** commands with full PHP and artisan paths for supported
-one-time commands. For migration, use an outside-webroot guarded shell script (or
-private PHP wrapper if shell is unavailable): verify a private marker is absent,
-activate maintenance, invoke artisan migrate --force, write a completion marker only
-on exit 0, keep failure code/log private; serialize invocation using available lock
-or a private atomic lock directory, fail closed on overlap. An interrupted run needs
-operator inspection before retry. Do not silently touch marker on failure.
+```bash
+cd /home/ACCOUNT/app
+/absolute/path/php83 artisan migrate --force --no-interaction
+# New installation only, private ADMIN_* configured:
+/absolute/path/php83 artisan shopnext:provision-admin --no-interaction
+```
 
-Review log/exit status and migrations table, remove temporary cron/script/marker,
-complete smoke tests and disable maintenance with another guarded private command.
-If host cannot execute artisan safely through cron, obtain host support/manual
-migration assistance — **do not publish a web shell or unauthenticated one-time
-migration endpoint**. No such wrapper is included until tested with L1. Schedule
-cron at least one minute apart with exit guards; no credentials in command text.
+No Composer/Node install is needed on the host. Assets are already published. If
+public is renamed, use `SHOPNEXT_PUBLIC_PATH=/home/ACCOUNT/public_html` in the process
+environment for CLI asset/storage commands; don't rely on it being read from .env
+before bootstrap. Clear stale config/routes when upgrading with the selected PHP.
+Do not use migrate:fresh, rollback, db:seed or key regeneration on production.
 
-## Database queue and scheduler — bounded, not persistent
+## 4B. WITHOUT terminal — optional one-time runner
 
-Required configuration: database queue (`jobs`, `failed_jobs`, optionally batches),
-file/database cache for scheduler locks, database sessions. Queue tables exist before
-scheduler use. Every delayed task uses scheduler/queue, never in-request sleeping or
-persistent daemons. Exactly one scheduler entry every minute:
+Prepare/upload app/.env and its persistent APP_KEY locally as above. First upload
+the normal package via encrypted FTP/SFTP. Activate ONLY AFTER the long upload and
+TLS setup, so the one-hour window is not wasted. Helpers run on the local trusted
+machine, not on the host:
+
+```bash
+# Run against the locally EXTRACTED app/public folders, not the source checkout.
+php activate-runner.php /local/release/app /local/release/public /local/PRIVATE-token
+```
+
+Keep the token file LOCAL and outside app/public; the helper refuses unsafe layout,
+public token placement or overwriting an activation. It prints only a random
+`migrate-<random>.php` filename. Upload just that PHP file to actual public_html and
+`app/storage/app/private/migration-runner.json` to the private app, preserving owner
+permissions. The config contains a hash/expiry, not the token. Do not upload the
+raw token file or helpers. Never place the token in a URL/query/string/CLI argument.
+
+```bash
+php invoke-runner.php https://shop.example/migrate-RANDOM.php /local/PRIVATE-token
+```
+
+The helper sends the token as an HTTPS POST header, never follows redirects and
+never prints the token or raw server errors. The server requires native HTTPS,
+POST, correct256-bit token, valid expiry and an atomic unused claim. It unlinks its
+public entry BEFORE migration, consumes activation even on failure, runs forward
+migrate --force and optionally initial-admin provisioning from private ADMIN_*.
+Response is generic. On success verify the URL is now404 and private config gone;
+remove local token and initial ADMIN_* values. No permanent install/admin endpoint.
+
+If it fails, inspect migration state privately; never replay the same activation.
+Remove any expired/stale runner/config and activate/upload a NEW token/file after
+fixing the cause. Preserve nonsecret used-claim markers until deployment review.
+Server-HTTPS must actually be set by the host. Do not trust a client-supplied
+X-Forwarded-Proto or weaken the runner check. If the TLS terminator does not provide
+that flag, ask the host to configure it safely, or use a private one-shot cron to
+run the same migration/provision commands and then REMOVE that temporary cron.
+No-terminal deployment is still UNVERIFIED on the owner's actual host.
+
+## 5. ONE minutely cron
+
+Substitute the discovered PHP binary and real paths. Example when public_html is
+used (the environment override is optional if the folder remains public):
 
 ```cron
-* * * * * cd /home/ACCOUNT/shopnext/backend && /FULL/PATH/php artisan schedule:run >> /home/ACCOUNT/private/scheduler.log 2>&1
+* * * * * cd /home/ACCOUNT/app && SHOPNEXT_PUBLIC_PATH=/home/ACCOUNT/public_html /absolute/path/php83 artisan schedule:run >> storage/logs/cron.log 2>&1
 ```
 
-Laravel scheduler must record heartbeat and invoke
-`queue:work --stop-when-empty --max-time=50` each minute with `withoutOverlapping`
-and a tested lock expiry. Choose job timeout/attempts/retry_after so failed work
-cannot execute twice concurrently (`retry_after` greater than effective timeout).
-Set tries/backoff consciously, surface failed_jobs, and test poison/retry behavior.
-`--max-time=50` is checked **between jobs**, not a hard kill of a long-running job;
-PCNTL is not guaranteed. Jobs must be short/bounded/chunked with provider connection/
-read timeouts; measure duration below host limits. Test crash/overlap recovery;
-external locking/`proc_open` must not be assumed available.
+There is ONE cron entry, not an additional queue-worker cron. The scheduled callback
+uses a2-minute database-cache overlap mutex and invokes `shopnext:tick` in process.
+It records cron start, enqueues QueuePulse and runs the equivalent of:
 
-`Schedule::command` may require proc_open. If disabled, implement/test a bounded
-in-process command invocation in the scheduler under the same lock, or obtain host
-support. Do not claim a cron shell command is universally portable until tested.
-Private cron logs need rotation/retention; no full request bodies or secrets.
+```text
+queue:work database --queue=default --stop-when-empty --max-time=50 --timeout=40 --tries=3 --sleep=1
+```
 
-Heartbeat table records UTC started_at and completed_at, worker last success/failure
-separately; a scheduler start must not falsely certify queue drain. Future Filament
-shell widget: “cron last ran X minutes ago”, distinguish never-ran/stale/failed,
-restrict to authorized operational roles (not public API), show UTC source + Tehran
-presentation. With minute cron, warn after a configurable small threshold (e.g. 3
-minutes), test server clock drift and stale locks. Keep audit/heartbeat writes bounded.
+Successful pulse processing and completion update separate DB heartbeats. Missing,
+future, stale (>3min) or failed worker warns on the Filament dashboard. Do not add
+Supervisor, a persistent worker, Redis or a second scheduler. Check cron/web UTC
+clocks. Review failed jobs before retrying; do not prune errors to fake health.
 
-## Required `artisan deploy-check` acceptance (not present yet)
+**Bounded-worker caveat:** max-time is checked BETWEEN jobs, not a hard kill of a
+hung job. Per-job timeout needs PCNTL support; future L2 network jobs also need
+strict provider I/O deadlines and idempotency. CI proves real database pulse work,
+not host wall-time/process-kill behavior. No provider jobs exist in L1.
 
-Nonzero exit on required failure; a redacted report, never dump env/config values:
+## 6. Readiness and manual sign-off
 
-- PHP floor/target, CLI binary/version/INI and required extensions, actual web/CLI
-  version confirmation; check 64-bit integer support, file limits/disabled functions.
-- env exists privately, APP_KEY valid, production/debug/URL/cookie/CORS/proxy settings
-  safe; private app root/public webroot separation; no default bootstrap secrets.
-- storage/bootstrap cache writable and not world-writable; private logs/backups.
-- DB connection/version/charset/InnoDB/CHECK support, migrations up to date, required
-  FKs/indexes/uniques; don't mutate production data to test constraints.
-- database queue/session/cache selected, queue/failed-job tables, no unsupported
-  persistent driver, stale jobs/locks surfaced; safe empty diagnostic job optional.
-- heartbeat fresh, completed timestamps honest; never-ran is warning/failure until
-  operator performs first cron, not fabricated as success.
-- storage symlink readable if used; if forbidden, use an explicit authenticated or
-  public-safe storage controller/copy workflow with traversal/visibility/MIME checks,
-  not broad access to private storage. Report selected fallback and verify it.
-- required local asset existence, upload PHP execution denied, production seeded
-  demo data absent; warning vs blocking classification documented per check.
+After the first cron run:
 
-## Pre-launch / rollback checklist
+```bash
+cd /home/ACCOUNT/app
+/absolute/path/php83 artisan deploy-check
+```
 
-- [ ] Implement L1 and pass real Pest/MySQL, PHP8.2/8.3 matrix and platform checks.
-- [ ] Confirm host CLI/web runtime and all unresolved checks above.
-- [ ] Verify encrypted settings + preserved APP_KEY + restore drill.
-- [ ] Verify private roots, TLS, cookies/CSRF, CORS, local assets/media and uploads.
-- [ ] Verify cron heartbeat/queue lock/retry/failed jobs on real shared host.
-- [ ] Provision administrator securely; force password change; no demo seeding.
-- [ ] Capture redacted deploy-check/smoke evidence, no secrets in artifact/logs.
-- [ ] Obtain L2 approval separately; close critical finance/provider/stock blockers.
+Returns nonzero for failed checks: actual PHP/extensions, write probes, .env/key,
+production debug/HTTPS origin, real DB family/version, database queue, stale cron/
+processed pulse, failed/overdue/stuck jobs, and symlink OR private /media fallback.
+Output never dumps credentials. Fresh installs correctly fail heartbeat readiness
+before cron. Without terminal, run this command via a temporary private cron,
+read its private output using SFTP and REMOVE that temporary check entry; do not
+expose deploy-check output as a public endpoint.
 
-None of the target-host checks/deploy commands has been executed here. A rollback
-must restore the compatible prior code+schema/data snapshot and preserved key;
-reverting PHP files alone cannot undo a destructive migration. Laravel foundations
-and green legacy tests do not make checkout/payments production-ready.
+Record [ACCEPTANCE.md](ACCEPTANCE.md), permissions, PHP CLI/web equivalence, TLS,
+actual upload/error headers/asset delivery, queue timing and an encrypted DB/key/
+media backup-and-restore drill. Static asset headers must also be configured on
+the real web server; PHP middleware cannot decorate files served directly by it.
+If any check fails or is not executed, keep it UNVERIFIED/NO-GO. No L2 work follows
+without explicit owner approval, regardless of the l1-complete implementation tag.

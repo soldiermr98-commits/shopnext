@@ -1,7 +1,7 @@
 # L1b authentication and authorization — verified slice
 
-2026-10-21. **L1a + the auth/role slice of L1b are implemented. Overall L1 is NOT
-complete; production remains NO-GO.** No pricing/payment/SMS/business resources.
+2026-10-21. **L1a/L1b and the L1c/L1d implementation are CI-verified.
+Actual host/browser acceptance remains UNVERIFIED; production remains NO-GO.** No pricing/payment/SMS/business resources.
 [CI evidence](CI_RESULTS.md) · [full legacy mapping](LEGACY_SCHEMA_MAP.json).
 
 ## Customer SPA
@@ -102,20 +102,16 @@ Inactive/initial-change users are denied before privileged actions.
 owner/forced-change/inactive/default-deny tests. These are real Gate/model policy
 tests, **NOT claims that all11 business HTTP endpoints/resources were implemented**.
 Those routes are deferred; their actual HTTP/action matrix must be ported when
-resources are authorized. Settings model hidden fields are NOT encryption; encrypted
-casts/DTO/update endpoints remain a separate pending L1 slice.
+resources are authorized. L1c now adds encrypted settings casts/masked DTOs and
+authorized updates; see SECURITY.md. Hidden fields alone are not encryption.
 
 ## Evidence and honest limits
 
-All six PHP8.2/8.3 × MySQL8/MariaDB10.6/11.4 jobs are green with **131 Pest tests,
-728 assertions each**, Pint and fresh/down/up migrations. Frontend7 tests plus
-legacy171 tests/typecheck/build green. Tests explicitly disable Laravel's test-only
-CSRF bypass and exercise readable XSRF + HttpOnly session cookies through requests.
-Filament login/profile are exercised through its actual Livewire components and
-HTTP page authorization, not screenshots/mocks. Native Filament login limiter is
-installed but a dedicated staff flood/regional TLS browser test is **UNVERIFIED**.
-
-Remaining overall L1: encrypted settings/newValue/masked DTOs; security headers/CSP,
-explicit CORS/trusted proxies/body/upload perimeter; activity logging; deploy-check;
-minute bounded queue/scheduler and heartbeat widget; host and browser acceptance.
-No launch or L2 approval should be based solely on green authentication tests.
+Current L1 suite:160 Pest tests/1028 assertions per six-way job, Pint and real
+migrations, plus frontend7 tests/legacy171/typecheck/build and upload-package smoke.
+See CI_RESULTS.md and ci/l1-complete-verified-matrix.json. Real CSRF checks and
+actual Filament components/pages are exercised; staff flood lockout before user
+lookup, uniform notification and decay recovery are now verified (no longer open).
+Settings/perimeter/audit/operations are implemented and tested. Actual browser,
+regional TLS/network/RTL/a11y, CLI/web PHP equivalence and host acceptance remain
+UNVERIFIED in ACCEPTANCE.md. No production launch or L2 authorization follows.
