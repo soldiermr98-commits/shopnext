@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+// Inactive template. Activation is an explicit offline operation, never a route.
+ini_set('display_errors', '0');
+header("Content-Security-Policy: default-src 'none'; frame-ancestors 'none'");
+header('Cache-Control: no-store');
+header('X-Content-Type-Options: nosniff');
+$status = 500;
+try {
+    $private = __DIR__.'/../app';
+    require $private.'/vendor/autoload.php';
+    $status = (new \App\Support\OneTimeMigrator)->run(
+        $_SERVER, $_SERVER['HTTP_X_MIGRATION_TOKEN'] ?? null,
+        $private.'/storage/app/private/migration-runner.json', __FILE__,
+        function () use ($private): int {
+            $app = require $private.'/bootstrap/app.php';
+            $kernel = $app->make(\Illuminate\Contracts\Console\Kernel::class);
+            $kernel->bootstrap();
+            if (! $app->environment('production') || config('app.debug') !== false) { return 1; }
+            $result = $kernel->call('migrate', ['--force' => true, '--no-interaction' => true]);
+            if ($result !== 0) { return $result; }
+            // Optional initial administrator; credentials only in private .env.
+            if (config('security.admin_initial_password')) { return $kernel->call('shopnext:provision-admin', ['--no-interaction' => true]); }
+            return 0;
+        },
+    );
+} catch (\Throwable) { $status = 500; }
+http_response_code($status);
+echo $status === 200 ? 'Migration completed. Runner removed.' : 'Runner unavailable. Activate a new runner offline if needed.';

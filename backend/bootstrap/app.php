@@ -14,7 +14,7 @@ use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-return Application::configure(basePath: dirname(__DIR__))
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
@@ -32,3 +32,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->dontFlash(['newValue', 'oldPassword', 'newPassword', 'currentPassword', 'passwordConfirmation']);
         $exceptions->shouldRenderJsonWhen(fn (Request $request) => $request->is('api/*') || $request->expectsJson());
     })->create();
+
+// Upload layout: private app/ and public/ (or public_html/) are siblings.
+// Public index explicitly supplies its directory; CLI uses the packaged marker.
+$public = defined('SHOPNEXT_PUBLIC_PATH') ? SHOPNEXT_PUBLIC_PATH : (getenv('SHOPNEXT_PUBLIC_PATH') ?: (is_file(base_path('../public/.shopnext-public')) ? base_path('../public') : null));
+if ($public) {
+    $app->usePublicPath($public);
+}
+
+return $app;

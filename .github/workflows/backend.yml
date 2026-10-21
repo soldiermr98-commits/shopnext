@@ -153,3 +153,33 @@ jobs:
               print(level + chunk.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
           PYRESULT
           exit "$result"
+
+      - uses: actions/setup-node@v4
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        with:
+          node-version: '22.22.3'
+      - uses: oven-sh/setup-bun@v2
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        with:
+          bun-version: '1.4.3'
+      - name: Build and exercise real no-dev upload package
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        run: |
+          set +e
+          (bash tools/build-deploy.sh build/shopnext-l1.zip && python3 tools/ci/deploy-smoke.py build/shopnext-l1.zip) > /tmp/package-result.log 2>&1
+          result=$?
+          cat /tmp/package-result.log
+          python3 - <<'PYPACKAGE'
+          from pathlib import Path
+          text = Path('/tmp/package-result.log').read_text()[-12000:]
+          for offset in range(0, len(text), 2800):
+              print('::notice::' + text[offset:offset+2800].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          PYPACKAGE
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        with:
+          name: shopnext-l1-upload
+          path: build/shopnext-l1.zip
+          retention-days: 7
+          if-no-files-found: error
