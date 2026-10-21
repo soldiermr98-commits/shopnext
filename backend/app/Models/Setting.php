@@ -11,4 +11,9 @@ class Setting extends Model
     protected $table = 'settings';
 
     protected $hidden = ['value'];
+
+    protected function casts(): array
+    {
+        return ['value' => 'encrypted'];
+    }
 }

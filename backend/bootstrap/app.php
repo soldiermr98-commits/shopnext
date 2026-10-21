@@ -15,8 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
-        $middleware->trimStrings(except: ['oldPassword', 'newPassword']);
+        $middleware->trimStrings(except: ['oldPassword', 'newPassword', 'newValue']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->dontFlash(['newValue', 'oldPassword', 'newPassword', 'currentPassword', 'passwordConfirmation']);
         $exceptions->shouldRenderJsonWhen(fn (Request $request) => $request->is('api/*') || $request->expectsJson());
     })->create();

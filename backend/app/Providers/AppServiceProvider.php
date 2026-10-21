@@ -23,6 +23,7 @@ use App\Models\SchedulerHeartbeat;
 use App\Models\Setting;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Observers\AdminActivity;
 use App\Policies\ActivityLogPolicy;
 use App\Policies\AddressPolicy;
 use App\Policies\FoundationPolicy;
@@ -56,6 +57,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        foreach ([User::class, Address::class, Category::class, Brand::class, Product::class, ProductVariant::class, Order::class, OrderItem::class, Coupon::class, BlogPost::class, Banner::class, Setting::class, Transaction::class, ReturnRequest::class, ReturnItem::class, CategoryProduct::class] as $model) {
+            $model::observe(AdminActivity::class);
+        }
         Gate::define('dashboard', fn (User $user): bool => Permissions::allows($user, 'dashboard'));
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Address::class, AddressPolicy::class);
