@@ -140,20 +140,23 @@ Read README, ARCHITECTURE, DATABASE, SECURITY, HOSTING, ACCEPTANCE, CI_RESULTS a
 L1_AUTH before changing scope. Historical PhaseA/L0 docs are not current approval.
 
 
-## Immediate next L2 concern (already authorized; do not ask for L2 again)
-- Order creation/lifecycle service: authenticated active customer and ONLY owned
-  account cart/version +owned address zone; one transaction/user->cart->order->
-  settings/coupon->sorted products/variants, locked shared PricingService,
-  coupon capacity reserve, stock reserve, immutable item/address/pricing snapshots,
-  idempotency intent hash; no client money. Failure rolls back ALL effects.
-- PaymentMethod interface only; full wallet via Ledger, COD/card manual states and
-  fresh admin/super_admin approvals, exactly-once paid/refund/restock, expiry COD
-  exception. Do NOT invent points formula or call any gateway/SMS.
-- Then owner-restricted FormRequests/policies/order/tracking APIs, minimal storefront
-  real API wiring (catalog IDs must be real; inspect current client source first),
-  separate-process/connection real stock/coupon/wallet concurrency tests with committed
-  fixtures and full matrix. Never describe current sequential tests as parallel.
-- Final docs/CI/l2-complete tag only when ALL L2 acceptance is actually green.
-  Current partial checkpoint is not a production commerce release.
-- Filter gh run list by backend.yml: scaffold/resolve-sanctum workflows can appear
-  later and are deliberately skipped; only the seven-job backend workflow is the gate.
+## Current L2 gate (already authorized; do not ask for L2 again)
+- API9205c58 CI39596445555 ALL7 green. Real concurrency3a41437
+  CI39597673255 ALL7 green: five real separate-process races EACH of six SQL/PHP
+  jobs, 215 backend tests/job. Evidence docs/ci/l2-real-concurrency-verified-matrix.json.
+- Read-only real SKU catalog1f952f1 CI39598522400 ALL7 green. No catalog management.
+- Current concern: minimal financial frontend API wiring, not a redesign. No seeded
+  cart, local money authority, fake paid state, fake wallet charge/loyalty conversion,
+  fake financial write success, or fabricated legal invoice IDs. HTTP request/store
+  unit tests use explicit fetch doubles: NEVER call them SQL/browser/concurrency proof.
+  Local client typecheck/build/12 tests and archived typecheck/171 tests executed green;
+  full seven-job CI for THIS concern must pass before the next concern.
+- Remaining: final SPEC financial finding coverage/named regression reconciliation,
+  PRICING formulas/examples + sequence diagrams, DATABASE/ARCHITECTURE/CHANGELOG/
+  evidence/acceptance consolidation, final complete matrix, then l2-complete tag.
+- Existing owned saved addresses + configured shipping data required; no fabricated
+  address/region/tariff. Business CRUD, gateways, SMS remain out of scope. Disabled
+  prototype account controls must never claim writes. Host/browser/TLS/RTL/a11y/
+  recovery still UNVERIFIED; no production-commerce acceptance claim.
+- After every commit wait for ALL7 backend.yml jobs GREEN. Never bypass a red.
+- Final l2-complete only after acceptance; stop for L3 authorization then, not before.

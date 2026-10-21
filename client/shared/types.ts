@@ -129,6 +129,7 @@ export type OrderStatus =
   | 'failed';
 
 export interface OrderItem {
+  lineTotal?: number;
   id?: string;
   productId: string;
   productTitle?: string;
@@ -147,11 +148,15 @@ export interface OrderItem {
 }
 
 export interface Order {
+  paymentState?: string;
+  payableTotal?: number;
+  roundingAdjustment?: number;
+  invoiceData?: import("../src/lib/financialApi").Quote | null;
   id: string;
   orderNumber: string;
   trackingCode: string;
   postalBarnameh?: string;
-  userId: string;
+  userId?: string;
   customerName: string;
   customerPhone: string;
   customerNationalCode?: string;
@@ -159,15 +164,15 @@ export interface Order {
   status: OrderStatus;
   statusText?: string;
   items: OrderItem[];
-  itemsCount: number;
+  itemsCount?: number;
   subtotal: number;
   itemsDiscount: number;
   couponCode?: string;
   couponDiscount: number;
   shippingFee: number;
-  shippingMethodName: string;
-  shippingMethodId: string;
-  deliveryDateSlot: string;
+  shippingMethodName?: string;
+  shippingMethodId?: string;
+  deliveryDateSlot?: string;
   vatAmount: number;
   totalPaid: number;
   paymentMethod: 'online' | 'cod' | 'wallet' | 'card_to_card' | 'snapppay' | string;
@@ -183,7 +188,7 @@ export interface Order {
   invoiceSerial?: string;
   taxRefId?: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface Coupon {

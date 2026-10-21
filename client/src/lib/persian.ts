@@ -28,9 +28,12 @@ export function persianToEnglishDigits(input: string): string {
  * e.g. 2400000 => "۲,۴۰۰,۰۰۰ تومان"
  */
 export function formatToman(amount: number | string | undefined | null, showSuffix = true): string {
-  if (amount === undefined || amount === null) return showSuffix ? '۰ تومان' : '۰';
-  const numericVal = typeof amount === 'string' ? parseInt(persianToEnglishDigits(amount), 10) || 0 : amount;
-  const formattedWithCommas = Math.round(numericVal).toLocaleString('en-US');
+  if (amount === undefined || amount === null) return 'در انتظار محاسبه';
+  const input = typeof amount === 'string' ? persianToEnglishDigits(amount) : amount;
+  if (typeof input === 'string' && !/^-?\d+$/.test(input)) return 'مبلغ نامعتبر';
+  const numericVal = Number(input);
+  if (!Number.isSafeInteger(numericVal)) return 'مبلغ نامعتبر';
+  const formattedWithCommas = numericVal.toLocaleString('en-US');
   const persianNum = toPersianDigits(formattedWithCommas);
   return showSuffix ? `${persianNum} تومان` : persianNum;
 }

@@ -72,7 +72,7 @@ export const ShopPage: React.FC = () => {
   const handleQuickAdd = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
     addItem(product, 1);
-    showToast(`«${product.title}» به سبد خرید شما افزوده شد.`, 'success');
+
   };
 
   const currentCategory = categories.find((c) => c.id === categoryParam);

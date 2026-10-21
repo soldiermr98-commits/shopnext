@@ -1,219 +1,46 @@
-// ===== STOREFRONT ORDER SUCCESS & INVOICE PAGE =====
-// Pixel-faithful order success screen with confetti animation, invoice print view, and tracking details
-
+import { financialDate as toJalaliDate } from '../../lib/financialDate';
+// Owner-only order/invoice projection. Order success is NOT payment success.
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation, Link } from 'react-router-dom';
-import confetti from 'canvas-confetti';
-import { Order } from '../../../shared/types';
-import { api } from '../../lib/api';
-import { formatToman, toPersianDigits, toJalaliDate } from '../../lib/persian';
-
+import { useAuthStore } from '../../store/authStore';
+import { Link, useParams } from 'react-router-dom';
+import { financialApi, paymentNames, paymentStates, orderStates, utcDate, type ServerOrder } from '../../lib/financialApi';
+import { formatToman, toPersianDigits } from '../../lib/persian';
+import { FinancialSummary } from '../../components/shared/FinancialSummary';
 export const OrderSuccessPage: React.FC = () => {
+  const { user } = useAuthStore();
+  const [owner, setOwner] = useState<string | null>(null);
   const { id } = useParams<{ id: string }>();
-  const location = useLocation();
-  const [order, setOrder] = useState<Order | null>((location.state as any)?.order || null);
-  const [loading, setLoading] = useState(!order);
-
-  useEffect(() => {
-    // Fire confetti celebration
-    try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
-    } catch {}
-
-    if (!order && id) {
-      api.getOrder(id).then((o) => {
-        setOrder(o);
-        setLoading(false);
-      }).catch(console.error);
-    }
-  }, [id, order]);
-
-  if (loading) {
-    return (
-      <div className="py-20 text-center">
-        <div className="w-10 h-10 rounded-full border-4 border-primary border-t-transparent animate-spin mx-auto" />
-      </div>
-    );
+  const [order, setOrder] = useState<ServerOrder | null>(null);
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { let current = true; setOrder(null); setError(''); if (id && user) financialApi.order(id).then(r => { if (current) { setOrder(r.order); setOwner(user.id); } }).catch(e => { if (current) setError(e.message); }); return () => { current = false; }; }, [id, user?.id]);
+  async function action(file?: File) {
+    if (!id || busy) return;
+    setBusy(true); setError('');
+    try { const result = file ? await financialApi.receipt(id, file) : await financialApi.cancel(id); if (useAuthStore.getState().user?.id === user?.id) setOrder(result.order); }
+    catch (e) { setError((e as Error).message); }
+    finally { setBusy(false); }
   }
-
-  if (!order) {
-    return (
-      <div className="py-20 text-center space-y-4">
-        <h2 className="text-xl font-bold text-on-surface">سفارش مورد نظر یافت نشد</h2>
-        <Link to="/" className="px-6 py-2.5 rounded-xl bg-primary text-white font-bold text-sm inline-block">
-          بازگشت به خانه
-        </Link>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-8 pb-16 max-w-4xl mx-auto">
-      {/* Success Card (Hidden on Print) */}
-      <div className="bg-surface rounded-3xl p-6 sm:p-8 border border-outline-variant/60 text-center space-y-4 shadow-sm no-print">
-        <div className="w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
-          <span className="material-symbols-outlined text-4xl">check_circle</span>
-        </div>
-
-        <div className="space-y-1">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-            پرداخت و ثبت با موفقیت انجام شد
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-black text-on-surface">
-            از حسن اعتماد و خرید شما سپاسگزاریم
-          </h1>
-          <p className="text-xs sm:text-sm text-on-surface-variant max-w-md mx-auto">
-            سفارش شما در مرحله بسته‌بندی انبار دیجی‌استایل قرار گرفت و پیامک وضعیت به زودی برای شما ارسال خواهد شد.
-          </p>
-        </div>
-
-        {/* Quick Reference Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto pt-4 text-xs">
-          <div className="p-3 rounded-xl bg-surface-container-low border border-outline-variant/50">
-            <span className="text-on-surface-variant block mb-1">شماره سفارش</span>
-            <span className="font-black font-mono text-on-surface text-sm">{order.orderNumber}</span>
-          </div>
-
-          <div className="p-3 rounded-xl bg-surface-container-low border border-outline-variant/50">
-            <span className="text-on-surface-variant block mb-1">کد رهگیری</span>
-            <span className="font-black font-mono text-primary text-sm">{order.trackingCode}</span>
-          </div>
-
-          <div className="p-3 rounded-xl bg-surface-container-low border border-outline-variant/50">
-            <span className="text-on-surface-variant block mb-1">مبلغ پرداختی</span>
-            <span className="font-black font-mono text-on-surface text-sm">{formatToman(order.totalPaid)}</span>
-          </div>
-
-          <div className="p-3 rounded-xl bg-surface-container-low border border-outline-variant/50">
-            <span className="text-on-surface-variant block mb-1">شیوه پرداخت</span>
-            <span className="font-black text-on-surface text-sm">{order.paymentMethodName}</span>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
-          <button
-            onClick={() => window.print()}
-            className="px-5 py-2.5 rounded-xl bg-surface-container-high border border-outline-variant text-on-surface font-bold text-xs flex items-center gap-1.5 hover:bg-surface-container transition"
-          >
-            <span className="material-symbols-outlined text-sm">print</span>
-            <span>چاپ فاکتور رسمی سفارش</span>
-          </button>
-
-          <Link
-            to={`/track-order?code=${order.trackingCode}`}
-            className="px-5 py-2.5 rounded-xl bg-primary text-white font-bold text-xs flex items-center gap-1.5 shadow hover:bg-primary-container transition"
-          >
-            <span className="material-symbols-outlined text-sm">local_shipping</span>
-            <span>رهگیری لحظه‌ای مرسوله</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* Official Tax Invoice Container (Visible on Print or Screen) */}
-      <div className="bg-white text-gray-900 rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm space-y-6 text-xs print:border-none print:shadow-none print:p-0">
-        {/* Invoice Header */}
-        <div className="flex items-center justify-between border-b pb-4 border-gray-200">
-          <div className="space-y-1">
-            <h2 className="text-lg font-black text-blue-900">شرکت تجارت الکترونیک ویستا استایل (دیجی‌استایل)</h2>
-            <p className="text-[11px] text-gray-500">صورتحساب فروش کالا و خدمات ویژه مصرف‌کننده نهایی</p>
-          </div>
-          <div className="text-end space-y-1 font-mono">
-            <div><span className="text-gray-500">شماره فاکتور:</span> <strong>{order.orderNumber}</strong></div>
-            <div><span className="text-gray-500">تاریخ صدور:</span> <strong>{toJalaliDate(order.createdAt)}</strong></div>
-            {order.invoiceSerial && <div><span className="text-gray-500">سریال مالیاتی:</span> <strong>{order.invoiceSerial}</strong></div>}
-          </div>
-        </div>
-
-        {/* Buyer & Seller Info */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-gray-50 border border-gray-200">
-          <div className="space-y-1">
-            <span className="font-bold text-gray-700 block border-b pb-1 mb-1">مشخصات خریدار (گیرنده):</span>
-            <div><span className="text-gray-500">نام گیرنده:</span> {order.customerName}</div>
-            <div><span className="text-gray-500">تلفن تماس:</span> <span className="font-mono">{order.customerPhone}</span></div>
-            <div><span className="text-gray-500">نشانی تحویل:</span> {order.shippingAddress.province}، {order.shippingAddress.city}، {order.shippingAddress.streetAddress}</div>
-            <div><span className="text-gray-500">کد پستی:</span> <span className="font-mono">{order.shippingAddress.postalCode}</span></div>
-          </div>
-
-          <div className="space-y-1">
-            <span className="font-bold text-gray-700 block border-b pb-1 mb-1">مشخصات فروشنده:</span>
-            <div><span className="text-gray-500">نام ثبتی:</span> شرکت تجارت الکترونیک ویستا استایل (سهامی خاص)</div>
-            <div><span className="text-gray-500">شناسه ملی:</span> ۱۰۱۰۳۹۸۴۷۱۲ | <span className="text-gray-500">کد اقتصادی:</span> ۴۱۱۵۸۹۳۴۶۷۱۸</div>
-            <div><span className="text-gray-500">آدرس دفتر مرکزی:</span> تهران، برج اداری ویستا، واحد ۷۰۳</div>
-            <div><span className="text-gray-500">روش ارسال:</span> {order.shippingMethodName} ({order.deliveryDateSlot})</div>
-          </div>
-        </div>
-
-        {/* Order Items Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-start border-collapse">
-            <thead>
-              <tr className="bg-gray-100 border-b border-gray-300 text-gray-700 font-bold">
-                <th className="p-2.5 text-center w-12">ردیف</th>
-                <th className="p-2.5 text-start">شرح کالا یا خدمات</th>
-                <th className="p-2.5 text-center w-20">تعداد</th>
-                <th className="p-2.5 text-end">مبلغ واحد (تومان)</th>
-                <th className="p-2.5 text-end">تخفیف (تومان)</th>
-                <th className="p-2.5 text-end">مبلغ کل (تومان)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map((it: any, idx) => {
-                const unitPrice = it.unitPrice || it.finalPrice || it.selectedVariant?.salePrice || it.selectedVariant?.price || it.salePrice || it.product?.salePrice || it.product?.price || it.price || 0;
-                const totalItemPrice = unitPrice * it.quantity;
-
-                return (
-                  <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="p-2.5 text-center font-mono text-gray-500">{toPersianDigits(idx + 1)}</td>
-                    <td className="p-2.5">
-                      <div className="font-bold text-gray-900">{it.productTitle || it.product?.title || 'کالای سفارشی'}</div>
-                      <div className="text-[11px] text-gray-500">
-                        {(it.colorName || it.selectedVariant?.colorName) && `رنگ: ${it.colorName || it.selectedVariant?.colorName} `}
-                        {(it.size || it.selectedVariant?.size) && `| سایز: ${it.size || it.selectedVariant?.size}`}
-                      </div>
-                    </td>
-                    <td className="p-2.5 text-center font-mono font-bold">{toPersianDigits(it.quantity)}</td>
-                    <td className="p-2.5 text-end font-mono">{formatToman(unitPrice)}</td>
-                    <td className="p-2.5 text-end font-mono text-gray-500">۰</td>
-                    <td className="p-2.5 text-end font-mono font-bold">{formatToman(totalItemPrice)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Totals */}
-        <div className="flex justify-end pt-2">
-          <div className="w-full sm:w-80 space-y-2 border-t pt-3 border-gray-300">
-            <div className="flex justify-between text-gray-600">
-              <span>جمع کل اقلام:</span>
-              <span className="font-mono font-bold">{formatToman(order.subtotal)}</span>
-            </div>
-
-            {order.couponDiscount > 0 && (
-              <div className="flex justify-between text-red-600 font-bold">
-                <span>تخفیف کوپن:</span>
-                <span className="font-mono">- {formatToman(order.couponDiscount)}</span>
-              </div>
-            )}
-
-            <div className="flex justify-between text-gray-600">
-              <span>هزینه حمل و نقل:</span>
-              <span className="font-mono">{order.shippingFee === 0 ? 'رایگان' : formatToman(order.shippingFee)}</span>
-            </div>
-
-            <div className="flex justify-between text-base font-black text-blue-900 border-t pt-2">
-              <span>مبلغ پرداختی نهایی:</span>
-              <span className="font-mono">{formatToman(order.totalPaid)}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+  if (!user) return <div className="py-20 text-center"><button onClick={() => useAuthStore.getState().openLoginModal()}>برای مشاهده سفارش وارد شوید.</button></div>;
+  if (!order || owner !== user.id) return <div className="py-20 text-center"><p role={error ? 'alert' : 'status'}>{error || 'دریافت سفارش…'}</p><Link to="/account#orders">سفارش‌های من</Link></div>;
+  const a = order.shipping_address;
+  return <div className="space-y-8 pb-16 max-w-4xl mx-auto">
+    <div className="bg-surface rounded-3xl p-6 sm:p-8 border border-outline-variant/60 text-center space-y-4 shadow-sm no-print">
+      <h1 className="text-2xl font-black">سفارش {order.order_number}</h1>
+      <p>{orderStates[order.status] ?? order.status} — {paymentStates[order.payment_state] ?? order.payment_state}</p>
+      <p>مبلغ واقعاً پرداخت‌شده: {formatToman(order.total_paid)}</p><p>{paymentNames[order.payment_method]}</p>
+      <Link to={`/track-order?code=${order.tracking_code}`} className="underline">پیگیری سفارش</Link> — <Link to="/account#orders" className="underline">سفارش‌های من</Link>
+      {['pending', 'awaiting_payment'].includes(order.status) && <button disabled={busy} onClick={() => { if (confirm('این سفارش لغو شود؟')) void action(); }} className="block mx-auto text-red-700 underline">لغو سفارش</button>}
+      {order.payment_method === 'card_to_card' && ['unpaid', 'pending_verification'].includes(order.payment_state) && ['pending', 'awaiting_payment', 'processing'].includes(order.status) && <label className="block text-xs">ارسال رسید تصویر (ثبت رسید به معنی تایید پرداخت نیست)<input type="file" accept="image/png,image/jpeg,image/webp" disabled={busy} onChange={e => { const f = e.target.files?.[0]; if (f) void action(f); e.target.value = ''; }} /></label>}
+      {order.receipt_url && <a href={order.receipt_url} target="_blank" rel="noreferrer" className="underline">مشاهده خصوصی رسید</a>}
+      {error && <p role="alert" className="text-red-700">{error}</p>}
     </div>
-  );
+    <div className="bg-white text-gray-900 rounded-2xl p-5 sm:p-8 border space-y-6 text-xs">
+      <div className="flex justify-between border-b pb-4"><h2 className="font-black text-lg">صورت‌حساب سفارش</h2><button onClick={() => window.print()} className="no-print underline">چاپ</button></div>
+      <p>{toJalaliDate(utcDate(order.created_at))} — {a?.recipient_name} — {a?.recipient_phone}<br />{a?.province}، {a?.city}، {a?.street_address} — {a?.postal_code}</p>
+      <div className="overflow-x-auto"><table className="w-full text-right"><thead><tr><th>کالا / شناسه تنوع</th><th>تعداد</th><th>قیمت واحد</th><th>تخفیف فروش / خودکار / کوپن</th><th>مالیات افزوده</th><th>تعدیل گرد کردن</th><th>جمع نهایی ردیف</th></tr></thead><tbody>{order.items.map(l => <tr key={l.key} className="border-b"><td className="p-2">{l.title} / {l.sku}</td><td>{toPersianDigits(l.quantity)}</td><td>{formatToman(l.unit_price)}</td><td>{formatToman(l.sale_discount)} / {formatToman(l.automatic_discount)} / {formatToman(l.coupon_discount)}</td><td>{formatToman(l.tax_added)}</td><td>{formatToman(l.rounding_adjustment)}</td><td>{formatToman(l.line_total)}</td></tr>)}</tbody></table></div>
+      <FinancialSummary quote={order.invoice} />
+    </div>
+    <section className="bg-surface rounded-2xl p-5 border space-y-3 text-xs"><h2 className="font-black">رویدادهای ثبت‌شده سفارش</h2>{order.timeline.map((e, i) => <p key={i}>{toJalaliDate(utcDate(e.created_at))} — {e.actor_role} — {orderStates[e.to_status] ?? e.to_status} — {paymentStates[e.to_payment_state] ?? e.to_payment_state}</p>)}</section>
+  </div>;
 };

@@ -1,330 +1,99 @@
+// No browser cart prices, seeded purchases, JWTs, or local monetary authority.
 import { create } from 'zustand';
-import { CartItem, Coupon, Product, ProductVariant } from '../../shared/types';
-import { api } from '../lib/api';
-
+import type { CartItem, Product, ProductVariant } from '../../shared/types';
+import { financialApi, type CartInput, type CartResponse, type Quote, type QuoteLine } from '../lib/financialApi';
+import { useAuthStore } from './authStore';
+import { useToastStore } from './toastStore';
+type Item = CartItem & { serverLine?: QuoteLine };
 interface CartStore {
-  items: CartItem[];
-  isMiniCartOpen: boolean;
-  coupon: Coupon | null;
-  couponCodeInput: string;
-  isApplyingCoupon: boolean;
-  couponError: string | null;
-
-  // Actions
-  openMiniCart: () => void;
-  closeMiniCart: () => void;
-  toggleMiniCart: () => void;
-  addItem: (itemOrProduct: CartItem | Product, quantity?: number, variant?: ProductVariant) => void;
-  removeItem: (idOrProductId: string, colorHex?: string, size?: string) => void;
-  updateQuantity: (idOrProductId: string, quantity: number, colorHex?: string, size?: string) => void;
-  clearCart: () => void;
-  setCouponCodeInput: (code: string) => void;
-  applyCoupon: (code?: string) => Promise<boolean>;
-  removeCoupon: () => void;
-
-  // Getters
-  getItemsCount: () => number;
-  getRawSubtotal: () => number;
-  getSubtotal: () => number;
-  getItemsDiscount: () => number;
-  getDiscountTotal: () => number;
-  getFinalItemsTotal: () => number;
-  getCouponDiscount: () => number;
-  getShippingFee: () => number;
-  getGrandTotal: () => number;
+  items: Item[]; rawItems: CartInput[]; version: number; pricing: Quote | null;
+  loaded: boolean; busy: boolean; error: string | null; mergeConflict: boolean;
+  isMiniCartOpen: boolean; coupon: { code: string } | null; couponCodeInput: string; isApplyingCoupon: boolean; couponError: string | null;
+  refresh: () => Promise<void>; retryMerge: () => Promise<void>;
+  openMiniCart: () => void; closeMiniCart: () => void; toggleMiniCart: () => void;
+  addItem: (p: CartItem | Product, qty?: number, variant?: ProductVariant) => Promise<void>;
+  removeItem: (id: string, color?: string, size?: string) => Promise<void>;
+  updateQuantity: (id: string, qty: number, color?: string, size?: string) => Promise<void>;
+  clearCart: () => Promise<void>; setCouponCodeInput: (code: string) => void;
+  applyCoupon: (code?: string) => Promise<boolean>; removeCoupon: () => void;
+  getItemsCount: () => number; getSubtotal: () => number | null; getGrandTotal: () => number | null;
 }
-
-const INITIAL_CART_ITEMS: CartItem[] = [
-  {
-    id: 'item-init-1',
-    productId: 'prod-1',
-    productTitle: 'پالتو پشمی دوطرفه فوتر کلاسیک مدل ۲۰۲۵',
-    productSku: 'VST-CL-4801',
-    productImage: '/images/catalog-placeholder.svg',
-    brand: 'هاکوپیان',
-    price: 3000000,
-    salePrice: 2400000,
-    quantity: 1,
-    selectedColor: { name: 'سرمه‌ای تیره', hex: '#1b263b' },
-    selectedSize: 'L',
-    maxStock: 5,
-    unit: 'عدد',
-    product: {
-      id: 'prod-1',
-      title: 'پالتو پشمی دوطرفه فوتر کلاسیک مدل ۲۰۲۵',
-      mainImage: '/images/catalog-placeholder.svg',
-      brand: 'هاکوپیان',
-      price: 3000000,
-      salePrice: 2400000,
-      sku: 'VST-CL-4801',
-    },
-    selectedVariant: {
-      colorName: 'سرمه‌ای تیره',
-      colorHex: '#1b263b',
-      size: 'L',
-      price: 3000000,
-      salePrice: 2400000,
-    },
-  },
-  {
-    id: 'item-init-2',
-    productId: 'prod-2',
-    productTitle: 'کفش کتانی چرم طبیعی اسپرت ارگونومیک',
-    productSku: 'VST-SH-1092',
-    productImage: '/images/catalog-placeholder.svg',
-    brand: 'چرم مشهد',
-    price: 1980000,
-    salePrice: 1683000,
-    quantity: 1,
-    selectedColor: { name: 'کرم روشن', hex: '#f4ecd8' },
-    selectedSize: '۴۲',
-    maxStock: 8,
-    unit: 'جفت',
-    product: {
-      id: 'prod-2',
-      title: 'کفش کتانی چرم طبیعی اسپرت ارگونومیک',
-      mainImage: '/images/catalog-placeholder.svg',
-      brand: 'چرم مشهد',
-      price: 1980000,
-      salePrice: 1683000,
-      sku: 'VST-SH-1092',
-    },
-    selectedVariant: {
-      colorName: 'کرم روشن',
-      colorHex: '#f4ecd8',
-      size: '۴۲',
-      price: 1980000,
-      salePrice: 1683000,
-    },
-  },
-];
-
-const savedCart = typeof window !== 'undefined' ? localStorage.getItem('digistyle_cart') : null;
-const parsedInitialItems: CartItem[] = savedCart ? JSON.parse(savedCart) : INITIAL_CART_ITEMS;
-
-export const useCartStore = create<CartStore>((set, get) => ({
-  items: parsedInitialItems,
-  isMiniCartOpen: false,
-  coupon: {
-    id: 'c-1',
-    code: 'VISTA2025',
-    type: 'fixed',
-    value: 150000,
-    usedCount: 0,
-    isActive: true,
-  },
-  couponCodeInput: 'VISTA2025',
-  isApplyingCoupon: false,
-  couponError: null,
-
-  openMiniCart: () => set({ isMiniCartOpen: true }),
-  closeMiniCart: () => set({ isMiniCartOpen: false }),
-  toggleMiniCart: () => set((state) => ({ isMiniCartOpen: !state.isMiniCartOpen })),
-
-  addItem: (itemOrProduct: any, qty = 1, variant) => {
-    set((state) => {
-      let newItem: CartItem;
-
-      // Check if it's already a CartItem
-      if (itemOrProduct.productId && itemOrProduct.productTitle) {
-        newItem = {
-          id: itemOrProduct.id || `item-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
-          productId: itemOrProduct.productId,
-          productTitle: itemOrProduct.productTitle,
-          productSku: itemOrProduct.productSku || '',
-          productImage: itemOrProduct.productImage || '',
-          brand: itemOrProduct.brand || '',
-          price: itemOrProduct.price || 0,
-          salePrice: itemOrProduct.salePrice,
-          quantity: itemOrProduct.quantity || 1,
-          selectedColor: itemOrProduct.selectedColor,
-          selectedSize: itemOrProduct.selectedSize,
-          maxStock: itemOrProduct.maxStock || 10,
-          unit: itemOrProduct.unit || 'عدد',
-          product: itemOrProduct.product || {
-            id: itemOrProduct.productId,
-            title: itemOrProduct.productTitle,
-            mainImage: itemOrProduct.productImage,
-            brand: itemOrProduct.brand,
-            price: itemOrProduct.price,
-            salePrice: itemOrProduct.salePrice,
-          },
-          selectedVariant: itemOrProduct.selectedVariant || (itemOrProduct.selectedColor || itemOrProduct.selectedSize ? {
-            colorName: itemOrProduct.selectedColor?.name,
-            colorHex: itemOrProduct.selectedColor?.hex,
-            size: itemOrProduct.selectedSize,
-            price: itemOrProduct.price,
-            salePrice: itemOrProduct.salePrice,
-          } : undefined),
-        };
-      } else {
-        // It's a Product
-        const p = itemOrProduct as Product;
-        newItem = {
-          id: `item-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
-          productId: p.id,
-          productTitle: p.title,
-          productSku: p.sku || '',
-          productImage: p.mainImage,
-          brand: p.brand || '',
-          price: variant?.price || p.price,
-          salePrice: variant?.salePrice || p.salePrice,
-          quantity: qty,
-          selectedColor: variant?.colorName ? { name: variant.colorName, hex: variant.colorHex || '#000' } : undefined,
-          selectedSize: variant?.size,
-          maxStock: variant?.stock || p.stock || 10,
-          unit: 'عدد',
-          product: p,
-          selectedVariant: variant,
-        };
-      }
-
-      const existingIndex = state.items.findIndex(
-        (i) =>
-          i.productId === newItem.productId &&
-          i.selectedColor?.hex === newItem.selectedColor?.hex &&
-          i.selectedSize === newItem.selectedSize
-      );
-
-      let updatedItems: CartItem[];
-      if (existingIndex > -1) {
-        updatedItems = [...state.items];
-        const existing = updatedItems[existingIndex];
-        const newQty = Math.min(existing.quantity + newItem.quantity, existing.maxStock || 10);
-        updatedItems[existingIndex] = { ...existing, quantity: newQty };
-      } else {
-        updatedItems = [...state.items, newItem];
-      }
-
-      localStorage.setItem('digistyle_cart', JSON.stringify(updatedItems));
-      return { items: updatedItems, isMiniCartOpen: true };
+const key = (i: CartInput) => `${i.product_id}:${i.variant_id ?? 0}`;
+let epoch = 0;
+let pending: Promise<void> = Promise.resolve();
+// Explicitly discard the old demo's untrusted monetary data; never import it.
+if (typeof localStorage !== 'undefined') localStorage.removeItem('digistyle_cart');
+export const useCartStore = create<CartStore>((set, get) => {
+  function receive(c: CartResponse, pricing = c.pricing) {
+    set({ rawItems: c.items, version: c.version, pricing, loaded: true, mergeConflict: c.merge_conflict,
+      error: Object.values(c.errors).flat().join(' ') || null,
+      items: c.items.map(i => { const line = pricing?.lines.find(l => key(l) === key(i)); return { id: key(i), productId: String(i.product_id), quantity: i.quantity, productTitle: line?.title ?? `کالا ${i.product_id}`, productSku: line?.sku, productImage: '/images/catalog-placeholder.svg', selectedVariant: i.variant_id ? { id: String(i.variant_id) } : undefined, serverLine: line }; }),
     });
-  },
-
-  removeItem: (idOrProductId, colorHex, size) => {
-    set((state) => {
-      const updated = state.items.filter(
-        (i) =>
-          !(
-            (i.id === idOrProductId) ||
-            (i.productId === idOrProductId &&
-              (!colorHex || i.selectedColor?.hex === colorHex) &&
-              (!size || i.selectedSize === size))
-          )
-      );
-      localStorage.setItem('digistyle_cart', JSON.stringify(updated));
-      return { items: updated };
-    });
-  },
-
-  updateQuantity: (idOrProductId, quantity, colorHex, size) => {
-    if (quantity <= 0) {
-      get().removeItem(idOrProductId, colorHex, size);
-      return;
-    }
-
-    set((state) => {
-      const updated = state.items.map((i) => {
-        if (
-          i.id === idOrProductId ||
-          (i.productId === idOrProductId &&
-            (!colorHex || i.selectedColor?.hex === colorHex) &&
-            (!size || i.selectedSize === size))
-        ) {
-          return { ...i, quantity: Math.min(quantity, i.maxStock || 10) };
-        }
-        return i;
-      });
-
-      localStorage.setItem('digistyle_cart', JSON.stringify(updated));
-      return { items: updated };
-    });
-  },
-
-  clearCart: () => {
-    localStorage.removeItem('digistyle_cart');
-    set({ items: [], coupon: null, couponCodeInput: '' });
-  },
-
-  setCouponCodeInput: (code: string) => set({ couponCodeInput: code, couponError: null }),
-
-  applyCoupon: async (codeArg?: string) => {
-    const code = typeof codeArg === 'string' ? codeArg : get().couponCodeInput;
-    if (!code || !code.trim()) {
-      set({ couponError: 'لطفاً کد تخفیف را وارد فرمایید.' });
-      return false;
-    }
-
-    set({ isApplyingCoupon: true, couponError: null });
-    try {
-      const subtotal = get().getRawSubtotal();
-      const res = await api.validateCoupon(code.trim(), subtotal);
-      set({ coupon: res.coupon, isApplyingCoupon: false, couponError: null });
-      return true;
-    } catch (err: any) {
-      set({
-        couponError: err.message || 'کد تخفیف وارد شده معتبر نمی‌باشد.',
-        isApplyingCoupon: false,
-      });
-      return false;
-    }
-  },
-
-  removeCoupon: () => set({ coupon: null, couponCodeInput: '' }),
-
-  getItemsCount: () => {
-    return get().items.reduce((sum, item) => sum + item.quantity, 0);
-  },
-
-  getRawSubtotal: () => {
-    return get().items.reduce((sum, item) => {
-      const effectivePrice = item.selectedVariant?.salePrice || item.selectedVariant?.price || item.salePrice || item.price || 0;
-      return sum + effectivePrice * item.quantity;
-    }, 0);
-  },
-
-  getSubtotal: () => {
-    return get().getRawSubtotal();
-  },
-
-  getItemsDiscount: () => {
-    return get().items.reduce((sum, item) => {
-      const original = item.selectedVariant?.price || item.price || 0;
-      const effective = item.selectedVariant?.salePrice || item.selectedVariant?.price || item.salePrice || item.price || original;
-      return sum + Math.max(0, original - effective) * item.quantity;
-    }, 0);
-  },
-
-  getDiscountTotal: () => {
-    return get().getItemsDiscount();
-  },
-
-  getFinalItemsTotal: () => {
-    return get().getRawSubtotal();
-  },
-
-  getCouponDiscount: () => {
-    const { coupon } = get();
-    if (!coupon) return 0;
-    const subtotal = get().getRawSubtotal();
-    if (coupon.type === 'percent') {
-      const discount = Math.round((subtotal * coupon.value) / 100);
-      return coupon.maxDiscountAmount ? Math.min(discount, coupon.maxDiscountAmount) : discount;
-    }
-    return coupon.value;
-  },
-
-  getShippingFee: () => {
-    const subtotal = get().getRawSubtotal();
-    // 4,000,000 Toman threshold
-    if (subtotal >= 4000000 || subtotal === 0) return 0;
-    return 45000;
-  },
-
-  getGrandTotal: () => {
-    const subtotal = get().getRawSubtotal();
-    const couponDisc = get().getCouponDiscount();
-    const shipping = get().getShippingFee();
-    return Math.max(0, subtotal - couponDisc + shipping);
-  },
-}));
+  }
+  async function load(e: number) {
+    const cart = await financialApi.cart();
+    if (e !== epoch) return;
+    receive(cart);
+    const code = get().coupon?.code;
+    if (code) { try { const quote = await financialApi.quote(cart.items, code); if (e === epoch) receive(cart, quote); } catch (err) { if (e === epoch) set({ pricing: null, couponError: (err as Error).message }); } }
+  }
+  function mutate(build: (items: CartInput[]) => CartInput[]) {
+    const e = epoch;
+    const task = async () => {
+      if (e !== epoch) return;
+      set({ busy: true, error: null, pricing: null });
+      try {
+        if (!get().loaded) await load(e);
+        if (e !== epoch) return;
+        const c = await financialApi.replace(build(get().rawItems), get().version);
+        if (e !== epoch) return;
+        receive(c);
+        if (get().coupon) await load(e);
+      } catch (err) {
+        if (e !== epoch) return;
+        const message = (err as Error).message;
+        try { await load(e); } catch { /* retain explicit error, never optimistic money */ }
+        if (e === epoch) { set({ error: message }); useToastStore.getState().showToast(message, 'error'); }
+      } finally { if (e === epoch) set({ busy: false }); }
+    };
+    pending = pending.then(task, task); return pending;
+  }
+  return {
+    items: [], rawItems: [], version: 0, pricing: null, loaded: false, busy: false, error: null, mergeConflict: false,
+    isMiniCartOpen: false, coupon: null, couponCodeInput: '', isApplyingCoupon: false, couponError: null,
+    refresh: async () => { const e = epoch; set({ busy: true, pricing: null }); try { await load(e); } catch (err) { if (e === epoch) set({ error: (err as Error).message }); } finally { if (e === epoch) set({ busy: false }); } },
+    retryMerge: async () => { try { await financialApi.merge(); } catch (err) { set({ error: (err as Error).message }); } await get().refresh(); },
+    openMiniCart: () => set({ isMiniCartOpen: true }), closeMiniCart: () => set({ isMiniCartOpen: false }), toggleMiniCart: () => set({ isMiniCartOpen: !get().isMiniCartOpen }),
+    addItem: async (p, qty = 1, variant) => {
+      const productId = Number('productId' in p ? p.productId : p.id);
+      const v = variant?.id ?? ('selectedVariant' in p ? p.selectedVariant?.id : null);
+      const variantId = v == null ? null : Number(v);
+      if (!Number.isSafeInteger(productId) || productId < 1 || (variantId !== null && (!Number.isSafeInteger(variantId) || variantId < 1))) { useToastStore.getState().showToast('شناسه واقعی کالا یا تنوع لازم است.', 'error'); return; }
+      await mutate(items => { const k = key({ product_id: productId, variant_id: variantId, quantity: qty }); const found = items.find(i => key(i) === k); return found ? items.map(i => key(i) === k ? { ...i, quantity: i.quantity + qty } : i) : [...items, { product_id: productId, variant_id: variantId, quantity: qty }]; });
+      if (!get().error) { set({ isMiniCartOpen: true }); useToastStore.getState().showToast('سبد خرید از سرور به‌روزرسانی شد.', 'success'); }
+    },
+    removeItem: (id) => mutate(items => items.filter(i => key(i) !== id && String(i.product_id) !== id)),
+    updateQuantity: (id, quantity) => mutate(items => items.flatMap(i => key(i) === id || String(i.product_id) === id ? quantity > 0 ? [{ ...i, quantity }] : [] : [i])),
+    clearCart: () => mutate(() => []),
+    setCouponCodeInput: code => set({ couponCodeInput: code, couponError: null }),
+    applyCoupon: async code => {
+      const e = epoch; const value = (code ?? get().couponCodeInput).trim();
+      if (!value || get().busy) return false;
+      set({ isApplyingCoupon: true, couponError: null, pricing: null });
+      try { const q = await financialApi.quote(get().rawItems, value); if (e !== epoch) return false; set({ coupon: { code: q.coupon_code! }, pricing: q, items: get().items.map(i => ({ ...i, serverLine: q.lines.find(l => key(l) === i.id) })) }); return true; }
+      catch (err) { if (e === epoch) set({ couponError: (err as Error).message }); return false; }
+      finally { if (e === epoch) set({ isApplyingCoupon: false }); }
+    },
+    removeCoupon: () => { set({ coupon: null, couponCodeInput: '', couponError: null }); void get().refresh(); },
+    getItemsCount: () => get().rawItems.reduce((n, i) => n + i.quantity, 0),
+    getSubtotal: () => get().pricing?.totals.subtotal ?? null,
+    getGrandTotal: () => get().pricing?.totals.payable_total ?? null,
+  };
+});
+useAuthStore.subscribe((state, previous) => {
+  if (state.user?.id !== previous.user?.id || (previous.isLoading && !state.isLoading)) {
+    epoch++;
+    useCartStore.setState({ items: [], rawItems: [], pricing: null, loaded: false, error: null, mergeConflict: false, coupon: null, couponCodeInput: '', couponError: null });
+    void useCartStore.getState().refresh();
+  }
+});

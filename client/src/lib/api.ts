@@ -11,6 +11,8 @@ import {
   FALLBACK_SETTINGS,
 } from './fallbackData';
 
+import { financialApi } from './financialApi';
+import { orderAdapter } from './orderAdapter';
 import { authFetch } from './authFetch';
 const BASE_URL = '/api';
 
@@ -51,47 +53,11 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 export const api = {
   // Storefront
   getProducts: async (params: Record<string, any> = {}) => {
-    try {
-      const query = new URLSearchParams();
-      for (const [k, v] of Object.entries(params)) {
-        if (v !== undefined && v !== null && v !== '') {
-          query.set(k, String(v));
-        }
-      }
-      return await request<{ products: Product[]; total: number; page: number; limit: number; totalPages: number }>(
-        `/products?${query.toString()}`
-      );
-    } catch (err) {
-      console.warn('Using fallback products data:', err);
-      let list = [...FALLBACK_PRODUCTS];
-      if (params.featured) {
-        list = list.filter((p) => p.featured);
-      }
-      if (params.category) {
-        list = list.filter((p) => p.categoryIds?.includes(params.category));
-      }
-      return {
-        products: list,
-        total: list.length,
-        page: 1,
-        limit: 12,
-        totalPages: 1,
-      };
-    }
+    const query = new URLSearchParams();
+    for (const [k, v] of Object.entries(params)) if (v !== undefined && v !== null && v !== '') query.set(k, String(v));
+    return request<{ products: Product[]; total: number; page: number; limit: number; totalPages: number }>(`/products?${query}`);
   },
-
-  getProduct: async (idOrSlug: string) => {
-    try {
-      return await request<{ product: Product; related: Product[] }>(`/products/${idOrSlug}`);
-    } catch (err) {
-      console.warn('Using fallback product data:', err);
-      const prod =
-        FALLBACK_PRODUCTS.find((p) => p.id === idOrSlug || p.slug === idOrSlug) ||
-        FALLBACK_PRODUCTS[0];
-      const related = FALLBACK_PRODUCTS.filter((p) => p.id !== prod.id).slice(0, 4);
-      return { product: prod, related };
-    }
-  },
+  getProduct: (idOrSlug: string) => request<{ product: Product; related: Product[] }>(`/products/${encodeURIComponent(idOrSlug)}`),
 
   getCategories: async () => {
     try {
@@ -130,36 +96,12 @@ export const api = {
     }
   },
 
-  validateCoupon: async (code: string, subtotal: number) => {
-    return request<{ success: boolean; coupon: Coupon; discount: number; message: string }>('/coupons/validate', {
-      method: 'POST',
-      body: JSON.stringify({ code, subtotal }),
-    });
+  getMyOrders: async (page = 1) => {
+    const response = await financialApi.orders(page);
+    return { orders: response.data.map(orderAdapter), page: response.current_page, lastPage: response.last_page };
   },
-
-  createOrder: async (orderData: any) => {
-    return request<{ success: boolean; order: Order; message: string }>('/orders', {
-      method: 'POST',
-      body: JSON.stringify(orderData),
-    });
-  },
-
-  getMyOrders: async () => {
-    try {
-      return await request<Order[]>('/orders');
-    } catch (err) {
-      console.warn('Orders fetch notice:', err);
-      return [];
-    }
-  },
-
-  getOrder: async (id: string) => {
-    return request<Order>(`/orders/${id}`);
-  },
-
-  trackOrder: async (code: string) => {
-    return request<any>(`/orders/track/${code}`);
-  },
+  getOrder: async (id: string) => orderAdapter((await financialApi.order(id)).order),
+  trackOrder: financialApi.track,
 
   // Admin Endpoints
   admin: {

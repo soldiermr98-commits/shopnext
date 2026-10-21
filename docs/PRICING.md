@@ -290,3 +290,32 @@ artifacts. No simulation, skip or assertion reduction. Read-only published catal
 projection now enables real product/variant IDs in the financial frontend and shares
 PricingService active price selection; catalog management remains out of scope.
 This small catalog integration change's tests/CI are pending.
+
+
+### Financial frontend integration gate (CI pending)
+Catalog1f952f1 CI39598522400 passed all seven jobs before this concern. Existing
+stepper/card/grid styling retained; financial cart/checkout/order controls now call
+same-origin cookie/CSRF APIs. Browser stores IDs/quantities/version and server quote,
+NOT locally computed money. Shipping remains unknown until owned saved address and
+configured method are quoted; no hardcoded free-shipping threshold or tariff.
+Exact server line totals, all discounts, included/added VAT and signed adjustment
+are rendered directly, including zero. No multiplication/discount/tax rounding in
+financial UI. A stable attempt key is reused after a network error; checkout's
+transaction clears its own cart, and the browser never follows it with a cart PUT.
+Pending COD/receipt orders are never labeled paid. Owner detail, paginated list,
+minimal private tracking, customer cancellation and private image receipt upload
+are wired. Old SQL timestamps are explicitly interpreted as UTC and rendered in
+Asia/Tehran, including historical DST; date-only/invalid input is not guessed.
+Stale cart responses are identity-scoped; order/tracking responses are owner-scoped.
+Missing product/error/empty list does not load another product/demo orders. Fake
+wallet top-ups, points conversion, refund/profile/address/review writes and invented
+invoice legal IDs are disabled/removed rather than reported as persisted.
+Saved-address creation/catalog management and general storefront content remain L3;
+no actual tariffs or legal identity have been supplied. Financial checkout correctly
+fails closed without that data. Account wallet-history view is explicitly unwired,
+not a fake successful ledger read; actual balance comes from authenticated server.
+Local client typecheck/build and12 HTTP/store/formatter unit tests passed; archived
+reference typecheck/171 tests passed. These use fetch doubles, NOT a rendered browser
+or MySQL replacement. Full frozen-lock seven-job CI for this change is pending;
+real-host/browser/TLS/RTL/a11y/restore remain UNVERIFIED. Final finding table/docs/tag
+are still pending, so this is NOT L2 completion.

@@ -5,6 +5,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
 import { formatToman, toPersianDigits } from '../../lib/persian';
+import { FinancialSummary, CartStatus } from '../../components/shared/FinancialSummary';
 import { CheckoutStepper } from '../../components/shared/CheckoutStepper';
 
 export const CartPage: React.FC = () => {
@@ -21,24 +22,14 @@ export const CartPage: React.FC = () => {
     applyCoupon,
     removeCoupon,
     getSubtotal,
-    getDiscountTotal,
-    getShippingFee,
-    getGrandTotal,
+    pricing,
+    busy,
   } = useCartStore();
 
-  const subtotal = getSubtotal();
-  const discountTotal = getDiscountTotal();
-  const shippingFee = getShippingFee();
-  const grandTotal = getGrandTotal();
-
-  // 4,000,000 Toman threshold for free shipping
-  const freeShippingThreshold = 4000000;
-  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
-  const freeShippingProgress = Math.min(100, (subtotal / freeShippingThreshold) * 100);
 
   if (items.length === 0) {
     return (
-      <div className="py-16 text-center space-y-6 max-w-md mx-auto">
+      <div className="py-16 text-center space-y-6 max-w-md mx-auto"><CartStatus />
         <div className="w-24 h-24 rounded-full bg-surface-container-high text-on-surface-variant mx-auto flex items-center justify-center">
           <span className="material-symbols-outlined text-5xl">shopping_cart</span>
         </div>
@@ -64,28 +55,7 @@ export const CartPage: React.FC = () => {
       {/* Checkout Progress Stepper (Step 1) */}
       <CheckoutStepper currentStep={1} />
 
-      {/* Free Shipping Alert Banner */}
-      <div className="rounded-2xl p-4 bg-surface-container-low border border-outline-variant/60 space-y-2">
-        <div className="flex items-center justify-between text-xs font-bold">
-          <span className="text-on-surface flex items-center gap-1.5">
-            <span className="material-symbols-outlined text-emerald-600 text-sm">local_shipping</span>
-            {remainingForFreeShipping > 0 ? (
-              <>
-                تنها <span className="text-primary font-mono">{formatToman(remainingForFreeShipping)}</span> تا ارسال کاملاً رایگان سفارش شما باقی مانده است!
-              </>
-            ) : (
-              <span className="text-emerald-600">سفارش شما مشمول ارسال کاملاً رایگان است!</span>
-            )}
-          </span>
-          <span className="text-on-surface-variant font-mono">{toPersianDigits(Math.round(freeShippingProgress))}٪</span>
-        </div>
-        <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
-          <div
-            className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-            style={{ width: `${freeShippingProgress}%` }}
-          />
-        </div>
-      </div>
+      <CartStatus />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Cart Items List (Col 1-8) */}
@@ -101,9 +71,9 @@ export const CartPage: React.FC = () => {
 
           <div className="space-y-3">
             {items.map((item: any) => {
-              const unitPrice = item.selectedVariant?.salePrice || item.selectedVariant?.price || item.salePrice || item.product?.salePrice || item.product?.price || item.price || 0;
-              const hasOldPrice = Boolean(item.product?.salePrice || item.salePrice || item.selectedVariant?.salePrice);
-              const oldPrice = item.selectedVariant?.price || item.price || item.product?.price || unitPrice;
+              const unitPrice = pricing ? item.serverLine?.unit_price : null;
+              const hasOldPrice = false;
+              const oldPrice = null;
 
               return (
                 <div
@@ -182,7 +152,7 @@ export const CartPage: React.FC = () => {
                     {/* Total & Delete */}
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-black text-on-surface font-mono hidden sm:inline">
-                        {formatToman(unitPrice * item.quantity)}
+                        {formatToman(pricing ? item.serverLine?.line_total : null)}
                       </span>
                       <button
                         onClick={() => removeItem(item.id || item.productId)}
@@ -247,36 +217,10 @@ export const CartPage: React.FC = () => {
             خلاصه فاکتور سفارش
           </h3>
 
-          <div className="space-y-3 text-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-on-surface-variant">قیمت کالاها ({toPersianDigits(items.length)} قلم)</span>
-              <span className="font-bold font-mono text-on-surface">{formatToman(subtotal)}</span>
-            </div>
-
-            {discountTotal > 0 && (
-              <div className="flex items-center justify-between text-secondary">
-                <span>تخفیف کل کالاها</span>
-                <span className="font-bold font-mono">- {formatToman(discountTotal)}</span>
-              </div>
-            )}
-
-            <div className="flex items-center justify-between">
-              <span className="text-on-surface-variant">هزینه ارسال</span>
-              <span className="font-bold font-mono text-on-surface">
-                {shippingFee === 0 ? <span className="text-emerald-600 font-bold">رایگان</span> : formatToman(shippingFee)}
-              </span>
-            </div>
-
-            <div className="pt-3 border-t border-outline-variant/60 flex items-center justify-between text-sm font-black text-on-surface">
-              <span>مبلغ قابل پرداخت</span>
-              <span className="text-lg font-black text-primary font-mono">
-                {formatToman(grandTotal)}
-              </span>
-            </div>
-          </div>
+          <FinancialSummary quote={pricing} />
 
           <button
-            onClick={() => navigate('/checkout')}
+            disabled={busy || !pricing} onClick={() => navigate('/checkout')}
             className="w-full py-3.5 px-6 rounded-xl bg-primary text-white font-black text-sm flex items-center justify-center gap-2 shadow hover:bg-primary-container transition active:scale-95"
           >
             <span>ادامه فرایند خرید و ثبت آدرس</span>
@@ -284,7 +228,7 @@ export const CartPage: React.FC = () => {
           </button>
 
           <p className="text-[11px] text-center text-on-surface-variant leading-relaxed">
-            کالاهای موجود در سبد شما تا پایان فرایند پرداخت برای شما رزرو موقت می‌گردند.
+            موجودی و سهمیه تنها هنگام ثبت موفق سفارش رزرو می‌شوند؛ سبد خرید رزرو نیست.
           </p>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { financialDate as toJalaliDate } from '../../lib/financialDate';
 // ===== STOREFRONT CUSTOMER ACCOUNT DASHBOARD =====
 // Enterprise-grade Iranian customer portal for Digistyle / Vista Store
 // Comprehensive modules: Profile Summary, KPI Cards, Dynamic Orders, Wallet & Transactions,
@@ -10,9 +11,11 @@ import { useAuthStore } from '../../store/authStore';
 import { useToastStore } from '../../store/toastStore';
 import { useCartStore } from '../../store/cartStore';
 import { authFetch } from '../../lib/authFetch';
+import { FinancialSummary } from '../../components/shared/FinancialSummary';
+import { financialApi, paymentStates, orderStates } from '../../lib/financialApi';
 import { api } from '../../lib/api';
 import { Order, User } from '../../../shared/types';
-import { formatToman, toPersianDigits, toJalaliDate } from '../../lib/persian';
+import { formatToman, toPersianDigits } from '../../lib/persian';
 
 interface SavedAddress {
   id: string;
@@ -312,21 +315,30 @@ export const AccountPage: React.FC = () => {
     }
   }, [location.hash]);
 
+  useEffect(() => {
+    let current = true; setAddresses([]);
+    if (user) financialApi.options().then(r => { if (current) setAddresses(r.addresses.map(a => ({ id: String(a.id), title: a.title, type: 'home', recipientName: a.recipient_name, recipientPhone: a.recipient_phone, province: a.province, city: a.city, postalCode: a.postal_code, streetAddress: a.street_address, isDefault: false }))); }).catch(() => { /* checkout displays configuration/request errors explicitly */ });
+    return () => { current = false; };
+  }, [user?.id]);
+
   // Current user state (with fallback to Sohrab Mozaffari for complete demonstration)
-  const currentUser: User = user || DEFAULT_CUSTOMER;
+  const currentUser: User = user || ({ id: '', name: '', phone: '', role: 'customer' } as User);
 
   // Real Database Orders State
   const [orders, setOrders] = useState<Order[]>([]);
+  const [orderPage, setOrderPage] = useState(1);
+  const [lastOrderPage, setLastOrderPage] = useState(1);
+  const [orderError, setOrderError] = useState('');
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [orderStatusFilter, setOrderStatusFilter] = useState<'all' | 'processing' | 'delivered' | 'cancelled'>('all');
 
   // Collections State
-  const [addresses, setAddresses] = useState<SavedAddress[]>(INITIAL_ADDRESSES);
-  const [wishlist, setWishlist] = useState<WishlistItem[]>(INITIAL_WISHLIST);
-  const [transactions, setTransactions] = useState<WalletTransaction[]>(INITIAL_TRANSACTIONS);
+  const [addresses, setAddresses] = useState<SavedAddress[]>([]);
+  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
+  const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
-  const [coupons] = useState<UserCoupon[]>(INITIAL_COUPONS);
-  const [returns, setReturns] = useState<ReturnRequest[]>(INITIAL_RETURNS);
+  const [coupons] = useState<UserCoupon[]>([]);
+  const [returns, setReturns] = useState<ReturnRequest[]>([]);
 
   // Modals State
   const [showWalletModal, setShowWalletModal] = useState(false);
@@ -363,92 +375,15 @@ export const AccountPage: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // Fetch real database orders on mount
+  // Server pagination; an empty result is never replaced by demo purchases.
   useEffect(() => {
-    setLoadingOrders(true);
-    api.getMyOrders()
-      .then((res) => {
-        if (Array.isArray(res) && res.length > 0) {
-          setOrders(res);
-        }
-      })
-      .catch((err) => {
-        console.warn('Orders load note:', err);
-      })
-      .finally(() => {
-        setLoadingOrders(false);
-      });
-  }, []);
-
-  // Demo Fallback Orders for complete experience
-  const DEMO_ACTIVE_ORDER = {
-    id: 'ord-demo-1',
-    orderNumber: 'VST-94821',
-    createdAt: '1403/02/25',
-    totalPaid: 4689000,
-    status: 'processing',
-    paymentMethodName: 'پرداخت اینترنتی سامان (SEP)',
-    trackingCode: 'EXP-94821-TEH',
-    postalBarnameh: '4892019482103',
-    items: [
-      {
-        productTitle: 'اورکت پشمی کلاسیک مردانه',
-        productImage: '/images/catalog-placeholder.svg',
-        selectedColor: { name: 'سرمه‌ای' },
-        selectedSize: 'L',
-        finalPrice: 3150000,
-        quantity: 1,
-      },
-      {
-        productTitle: 'کتانی روزمره چرم مات ارگونومیک',
-        productImage: '/images/catalog-placeholder.svg',
-        selectedColor: { name: 'سفید شیری' },
-        selectedSize: '۴۳',
-        finalPrice: 1189000,
-        quantity: 1,
-      },
-      {
-        productTitle: 'شال گردن کشمیر بافت‌دار',
-        productImage: '/images/catalog-placeholder.svg',
-        selectedColor: { name: 'دودی' },
-        selectedSize: 'فری سایز',
-        finalPrice: 350000,
-        quantity: 1,
-      },
-    ],
-  };
-
-  const DEMO_DELIVERED_ORDER = {
-    id: 'ord-demo-2',
-    orderNumber: 'VST-88210',
-    createdAt: '1403/01/12',
-    totalPaid: 1850000,
-    status: 'delivered',
-    paymentMethodName: 'درگاه شاپرک به‌پرداخت ملت',
-    trackingCode: 'EXP-88210-TEH',
-    postalBarnameh: '3901928410294',
-    items: [
-      {
-        productTitle: 'پیراهن آکسفورد نخی مردانه',
-        productImage: '/images/catalog-placeholder.svg',
-        selectedColor: { name: 'آبی آسمانی' },
-        selectedSize: 'XL',
-        finalPrice: 960000,
-        quantity: 1,
-      },
-      {
-        productTitle: 'کمربند چرم طبیعی با سگک مات',
-        productImage: '/images/catalog-placeholder.svg',
-        selectedColor: { name: 'مشکی' },
-        selectedSize: '۱۱۰ سانت',
-        finalPrice: 890000,
-        quantity: 1,
-      },
-    ],
-  };
-
-  // Combine real DB orders with demo orders if needed
-  const displayOrders = orders.length > 0 ? orders : [DEMO_ACTIVE_ORDER as any, DEMO_DELIVERED_ORDER as any];
+    let current = true;
+    setOrders([]); setOrderError(''); setLoadingOrders(true);
+    if (user) api.getMyOrders(orderPage).then(res => { if (current) { setOrders(res.orders); setLastOrderPage(res.lastPage); } }).catch(e => { if (current) setOrderError(e.message); }).finally(() => { if (current) setLoadingOrders(false); });
+    else setLoadingOrders(false);
+    return () => { current = false; };
+  }, [orderPage, user?.id]);
+  const displayOrders = orders;
 
   // Filtered orders
   const filteredOrders = displayOrders.filter((ord) => {
@@ -459,43 +394,9 @@ export const AccountPage: React.FC = () => {
     return true;
   });
 
-  // Handle Wallet Charge
-  const handleChargeWallet = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newBalance = (currentUser.walletBalance || 1250000) + walletChargeAmount;
-    const updatedUser = { ...currentUser, walletBalance: newBalance };
-    setUser(updatedUser);
-
-    const newTx: WalletTransaction = {
-      id: `tx-${Date.now()}`,
-      title: 'شارژ آنلاین کیف پول از طریق شاپرک',
-      type: 'deposit',
-      amount: walletChargeAmount,
-      trackingCode: `TRC-${Math.floor(10000000 + Math.random() * 90000000)}`,
-      date: 'هم‌اکنون',
-      status: 'successful',
-    };
-    setTransactions([newTx, ...transactions]);
-
-    showToast(`مبلغ ${formatToman(walletChargeAmount)} تومان با موفقیت به کیف پول شما افزوده شد.`, 'success');
-    setShowWalletModal(false);
-  };
-
-  // Convert Club points to coupon
-  const handleConvertPoints = () => {
-    if ((currentUser.clubPoints || 0) < 100) {
-      showToast('برای تبدیل امتیاز به کوپن تخفیف حداقل ۱۰۰ امتیاز نیاز است.', 'error');
-      return;
-    }
-    const pointsToUse = 100;
-    const updatedUser = {
-      ...currentUser,
-      clubPoints: (currentUser.clubPoints || 248) - pointsToUse,
-      walletBalance: (currentUser.walletBalance || 1250000) + 100000,
-    };
-    setUser(updatedUser);
-    showToast('۱۰۰ امتیاز ویستا کلاب به ۱۰۰,۰۰۰ تومان اعتبار نقدی کیف پول تبدیل گردید.', 'success');
-  };
+  // No gateway or loyalty conversion formula has been approved in L2.
+  const handleChargeWallet = (e: React.FormEvent) => { e.preventDefault(); showToast('شارژ آنلاین کیف پول در این مرحله فعال نیست.', 'info'); };
+  const handleConvertPoints = () => showToast('فرمول تبدیل امتیاز تایید نشده است.', 'info');
 
   // Open Create Address Modal
   const openCreateAddress = () => {
@@ -521,73 +422,10 @@ export const AccountPage: React.FC = () => {
     setShowAddressModal(true);
   };
 
-  // Save Address
-  const handleSaveAddress = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formTitle || !formAddress || !formRecipient || !formPhone) {
-      showToast('لطفاً تمام اطلاعات الزامی را تکمیل کنید.', 'error');
-      return;
-    }
-
-    if (editingAddress) {
-      setAddresses(
-        addresses.map((addr) =>
-          addr.id === editingAddress.id
-            ? {
-                ...addr,
-                title: formTitle,
-                recipientName: formRecipient,
-                recipientPhone: formPhone,
-                postalCode: formPostal || '۱۴۵۱۱-۱۹۹۴۶',
-                streetAddress: formAddress,
-                isDefault: formIsDefault,
-              }
-            : formIsDefault
-            ? { ...addr, isDefault: false }
-            : addr
-        )
-      );
-      showToast('نشانی با موفقیت ویرایش شد.', 'success');
-    } else {
-      const newAddr: SavedAddress = {
-        id: `addr-${Date.now()}`,
-        title: formTitle,
-        type: 'home',
-        recipientName: formRecipient,
-        recipientPhone: formPhone,
-        province: 'تهران',
-        city: 'تهران',
-        postalCode: formPostal || '۱۴۵۱۱-۱۹۹۴۶',
-        streetAddress: formAddress,
-        isDefault: formIsDefault,
-      };
-      setAddresses(
-        formIsDefault
-          ? [newAddr, ...addresses.map((a) => ({ ...a, isDefault: false }))]
-          : [...addresses, newAddr]
-      );
-      showToast('نشانی پستی جدید با موفقیت اضافه شد.', 'success');
-    }
-
-    setShowAddressModal(false);
-  };
-
-  // Delete Address
-  const handleDeleteAddress = (id: string) => {
-    setAddresses(addresses.filter((a) => a.id !== id));
-    showToast('نشانی با موفقیت حذف گردید.', 'info');
-  };
-
-  // Set Default Address
-  const handleSetDefaultAddress = (id: string) => {
-    setAddresses(
-      addresses.map((a) => ({
-        ...a,
-        isDefault: a.id === id,
-      }))
-    );
-    showToast('نشانی پیش‌فرض تحویل تغییر یافت.', 'success');
-  };
+  // These prototypes must not claim durable writes without an API.
+  const handleSaveAddress = (e: React.FormEvent) => { e.preventDefault(); showToast('ویرایش نشانی در این مرحله فعال نیست؛ تسویه فقط نشانی ذخیره‌شده سرور را می‌پذیرد.', 'info'); };
+  const handleDeleteAddress = (_id: string) => showToast('حذف نشانی در این مرحله فعال نیست.', 'info');
+  const handleSetDefaultAddress = (_id: string) => showToast('تغییر نشانی پیش‌فرض در این مرحله فعال نیست.', 'info');
 
   // Move Wishlist Item to Cart
   const handleMoveToCart = (item: WishlistItem) => {
@@ -621,45 +459,11 @@ export const AccountPage: React.FC = () => {
     showToast(`کد تخفیف «${code}» با موفقیت کپی شد! در مرحله پرداخت وارد کنید.`, 'success');
   };
 
-  // Submit Review
-  const handleSubmitReview = (e: React.FormEvent) => {
-    e.preventDefault();
-    showToast('دیدگاه ارزشمند شما ثبت و پس از تأیید ناظر منتشر خواهد شد.', 'success');
-    setShowReviewModal(false);
-    setReviewText('');
-  };
+  // Unimplemented controls are explicitly inactive, not mocked successes.
+  const handleSubmitReview = (e: React.FormEvent) => { e.preventDefault(); showToast('ثبت دیدگاه در این مرحله فعال نیست.', 'info'); };
+  const handleSubmitReturn = (e: React.FormEvent) => { e.preventDefault(); showToast('بازپرداخت فقط با اقدام مجاز مدیر انجام می‌شود؛ این فرم فعال نیست.', 'info'); };
 
-  // Submit Return Request
-  const handleSubmitReturn = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newRet: ReturnRequest = {
-      id: `ret-${Date.now()}`,
-      orderNumber: returnOrderNumber,
-      productTitle: 'اورکت پشمی کلاسیک مردانه (سایز L)',
-      productImage: '/images/catalog-placeholder.svg',
-      reason: `${returnReason}: ${returnDescription}`,
-      status: 'pending',
-      date: 'هم‌اکنون',
-      refundAmount: 3150000,
-    };
-    setReturns([newRet, ...returns]);
-    showToast('درخواست مرجوعی ۷ روزه شما ثبت شد. کارشناس پشتیبانی با شما تماس می‌گیرد.', 'success');
-    setShowReturnModal(false);
-    setReturnDescription('');
-  };
-
-  // Save Profile Info
-  const handleSaveProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    setUser({
-      ...currentUser,
-      name: editName,
-      nationalCode: editNationalCode,
-      phone: editPhone,
-      email: editEmail,
-    });
-    showToast('اطلاعات هویتی و شماره شبا با موفقیت در پایگاه داده ذخیره شد.', 'success');
-  };
+  const handleSaveProfile = (e: React.FormEvent) => { e.preventDefault(); showToast('ویرایش پروفایل در این مرحله فعال نیست.', 'info'); };
 
   // Change Password
   const handleChangePassword = async (e: React.FormEvent) => {
@@ -695,6 +499,7 @@ export const AccountPage: React.FC = () => {
     setShowInvoiceModal(true);
   };
 
+  if (!user) return <div className="py-16 text-center"><button onClick={() => useAuthStore.getState().openLoginModal()}>برای مشاهده حساب وارد شوید.</button></div>;
   return (
     <div className="min-h-screen bg-surface-container-low text-on-surface">
       {/* ================= BREADCRUMB & PAGE HEADER ================= */}
@@ -792,13 +597,13 @@ export const AccountPage: React.FC = () => {
                   <div className="p-2 rounded-xl bg-surface-container-low border border-outline-variant/40">
                     <span className="text-[10px] text-outline block">موجودی کیف پول:</span>
                     <span className="text-xs text-primary font-black font-mono block mt-0.5">
-                      {formatToman(currentUser.walletBalance || 1250000)}
+                      {formatToman(currentUser.walletBalance)}
                     </span>
                   </div>
                   <div className="p-2 rounded-xl bg-surface-container-low border border-outline-variant/40">
                     <span className="text-[10px] text-outline block">امتیاز کلاب:</span>
                     <span className="text-xs text-amber-700 font-black font-mono block mt-0.5">
-                      {toPersianDigits(currentUser.clubPoints || 248)} امتیاز
+                      {toPersianDigits(currentUser.clubPoints)} امتیاز
                     </span>
                   </div>
                 </div>
@@ -868,7 +673,7 @@ export const AccountPage: React.FC = () => {
                     <span>کیف پول و تراکنش‌ها</span>
                   </div>
                   <span className="text-[11px] font-mono font-bold text-emerald-700">
-                    {formatToman(currentUser.walletBalance || 1250000)}
+                    {formatToman(currentUser.walletBalance)}
                   </span>
                 </button>
 
@@ -1096,7 +901,7 @@ export const AccountPage: React.FC = () => {
                     <div>
                       <span className="text-[11px] text-outline block">موجودی کیف پول</span>
                       <div className="text-sm font-black text-on-surface mt-0.5 font-mono">
-                        {formatToman(currentUser.walletBalance || 1250000)}
+                        {formatToman(currentUser.walletBalance)}
                       </div>
                     </div>
                   </div>
@@ -1113,7 +918,7 @@ export const AccountPage: React.FC = () => {
                     <div>
                       <span className="text-[11px] text-outline block">امتیاز کلاب</span>
                       <div className="text-base font-black text-amber-700 mt-0.5 font-mono">
-                        {toPersianDigits(currentUser.clubPoints || 248)} امتیاز
+                        {toPersianDigits(currentUser.clubPoints)} امتیاز
                       </div>
                     </div>
                   </div>
@@ -1372,6 +1177,8 @@ export const AccountPage: React.FC = () => {
                   </div>
                 )}
 
+                {orderError && <p role="alert" className="text-red-700">{orderError}</p>}
+                <div className="flex gap-3 text-xs"><button disabled={orderPage <= 1 || loadingOrders} onClick={() => setOrderPage(p => p - 1)}>صفحه قبل</button><span>{orderPage} / {lastOrderPage}</span><button disabled={orderPage >= lastOrderPage || loadingOrders} onClick={() => setOrderPage(p => p + 1)}>صفحه بعد</button></div>
                 {/* Orders Cards Grid */}
                 <div className="space-y-5">
                   {filteredOrders.map((ord: any) => {
@@ -1412,7 +1219,7 @@ export const AccountPage: React.FC = () => {
                                 : 'bg-blue-100 text-blue-800'
                             }`}
                           >
-                            {isDelivered ? 'تحویل داده شده به مشتری' : 'در حال آماده‌سازی و ارسال'}
+                            {orderStates[ord.status] ?? ord.status} — {paymentStates[ord.paymentState] ?? ord.paymentState}
                           </span>
                         </div>
 
@@ -1439,7 +1246,7 @@ export const AccountPage: React.FC = () => {
                                     {it.selectedSize ? ` | سایز: ${it.selectedSize}` : ''}
                                   </p>
                                   <p className="text-xs font-mono font-bold text-on-surface mt-1">
-                                    {formatToman(it.finalPrice || it.price || 1000000)}
+                                    {formatToman(it.unitPrice)}
                                   </p>
                                 </div>
                               </div>
@@ -1447,10 +1254,11 @@ export const AccountPage: React.FC = () => {
                           })}
                         </div>
 
+                        <Link to={`/order-success/${ord.id}`} className="underline text-xs">جزئیات، صورت‌حساب و عملیات مجاز سفارش</Link>
                         {/* Actions Row */}
                         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-outline-variant/60">
                           <div className="text-xs text-outline font-mono">
-                            کد بارنامه رهگیری: {ord.postalBarnameh || ord.trackingCode || 'TRK-849201'}
+                            کد بارنامه رهگیری: {ord.postalBarnameh || ord.trackingCode || 'ثبت نشده'}
                           </div>
 
                           <div className="flex flex-wrap items-center gap-2">
@@ -1508,10 +1316,10 @@ export const AccountPage: React.FC = () => {
                   <div className="space-y-1">
                     <span className="text-xs text-white/80 font-bold block">موجودی نقدی کیف پول دیجی‌استایل:</span>
                     <div className="text-2xl sm:text-3xl font-black font-mono">
-                      {formatToman(currentUser.walletBalance || 1250000)} تومان
+                      {formatToman(currentUser.walletBalance)} تومان
                     </div>
                     <span className="text-xs text-white/90 block">
-                      قابل استفاده برای خرید آنی تمام کالاها و دریافت کش‌بک‌های ویژه
+                      فقط پرداخت کامل با موجودی کافی؛ شارژ آنلاین و کش‌بک فعال نیست.
                     </span>
                   </div>
 
@@ -1529,10 +1337,10 @@ export const AccountPage: React.FC = () => {
                   <div className="flex items-center justify-between pb-3 border-b border-outline-variant/60">
                     <div className="flex items-center gap-2.5">
                       <span className="w-2.5 h-6 rounded-full bg-primary"></span>
-                      <h3 className="text-sm font-black text-on-surface">گردش حساب و تاریخچه تراکنش‌ها</h3>
+                      <h3 className="text-sm font-black text-on-surface">تاریخچه تراکنش‌ها در این مرحله به رابط متصل نیست</h3>
                     </div>
                     <span className="text-xs text-outline font-mono">
-                      {toPersianDigits(transactions.length)} تراکنش
+                      نمایش تاریخچه فعال نیست
                     </span>
                   </div>
 
@@ -1596,96 +1404,7 @@ export const AccountPage: React.FC = () => {
               </div>
             )}
 
-            {/* ================= TAB 4: VISTA CLUB LOYALTY ================= */}
-            {activeTab === 'club' && (
-              <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-xs p-6 space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant/60 pb-5">
-                  <div className="flex items-center gap-3">
-                    <span className="w-2.5 h-6 rounded-full bg-amber-500"></span>
-                    <div>
-                      <h3 className="text-base font-black text-on-surface">باشگاه مشتریان ویستا کلاب</h3>
-                      <p className="text-xs text-outline mt-0.5">امتیازات خرید، سطوح وفاداری و هدایای اختصاصی</p>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={handleConvertPoints}
-                    className="px-5 py-2.5 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700 shadow-xs transition active:scale-95 flex items-center gap-1.5"
-                  >
-                    <span className="material-symbols-outlined text-base">currency_exchange</span>
-                    <span>تبدیل هر ۱۰۰ امتیاز به ۱۰۰,۰۰۰ تومان اعتبار</span>
-                  </button>
-                </div>
-
-                {/* Tier Progress Card */}
-                <div className="p-6 rounded-2xl bg-gradient-to-r from-amber-50 via-amber-100/60 to-surface border border-amber-200 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-xs text-amber-800 font-bold block">سطح عضویت فعلی شما:</span>
-                      <h4 className="text-xl font-black text-amber-950 mt-0.5 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-amber-600" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          military_tech
-                        </span>
-                        <span>عضو طلایی (Gold Tier)</span>
-                      </h4>
-                    </div>
-                    <div className="text-end">
-                      <span className="text-xs text-outline block">موجودی امتیاز:</span>
-                      <span className="text-xl font-black text-amber-800 font-mono">
-                        {toPersianDigits(currentUser.clubPoints || 248)} امتیاز
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Progress to Diamond VIP */}
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between text-xs text-amber-900 font-bold">
-                      <span>پیشرفت تا سطح الماس (Diamond VIP)</span>
-                      <span>۲۴۸ از ۵۰۰ امتیاز (۵۰٪)</span>
-                    </div>
-                    <div className="w-full h-3 rounded-full bg-amber-200 overflow-hidden">
-                      <div className="w-1/2 h-full bg-amber-600 rounded-full"></div>
-                    </div>
-                    <span className="text-[11px] text-amber-800 block">
-                      با ۲۵۲ امتیاز دیگر به سطح الماس ارتقا یافته و از ارسال رایگان نامحدود بهره‌مند می‌شوید.
-                    </span>
-                  </div>
-                </div>
-
-                {/* VIP Privileges Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-xl border border-outline-variant bg-surface space-y-2">
-                    <span className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                      <span className="material-symbols-outlined text-base">local_shipping</span>
-                    </span>
-                    <h5 className="text-xs font-bold text-on-surface">ارسال رایگان سفارش‌ها</h5>
-                    <p className="text-[11px] text-outline leading-relaxed">
-                      ارسال اکسپرس رایگان برای تمامی سفارش‌های بالای ۱ میلیون تومان
-                    </p>
-                  </div>
-
-                  <div className="p-4 rounded-xl border border-outline-variant bg-surface space-y-2">
-                    <span className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-base">percent</span>
-                    </span>
-                    <h5 className="text-xs font-bold text-on-surface">کش‌بک نقدی روزهای طلایی</h5>
-                    <p className="text-[11px] text-outline leading-relaxed">
-                      بازگشت ۵ الی ۱۰ درصد از کل خرید به کیف پول در جشنواره‌ها
-                    </p>
-                  </div>
-
-                  <div className="p-4 rounded-xl border border-outline-variant bg-surface space-y-2">
-                    <span className="w-8 h-8 rounded-lg bg-rose-100 text-rose-800 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-base">cake</span>
-                    </span>
-                    <h5 className="text-xs font-bold text-on-surface">کارت هدیه زادروز</h5>
-                    <p className="text-[11px] text-outline leading-relaxed">
-                      کوپن تخفیف ۳۰۰,۰۰۰ تومانی بدون محدودیت حداقل خرید در ماه تولد
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
+            {activeTab === 'club' && <p>فرمول وفاداری و تبدیل امتیاز در این مرحله تایید نشده و فعال نیست.</p>}
 
             {/* ================= TAB 5: SAVED ADDRESSES ================= */}
             {activeTab === 'addresses' && (
@@ -2287,7 +2006,7 @@ export const AccountPage: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary text-2xl">receipt_long</span>
                 <h3 className="font-bold text-sm text-on-surface">
-                  فاکتور رسمی الکترونیکی سفارش {selectedInvoiceOrder.orderNumber}
+                  صورت‌حساب سفارش {selectedInvoiceOrder.orderNumber}
                 </h3>
               </div>
               <button
@@ -2304,10 +2023,10 @@ export const AccountPage: React.FC = () => {
                 <div>
                   <span className="text-outline block text-[11px]">فروشنده:</span>
                   <span className="font-bold text-on-surface">
-                    شرکت تجارت مد و استایل ویستا (دیجی‌استایل)
+                    صورت‌حساب ثبت‌شده سفارش
                   </span>
                   <span className="text-outline block text-[11px] mt-0.5 font-mono">
-                    شناسه ملی: ۱۰۱۰۳۸۹۲۸۱۱ | کد اقتصادی: ۴۱۱۵۸۹۳۲۱۴۷۸
+                    اطلاعات حقوقی فروشنده هنوز تایید و پیکربندی نشده است.
                   </span>
                 </div>
                 <div className="text-left font-mono">
@@ -2342,10 +2061,10 @@ export const AccountPage: React.FC = () => {
                         <td className="p-2.5">{it.productTitle || it.product?.title || 'کالای سفارشی'}</td>
                         <td className="p-2.5 text-center font-mono">{toPersianDigits(it.quantity || 1)}</td>
                         <td className="p-2.5 text-left font-mono">
-                          {formatToman(it.finalPrice || it.price || 1000000)}
+                          {formatToman(it.unitPrice)}
                         </td>
                         <td className="p-2.5 text-left font-mono font-bold">
-                          {formatToman((it.finalPrice || it.price || 1000000) * (it.quantity || 1))}
+                          {formatToman(it.lineTotal)}
                         </td>
                       </tr>
                     ))}
@@ -2353,23 +2072,7 @@ export const AccountPage: React.FC = () => {
                 </table>
               </div>
 
-              {/* Financial Totals */}
-              <div className="p-4 rounded-xl bg-surface-container-low space-y-1.5 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-outline">هزینه ارسال اختصاصی اکسپرس:</span>
-                  <span className="text-emerald-700 font-bold">رایگان (طرح مشتریان طلایی)</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-outline">مالیات بر ارزش افزوده (۱۰٪):</span>
-                  <span className="text-outline font-mono">محاسبه در قیمت نهایی</span>
-                </div>
-                <div className="flex justify-between pt-2 border-t border-outline-variant font-bold text-sm text-primary">
-                  <span>مبلغ کل پرداخت شده:</span>
-                  <span className="font-mono text-base font-black">
-                    {formatToman(selectedInvoiceOrder.totalPaid)} تومان
-                  </span>
-                </div>
-              </div>
+              <FinancialSummary quote={selectedInvoiceOrder.invoiceData ?? null} />
             </div>
 
             <div className="flex items-center justify-end gap-3 pt-2 border-t border-outline-variant/60">
@@ -2378,7 +2081,7 @@ export const AccountPage: React.FC = () => {
                 className="px-5 py-2.5 rounded-xl bg-primary text-white font-bold text-xs hover:bg-primary-container shadow transition flex items-center gap-1.5"
               >
                 <span className="material-symbols-outlined text-base">print</span>
-                <span>چاپ فاکتور رسمی</span>
+                <span>چاپ صورت‌حساب</span>
               </button>
             </div>
           </div>

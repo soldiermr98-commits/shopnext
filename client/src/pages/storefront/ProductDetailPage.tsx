@@ -25,7 +25,7 @@ export const ProductDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (!idOrSlug) return;
-    setLoading(true);
+    setLoading(true); setProduct(null); setSelectedVariant(null);
     api
       .getProduct(idOrSlug)
       .then((res) => {
@@ -63,14 +63,14 @@ export const ProductDetailPage: React.FC = () => {
     );
   }
 
-  const currentPrice = selectedVariant?.salePrice || selectedVariant?.price || product.salePrice || product.price;
-  const originalPrice = selectedVariant?.price || product.price;
+  const currentPrice = selectedVariant?.salePrice ?? selectedVariant?.price ?? product.salePrice ?? product.price;
+  const originalPrice = selectedVariant?.price ?? product.price;
   const hasDiscount = Boolean(product.salePrice || selectedVariant?.salePrice);
   const allImages = [product.mainImage, ...(product.galleryImages || [])];
 
   const handleAddToCart = () => {
     addItem(product, quantity, selectedVariant || undefined);
-    showToast(`«${product.title}» به سبد خرید اضافه گردید.`, 'success');
+
     openMiniCart();
   };
 

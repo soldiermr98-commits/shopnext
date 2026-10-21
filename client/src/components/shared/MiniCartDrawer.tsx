@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
+import { CartStatus } from './FinancialSummary';
 import { formatToman, toPersianDigits } from '../../lib/persian';
 
 export const MiniCartDrawer: React.FC = () => {
@@ -12,6 +13,7 @@ export const MiniCartDrawer: React.FC = () => {
     removeItem,
     updateQuantity,
     getGrandTotal,
+    pricing,
     getItemsCount,
   } = useCartStore();
 
@@ -82,7 +84,7 @@ export const MiniCartDrawer: React.FC = () => {
 
         {/* Scrollable Items List */}
         <div className="flex-grow overflow-y-auto p-4 space-y-4 divide-y divide-outline-variant/40">
-          {items.length === 0 ? (
+          <CartStatus />{items.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center text-outline">
               <span className="material-symbols-outlined text-6xl text-outline-variant mb-3">
                 remove_shopping_cart
@@ -167,7 +169,7 @@ export const MiniCartDrawer: React.FC = () => {
                       </button>
                     </div>
                     <span className="text-label-md font-label-md font-bold text-primary font-persian-nums">
-                      {formatToman((item.salePrice || item.price || 0) * item.quantity)}
+                      {formatToman(pricing ? item.serverLine?.line_total : null)}
                     </span>
                   </div>
                 </div>
