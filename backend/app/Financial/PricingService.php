@@ -46,12 +46,7 @@ final class PricingService
             if ($qty > $source->stock) {
                 $this->fail('stock', 'موجودی کالا کافی نیست.');
             }
-            $unit = Money::integer((int) $source->price);
-            foreach ([['sale_price', 'sale_starts_at', 'sale_ends_at'], ['flash_price', 'flash_starts_at', 'flash_ends_at']] as [$price, $start, $end]) {
-                if ($source->$price !== null && ($price !== 'flash_price' || ($source->$start !== null && $source->$end !== null)) && $this->window($source->$start, $source->$end, $now)) {
-                    $unit = min($unit, Money::integer((int) $source->$price));
-                }
-            }
+            $unit = $this->unitPrice($source, $now);
             $listed = Money::multiply((int) $source->price, $qty);
             $base = Fraction::of(Money::multiply($unit, $qty));
             $categoryIds = ($categories->get($product->id) ?? collect())->pluck('category_id')->all();
@@ -134,6 +129,20 @@ final class PricingService
         $shipping = $method === null ? null : $this->shipping($rules, $method, $zone, $preTax, $knownWeight ? $weight : null);
 
         return ['unit' => 'TOMAN', 'calculation_version' => 'exact-line-v1', 'lines' => $lines, 'totals' => [...$totals, 'shipping_fee' => $shipping['amount'] ?? null, 'payable_total' => $shipping === null ? null : Money::add($totals['merchandise_total'], $shipping['amount'])], 'shipping' => $shipping, 'coupon_id' => $coupon?->id, 'coupon_code' => $coupon?->code, 'expires_in_minutes' => $rules['expiry_minutes'], 'vat_bps' => $rules['vat_bps'], 'prices_include_tax' => $rules['prices_include_tax'], 'checkout_ready' => $shipping !== null && $lines !== []];
+    }
+
+    /** Catalog and checkout share active regular/sale/flash price selection. */
+    public function unitPrice(object $source, ?CarbonImmutable $now = null): int
+    {
+        $now ??= CarbonImmutable::now('UTC');
+        $unit = Money::integer((int) $source->price);
+        foreach ([['sale_price', 'sale_starts_at', 'sale_ends_at'], ['flash_price', 'flash_starts_at', 'flash_ends_at']] as [$price, $start, $end]) {
+            if ($source->$price !== null && ($price !== 'flash_price' || ($source->$start !== null && $source->$end !== null)) && $this->window($source->$start, $source->$end, $now)) {
+                $unit = min($unit, Money::integer((int) $source->$price));
+            }
+        }
+
+        return $unit;
     }
 
     public function normalize(array $items, array $rules): array

@@ -281,3 +281,12 @@ keys, and lookup is the first consistent read after that owner lock in checkout'
 transaction. Keep all stock/coupon/user locks and all race workers/assertions. Add
 safe SQLSTATE/driver-code-only diagnostics (never SQL/messages/credentials). Rerun the
 ENTIRE matrix; no claim of an observed driver number without diagnostic evidence.
+
+
+Real concurrency fix3a41437 CI39597673255: ALL7 GREEN; all five separate-process
+scenarios actually executed in EACH of six PHP/database jobs. Proof summaries recorded
+in ci/l2-real-concurrency-verified-matrix.json; full per-worker evidence in six CI
+artifacts. No simulation, skip or assertion reduction. Read-only published catalog
+projection now enables real product/variant IDs in the financial frontend and shares
+PricingService active price selection; catalog management remains out of scope.
+This small catalog integration change's tests/CI are pending.

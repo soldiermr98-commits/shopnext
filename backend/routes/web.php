@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SettingsController;
@@ -26,6 +27,8 @@ Route::prefix('api/auth')->middleware(CookieOnly::class)->group(function (): voi
 
 // No bearer fallback; even guest mutations retain the web CSRF/session stack.
 Route::middleware([CookieOnly::class, 'throttle:financial-cart'])->group(function (): void {
+    Route::get('api/products', [CatalogController::class, 'index']);
+    Route::get('api/products/{slug}', [CatalogController::class, 'show'])->where('slug', '[A-Za-z0-9_-]{1,200}');
     Route::get('api/cart', [CartController::class, 'index'])->name('cart.index');
     Route::put('api/cart', [CartController::class, 'replace'])->name('cart.replace');
     Route::post('api/quote', [CartController::class, 'quote'])->name('cart.quote');

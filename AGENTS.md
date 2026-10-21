@@ -12,7 +12,9 @@
   CI39594655416 passed all7 jobs (199/6662 each). Lifecycle bf11063
   CI39595334260 passed all7. Order/receipt API9205c58 CI39596445555 passed all7
   after fixing cached test RequestGuard identity between distinct browser actors.
-  Current separate-process concurrency harness/tests CI pending; no simulation fallback.
+  Real parallel harness3a41437 CI39597673255 passed ALL7, five races EACH database/PHP.
+  Evidence docs/ci/l2-real-concurrency-verified-matrix.json +six CI proof artifacts.
+  Current read-only catalog IDs integration (for financial frontend) CI pending.
 - Next concerns after FULL green: lifecycle/cancel/refund/paid/expiry; real parallel
   workers; order APIs/receipt/manual approvals; storefront wiring; final docs/tag.
 
