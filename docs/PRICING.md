@@ -197,3 +197,9 @@ Named throttling bounds routes by IP and identity, no bearer fallback. Real-CSRF
 secure-cookie persistence/reload, fractional input rejection, throttling and foreign
 owner-ID regressions added. These NEW tests still need execution; storefront wiring
 and full checkout/order APIs remain unimplemented.
+
+Cart API first CI39583987683: one throttle-boundary test expected429 on the60th
+GET, but a60/min limit correctly permits60 and rejects61. The preceding unauthorized
+merge request is rejected by auth before consuming the route throttle. Fix the test
+to assert all60 requests succeed and the61st fails; do not change production limits.
+Full matrix rerun is mandatory before further concerns.

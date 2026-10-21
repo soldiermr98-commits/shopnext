@@ -59,9 +59,9 @@ it('H09 bounds quote floods independently of authentication and requires login f
     cartCsrf();
     $this->postJson('https://localhost/api/cart/merge')->assertUnauthorized();
     for ($i = 0; $i < 60; $i++) {
-        $response = $this->getJson('https://localhost/api/cart');
+        $this->getJson('https://localhost/api/cart')->assertOk();
     }
-    $response->assertStatus(429);
+    $this->getJson('https://localhost/api/cart')->assertStatus(429);
 });
 
 it('C01 H10 retry merges only authenticated account and token-authorized guest without accepting owner IDs', function () {
