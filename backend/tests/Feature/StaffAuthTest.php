@@ -6,6 +6,8 @@ use App\Filament\Auth\StaffLogin;
 use App\Filament\Auth\StaffProfile;
 use App\Models\User;
 use Filament\Facades\Filament;
+use Filament\Notifications\Notification;
+use Illuminate\Cache\RateLimiter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -73,4 +75,37 @@ it('provisions once from private environment configuration with no default reset
     expect(Hash::check($password, $user->password))->toBeTrue();
     $this->artisan('shopnext:provision-admin')->assertExitCode(1);
     expect(User::count())->toBe(1);
+});
+
+it('locks staff login flooding before credential lookup without revealing account existence and recovers after decay', function () {
+    $this->freezeTime();
+    config(['cache.default' => 'database', 'cache.limiter' => 'database']);
+    app()->forgetInstance(RateLimiter::class);
+    Illuminate\Support\Facades\RateLimiter::clearResolvedInstance(RateLimiter::class);
+    $password = bin2hex(random_bytes(16));
+    $user = User::factory()->create(['role' => 'admin', 'password' => $password]);
+    for ($attempt = 0; $attempt < 5; $attempt++) {
+        Livewire::test(StaffLogin::class)
+            ->fillForm(['email' => $attempt % 2 ? 'absent@example.invalid' : $user->email, 'password' => 'incorrect-password'])
+            ->call('authenticate')->assertHasFormErrors(['email']);
+        $this->assertGuest('web');
+    }
+    $credentialQueries = [];
+    DB::listen(function ($query) use (&$credentialQueries): void {
+        if (str_contains($query->sql, 'from `users`')) {
+            $credentialQueries[] = $query->sql;
+        }
+    });
+    $title = __('filament-panels::auth/pages/login.notifications.throttled.title', ['seconds' => 60, 'minutes' => 1]);
+    foreach ([$user->email, 'absent@example.invalid'] as $email) {
+        Livewire::test(StaffLogin::class)->fillForm(['email' => $email, 'password' => $password])
+            ->call('authenticate')->assertHasNoFormErrors();
+        Notification::assertNotified($title);
+        $this->assertGuest('web');
+    }
+    expect($credentialQueries)->toBeEmpty();
+    $this->travel(61)->seconds();
+    Livewire::test(StaffLogin::class)->fillForm(['email' => $user->email, 'password' => $password])
+        ->call('authenticate')->assertHasNoFormErrors();
+    $this->assertAuthenticatedAs($user, 'web');
 });
