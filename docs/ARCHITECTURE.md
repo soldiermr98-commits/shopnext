@@ -89,3 +89,48 @@ Legacy Node/sql.js code is reference-only, excluded from releases. New encrypted
 settings are supported; legacy plaintext settings need an explicit future importer,
 not automatic decryption/fallback. Runtime CI is not browser, TLS or shared-host
 certification. See [acceptance](ACCEPTANCE.md) and [CI](CI_RESULTS.md).
+
+
+## Executed L2 cart/quote sequence (not an order/payment sequence)
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant CartAPI
+    participant CartService
+    participant PricingService
+    participant SQL
+    Browser->>CartAPI: PUT items + optimistic version + CSRF
+    CartAPI->>CartService: authenticated owner OR encrypted guest cookie
+    CartService->>SQL: begin; lock owner/cart; check version
+    CartService->>PricingService: validated IDs/quantities; locked mode
+    PricingService->>SQL: settings shared; sorted SKU locks/current prices
+    PricingService-->>CartService: exact economics, rounded integer DTO
+    CartService->>SQL: replace item IDs/qty, increment version, commit
+    CartAPI-->>Browser: persisted snapshot; new guest secure HttpOnly cookie if needed
+```
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant Auth
+    participant CartService
+    participant SQL
+    Browser->>Auth: login + CSRF + guest cookie
+    Auth->>Auth: credentials, customer/active checks, rotate session
+    Auth->>CartService: merge persisted guest into owned account
+    CartService->>SQL: begin; user lock; sorted cart locks; validate combined quantities
+    alt valid whole merge
+        CartService->>SQL: write account; delete guest; commit
+        Auth-->>Browser: authenticated + merged; expire guest cookie
+    else business limit/stock conflict
+        CartService->>SQL: rollback entire merge (both carts/versions preserved)
+        Auth-->>Browser: authenticated + explicit conflict/errors; retain guest cookie
+    end
+```
+
+Forced password rotation defers merge; cart APIs enforce active customer permissions.
+Wallet primitives lock user rows/current SUM and append entries, never update the old
+balance snapshot. They require a caller transaction and do NOT mark orders paid.
+Order/reservation/payment/expiry sequences are intentionally NOT claimed implemented;
+those are the next L2 concern, with stock/coupon/ledger changes in one transaction.

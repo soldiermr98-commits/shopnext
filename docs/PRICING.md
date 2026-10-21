@@ -211,4 +211,5 @@ in `docs/ci/l2-cart-api-verified-matrix.json`. Production throttle remained unch
 New hardening change: encrypted configuration plaintext is bounded to30,000 UTF-8
 JSON bytes before validation/storage, ensuring ciphertext fits existing TEXT. Money
 fails closed on non64-bit PHP, and deploy-check reports php.integer64. Cart validation
-messages are Persian. These changes need their own CI before the next concern.
+messages are Persian. Executed hardening8178a52 passed CI39584953220: all7 jobs green, each backend
+job193 tests/6619 assertions. Recorded in ci/l2-pricing-cart-wallet-hardening-verified-matrix.json.

@@ -7,6 +7,7 @@
 - Wallet primitives63088db: [39582169761](https://github.com/soldiermr98-commits/shopnext/actions/runs/39582169761),7/7 green,180/6482 each.
 - Cart/login8080bfe: [39583400561](https://github.com/soldiermr98-commits/shopnext/actions/runs/39583400561),7/7 green,187/6525 each.
 - Cart/quote API03238d6: [39584222988](https://github.com/soldiermr98-commits/shopnext/actions/runs/39584222988),7/7 green,192/6615 each.
+- Runtime/config hardening8178a52: [39584953220](https://github.com/soldiermr98-commits/shopnext/actions/runs/39584953220),7/7 green,193/6619 each.
 - Per-job evidence: docs/ci/l2-*-verified-matrix.json. Real SQL, no SQLite substitute.
   Red39583138981 (JSON fixture missing cookies) and39583987683 (60/61 throttle test
   off-by-one) were diagnosed; corrected tests rerun fully, no assertion bypass.

@@ -35,7 +35,9 @@
   (7/7 SUCCESS, each matrix192/6615); evidence docs/ci/l2-cart-api-verified-matrix.json.
   Storefront financial wiring and order/checkout APIs remain NOT implemented.
 - Current hardening: financial JSON bound30,000 bytes, Money requires64-bit PHP,
-  deploy-check integer64 and Persian cart validation messages; its CI is pending.
+  deploy-check integer64 and Persian cart validation messages.8178a52 passed
+  CI39584953220 (all7 SUCCESS, each matrix193/6619); exact evidence recorded in
+  docs/ci/l2-pricing-cart-wallet-hardening-verified-matrix.json.
 - Before final L2: complete exact concurrent wallet/stock/coupon
   tests and all outstanding lifecycle/API/UI/docs. Do not create l2-complete early.
 - Actual browser/host/TLS/RTL/a11y/backup restore UNVERIFIED. The tag is an
@@ -118,3 +120,22 @@
 
 Read README, ARCHITECTURE, DATABASE, SECURITY, HOSTING, ACCEPTANCE, CI_RESULTS and
 L1_AUTH before changing scope. Historical PhaseA/L0 docs are not current approval.
+
+
+## Immediate next L2 concern (already authorized; do not ask for L2 again)
+- Order creation/lifecycle service: authenticated active customer and ONLY owned
+  account cart/version +owned address zone; one transaction/user->cart->order->
+  settings/coupon->sorted products/variants, locked shared PricingService,
+  coupon capacity reserve, stock reserve, immutable item/address/pricing snapshots,
+  idempotency intent hash; no client money. Failure rolls back ALL effects.
+- PaymentMethod interface only; full wallet via Ledger, COD/card manual states and
+  fresh admin/super_admin approvals, exactly-once paid/refund/restock, expiry COD
+  exception. Do NOT invent points formula or call any gateway/SMS.
+- Then owner-restricted FormRequests/policies/order/tracking APIs, minimal storefront
+  real API wiring (catalog IDs must be real; inspect current client source first),
+  separate-process/connection real stock/coupon/wallet concurrency tests with committed
+  fixtures and full matrix. Never describe current sequential tests as parallel.
+- Final docs/CI/l2-complete tag only when ALL L2 acceptance is actually green.
+  Current partial checkpoint is not a production commerce release.
+- Filter gh run list by backend.yml: scaffold/resolve-sanctum workflows can appear
+  later and are deliberately skipped; only the seven-job backend workflow is the gate.
