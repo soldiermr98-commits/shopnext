@@ -1,0 +1,60 @@
+{
+  "scope": "L2 pricing checkpoint only, NOT l2-complete",
+  "run_id": 39581254064,
+  "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39581254064",
+  "sha": "4a76d5143c471621e97a78f995a97d53684598a5",
+  "jobs": [
+    {
+      "name": "Storefront and archived security regression tests",
+      "conclusion": "success",
+      "job_id": 119159146874
+    },
+    {
+      "name": "PHP 8.2 / mariadb:11.4",
+      "conclusion": "success",
+      "job_id": 119159147233,
+      "tests": 173,
+      "assertions": 6437
+    },
+    {
+      "name": "PHP 8.2 / mysql:8.0",
+      "conclusion": "success",
+      "job_id": 119159147265,
+      "tests": 173,
+      "assertions": 6437
+    },
+    {
+      "name": "PHP 8.3 / mariadb:11.4",
+      "conclusion": "success",
+      "job_id": 119159147298,
+      "tests": 173,
+      "assertions": 6437
+    },
+    {
+      "name": "PHP 8.3 / mariadb:10.6",
+      "conclusion": "success",
+      "job_id": 119159147401,
+      "tests": 173,
+      "assertions": 6437
+    },
+    {
+      "name": "PHP 8.3 / mysql:8.0",
+      "conclusion": "success",
+      "job_id": 119159147427,
+      "tests": 173,
+      "assertions": 6437
+    },
+    {
+      "name": "PHP 8.2 / mariadb:10.6",
+      "conclusion": "success",
+      "job_id": 119159147535,
+      "tests": 173,
+      "assertions": 6437
+    }
+  ],
+  "limitations": [
+    "No order orchestration/stock or coupon reservation yet",
+    "No real concurrency proof yet",
+    "No host/browser/TLS acceptance"
+  ]
+}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Financial\Ledger;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -56,6 +56,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
             'must_change_password' => 'boolean',
             'is_active' => 'boolean',
         ];
+    }
+
+    /** Legacy column is only an immutable opening snapshot; never a live cache. */
+    public function getWalletBalanceAttribute(mixed $opening): int
+    {
+        return $this->exists ? app(Ledger::class)->balance((int) $this->getKey()) : 0;
     }
 
     public function canAccessPanel(Panel $panel): bool

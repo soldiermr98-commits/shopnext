@@ -16,10 +16,13 @@
 - docs/PRICING.md records other approved pricing, full-wallet/manual/COD/expiry defaults.
   No tariffs/zone mapping supplied: fail closed. L2 is NOT complete. Money04cdcab
   CI39578549164 and schema66b2187 CI39579280000 both seven-job SUCCESS. This new pricing
-  checkpoint still needs its own full CI. Pending: cart/login merge, order/reservation,
-  append-only wallet read/write, manual payments, expiry, APIs/UI, real concurrency.
+  checkpoint4a76d51 passed CI39581254064 (7/7 green, each matrix173/6437). Pending: cart/login merge, order/reservation,
+  wallet/order integration, manual payments, expiry, APIs/UI, real concurrency.
 - Legacy users.wallet_balance is an IMMUTABLE OPENING SNAPSHOT, not live balance.
-  Current AuthController/User still need ledger-backed balance before L2 completion.
+  New User accessor uses Ledger SUM, so AuthController identity now reports live balance.
+  Ledger primitives (credit/full debit/actual-paid refund, caller transaction required)
+  and rollback/idempotency tests are the current change; their CI is still pending.
+  Ledger does NOT mark paid/refunded or orchestrate stock/coupon/order transitions.
 - Actual browser/host/TLS/RTL/a11y/backup restore UNVERIFIED. The tag is an
   implementation checkpoint, NOT launch/commerce certification.
 

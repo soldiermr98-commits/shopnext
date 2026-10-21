@@ -36,7 +36,7 @@ Only executed green CI is evidence. No gateway/SMS/Filament business resources.
 - No loyalty-point formula is approved. Do not invent earning rules or double-apply
   effects when payment is repeated. No provider adapters beyond PaymentMethod.
 
-## Pricing implementation (CI pending for this change)
+## Pricing implementation (verified checkpoint4a76d51)
 
 `Money` checks unsigned JS-safe integer arithmetic. `Fraction` performs reduced
 nonnegative rational operations using BCMath strings (no float conversions).
@@ -112,8 +112,30 @@ by this pure calculator; full-wallet orchestration remains pending.
 Money checkpoint04cdcab: full seven-job CI success39578549164. Schema checkpoint
 66b2187: full seven-job CI success39579280000. Pricing service tests in this change:
 named C01/C02/H06 regressions plus80 deterministic property iterations, with existing
-200 Money allocation iterations. Execution evidence for the new change is pending.
+200 Money allocation iterations. Executed on4a76d51: CI39581254064 all seven jobs SUCCESS;173 tests/6437 assertions
+on EACH of six PHP/database combinations. Exact evidence: `docs/ci/l2-pricing-verified-matrix.json`.
 
-Order transactions, stock/coupon reservation concurrency, cart/login merge, wallet,
+Order transactions, stock/coupon reservation concurrency, cart/login merge,
 manual payment state machine, expiry, owner-only APIs and storefront wiring remain
 **NOT IMPLEMENTED / UNVERIFIED**. No `l2-complete` tag until the whole gate passes.
+
+## Wallet ledger primitives (new change; CI pending)
+
+`Ledger` computes balance as SQL SUM(delta), not users.wallet_balance. User's accessor
+and therefore auth identity now read that sum. Credit/debit/refund lock the owner row;
+credit locks actor and owner in ascending ID and rechecks privileged actor. Locked
+balance and idempotency reads use locking/current reads, not an older InnoDB RR snapshot.
+Credits reject zero/overflow and atomically append a redacted actor audit. Repeated
+keys must match exact owner/delta/order/kind/reason; conflicts fail, not double-credit.
+Payment debits the full persisted wallet order payable only; insufficient funds fail.
+Refund credits actual recorded total_paid once, including manual COD/card payments;
+zero paid/payable amounts create no zero-value ledger record. SQL append-only triggers
+remain in force. The legacy users column stays an immutable opening snapshot.
+
+These are TRANSACTIONAL PRIMITIVES, not a completed payment workflow. `payLocked` and
+`refundLocked` require an enclosing caller transaction and do not change order/payment
+state, release stock, redeem coupons or grant points. The forthcoming orchestrator
+must atomically apply those changes and approve refunds via fresh admin permissions.
+Tests inject audit/caller failures and assert rollback; they are sequential real SQL
+regressions, NOT separate-connection concurrency evidence. Actual concurrent wallet
+spend and full end-to-end stock/order/coupon rollback remain pending.
