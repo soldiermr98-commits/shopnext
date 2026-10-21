@@ -1,0 +1,60 @@
+{
+  "scope": "L2 wallet primitives only, NOT complete payment orchestration or l2-complete",
+  "run_id": 39582169761,
+  "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39582169761",
+  "sha": "63088dbafe9344a33d50630658f9ca39db5fe8ce",
+  "jobs": [
+    {
+      "name": "Storefront and archived security regression tests",
+      "conclusion": "success",
+      "job_id": 119162148659
+    },
+    {
+      "name": "PHP 8.2 / mysql:8.0",
+      "conclusion": "success",
+      "job_id": 119162148992,
+      "tests": 180,
+      "assertions": 6482
+    },
+    {
+      "name": "PHP 8.2 / mariadb:10.6",
+      "conclusion": "success",
+      "job_id": 119162149116,
+      "tests": 180,
+      "assertions": 6482
+    },
+    {
+      "name": "PHP 8.3 / mariadb:10.6",
+      "conclusion": "success",
+      "job_id": 119162149144,
+      "tests": 180,
+      "assertions": 6482
+    },
+    {
+      "name": "PHP 8.3 / mysql:8.0",
+      "conclusion": "success",
+      "job_id": 119162149221,
+      "tests": 180,
+      "assertions": 6482
+    },
+    {
+      "name": "PHP 8.3 / mariadb:11.4",
+      "conclusion": "success",
+      "job_id": 119162149250,
+      "tests": 180,
+      "assertions": 6482
+    },
+    {
+      "name": "PHP 8.2 / mariadb:11.4",
+      "conclusion": "success",
+      "job_id": 119162149327,
+      "tests": 180,
+      "assertions": 6482
+    }
+  ],
+  "limitations": [
+    "No real concurrent spend test yet",
+    "No order lifecycle integration yet",
+    "No host/browser acceptance"
+  ]
+}

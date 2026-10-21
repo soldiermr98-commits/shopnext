@@ -138,7 +138,7 @@ final class PricingService
 
     public function normalize(array $items, array $rules): array
     {
-        if (count($items) > $rules['max_lines']) {
+        if (count($items) > 2 * $rules['max_lines']) {
             $this->fail('items', 'تعداد خطوط سبد بیشتر از سقف مجاز است.');
         }
         $result = [];
@@ -157,6 +157,9 @@ final class PricingService
         }
         if ($total > $rules['max_order_quantity']) {
             $this->fail('quantity', 'تعداد کل سفارش از سقف مجاز بیشتر است.');
+        }
+        if (count($result) > $rules['max_lines']) {
+            $this->fail('items', 'تعداد خطوط سبد بیشتر از سقف مجاز است.');
         }
         ksort($result);
 

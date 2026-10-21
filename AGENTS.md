@@ -20,9 +20,16 @@
   wallet/order integration, manual payments, expiry, APIs/UI, real concurrency.
 - Legacy users.wallet_balance is an IMMUTABLE OPENING SNAPSHOT, not live balance.
   New User accessor uses Ledger SUM, so AuthController identity now reports live balance.
-  Ledger primitives (credit/full debit/actual-paid refund, caller transaction required)
-  and rollback/idempotency tests are the current change; their CI is still pending.
+  Ledger primitives63088db passed CI39582169761 (7/7, each matrix180/6482).
+  Exact recorded evidence: docs/ci/l2-wallet-primitives-verified-matrix.json.
   Ledger does NOT mark paid/refunded or orchestrate stock/coupon/order transitions.
+- Current change: CartService +login/register merge (secure token HASH persistence,
+  optimistic versions, all-or-nothing preserve-both conflict, explicit auth/cart DTO).
+  Cart domain and auth conflict tests added; CI pending. Cart/quote endpoints and
+  cookie issuance/UI remain NOT implemented. Forced password rotation defers merge.
+- Before final L2: bound financial settings encoded JSON to fit encrypted TEXT;
+  add 64-bit integer deployment check; complete exact concurrent wallet/stock/coupon
+  tests and all outstanding lifecycle/API/UI/docs. Do not create l2-complete early.
 - Actual browser/host/TLS/RTL/a11y/backup restore UNVERIFIED. The tag is an
   implementation checkpoint, NOT launch/commerce certification.
 

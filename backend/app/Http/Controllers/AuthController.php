@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Financial\CartService;
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -26,7 +27,7 @@ final class AuthController extends Controller
         Auth::guard('web')->login($user);
         $request->session()->regenerate(true);
 
-        return $this->identity($user);
+        return $this->afterLogin($request, $user);
     }
 
     public function register(AuthRequest $request): JsonResponse
@@ -35,7 +36,7 @@ final class AuthController extends Controller
         Auth::guard('web')->login($user);
         $request->session()->regenerate(true);
 
-        return $this->identity($user)->setStatusCode(201);
+        return $this->afterLogin($request, $user)->setStatusCode(201);
     }
 
     public function me(AuthRequest $request): JsonResponse
@@ -77,6 +78,18 @@ final class AuthController extends Controller
     public function otp(AuthRequest $request): JsonResponse
     {
         return response()->json(['message' => 'SMS authentication is unavailable.'], 503);
+    }
+
+    private function afterLogin(AuthRequest $request, User $user): JsonResponse
+    {
+        $merge = $user->must_change_password ? ['status' => 'deferred', 'errors' => ['password' => ['ابتدا رمز عبور خود را تغییر دهید.']]] : app(CartService::class)->merge($user, $request->cookie(CartService::COOKIE));
+        $response = $this->identity($user);
+        $response->setData([...$response->getData(true), 'cart_merge' => $merge]);
+        if ($merge['status'] === 'merged') {
+            $response->withCookie(cookie(CartService::COOKIE, '', -2628000, '/', null, true, true, false, 'strict'));
+        }
+
+        return $response;
     }
 
     private function identity(User $user): JsonResponse

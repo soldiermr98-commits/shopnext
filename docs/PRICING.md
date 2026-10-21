@@ -119,7 +119,7 @@ Order transactions, stock/coupon reservation concurrency, cart/login merge,
 manual payment state machine, expiry, owner-only APIs and storefront wiring remain
 **NOT IMPLEMENTED / UNVERIFIED**. No `l2-complete` tag until the whole gate passes.
 
-## Wallet ledger primitives (new change; CI pending)
+## Wallet ledger primitives (verified checkpoint63088db)
 
 `Ledger` computes balance as SQL SUM(delta), not users.wallet_balance. User's accessor
 and therefore auth identity now read that sum. Credit/debit/refund lock the owner row;
@@ -139,3 +139,31 @@ must atomically apply those changes and approve refunds via fresh admin permissi
 Tests inject audit/caller failures and assert rollback; they are sequential real SQL
 regressions, NOT separate-connection concurrency evidence. Actual concurrent wallet
 spend and full end-to-end stock/order/coupon rollback remain pending.
+
+Wallet checkpoint63088db passed CI39582169761: all seven jobs success,180 Pest tests /
+6482 assertions on EACH real PHP/database matrix. Exact evidence is recorded in
+`docs/ci/l2-wallet-primitives-verified-matrix.json`. This is not a concurrent-spend proof.
+
+## Server cart primitives / login integration (new change; CI pending)
+
+`CartService` stores only IDs and positive canonical quantities, never client prices.
+Guest identity uses a256-bit random token with only SHA256 persisted. HTTP issuance
+via cart endpoints is not implemented yet. Anonymous reads create no database rows.
+Account mutation/merge locks the fresh active customer first, then carts in ID order.
+Optimistic version conflicts return409 instead of overwriting a newer cart. Invalid
+catalog/stock leaves stored items visible but unpriced, with explicit validation
+errors; no fabricated zero money. Account reads never substitute the guest cart.
+
+Login/register attempts an atomic merge and returns `cart_merge.status` and Persian
+errors. Limit/stock conflicts roll back the entire merge without failing login, losing
+lines, clamping quantities, changing versions or clearing the guest credential.
+Successful merge deletes the guest only after validated account write and expires its
+Secure/HttpOnly/SameSite=Strict __Host cookie. Forced password rotation defers merge;
+no financial state changes until customer permissions allow it. Cart views explicitly
+include `merge_conflict` and the token-authorized `pending_guest_items` for resolution.
+Duplicate lines are combined before the DISTINCT line cap; raw domain input is capped
+at twice that limit to accommodate two carts. Neither cart stores coupon/fee amounts.
+
+These are domain methods plus login integration, NOT finished storefront/cart HTTP
+contracts. Secure cart-cookie issuance, FormRequests, cart/quote routes, retry endpoint,
+UI wiring, checkout/order orchestration and actual parallel merge tests are pending.
