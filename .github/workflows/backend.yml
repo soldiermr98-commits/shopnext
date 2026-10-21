@@ -122,7 +122,17 @@ jobs:
         run: |
           test "$APP_ENV" = testing
           test "$DB_DATABASE" = shopnext_ci_test
-          php artisan migrate:fresh --force --no-interaction
+          set +e
+          php artisan migrate:fresh --force --no-interaction > /tmp/migrate-result.log 2>&1
+          result=$?
+          cat /tmp/migrate-result.log
+          python3 - <<'PYMIGRATE'
+          from pathlib import Path
+          text = Path('/tmp/migrate-result.log').read_text()
+          for offset in range(0, min(len(text), 16000), 2800):
+              print('::notice::' + text[offset:offset+2800].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          PYMIGRATE
+          exit "$result"
       - name: Pest on selected real database (not SQLite)
         working-directory: backend
         run: |
