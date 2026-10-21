@@ -6,6 +6,7 @@ use App\Financial\Checkout;
 use App\Financial\OrderLifecycle;
 use App\Models\User;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -39,7 +40,7 @@ try {
     $result = ['status' => 'rejected', 'exception' => $e::class];
 } catch (Throwable $e) {
     // Never write raw SQL, env, exception messages or arguments to a public CI artifact.
-    $result = ['status' => 'unexpected', 'exception' => $e::class];
+    $result = ['status' => 'unexpected', 'exception' => $e::class, 'sql_state' => $e instanceof QueryException ? ($e->errorInfo[0] ?? null) : null, 'driver_code' => $e instanceof QueryException ? ($e->errorInfo[1] ?? null) : null];
 }
 file_put_contents($base.'.result', json_encode([...$identity, ...$result, 'started' => $started, 'finished' => microtime(true)], JSON_THROW_ON_ERROR));
 exit($result['status'] === 'unexpected' ? 72 : 0);

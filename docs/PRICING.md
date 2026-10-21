@@ -270,3 +270,14 @@ mistaking cart-version or a shared admin actor lock for a balance check. No Refr
 transaction hides fixtures. proc_open absence or a barrier failure FAILS explicitly;
 there is no sequential fallback. Each matrix uploads safe proof JSON with no credentials.
 These five scenarios remain UNVERIFIED until the new full CI actually executes them.
+
+
+First real race run39597201549 failed last-stock with an unexpected QueryException;
+four other actual concurrent scenarios passed on inspected PHP8.2/MySQL. It is NOT
+green. Review found missing-key FOR UPDATE in checkout held unique-index gaps across
+different buyers while each waited on the shared SKU, creating insertion-lock cycles.
+Remove that unnecessary range lock: the already-held owner row serializes idempotency
+keys, and lookup is the first consistent read after that owner lock in checkout's
+transaction. Keep all stock/coupon/user locks and all race workers/assertions. Add
+safe SQLSTATE/driver-code-only diagnostics (never SQL/messages/credentials). Rerun the
+ENTIRE matrix; no claim of an observed driver number without diagnostic evidence.

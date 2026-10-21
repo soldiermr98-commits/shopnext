@@ -46,7 +46,7 @@ final class FinancialRace
             foreach ($processes as $i => $p) {
                 $result = json_decode(file_get_contents($dir.'/'.$i.'.result'), true, 512, JSON_THROW_ON_ERROR);
                 if (proc_close($p) !== 0 || $result['status'] === 'unexpected') {
-                    throw new \RuntimeException('Real worker unexpected failure: '.($result['exception'] ?? 'exit'));
+                    throw new \RuntimeException('Real worker unexpected failure: '.($result['exception'] ?? 'exit').' SQLSTATE='.($result['sql_state'] ?? 'n/a').' driver='.($result['driver_code'] ?? 'n/a'));
                 }
                 unset($processes[$i]);
                 $results[] = $result;

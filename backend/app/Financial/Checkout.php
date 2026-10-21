@@ -24,7 +24,10 @@ final class Checkout
             $owner = User::whereKey($actor->id)->lockForUpdate()->firstOrFail();
             abort_unless($owner->is_active && $owner->role === 'customer' && ! $owner->must_change_password, 403);
             $cart = DB::table('carts')->where('user_id', $owner->id)->lockForUpdate()->first();
-            $existing = DB::table('orders')->where('user_id', $owner->id)->where('idempotency_key', $key)->lockForUpdate()->first();
+            // User row already serializes this owner's keys. This FIRST consistent read
+            // occurs after that mutex; locking a MISSING unique-key range would
+            // hold insertion gaps across buyers while waiting on the shared SKU.
+            $existing = DB::table('orders')->where('user_id', $owner->id)->where('idempotency_key', $key)->first();
             if ($existing) {
                 abort_unless($existing->idempotency_key === $key && hash_equals($existing->intent_hash, $hash), 409, 'شناسه تکرار درخواست با سفارش قبلی مطابقت ندارد.');
 
