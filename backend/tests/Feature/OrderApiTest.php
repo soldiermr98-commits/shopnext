@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Tests\Support\EnforcedCsrf;
@@ -21,6 +22,14 @@ beforeEach(function () {
     Storage::fake('local');
     config(['cache.default' => 'database']);
 });
+
+function orderAs(User $user)
+{
+    // Fresh PHP request identity: Sanctum RequestGuard otherwise caches the first actor.
+    Auth::forgetGuards();
+
+    return test()->actingAs($user, 'web');
+}
 
 function orderCsrf(): void
 {
@@ -39,11 +48,11 @@ it('C01 H02 H09 rejects guests foreign orders tracking enumeration and oversized
     $order = F::order($owner);
     $this->getJson('https://localhost/api/orders')->assertUnauthorized();
     $this->getJson('https://localhost/api/orders/'.$order->id)->assertUnauthorized();
-    $this->actingAs($other, 'web')->getJson('https://localhost/api/orders/'.$order->id)->assertNotFound();
+    orderAs($other)->getJson('https://localhost/api/orders/'.$order->id)->assertNotFound();
     $this->getJson('https://localhost/api/orders/track/'.$order->tracking_code)->assertNotFound();
     $this->getJson('https://localhost/api/orders')->assertOk()->assertJsonCount(0, 'data');
     $this->getJson('https://localhost/api/orders?per_page=51')->assertUnprocessable();
-    $this->actingAs($owner, 'web')->getJson('https://localhost/api/orders/track/'.$order->tracking_code)->assertOk()->assertJsonMissingPath('shipping_address')->assertJsonMissingPath('customer_phone');
+    orderAs($owner)->getJson('https://localhost/api/orders/track/'.$order->tracking_code)->assertOk()->assertJsonMissingPath('shipping_address')->assertJsonMissingPath('customer_phone');
 });
 
 it('C02 H06 H10 checkout API discards client prices and items reprices owned cart and replays exactly one durable order', function () {
@@ -54,7 +63,7 @@ it('C02 H06 H10 checkout API discards client prices and items reprices owned car
     app(CartService::class)->replace($user, null, [['product_id' => $p, 'quantity' => 1]], 0);
     DB::table('products')->where('id', $p)->update(['price' => 200]);
     $payload = ['version' => 1, 'address_id' => F::address($user), 'shipping_method' => 'post', 'payment_method' => 'cod', 'idempotency_key' => str_repeat('r', 32), 'payable_total' => 0, 'items' => []];
-    $response = $this->actingAs($user, 'web')->postJson('https://localhost/api/checkout', $payload);
+    $response = orderAs($user)->postJson('https://localhost/api/checkout', $payload);
     $response->assertCreated()->assertJsonPath('order.payable_total', 200)->assertJsonPath('order.invoice.totals.rounding_adjustment', 0);
     $id = $response->json('order.id');
     $this->postJson('https://localhost/api/checkout', $payload)->assertCreated()->assertJsonPath('order.id', $id);
@@ -66,12 +75,12 @@ it('M02 C01 enforces actual checkout mutation CSRF and denies owner cancellation
     $admin = F::rules();
     $user = User::factory()->create();
     $order = F::order($user);
-    $this->actingAs($user, 'web')->postJson('https://localhost/api/orders/'.$order->id.'/cancel')->assertStatus(419);
+    orderAs($user)->postJson('https://localhost/api/orders/'.$order->id.'/cancel')->assertStatus(419);
     orderCsrf();
-    $this->actingAs($admin, 'web')->postJson('https://localhost/api/orders/'.$order->id.'/actions', ['action' => 'processing'])->assertOk();
-    $this->actingAs($user, 'web')->postJson('https://localhost/api/orders/'.$order->id.'/cancel')->assertForbidden();
+    orderAs($admin)->postJson('https://localhost/api/orders/'.$order->id.'/actions', ['action' => 'processing'])->assertOk();
+    orderAs($user)->postJson('https://localhost/api/orders/'.$order->id.'/cancel')->assertForbidden();
     $this->postJson('https://localhost/api/orders/'.$order->id.'/actions', ['action' => 'paid'])->assertForbidden();
-    $this->actingAs($admin, 'web')->postJson('https://localhost/api/orders/'.$order->id.'/actions', ['action' => 'cancel', 'reason' => 'Reviewed unshipped COD'])->assertOk()->assertJsonPath('order.status', 'cancelled');
+    orderAs($admin)->postJson('https://localhost/api/orders/'.$order->id.'/actions', ['action' => 'cancel', 'reason' => 'Reviewed unshipped COD'])->assertOk()->assertJsonPath('order.status', 'cancelled');
 });
 
 it('C03 H09 stores sanitized private card receipt authorizes read and requires admin verification without exposing storage path', function () {
@@ -81,13 +90,13 @@ it('C03 H09 stores sanitized private card receipt authorizes read and requires a
     $order = F::order($user, 'card_to_card');
     orderCsrf();
     $url = 'https://localhost/api/orders/'.$order->id.'/receipt';
-    $this->actingAs($user, 'web')->post($url, ['file' => UploadedFile::fake()->image('receipt.jpg', 10, 10)], ['Accept' => 'application/json'])->assertOk()->assertJsonPath('order.payment_state', 'pending_verification')->assertJsonMissingPath('order.receipt_path');
+    orderAs($user)->post($url, ['file' => UploadedFile::fake()->image('receipt.jpg', 10, 10)], ['Accept' => 'application/json'])->assertOk()->assertJsonPath('order.payment_state', 'pending_verification')->assertJsonMissingPath('order.receipt_path');
     $path = DB::table('orders')->where('id', $order->id)->value('receipt_path');
     expect(Storage::disk('local')->exists($path))->toBeTrue()->and(Storage::disk('local')->get($path))->toStartWith("\x89PNG");
     $this->get($url)->assertOk()->assertHeader('Content-Type', 'image/png');
-    $this->actingAs($other, 'web')->get($url)->assertNotFound();
-    $this->actingAs(User::factory()->create(['role' => 'shop_manager']), 'web')->get($url)->assertForbidden();
-    $this->actingAs($admin, 'web')->get($url)->assertOk();
+    orderAs($other)->get($url)->assertNotFound();
+    orderAs(User::factory()->create(['role' => 'shop_manager']))->get($url)->assertForbidden();
+    orderAs($admin)->get($url)->assertOk();
     $this->postJson('https://localhost/api/orders/'.$order->id.'/actions', ['action' => 'paid'])->assertOk()->assertJsonPath('order.payment_state', 'paid');
     $this->get('https://localhost/media/'.basename($path))->assertNotFound();
 });
@@ -98,7 +107,7 @@ it('C04 H09 rejects SVG and removes newly stored receipt if transactional journa
     $order = F::order($user, 'card_to_card');
     orderCsrf();
     $url = 'https://localhost/api/orders/'.$order->id.'/receipt';
-    $this->actingAs($user, 'web')->post($url, ['file' => UploadedFile::fake()->createWithContent('bad.svg', '<svg/>')], ['Accept' => 'application/json'])->assertUnprocessable();
+    orderAs($user)->post($url, ['file' => UploadedFile::fake()->createWithContent('bad.svg', '<svg/>')], ['Accept' => 'application/json'])->assertUnprocessable();
     ActivityLog::creating(function (ActivityLog $log): void {
         if ($log->action === 'receipt') {
             throw new RuntimeException('Injected receipt audit failure');

@@ -251,3 +251,9 @@ upload/read and admin approval. Receipt storage existence is checked by the life
 failed journal rolls back state and deletes newly uploaded file. Order list preloads
 all timelines in one query. Policies, FormRequests, real CSRF and per-IP/user limits
 are used; invoice exposes signed rounding_adjustment. New API regressions CI pending.
+
+API first run39596127122 failed three multi-actor browser fixtures: Sanctum's
+RequestGuard cached the initial test actor across requests when only the web guard
+was replaced. Fixtures now forget guards before switching actors (as existing L1
+browser tests already do); ownership/receipt/cancel assertions and production checks
+are unchanged. Full matrix rerun required; this red is not accepted evidence.
