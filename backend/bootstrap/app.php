@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\RequestLimits;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\StrictCors;
 use App\Http\Middleware\TrustedHosts;
@@ -23,7 +24,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->replace(HandleCors::class, StrictCors::class);
         $middleware->replace(TrustProxies::class, TrustedProxies::class);
-        $middleware->prepend([TrustedHosts::class, SecurityHeaders::class]);
+        $middleware->prepend([TrustedHosts::class, RequestLimits::class, SecurityHeaders::class]);
         $middleware->statefulApi();
         $middleware->trimStrings(except: ['oldPassword', 'newPassword', 'newValue']);
     })

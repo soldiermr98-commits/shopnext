@@ -12,7 +12,7 @@ final class TrustedProxies extends TrustProxies
 {
     public function handle(Request $request, Closure $next)
     {
-        $this->proxies = config('security.trusted_proxies', []);
+        $this->proxies = array_values(array_filter(config('security.trusted_proxies', []), fn (string $proxy): bool => ! in_array($proxy, ['*', '**'], true)));
         // Never trust forwarded Host. Never trust all proxy IPs by default.
         $this->headers = Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_PROTO | Request::HEADER_X_FORWARDED_PORT;
 

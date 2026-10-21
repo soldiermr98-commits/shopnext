@@ -15,6 +15,6 @@ final class ReadRequest extends FormRequest
 
     public function rules(): array
     {
-        return ['q' => ['sometimes', 'string', 'max:200']];
+        return ['q' => ['sometimes', 'nullable', 'string', 'max:200']];
     }
 }

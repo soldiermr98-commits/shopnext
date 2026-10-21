@@ -116,3 +116,15 @@ it('executes the Imagick alternative raster path and audits upload identity with
     expect($log->action)->toBe('create');
     expect(json_encode($log))->not->toContain('original-private-name', 'image-payload');
 });
+
+it('bounds request bodies independently of PHP settings without reflecting the rejected payload', function () {
+    $secret = bin2hex(random_bytes(24));
+    $this->postJson('/api/auth/login', ['identifier' => 'missing', 'password' => str_repeat($secret, 70000)])->assertStatus(413)->assertDontSee($secret)->assertHeader('X-Content-Type-Options', 'nosniff');
+});
+
+it('fails closed on missing host configuration and never accepts wildcard proxy trust', function () {
+    config(['app.url' => '', 'security.trusted_hosts' => []]);
+    $this->get('/up')->assertStatus(503);
+    config(['app.url' => 'http://localhost', 'security.trusted_proxies' => ['*', '**']]);
+    $this->withHeader('X-Forwarded-Proto', 'https')->get('http://localhost/up')->assertOk()->assertHeaderMissing('Strict-Transport-Security');
+});
