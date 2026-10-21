@@ -319,3 +319,9 @@ reference typecheck/171 tests passed. These use fetch doubles, NOT a rendered br
 or MySQL replacement. Full frozen-lock seven-job CI for this change is pending;
 real-host/browser/TLS/RTL/a11y/restore remain UNVERIFIED. Final finding table/docs/tag
 are still pending, so this is NOT L2 completion.
+
+
+Frontend840d2de CI39601233392: ALL7 green (explicit job status verified).
+Follow-up marks deferred wallet/address/return controls disabled/labeled and adds
+H10/M11 invoice-adapter regression for unpaid zero, authoritative totals and absence
+of fabricated legal IDs. This follow-up's full matrix is pending; no tag yet.

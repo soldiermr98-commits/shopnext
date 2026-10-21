@@ -609,7 +609,7 @@ export const AccountPage: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={() => setShowWalletModal(true)}
+                  disabled title="شارژ آنلاین در این مرحله فعال نیست" onClick={() => setShowWalletModal(true)}
                   className="w-full mt-2.5 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-container transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-xs"
                 >
                   <span className="material-symbols-outlined text-base">add_circle</span>
@@ -1263,7 +1263,7 @@ export const AccountPage: React.FC = () => {
 
                           <div className="flex flex-wrap items-center gap-2">
                             <button
-                              onClick={() => {
+                              disabled title="ثبت مرجوعی در این مرحله فعال نیست" onClick={() => {
                                 setReturnOrderNumber(ord.orderNumber);
                                 setShowReturnModal(true);
                               }}
@@ -1324,11 +1324,11 @@ export const AccountPage: React.FC = () => {
                   </div>
 
                   <button
-                    onClick={() => setShowWalletModal(true)}
+                    disabled title="شارژ آنلاین در این مرحله فعال نیست" onClick={() => setShowWalletModal(true)}
                     className="px-6 py-3 rounded-xl bg-white text-primary text-xs font-black shadow-md hover:bg-surface-container transition active:scale-95 flex items-center gap-2 self-start sm:self-auto"
                   >
                     <span className="material-symbols-outlined text-base">add_circle</span>
-                    <span>افزایش موجودی</span>
+                    <span>افزایش موجودی (غیرفعال)</span>
                   </button>
                 </div>
 
@@ -1419,7 +1419,7 @@ export const AccountPage: React.FC = () => {
                   </div>
 
                   <button
-                    onClick={openCreateAddress}
+                    disabled title="مدیریت نشانی در این مرحله فعال نیست" onClick={openCreateAddress}
                     className="px-4 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-container shadow-xs transition active:scale-95 flex items-center gap-1.5"
                   >
                     <span className="material-symbols-outlined text-base">add_location_alt</span>
@@ -1472,7 +1472,7 @@ export const AccountPage: React.FC = () => {
                       <div className="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/50 text-xs">
                         {!addr.isDefault ? (
                           <button
-                            onClick={() => handleSetDefaultAddress(addr.id)}
+                            disabled title="تغییر پیش‌فرض فعال نیست" onClick={() => handleSetDefaultAddress(addr.id)}
                             className="text-primary font-bold hover:underline flex items-center gap-1"
                           >
                             <span className="material-symbols-outlined text-sm">check_circle</span>
@@ -1484,14 +1484,14 @@ export const AccountPage: React.FC = () => {
 
                         <div className="flex items-center gap-3 font-bold">
                           <button
-                            onClick={() => openEditAddress(addr)}
+                            disabled title="ویرایش نشانی فعال نیست" onClick={() => openEditAddress(addr)}
                             className="text-outline hover:text-primary flex items-center gap-1"
                           >
                             <span className="material-symbols-outlined text-sm">edit</span>
                             <span>ویرایش</span>
                           </button>
                           <button
-                            onClick={() => handleDeleteAddress(addr.id)}
+                            disabled title="حذف نشانی فعال نیست" onClick={() => handleDeleteAddress(addr.id)}
                             className="text-error hover:underline flex items-center gap-1"
                           >
                             <span className="material-symbols-outlined text-sm">delete</span>
@@ -1793,7 +1793,7 @@ export const AccountPage: React.FC = () => {
             {activeTab === 'security' && (
               <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-xs p-6 space-y-8">
                 {/* Personal Info Form */}
-                <form onSubmit={handleSaveProfile} className="space-y-4">
+                <form onSubmit={handleSaveProfile} aria-label="ویرایش پروفایل در این مرحله فعال نیست" className="space-y-4">
                   <div className="flex items-center gap-3 border-b border-outline-variant/60 pb-4">
                     <span className="w-2.5 h-6 rounded-full bg-primary"></span>
                     <h3 className="text-base font-black text-on-surface">اطلاعات هویتی و شماره شبا بانکی</h3>
@@ -2211,7 +2211,7 @@ export const AccountPage: React.FC = () => {
               </button>
             </div>
 
-            <form onSubmit={handleSubmitReview} className="space-y-4 text-xs">
+            <form onSubmit={handleSubmitReview} aria-label="ثبت دیدگاه در این مرحله فعال نیست" className="space-y-4 text-xs">
               <div className="p-3 rounded-xl bg-surface-container-low text-on-surface font-bold">
                 {reviewProductTitle}
               </div>

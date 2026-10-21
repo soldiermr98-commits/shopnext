@@ -4,8 +4,9 @@ import assert from 'node:assert/strict';
 import { buildSync } from 'esbuild';
 import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
+import { readFileSync } from 'node:fs';
 const root = resolve(import.meta.dirname, '..');
-const code = buildSync({ stdin: { contents: "export {useCartStore} from './src/store/cartStore'; export {useAuthStore} from './src/store/authStore'; export {financialApi,FinancialError} from './src/lib/financialApi'; export {formatToman} from './src/lib/persian'; export {financialDate} from './src/lib/financialDate';", resolveDir: root, loader: 'ts' }, bundle: true, platform: 'node', format: 'cjs', write: false }).outputFiles[0].text;
+const code = buildSync({ stdin: { contents: "export {useCartStore} from './src/store/cartStore'; export {useAuthStore} from './src/store/authStore'; export {financialApi,FinancialError} from './src/lib/financialApi'; export {formatToman} from './src/lib/persian'; export {financialDate} from './src/lib/financialDate'; export {orderAdapter} from './src/lib/orderAdapter';", resolveDir: root, loader: 'ts' }, bundle: true, platform: 'node', format: 'cjs', write: false }).outputFiles[0].text;
 function setup() {
   const removed = [];
   globalThis.document = { cookie: 'XSRF-TOKEN=unit-csrf' };
@@ -71,4 +72,16 @@ test('M07 financial timestamps use explicit Tehran midnight, historical DST and 
   assert.match(date('2025-03-20T08:00:00Z'), /۳۰ اسفند ۱۴۰۳/);
   assert.match(date('2025-03-21T08:00:00Z'), /۱ فروردین ۱۴۰۴/);
   for (const value of ['not-a-date', '2025-03-20', '2025-02-30T00:00:00Z', '2025-03-20T24:00:00Z', '2025-03-20T08:00:00']) assert.equal(date(value), 'تاریخ نامعتبر');
+});
+
+test('H10 M11 immutable invoice adapter preserves zero paid/discount values and server totals, never fabricated legal identity', () => {
+  const { orderAdapter } = setup();
+  const quote = cart().pricing;
+  const order = orderAdapter({ id: 1, order_number: 'real', tracking_code: 'private', status: 'pending', payment_method: 'cod', payment_state: 'unpaid', total_paid: 0, payable_total: 3, rounding_adjustment: -1, invoice: quote, items: quote.lines, shipping_address: { id: 2, recipient_name: 'مالک', recipient_phone: '09000000000' }, created_at: '2026-10-21 00:00:00' });
+  assert.equal(order.isPaid, false); assert.equal(order.totalPaid, 0); assert.equal(order.payableTotal, 3);
+  assert.equal(order.items[0].unitPrice, 7); assert.equal(order.items[0].lineTotal, 3);
+  assert.equal(order.roundingAdjustment, -1); assert.equal(order.couponDiscount, 0);
+  for (const page of ['AccountPage', 'OrderSuccessPage']) assert.doesNotMatch(readFileSync(resolve(root, 'src/pages/storefront', page + '.tsx'), 'utf8'), /(?:شناسه ملی|کد اقتصادی):\s*[۰-۹]{5}/);
+  const account = readFileSync(resolve(root, 'src/pages/storefront/AccountPage.tsx'), 'utf8');
+  assert.match(account, /disabled title="شارژ آنلاین در این مرحله فعال نیست"/);
 });
