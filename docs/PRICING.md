@@ -213,3 +213,22 @@ JSON bytes before validation/storage, ensuring ciphertext fits existing TEXT. Mo
 fails closed on non64-bit PHP, and deploy-check reports php.integer64. Cart validation
 messages are Persian. Executed hardening8178a52 passed CI39584953220: all7 jobs green, each backend
 job193 tests/6619 assertions. Recorded in ci/l2-pricing-cart-wallet-hardening-verified-matrix.json.
+
+
+## Owner continuation / L2c checkout change (CI pending)
+
+Latest explicit owner decision: ALL COD exempt from30-minute unpaid expiry,
+including pending COD. This supersedes the older pending-COD expiry paragraph above.
+Owner selected7 days as configurable `cod_review_days`: flag unshipped COD for admin,
+never automatically cancel it. Shipment/cancellation/refund end that review path.
+
+Checkout now uses a single transaction, fresh active customer lock, owned cart/version,
+owned address shared lock, PricingService locked repricing, ascending product/variant
+locks, conditional nonnegative stock decrement and coupon row capacity reservation.
+User+request key and canonical intent hash make retry return the SAME order even after
+cart consumption; changed intent/key collision fails409. No guest cart is checked out.
+Full wallet initializes payment and records paid in this same transaction; manual
+methods remain unpaid. All snapshots (including signed adjustment) and actor timeline
+are persisted; SQL triggers protect financial snapshots and timeline against mutation.
+Tests inject paid-audit failure after stock/quota/ledger writes and require full rollback.
+New code/schema/tests are UNVERIFIED until this change's full matrix executes.

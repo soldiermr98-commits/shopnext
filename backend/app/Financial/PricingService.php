@@ -25,7 +25,7 @@ final class PricingService
         $coupon = $this->coupon($code, $user, $now, $lock);
         $products = DB::table('products')->whereIn('id', array_column($items, 'product_id'))->orderBy('id')->when($lock, fn ($q) => $q->lockForUpdate())->get()->keyBy('id');
         $variants = DB::table('product_variants')->whereIn('id', array_filter(array_column($items, 'variant_id')))->orderBy('id')->when($lock, fn ($q) => $q->lockForUpdate())->get()->keyBy('id');
-        $categories = DB::table('category_product')->whereIn('product_id', $products->keys())->get()->groupBy('product_id');
+        $categories = DB::table('category_product')->whereIn('product_id', $products->keys())->when($lock, fn ($q) => $q->sharedLock())->get()->groupBy('product_id');
         $prepared = [];
         $eligible = Fraction::of(0);
         $weight = 0;
@@ -189,7 +189,7 @@ final class PricingService
             if (! $user) {
                 $this->fail('coupon', 'برای استفاده از این کوپن وارد حساب شوید.');
             }
-            if (DB::table('coupon_usages')->where('coupon_id', $row->id)->where('user_id', $user->id)->whereIn('state', ['reserved', 'redeemed'])->count() >= $row->per_user_limit) {
+            if (DB::table('coupon_usages')->where('coupon_id', $row->id)->where('user_id', $user->id)->whereIn('state', ['reserved', 'redeemed'])->when($lock, fn ($q) => $q->lockForUpdate())->count() >= $row->per_user_limit) {
                 $this->fail('coupon', 'سقف استفاده شما از این کوپن تکمیل شده است.');
             }
         }

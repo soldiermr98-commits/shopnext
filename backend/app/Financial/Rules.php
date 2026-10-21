@@ -17,7 +17,7 @@ final class Rules
 {
     public const KEY = '_financial_rules';
 
-    public const DEFAULTS = ['expiry_minutes' => 30, 'vat_bps' => 0, 'prices_include_tax' => false, 'max_per_line' => 99, 'max_lines' => 100, 'max_order_quantity' => 1000, 'shipping' => [], 'automatic' => []];
+    public const DEFAULTS = ['expiry_minutes' => 30, 'cod_review_days' => 7, 'vat_bps' => 0, 'prices_include_tax' => false, 'max_per_line' => 99, 'max_lines' => 100, 'max_order_quantity' => 1000, 'shipping' => [], 'automatic' => []];
 
     public function current(bool $lock = false): array
     {
@@ -68,6 +68,7 @@ final class Rules
         $money = ['required', 'integer', $int, 'min:0', 'max:'.Money::MAX];
         Validator::make($data, [
             'expiry_minutes' => ['required', 'integer', $int, 'min:1', 'max:10080'],
+            'cod_review_days' => ['required', 'integer', $int, 'between:1,365'],
             'vat_bps' => ['required', 'integer', $int, 'between:0,10000'],
             'prices_include_tax' => ['required', function ($a, $v, $f): void {
                 if (! is_bool($v)) {

@@ -1,5 +1,17 @@
 # Shopnext handoff — L2 in progress, 2026-10-21
 
+## Latest owner continuation (2026-10-21)
+-745c526 checkpoint approved; continue ALL remaining L2 before l2-complete/L3 gate.
+- Latest explicit COD clarification supersedes the older pending-COD exception:
+  ALL COD exempt from30-minute expiry. Owner chose configurable7-day no-shipment
+  auto-FLAG for admin, NEVER auto-cancel. Admin explicit cancel restores stock.
+- Current unverified change: Checkout one transaction with idempotent intent, owned
+  cart/version/address, locked shared PricingService, stock/coupon reservation,
+  immutable SQL snapshots, append-only actor timeline and atomic full-wallet start.
+  PaymentMethod is domain interface only; no external adapters. CI pending.
+- Next concerns after FULL green: lifecycle/cancel/refund/paid/expiry; real parallel
+  workers; order APIs/receipt/manual approvals; storefront wiring; final docs/tag.
+
 ## Standing rules / gate
 - Fixed branch arena/c101d8c3-shopnext ONLY. Small commits; push and inspect FULL
   green CI after EVERY commit before next concern. Read red logs/annotations and
