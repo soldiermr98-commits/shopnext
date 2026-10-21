@@ -27,9 +27,14 @@ final class Settings
         if ($newValue === null || $newValue === '') {
             return;
         }
-        DB::transaction(function () use ($key, $newValue): void {
-            $setting = Setting::where('key', $key)->first() ?? new Setting;
-            $setting->forceFill(['key' => $key, 'value' => $newValue])->save();
-        });
+        try {
+            DB::transaction(function () use ($key, $newValue): void {
+                $setting = Setting::where('key', $key)->first() ?? new Setting;
+                $setting->forceFill(['key' => $key, 'value' => $newValue])->save();
+            });
+        } catch (\Throwable) {
+            // Do not chain provider/driver exceptions that may include secret arguments.
+            throw new \RuntimeException('Unable to save setting.');
+        }
     }
 }

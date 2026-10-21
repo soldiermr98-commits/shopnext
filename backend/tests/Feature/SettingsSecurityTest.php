@@ -91,7 +91,7 @@ it('records admin create update delete with identity IP time and default-deny re
     expect($logs->pluck('action')->all())->toBe(['create', 'update', 'delete']);
     foreach ($logs as $log) {
         expect($log->user_id)->toBe($actor->id);
-        expect($log->actor_role)->toBe('admin');
+        expect($log->user_role)->toBe('admin');
         expect($log->ip_address)->not->toBeNull();
         expect($log->created_at)->not->toBeNull();
     }
@@ -101,4 +101,20 @@ it('records admin create update delete with identity IP time and default-deny re
     app(Settings::class)->write('integration_secret', $secret);
     expect(json_encode(ActivityLog::all()))->not->toContain($secret, 'Private name', 'Private changed name');
     expect(ActivityLog::where('module', 'settings')->first()->after['value'])->toBe('[REDACTED]');
+});
+
+it('replaces failing secret-write exceptions with a safe unchained error', function () {
+    $secret = bin2hex(random_bytes(24));
+    Setting::saving(function () use ($secret): void {
+        throw new RuntimeException($secret);
+    });
+    try {
+        app(Settings::class)->write('integration_secret', $secret);
+        $this->fail('Write should fail.');
+    } catch (RuntimeException $exception) {
+        expect($exception->getMessage())->toBe('Unable to save setting.');
+        expect($exception->getPrevious())->toBeNull();
+        expect($exception->getTraceAsString())->not->toContain($secret);
+    }
+    expect(Setting::count())->toBe(0);
 });

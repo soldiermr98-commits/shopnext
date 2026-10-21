@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Observers;
 
 use App\Models\ActivityLog;
-use App\Support\Permissions;
 use Illuminate\Database\Eloquent\Model;
 
 final class AdminActivity
@@ -41,11 +40,11 @@ final class AdminActivity
     private function record(Model $model, string $action, array $before, array $after): void
     {
         $actor = auth('web')->user();
-        if (! $actor || ! Permissions::allows($actor, 'dashboard')) {
+        if (! $actor || ! $actor->is_active || ! in_array($actor->role, ['super_admin', 'admin', 'shop_manager'], true)) {
             return;
         }
         (new ActivityLog)->forceFill([
-            'user_id' => $actor->id, 'actor_role' => $actor->role,
+            'user_id' => $actor->id, 'user_name' => $actor->name, 'user_role' => $actor->role,
             'action' => $action, 'module' => $model->getTable(), 'subject_id' => (string) $model->getKey(),
             'changed_fields' => array_keys($model->getChanges()),
             'before' => $this->redact($before), 'after' => $this->redact($after),

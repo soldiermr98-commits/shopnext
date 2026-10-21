@@ -11,8 +11,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('activity_logs', function (Blueprint $t): void {
-            $t->string('actor_role', 32)->nullable();
-            $t->string('ip_address', 45)->nullable();
             $t->json('before')->nullable();
             $t->json('after')->nullable();
         });
@@ -20,6 +18,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('activity_logs', fn (Blueprint $t) => $t->dropColumn(['actor_role', 'ip_address', 'before', 'after']));
+        Schema::table('activity_logs', fn (Blueprint $t) => $t->dropColumn(['before', 'after']));
     }
 };
