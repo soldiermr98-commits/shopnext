@@ -116,6 +116,6 @@ it('H10 successful HTTP login explicitly reports merge conflict while keeping bo
     $user = User::factory()->create(['password' => $password]);
     $guest = $cart->replace(null, null, [['product_id' => $id, 'quantity' => 60]], 0);
     $cart->replace($user, null, [['product_id' => $id, 'quantity' => 60]], 0);
-    $this->withCookie(CartService::COOKIE, $guest['token'])->postJson('/api/auth/login', ['identifier' => $user->phone, 'password' => $password])->assertOk()->assertJsonPath('user.id', (string) $user->id)->assertJsonPath('cart_merge.status', 'conflict');
+    $this->withCredentials()->withCookie(CartService::COOKIE, $guest['token'])->postJson('/api/auth/login', ['identifier' => $user->phone, 'password' => $password])->assertOk()->assertJsonPath('user.id', (string) $user->id)->assertJsonPath('cart_merge.status', 'conflict');
     expect($cart->view(null, $guest['token'])['items'][0]['quantity'])->toBe(60)->and($cart->view($user, null)['items'][0]['quantity'])->toBe(60);
 });

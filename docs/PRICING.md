@@ -167,3 +167,9 @@ at twice that limit to accommodate two carts. Neither cart stores coupon/fee amo
 These are domain methods plus login integration, NOT finished storefront/cart HTTP
 contracts. Secure cart-cookie issuance, FormRequests, cart/quote routes, retry endpoint,
 UI wiring, checkout/order orchestration and actual parallel merge tests are pending.
+
+Cart first CI39583138981 failed HTTP conflict regression: the JSON test request did
+not send its cookie (`MakesHttpRequests::prepareCookiesForJsonRequest` requires
+withCredentials). The actual domain preserve-both tests passed. Fix the browser
+fixture with withCredentials, WITHOUT relaxing cookie encryption or the conflict
+assertion. Full rerun after this fix is required before continuing another concern.
