@@ -101,7 +101,7 @@ it('H06 validates coupon dates scopes exclusions eligible minimum cap capacity a
     expect(fn () => $service->quote($lines, 'CODE', null, null, $user))->toThrow(ValidationException::class); // eligible95 is below minimum100
 });
 
-it('H06 quotes lowest active price and owns variant stock weight price and parent quantity cap', function () {
+it('H06 M08 quotes lowest active price and owns variant stock weight price and parent quantity cap', function () {
     financialRules();
     $id = financialProduct(['type' => 'variable', 'price' => 200]);
     $variant = DB::table('product_variants')->insertGetId(['product_id' => $id, 'sku' => 'v1', 'price' => 100, 'sale_price' => 80, 'sale_starts_at' => now()->subHour(), 'sale_ends_at' => now()->addHour(), 'flash_price' => 70, 'flash_starts_at' => now()->addHour(), 'flash_ends_at' => now()->addHours(2), 'stock' => 5]);

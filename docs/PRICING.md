@@ -1,6 +1,7 @@
 # L2 financial contract — approved decisions and implementation checkpoints
 
-L2 authorized by owner after l1-complete. **IN PROGRESS; not l2-complete.**
+L2 financial code verified. Current acceptance/limits: [L2_ACCEPTANCE](L2_ACCEPTANCE.md).
+`l2-complete` is published only after the final documentation commit also passes ALL7 jobs.
 Only executed green CI is evidence. No gateway/SMS/Filament business resources.
 
 ## Owner-approved decisions
@@ -24,8 +25,9 @@ Only executed green CI is evidence. No gateway/SMS/Filament business resources.
   unpaid cancellation/expiry releases it; paid usage is retained after refund.
 - Login succeeds on cart-merge limit conflict: reject the ENTIRE merge, preserve
   both carts, report explicit conflict; checkout uses only a valid account cart.
-- Stock reserved at creation; default unpaid expiry30min. COD pending/unpaid expires
-  until admin/super_admin accepts ->processing; then excluded from unpaid expiry.
+- Stock reserved at creation; default non-COD unpaid expiry30min. ALL COD is
+  exempt from minute expiry; unshipped COD is flagged after configurable7days.
+  A warning NEVER cancels an order; explicit authorized admin cancellation is required.
   Card-to-card remains subject to expiry until paid, including pending verification.
 - Full-wallet payments ONLY, insufficient balance fails; no partial wallet/COD/card
   combinations. COD unpaid until administrator confirms collection; delivery alone
@@ -105,9 +107,9 @@ No selected shipping method produces nullable shipping/payable and `checkout_rea
 NOT a fabricated zero shipping fee. A selected but unavailable method/zone fails closed.
 Checkout MUST derive zone from the authenticated owner's saved address; quote inputs
 alone must never authorize an address or final order. Wallet deductions are not applied
-by this pure calculator; full-wallet orchestration remains pending.
+by this pure calculator; full-wallet orchestration is atomic in Checkout/WalletPayment.
 
-## Evidence / remaining gate
+## Historical checkpoints (superseded by current L2_ACCEPTANCE status)
 
 Money checkpoint04cdcab: full seven-job CI success39578549164. Schema checkpoint
 66b2187: full seven-job CI success39579280000. Pricing service tests in this change:
@@ -115,9 +117,9 @@ named C01/C02/H06 regressions plus80 deterministic property iterations, with exi
 200 Money allocation iterations. Executed on4a76d51: CI39581254064 all seven jobs SUCCESS;173 tests/6437 assertions
 on EACH of six PHP/database combinations. Exact evidence: `docs/ci/l2-pricing-verified-matrix.json`.
 
-Order transactions, stock/coupon reservation concurrency, cart/login merge,
-manual payment state machine, expiry, owner-only APIs and storefront wiring remain
-**NOT IMPLEMENTED / UNVERIFIED**. No `l2-complete` tag until the whole gate passes.
+The subsequent checkpoints below completed transactions, lifecycle, real parallel
+SQL tests, HTTP APIs and minimal storefront wiring. See L2_ACCEPTANCE for the
+consolidated current status rather than interpreting historical pending notes as current.
 
 ## Wallet ledger primitives (verified checkpoint63088db)
 
@@ -325,3 +327,13 @@ Frontend840d2de CI39601233392: ALL7 green (explicit job status verified).
 Follow-up marks deferred wallet/address/return controls disabled/labeled and adds
 H10/M11 invoice-adapter regression for unpaid zero, authoritative totals and absence
 of fabricated legal IDs. This follow-up's full matrix is pending; no tag yet.
+
+
+## Current verified code gate
+40abc65 / CI39601812389: all seven jobs SUCCESS. Exact backend counts and all five
+executed real races per PHP/database job are in ci/l2-code-verified-matrix.json.
+Client13 transport/store/formatter tests, archived171 tests, both typechecks and
+production frontend build also executed locally. CI installs the frozen Bun lock
+and verifies typechecks, tests and build independently. Browser/host is UNVERIFIED.
+Final documentation-commit CI is recorded by the annotated completion tag, not
+predeclared as successful here. No gateways/SMS/loyalty formula were implemented.

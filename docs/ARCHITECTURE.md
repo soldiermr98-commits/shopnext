@@ -1,10 +1,10 @@
 # Architecture — L1 complete; L2 in progress
 
-2026-10-21. L1 implementation is tested; real deployment acceptance remains
-UNVERIFIED. L2 is approved but NOT complete. Pricing/cart API and wallet primitives
-are executed checkpoints (PRICING.md); order/payment orchestration and concurrency
-are pending. No gateway/SMS/Filament business resources. Historical Node architecture:
-[ARCHITECTURE_LEGACY](ARCHITECTURE_LEGACY.md).
+2026-10-21. L1 and L2 financial code are CI-verified; deployment/browser acceptance
+remains UNVERIFIED. [L2 acceptance and boundaries](L2_ACCEPTANCE.md). Exact pricing,
+versioned carts, ledger, checkout/lifecycle, APIs, real parallel SQL harness and
+minimal financial frontend are implemented. No gateway/SMS/business Filament resources.
+Historical Node architecture: [ARCHITECTURE_LEGACY](ARCHITECTURE_LEGACY.md).
 
 ## Request and deployment boundaries
 
@@ -134,3 +134,60 @@ Wallet primitives lock user rows/current SUM and append entries, never update th
 balance snapshot. They require a caller transaction and do NOT mark orders paid.
 Order/reservation/payment/expiry sequences are intentionally NOT claimed implemented;
 those are the next L2 concern, with stock/coupon/ledger changes in one transaction.
+
+
+## L2 transactional boundaries
+
+```mermaid
+sequenceDiagram
+    participant UI as Cookie/CSRF storefront
+    participant API as Checkout FormRequest/policy
+    participant TX as Checkout transaction
+    participant SQL as InnoDB
+    UI->>API: owned cart version/address, method, coupon, idempotency key
+    API->>TX: validated intent (NO client money)
+    TX->>SQL: owner mutex; account cart; existing-key intent lookup
+    alt same key and intent already committed
+        SQL-->>UI: original immutable order
+    else new intent
+        TX->>SQL: lock rules/coupon; sorted product/variant rows
+        TX->>TX: shared exact PricingService reprice/validate
+        TX->>SQL: order/items/address/pricing snapshots; stock/coupon reserve
+        opt FULL wallet
+            TX->>SQL: authoritative ledger debit + paid state atomically
+        end
+        TX->>SQL: actor event + audit; clear cart/version; COMMIT
+        SQL-->>UI: authoritative order (manual methods still unpaid)
+    end
+    Note over TX,SQL: Any failure rolls back ALL effects; deadlock retry bounded5
+```
+
+```mermaid
+sequenceDiagram
+    participant Actor as Owner / authorized staff / scheduler
+    participant L as OrderLifecycle transaction
+    participant SQL as InnoDB + append-only journal
+    Actor->>L: named allowed action, reason/validated receipt
+    L->>SQL: sorted owner/actor mutexes, order lock; fresh auth/state/expiry
+    alt card receipt
+        L->>SQL: private sanitized raster reference; pending_verification
+    else admin confirms COD collection/card receipt
+        L->>SQL: paid + actual paid amount; reserved coupon to redeemed
+    else cancel / expire / refund
+        L->>SQL: once-only stock release; unpaid quota release
+        opt actually paid
+            L->>SQL: actual paid amount credited once to wallet; redeemed coupon retained
+        end
+    end
+    L->>SQL: actor timeline + audit; COMMIT
+    Note over L,SQL: Repeated paid/refund/release has no repeated financial effect
+```
+
+Advisory cart prices are not reservations. Checkout's owner mutex serializes own
+idempotency keys; missing-key lookup is deliberately NOT a next-key FOR UPDATE
+range lock across buyers. Real separate processes/connections exercise stock,
+coupon, wallet, paid replay and cancel/pay races on committed data in every SQL job.
+Frontends never calculate totals; signed rounding reconciliation is part of invoice
+projection. Private receipts never travel through public media routes. Cron enqueues
+bounded100 expiry +100 COD-warning candidates, rechecked while locked. No persistent
+worker/Redis/Supervisor is required. Production cron/hard timeout is UNVERIFIED.

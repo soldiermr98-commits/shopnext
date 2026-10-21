@@ -55,7 +55,7 @@ it('C01 H02 H09 rejects guests foreign orders tracking enumeration and oversized
     orderAs($owner)->getJson('https://localhost/api/orders/track/'.$order->tracking_code)->assertOk()->assertJsonMissingPath('shipping_address')->assertJsonMissingPath('customer_phone');
 });
 
-it('C02 H06 H10 checkout API discards client prices and items reprices owned cart and replays exactly one durable order', function () {
+it('C02 H06 H10 M06 checkout API discards client prices and items reprices owned cart and replays exactly one durable order', function () {
     F::rules();
     orderCsrf();
     $user = User::factory()->create();
@@ -64,7 +64,7 @@ it('C02 H06 H10 checkout API discards client prices and items reprices owned car
     DB::table('products')->where('id', $p)->update(['price' => 200]);
     $payload = ['version' => 1, 'address_id' => F::address($user), 'shipping_method' => 'post', 'payment_method' => 'cod', 'idempotency_key' => str_repeat('r', 32), 'payable_total' => 0, 'items' => []];
     $response = orderAs($user)->postJson('https://localhost/api/checkout', $payload);
-    $response->assertCreated()->assertJsonPath('order.payable_total', 200)->assertJsonPath('order.invoice.totals.rounding_adjustment', 0);
+    $response->assertCreated()->assertJsonPath('order.unit', 'TOMAN')->assertJsonPath('order.payable_total', 200)->assertJsonPath('order.invoice.totals.rounding_adjustment', 0);
     $id = $response->json('order.id');
     $this->postJson('https://localhost/api/checkout', $payload)->assertCreated()->assertJsonPath('order.id', $id);
     $this->getJson('https://localhost/api/orders/'.$id)->assertOk()->assertJsonPath('order.invoice.lines.0.line_total', 200);
@@ -119,4 +119,9 @@ it('C04 H09 rejects SVG and removes newly stored receipt if transactional journa
         ActivityLog::flushEventListeners();
     }
     expect(Storage::disk('local')->allFiles('receipts'))->toBe([])->and(DB::table('orders')->where('id', $order->id)->value('payment_state'))->toBe('unpaid');
+});
+
+it('M09 H02 does not fabricate or expose an unimplemented financial CSV export to guest or customer', function () {
+    $this->getJson('https://localhost/api/orders/export?format=csv')->assertNotFound();
+    orderAs(User::factory()->create())->getJson('https://localhost/api/orders/export?format=csv')->assertNotFound();
 });

@@ -238,26 +238,12 @@ passed vs unverified. Current state meets none of those Laravel execution gates.
 Do not deploy or begin L2 based on the legacy 171 tests or this specification.
 
 
-## Current L2 financial checkpoint status — partial, not acceptance
+## Current L2 financial coverage
 
-Executed evidence: CI_RESULTS.md and ci/l2-*-verified-matrix.json. Only the named
-sequential SQL/domain/API regressions below are covered; no parallel-order claim.
-
-| Finding | Current executed slice | Still required before L2 completion |
-|---|---|---|
-| C01 | Typed settings/admin credit permission checks; cart owner/token separation | Fresh owner/role checks for checkout/manual approval/order mutations |
-| C02 | Shared quote ignores client money; strict positive integer IDs/quantities; variant/stock/caps/overflow; real cart API | Locked final checkout repricing/persisted quote equality |
-| C03 | Authoritative append-only SUM balance; full-debit/actual-paid-refund primitives; replay guards | Atomic order/payment workflow, manual methods and true parallel wallet test; gateways NOT in L2 |
-| C04 | Injected wallet/audit/caller failure rollback; atomic preserve-both cart merge | Complete stock/order/coupon/log rollback, last-stock concurrency; real-host recovery unverified |
-| H02 | L1 owner policy only | Order list/detail/tracking routes and enumeration/foreign-owner rejection |
-| H06 | Coupon validity/scope/min/cap/stack; exact rounding, VAT/shipping boundary tests | Atomic usage reservations, parallel last-capacity use, persisted checkout equality |
-| H07 | L1 enum constraints only | Approved state graph, manual paid, once restock/refund and expiry/COD exception |
-| H08 | Real SQL constraints/append-only/immutable opening wallet snapshot | Created order snapshots stable against catalog edits, complete reservation service |
-| H09 | Cart/quote FormRequest, actual CSRF, encrypted secure cookie and exact60/61 throttle boundary | Checkout/order/tracking request/limit/error/pagination tests |
-| H10 | Real cart persistence/readback and explicit login conflict; no fake cart prices | Storefront financial contracts; remaining prototype flows not commerce acceptance |
-| H11 | All seven jobs executed for each green checkpoint, six real PHP/DB combinations | Real concurrent stock/coupon/wallet workers and final full L2 green gate |
-
-M01 public catalog, M05 measured query/load budgets and unrelated legacy findings are
-NOT claimed complete by published-SKU validation or pricing property loops. Browser,
-TLS, RTL/a11y, host and restore acceptance remain UNVERIFIED. No SMS/gateway adapters
-or Filament business resources were added or authorized by these checkpoints.
+The earlier partial checkpoint table is superseded by [L2_ACCEPTANCE](L2_ACCEPTANCE.md).
+That report maps every financial finding to named executable tests and separates
+verified financial scope from deferred gateways/SMS/business CRUD/content/CSV/SEO
+features and UNVERIFIED host/browser/recovery acceptance. Code40abc65 CI39601812389
+passed all seven jobs. Final reconciliation adds explicit TOMAN projection and
+absent-export privacy assertions; its final commit must pass ALL7 before tagging.
+The annotated l2-complete tag records that final gate; no L3 work is authorized by it.

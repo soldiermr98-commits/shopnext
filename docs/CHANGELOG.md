@@ -1,6 +1,18 @@
 # Changelog
 
-## 2026-10-21 — L2 in progress (NOT l2-complete)
+## 2026-10-21 — L2 financial implementation and CI gate
+
+- Atomic repriced checkout, immutable snapshots/reservations/idempotency; complete
+  manual/full-wallet lifecycle, actual-paid once-only wallet refunds and actor events.
+- ALL COD exempt minute expiry; configurable7day admin warning only; bounded cron.
+- Owner/role/CSRF/throttled financial APIs, sanitized private receipts and server-only
+  financial storefront values; deferred prototype writes labeled/disabled.
+- Five real parallel process/connection scenarios in EACH of six SQL/PHP jobs;
+  latest code40abc65 / CI39601812389 all7 green. Finding status: L2_ACCEPTANCE.md.
+- Final documentation commit must pass full matrix before l2-complete is tagged.
+  No gateway/SMS, loyalty formula, business Filament CRUD or deployment acceptance.
+
+## Earlier L2 checkpoints (historical)
 
 - Exact rational shared pricing, scoped/time-limited coupons, automatic rules,
   inclusive/exclusive VAT and fail-closed zone/method shipping; display-only integer

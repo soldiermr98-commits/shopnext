@@ -140,23 +140,17 @@ Read README, ARCHITECTURE, DATABASE, SECURITY, HOSTING, ACCEPTANCE, CI_RESULTS a
 L1_AUTH before changing scope. Historical PhaseA/L0 docs are not current approval.
 
 
-## Current L2 gate (already authorized; do not ask for L2 again)
-- API9205c58 CI39596445555 ALL7 green. Real concurrency3a41437
-  CI39597673255 ALL7 green: five real separate-process races EACH of six SQL/PHP
-  jobs, 215 backend tests/job. Evidence docs/ci/l2-real-concurrency-verified-matrix.json.
-- Read-only real SKU catalog1f952f1 CI39598522400 ALL7 green. No catalog management.
-- Current concern: minimal financial frontend API wiring, not a redesign. No seeded
-  cart, local money authority, fake paid state, fake wallet charge/loyalty conversion,
-  fake financial write success, or fabricated legal invoice IDs. HTTP request/store
-  unit tests use explicit fetch doubles: NEVER call them SQL/browser/concurrency proof.
-  Local client typecheck/build/12 tests and archived typecheck/171 tests executed green;
-  full seven-job CI for THIS concern must pass before the next concern.
-- Remaining: final SPEC financial finding coverage/named regression reconciliation,
-  PRICING formulas/examples + sequence diagrams, DATABASE/ARCHITECTURE/CHANGELOG/
-  evidence/acceptance consolidation, final complete matrix, then l2-complete tag.
-- Existing owned saved addresses + configured shipping data required; no fabricated
-  address/region/tariff. Business CRUD, gateways, SMS remain out of scope. Disabled
-  prototype account controls must never claim writes. Host/browser/TLS/RTL/a11y/
-  recovery still UNVERIFIED; no production-commerce acceptance claim.
-- After every commit wait for ALL7 backend.yml jobs GREEN. Never bypass a red.
-- Final l2-complete only after acceptance; stop for L3 authorization then, not before.
+## L2 final reconciliation gate
+- Read docs/L2_ACCEPTANCE.md for complete financial finding/test status and boundaries.
+- Code40abc65 CI39601812389 ALL7 green,217 tests/job; assertions6786/6787 depend on
+  valid cancel/pay winner. docs/ci/l2-code-verified-matrix.json has actual per-job results.
+- Five real separate-process same-DB races EACH of six PHP/SQL jobs; no simulation.
+- Financial frontend uses authoritative APIs; no local money/fake paid orders/legal
+  IDs or gateway/loyalty formulas. Browser/host/restore remain UNVERIFIED.
+- Current final concern: documentation/finding reconciliation, explicit TOMAN and
+  absent-export assertions. Commit it; wait for ALL7 backend.yml jobs green. A red
+  must be diagnosed/fixed and rerun; never tag on partial green.
+- ONLY THEN annotated l2-complete points to that exact final commit, with final CI
+  run URL/SHA in the tag message. STOP after tagging; wait for L3 authorization.
+- No gateway/SMS/business Filament resources. Real tariffs/owned saved addresses
+  required; no invented tariff/region/legal identity. General CRUD/content remain L3.

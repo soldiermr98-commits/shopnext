@@ -34,7 +34,7 @@ function checkoutRacers(int $product, int $count, ?string $coupon = null): array
     return $inputs;
 }
 
-it('C04 REAL parallel eight buyers of last stock yield exactly one order and no oversell', function () {
+it('C04 H11 M05 REAL parallel eight buyers of last stock yield exactly one order and no oversell', function () {
     F::rules();
     $p = F::product(['stock' => 1]);
     $r = FinancialRace::run('last_stock', checkoutRacers($p, 8));

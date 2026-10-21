@@ -1,3 +1,16 @@
+# Current L2 financial evidence
+
+Code40abc65: CI39601812389 ALL7 SUCCESS; details in
+[ci/l2-code-verified-matrix.json](ci/l2-code-verified-matrix.json).
+Five real separate-process races executed in EACH of six SQL/PHP jobs; full per-worker
+proof artifacts are attached to the run (7day retention). The committed summary
+records actual observed outcomes; the harness asserts separate PIDs/connections,
+same database and overlapping operation intervals. No sequential simulation fallback.
+Final documentation-commit gate is recorded in the annotated l2-complete tag only
+after ALL7 success. [Coverage/limits](L2_ACCEPTANCE.md).
+
+## Historical evidence below (pending notes superseded above)
+
 # CI evidence — L1 complete, L2 checkpoints (NOT complete)
 
 

@@ -107,3 +107,26 @@ CLI equivalence remain UNVERIFIED. Do not disable append-only constraints to dep
 Financial down-migration refuses to erase actual financial orders/nonopening entries;
 use forward repairs after commerce begins, not destructive rollback. Do not import
 old balances a second time or set users.wallet_balance as an operational shortcut.
+
+
+## Implemented L2 financial persistence
+Migrations000005/000006 are additive; no production legacy import has run.
+`carts/cart_items` persist canonical IDs/quantities and optimistic versions; guest
+tokens are random secrets stored only as hashes. `wallet_entries` is append-only
+signed integer Toman; SUM(delta), not the legacy balance snapshot, is authoritative.
+`coupon_usages` state reserved/redeemed/released serializes capacity under coupon
+lock. Reserved unpaid orders count toward global/per-user capacity; paid usage is
+retained after refund. Unique order/idempotency references prohibit replay effects.
+`orders` retains immutable owned-address/quote/monetary/intent snapshots and separate
+fulfillment/payment states. `order_items` retains title/SKU/unit/discount/tax/line
+and signed adjustment data. Live catalog edits cannot rewrite these snapshots.
+`order_events` retains actor snapshot, transition/reason/time; SQL rejects UPDATE/
+DELETE. SQL snapshot triggers apply to new idempotency-key orders; legacy null-key
+orders require administrator review and are not mutated by the new lifecycle.
+Stock is reserved on creation and released once, not deducted again when paid.
+COD expires_at is null; cod_review_at defaults7days and cod_flagged_at warns only.
+Other unpaid/pending-verification expiry defaults30min. All instants persist UTC.
+Cross-row money equality is enforced transactionally by domain services, not by
+pretending a CHECK constraint can inspect other tables. Six real database/PHP CI
+jobs cover constraints, rollback, triggers, races and no-dev migration smoke.
+Host restore/import/large-dataset performance remain UNVERIFIED.
