@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\DB;
 
 it('actually uses the selected MySQL or MariaDB server, not SQLite', function () {
+    expect(DB::selectOne('SELECT @@session.time_zone AS zone')->zone)->toBe('+00:00');
+    expect(config('app.timezone'))->toBe('UTC');
     expect(app()->environment())->toBe('testing');
     expect(DB::connection()->getDriverName())->toBe('mysql');
     expect(DB::connection()->getDatabaseName())->toBe('shopnext_ci_test');

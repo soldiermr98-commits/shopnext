@@ -16,7 +16,7 @@ final class SafeUpload
     {
         Validator::make(['file' => $file], ['file' => MediaRequest::FILE_RULES])->validate();
         $source = file_get_contents($file->getRealPath());
-        if (extension_loaded('gd')) {
+        if (extension_loaded('gd') && config('security.image_driver', 'auto') !== 'imagick') {
             $image = @imagecreatefromstring($source);
             if (! $image) {
                 throw ValidationException::withMessages(['file' => 'Invalid image.']);
@@ -31,6 +31,9 @@ final class SafeUpload
                 imagedestroy($image);
             }
         } else {
+            \Imagick::setResourceLimit(\Imagick::RESOURCETYPE_MEMORY, 64 * 1024 * 1024);
+            \Imagick::setResourceLimit(\Imagick::RESOURCETYPE_MAP, 128 * 1024 * 1024);
+            \Imagick::setResourceLimit(\Imagick::RESOURCETYPE_DISK, 0);
             $image = new \Imagick;
             try {
                 $image->readImageBlob($source);

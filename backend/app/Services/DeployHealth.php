@@ -18,7 +18,8 @@ final class DeployHealth
         foreach (self::EXTENSIONS as $extension) {
             $checks['extension.'.$extension] = [extension_loaded($extension), 'required'];
         }
-        $checks['extension.image'] = [extension_loaded('gd') || extension_loaded('imagick'), 'gd or imagick'];
+        $driver = config('security.image_driver', 'auto');
+        $checks['extension.image'] = [$driver === 'auto' ? (extension_loaded('gd') || extension_loaded('imagick')) : (in_array($driver, ['gd', 'imagick'], true) && extension_loaded($driver)), 'gd or imagick'];
         foreach (['storage' => storage_path(), 'bootstrap.cache' => base_path('bootstrap/cache'), 'private.media' => storage_path('app/private')] as $name => $path) {
             $probe = $path.'/.deploy-check-'.bin2hex(random_bytes(8));
             $ok = is_dir($path) && is_writable($path) && @file_put_contents($probe, 'probe') === 5;

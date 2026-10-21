@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MediaRequest;
 use App\Http\Requests\ReadRequest;
+use App\Models\ActivityLog;
 use App\Services\SafeUpload;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +17,17 @@ final class MediaController
     public function store(MediaRequest $request, SafeUpload $uploads): JsonResponse
     {
         $name = $uploads->store($request->file('file'));
+
+        try {
+            (new ActivityLog)->forceFill([
+                'user_id' => $request->user()->id, 'user_name' => $request->user()->name, 'user_role' => $request->user()->role,
+                'action' => 'create', 'module' => 'media', 'subject_id' => $name, 'ip_address' => $request->ip(),
+                'before' => [], 'after' => ['format' => 'png'], 'changed_fields' => ['file'],
+            ])->save();
+        } catch (\Throwable $exception) {
+            Storage::disk('local')->delete('media/'.$name);
+            throw $exception;
+        }
 
         return response()->json(['url' => '/media/'.$name], 201);
     }

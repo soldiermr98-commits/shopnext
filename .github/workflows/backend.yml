@@ -78,14 +78,14 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: intl, mbstring, pdo_mysql, gd, zip, curl, bcmath
+          extensions: intl, mbstring, pdo_mysql, gd, imagick, zip, curl, bcmath
           tools: composer:v2
           coverage: none
       - name: Verify actual PHP extensions and selected database
         run: |
           php --version
           composer --version
-          php -r 'foreach (["intl","mbstring","pdo_mysql","gd","zip","curl","bcmath"] as $ext) { if (!extension_loaded($ext)) { fwrite(STDERR, "Missing extension: $ext\n"); exit(1); } } $db = new PDO("mysql:host=127.0.0.1;port=3306;dbname=shopnext_ci_test", "root", ""); echo "::notice::PHP ", PHP_VERSION, "; DB ", $db->query("select version()")->fetchColumn(), PHP_EOL;'
+          php -r 'foreach (["intl","mbstring","pdo_mysql","gd","imagick","zip","curl","bcmath"] as $ext) { if (!extension_loaded($ext)) { fwrite(STDERR, "Missing extension: $ext\n"); exit(1); } } $db = new PDO("mysql:host=127.0.0.1;port=3306;dbname=shopnext_ci_test", "root", ""); echo "::notice::PHP ", PHP_VERSION, "; DB ", $db->query("select version()")->fetchColumn(), PHP_EOL;'
       - name: Require committed Laravel application and lock
         run: |
           test -f backend/composer.json

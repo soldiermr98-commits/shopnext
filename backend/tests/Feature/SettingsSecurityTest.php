@@ -9,11 +9,16 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Services\Settings;
 use Filament\Facades\Filament;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Livewire\Livewire;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
+use Tests\Support\EnforcedCsrf;
 
 uses(RefreshDatabase::class);
 
@@ -104,6 +109,8 @@ it('records admin create update delete with identity IP time and default-deny re
 });
 
 it('replaces failing secret-write exceptions with a safe unchained error', function () {
+    $handler = new TestHandler;
+    Log::swap(new Illuminate\Log\Logger(new Logger('redaction', [$handler])));
     $secret = bin2hex(random_bytes(24));
     Setting::saving(function () use ($secret): void {
         throw new RuntimeException($secret);
@@ -113,8 +120,24 @@ it('replaces failing secret-write exceptions with a safe unchained error', funct
         $this->fail('Write should fail.');
     } catch (RuntimeException $exception) {
         expect($exception->getMessage())->toBe('Unable to save setting.');
+        report($exception);
         expect($exception->getPrevious())->toBeNull();
         expect($exception->getTraceAsString())->not->toContain($secret);
     }
+    expect($handler->getRecords())->not->toBeEmpty();
+    $formatter = new LineFormatter;
+    $formatter->includeStacktraces(true);
+    foreach ($handler->getRecords() as $record) {
+        expect($formatter->format($record))->not->toContain($secret);
+    }
     expect(Setting::count())->toBe(0);
+});
+
+it('enforces real CSRF on settings writes instead of a Laravel unit-test exemption', function () {
+    $this->app->bind(ValidateCsrfToken::class, EnforcedCsrf::class);
+    $this->actingAs(User::factory()->create(['role' => 'admin']));
+    $input = ['key' => 'integration_secret', 'newValue' => bin2hex(random_bytes(16))];
+    $this->putJson('/api/admin/settings', $input)->assertStatus(419);
+    $proof = bin2hex(random_bytes(20));
+    $this->withSession(['_token' => $proof])->withHeader('X-CSRF-TOKEN', $proof)->putJson('/api/admin/settings', $input)->assertOk()->assertDontSee($input['newValue']);
 });

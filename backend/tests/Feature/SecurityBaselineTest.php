@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\ActivityLog;
 use App\Models\BlogPost;
 use App\Models\User;
 use App\Services\RichText;
@@ -96,4 +97,22 @@ it('serves a private built SPA document on the same origin without swallowing AP
     expect(config('session.http_only'))->toBeTrue();
     expect(config('session.same_site'))->toBe('strict');
     expect(config('session.domain'))->toBeNull();
+});
+
+it('executes the Imagick alternative raster path and audits upload identity without original file content', function () {
+    expect(extension_loaded('imagick'))->toBeTrue();
+    config(['security.image_driver' => 'imagick']);
+    Storage::fake('local');
+    $actor = User::factory()->create(['role' => 'admin']);
+    $this->actingAs($actor);
+    $file = UploadedFile::fake()->image('original-private-name.png', 2, 2);
+    file_put_contents($file->getRealPath(), '<?php echo "image-payload";', FILE_APPEND);
+    $url = $this->postJson('/api/admin/media', ['file' => $file])->assertCreated()->json('url');
+    $bytes = Storage::disk('local')->get(ltrim($url, '/'));
+    expect(getimagesizefromstring($bytes)['mime'])->toBe('image/png');
+    expect($bytes)->not->toContain('image-payload', '<?php');
+    $log = ActivityLog::where('module', 'media')->sole();
+    expect($log->user_id)->toBe($actor->id);
+    expect($log->action)->toBe('create');
+    expect(json_encode($log))->not->toContain('original-private-name', 'image-payload');
 });
