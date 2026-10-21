@@ -12,8 +12,11 @@ use Illuminate\Validation\ValidationException;
 
 final class SafeUpload
 {
-    public function store(UploadedFile $file): string
+    public function store(UploadedFile $file, string $directory = 'media'): string
     {
+        if (! in_array($directory, ['media', 'receipts'], true)) {
+            throw new \LogicException('Unsupported image directory.');
+        }
         Validator::make(['file' => $file], ['file' => MediaRequest::FILE_RULES])->validate();
         $source = file_get_contents($file->getRealPath());
         if (extension_loaded('gd') && config('security.image_driver', 'auto') !== 'imagick') {
@@ -49,7 +52,7 @@ final class SafeUpload
             throw ValidationException::withMessages(['file' => 'Image output is too large.']);
         }
         $name = bin2hex(random_bytes(24)).'.png';
-        if (! Storage::disk('local')->put('media/'.$name, $bytes)) {
+        if (! Storage::disk('local')->put($directory.'/'.$name, $bytes)) {
             throw new \RuntimeException('Unable to store image.');
         }
 

@@ -9,7 +9,8 @@
   cart/version/address, locked shared PricingService, stock/coupon reservation,
   immutable SQL snapshots, append-only actor timeline and atomic full-wallet start.
   PaymentMethod is domain interface only; no external adapters. Checkout d532f0e
-  CI39594655416 passed all7 jobs. Current lifecycle/expiry change CI pending.
+  CI39594655416 passed all7 jobs (199/6662 each). Lifecycle bf11063
+  CI39595334260 passed all7. Current order/receipt API change CI pending.
 - Next concerns after FULL green: lifecycle/cancel/refund/paid/expiry; real parallel
   workers; order APIs/receipt/manual approvals; storefront wiring; final docs/tag.
 

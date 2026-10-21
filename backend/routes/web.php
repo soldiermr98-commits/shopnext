@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SpaController;
 use App\Http\Middleware\CookieOnly;
@@ -29,6 +30,19 @@ Route::middleware([CookieOnly::class, 'throttle:financial-cart'])->group(functio
     Route::put('api/cart', [CartController::class, 'replace'])->name('cart.replace');
     Route::post('api/quote', [CartController::class, 'quote'])->name('cart.quote');
     Route::post('api/cart/merge', [CartController::class, 'merge'])->middleware('auth:sanctum')->name('cart.merge');
+});
+
+Route::middleware([CookieOnly::class, 'auth:sanctum', 'throttle:financial-orders'])->group(function (): void {
+    Route::get('api/checkout/options', [OrderController::class, 'options'])->name('orders.options');
+    Route::post('api/checkout/quote', [OrderController::class, 'quote'])->name('orders.quote');
+    Route::post('api/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
+    Route::get('api/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('api/orders/track/{code}', [OrderController::class, 'track'])->where('code', '[a-f0-9]{48}')->name('orders.track');
+    Route::get('api/orders/{order}', [OrderController::class, 'show'])->whereNumber('order')->name('orders.show');
+    Route::post('api/orders/{order}/cancel', [OrderController::class, 'cancel'])->whereNumber('order')->name('orders.cancel');
+    Route::post('api/orders/{order}/actions', [OrderController::class, 'action'])->whereNumber('order')->name('orders.action');
+    Route::post('api/orders/{order}/receipt', [OrderController::class, 'receipt'])->whereNumber('order')->name('orders.receipt.store');
+    Route::get('api/orders/{order}/receipt', [OrderController::class, 'receiptFile'])->whereNumber('order')->name('orders.receipt.show');
 });
 
 Route::prefix('api/admin')->middleware([CookieOnly::class, 'auth:sanctum', 'throttle:30,1'])->group(function (): void {

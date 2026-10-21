@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Support\Permissions;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 final class OrderLifecycle
@@ -97,7 +98,7 @@ final class OrderLifecycle
                 if ($order->payment_method === 'wallet') {
                     $this->ledger->payLocked($ownerId, $id);
                 } elseif ($order->payment_method === 'card_to_card') {
-                    if ($order->payment_state !== 'pending_verification' || $order->receipt_path === null) {
+                    if ($order->payment_state !== 'pending_verification' || $order->receipt_path === null || ! Storage::disk('local')->exists($order->receipt_path)) {
                         $this->fail('رسید معتبر در انتظار تأیید وجود ندارد.');
                     }
                 } elseif ($order->payment_method !== 'cod') {
@@ -130,6 +131,9 @@ final class OrderLifecycle
                 $this->live($order);
                 if ($order->payment_method !== 'card_to_card' || $order->status !== 'awaiting_payment' || ! in_array($order->payment_state, ['unpaid', 'failed'], true) || $receipt === null || ! preg_match('/^receipts\/[a-f0-9]{48}\.png$/D', $receipt)) {
                     $this->fail('ارسال رسید در وضعیت فعلی مجاز نیست.');
+                }
+                if (! Storage::disk('local')->exists($receipt)) {
+                    $this->fail('فایل رسید ذخیره نشده است.');
                 }
                 $update = ['receipt_path' => $receipt, 'payment_state' => 'pending_verification'];
             } elseif ($action === 'reject_receipt') {

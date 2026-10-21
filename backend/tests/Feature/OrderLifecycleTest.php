@@ -9,11 +9,16 @@ use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\Support\FinancialFixtures as F;
 
 uses(RefreshDatabase::class);
+beforeEach(function () {
+    Storage::fake('local');
+    Storage::disk('local')->put('receipts/'.str_repeat('a', 48).'.png', base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jL1kAAAAASUVORK5CYII='));
+});
 
 it('H07 C03 COD shipment delivery and repeated paid stay separate with no duplicate stock quota points or events', function () {
     $admin = F::rules();

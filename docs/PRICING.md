@@ -242,3 +242,12 @@ row revalidated under the same locks. Unpaid cancellation releases reserved coup
 paid cancellation/refund keeps redeemed usage. Receipt rejection leaves reservation
 until retry/expiry; receipt upload/storage/API still pending. Delivered COD is unpaid
 until explicit admin collection. No loyalty earning formula invented.
+
+
+Lifecycle bf11063 CI39595334260 all7 jobs SUCCESS. New HTTP concern: owned checkout/
+quote/options, own paginated order list/detail/minimal tracking, customer cancel,
+staff transition endpoint with fresh domain authorization, private sanitized receipt
+upload/read and admin approval. Receipt storage existence is checked by the lifecycle;
+failed journal rolls back state and deletes newly uploaded file. Order list preloads
+all timelines in one query. Policies, FormRequests, real CSRF and per-IP/user limits
+are used; invoice exposes signed rounding_adjustment. New API regressions CI pending.
