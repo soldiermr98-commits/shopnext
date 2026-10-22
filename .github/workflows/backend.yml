@@ -2,7 +2,7 @@ name: Backend and frontend verification
 
 on:
   push:
-    branches: [arena/c101d8c3-shopnext]
+    branches: [main, arena/c101d8c3-shopnext]
   pull_request:
   workflow_dispatch:
 

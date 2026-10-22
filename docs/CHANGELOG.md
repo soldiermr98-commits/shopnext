@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-22 — L2 main integration handoff
+
+- Confirmed l2-complete at5120dad and final CI39602866142: ALL7 SUCCESS.
+- Refreshed README, handoff and acceptance/evidence docs to remove stale pending
+  claims; retained unverified host/browser/restore and L3 approval boundaries.
+- Enabled the full backend/frontend workflow on main pushes as well as session
+  pushes and PRs, so the merge commit is independently verified.
+- Integration is through a reviewed/check-gated PR, not a direct push to main.
+- Completion tag remains immutable; no gateway/SMS/L3/deployment scope added.
+
 ## 2026-10-21 — L2 financial implementation and CI gate
 
 - Atomic repriced checkout, immutable snapshots/reservations/idempotency; complete

@@ -1,4 +1,4 @@
-# Architecture — L1 complete; L2 in progress
+# Architecture — L1 and L2 implemented; deployment unverified
 
 2026-10-21. L1 and L2 financial code are CI-verified; deployment/browser acceptance
 remains UNVERIFIED. [L2 acceptance and boundaries](L2_ACCEPTANCE.md). Exact pricing,

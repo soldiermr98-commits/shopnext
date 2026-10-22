@@ -1,13 +1,16 @@
 # Current L2 financial evidence
 
+Tagged gate:5120dad / [CI39602866142](https://github.com/soldiermr98-commits/shopnext/actions/runs/39602866142),
+ALL7 SUCCESS;218 tests and6789/6790 assertions per SQL/PHP job. All five real
+parallel scenarios executed in each. `l2-complete` remains pinned to this commit.
+
 Code40abc65: CI39601812389 ALL7 SUCCESS; details in
 [ci/l2-code-verified-matrix.json](ci/l2-code-verified-matrix.json).
 Five real separate-process races executed in EACH of six SQL/PHP jobs; full per-worker
 proof artifacts are attached to the run (7day retention). The committed summary
 records actual observed outcomes; the harness asserts separate PIDs/connections,
 same database and overlapping operation intervals. No sequential simulation fallback.
-Final documentation-commit gate is recorded in the annotated l2-complete tag only
-after ALL7 success. [Coverage/limits](L2_ACCEPTANCE.md).
+The completed documentation-commit gate is recorded in the annotated l2-complete tag. [Coverage/limits](L2_ACCEPTANCE.md).
 
 ## Historical evidence below (pending notes superseded above)
 

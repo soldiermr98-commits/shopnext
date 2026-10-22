@@ -1,8 +1,9 @@
-# Shopnext — L1 Laravel foundation
+# Shopnext — L1 foundation and L2 financial core
 
 Persian RTL React/Vite storefront with Laravel 12, Sanctum and Filament 5 for
-PHP shared hosting. **L1 implementation is CI-verified. L2 is NOT approved.**
-This is not a functioning commerce backend or a production launch approval.
+PHP shared hosting. **L1 and L2 implementations are CI-verified.**
+The `l2-complete` tag points to `5120dad`; this is NOT production launch approval.
+L3 has not been authorized. [Financial coverage and limits](docs/L2_ACCEPTANCE.md).
 Actual host/browser/TLS acceptance is **UNVERIFIED**: [run the checklist](docs/ACCEPTANCE.md).
 
 ## Implemented and executed
@@ -22,12 +23,24 @@ Actual host/browser/TLS acceptance is **UNVERIFIED**: [run the checklist](docs/A
   stale warning; `php artisan deploy-check` with fail-closed readiness diagnostics.
 - No-dev upload ZIP builder and optional, token-protected, self-deleting migration runner.
 
-**160 Pest tests / 1,028 assertions in EACH of six real DB jobs**:
+**218 Pest tests / 6,789–6,790 assertions in EACH of six real DB jobs**
+at the tagged L2 gate ([CI39602866142](https://github.com/soldiermr98-commits/shopnext/actions/runs/39602866142)):
 PHP 8.2/8.3 × MySQL 8.0 / MariaDB 10.6 / MariaDB 11.4. Frontend typecheck,
-7 transport/local-asset tests +171 archived regressions and build pass separately.
+13 transport/store/formatter/local-asset tests +171 archived regressions and build pass separately.
 The PHP8.2/MySQL job also builds/extracts the real ZIP and runs HTTP/runner smoke.
 [CI links and evidence](docs/CI_RESULTS.md) · [Architecture](docs/ARCHITECTURE.md)
 · [Schema](docs/DATABASE.md) · [Security](docs/SECURITY.md).
+
+## L2 financial implementation
+
+- One exact rational integer-Toman pricing engine; server-only financial UI totals,
+  VAT/coupon allocation and explicit signed rounding reconciliation.
+- Versioned server carts, hashed guest tokens and preserve-both login merge conflicts.
+- Atomic locked checkout, owned addresses, immutable snapshots, stock/coupon
+  reservations and idempotent full-wallet or manual COD/card-to-card workflows.
+- Once-only lifecycle/refunds to wallet, private sanitized receipts, owner APIs,
+  actor timeline, bounded expiry and warning-only COD review.
+- Five real separate-process same-database race scenarios in each of six SQL/PHP jobs.
 
 ## Layout and development
 
@@ -56,7 +69,7 @@ Sanctum4.3.3, Pest3.8.7, Pint1.30.4. Do not interpret Node/sql.js tests as PHP/D
 ## Build and deploy
 
 ```bash
-bash tools/build-deploy.sh build/shopnext-l1.zip
+bash tools/build-deploy.sh build/shopnext-l2.zip
 ```
 
 The builder uses committed HEAD, a fresh no-dev vendor, local SPA/Filament assets,
@@ -67,9 +80,10 @@ cron, environment configuration and the optional one-hour offline runner activat
 
 ## Explicit non-goals / launch gate
 
-No pricing, checkout, payments, SMS integration or Filament business resources
-were built. The existing storefront's catalog/account/checkout mock UI is not a
-trusted business implementation. Original external photos remain explicit local
-placeholders, not a claim that photographs were mirrored. Real browser behavior,
-RTL/a11y, hosting permissions, CLI/web PHP equivalence, TLS and backups/restore
-remain UNVERIFIED until acceptance is recorded. Stop for owner approval before L2.
+No gateway adapters, SMS integration, loyalty formula or Filament business
+resources were built. Real tariffs and owned saved addresses are required; missing
+configuration fails closed. General CRUD/content and explicitly inactive prototype
+controls remain outside L2. Original external photos remain local placeholders.
+Real browser behavior, RTL/a11y, hosting permissions, CLI/web PHP equivalence, TLS
+and backups/restore remain UNVERIFIED. Integration into `main` does not authorize
+production deployment or L3. Continue only after explicit owner approval for L3.

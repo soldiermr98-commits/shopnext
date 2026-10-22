@@ -1,10 +1,12 @@
 # L2 financial acceptance — implementation, evidence and limits
 
 2026-10-21. Owner approved L1 and continuation of L2; contracts unchanged.
-The financial implementation is complete. **Completion marker `l2-complete` is
-published only after ALL7 jobs pass on the final reconciliation commit.** Its
-annotated tag records the exact final SHA and CI URL. This document does not
-predeclare that future run green. Stop after the tag; L3 requires owner approval.
+The financial implementation is complete. **`l2-complete` was published at
+`5120dadbb1a60cf91877165c4ac09e1dbd783b2b` after ALL7 jobs passed in
+[CI39602866142](https://github.com/soldiermr98-commits/shopnext/actions/runs/39602866142).**
+Each backend job passed218 tests and6789/6790 assertions; every job executed all five
+real parallel scenarios. Documentation/main integration is separately authorized;
+no L3 implementation or production deployment is authorized by this merge.
 
 ## Executed evidence
 
@@ -20,7 +22,7 @@ predeclare that future run green. Stop after the tag; L3 requires owner approval
 - Local client13 tests/typecheck/build and archived171 tests/typecheck executed green.
   Client fetch doubles test transport/store/formatting, NOT SQL or a rendered browser.
 - Final reconciliation names financial M05/M06/M08/H11 coverage explicitly and adds
-  an M09/H02 no-export privacy boundary; final CI must execute these changes too.
+  an M09/H02 no-export privacy boundary; final CI39602866142 executed these changes successfully.
 
 Seven jobs = frontend plus PHP8.2/8.3 × MySQL8/MariaDB10.6/11.4, real migrations,
 Pint, Pest, production frontend build and real no-dev upload-package smoke.
@@ -53,7 +55,7 @@ Assertions differ by1 for the valid alternative cancel/pay winner, not by missin
 
 Names below are searchable Pest/Node titles, not a claim that every broader L2+
 feature in the legacy audit was authorized here. **PASS(financial)** means executed
-scope at the code gate; the final reconciliation must also pass before tagging.
+scope at the code gate; the final reconciliation also passed before tagging.
 
 | Finding | Named regression / file | Status and boundary |
 |---|---|---|

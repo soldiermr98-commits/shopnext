@@ -1,7 +1,7 @@
 # L2 financial contract — approved decisions and implementation checkpoints
 
 L2 financial code verified. Current acceptance/limits: [L2_ACCEPTANCE](L2_ACCEPTANCE.md).
-`l2-complete` is published only after the final documentation commit also passes ALL7 jobs.
+`l2-complete` is published at5120dad after CI39602866142 passed ALL7 jobs.
 Only executed green CI is evidence. No gateway/SMS/Filament business resources.
 
 ## Owner-approved decisions

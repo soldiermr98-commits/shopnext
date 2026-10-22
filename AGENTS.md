@@ -1,67 +1,31 @@
-# Shopnext handoff — L2 in progress, 2026-10-21
+# Shopnext handoff — L2 complete; main integration, 2026-10-22
 
-## Latest owner continuation (2026-10-21)
--745c526 checkpoint approved; continue ALL remaining L2 before l2-complete/L3 gate.
-- Latest explicit COD clarification supersedes the older pending-COD exception:
-  ALL COD exempt from30-minute expiry. Owner chose configurable7-day no-shipment
-  auto-FLAG for admin, NEVER auto-cancel. Admin explicit cancel restores stock.
-- Current unverified change: Checkout one transaction with idempotent intent, owned
-  cart/version/address, locked shared PricingService, stock/coupon reservation,
-  immutable SQL snapshots, append-only actor timeline and atomic full-wallet start.
-  PaymentMethod is domain interface only; no external adapters. Checkout d532f0e
-  CI39594655416 passed all7 jobs (199/6662 each). Lifecycle bf11063
-  CI39595334260 passed all7. Order/receipt API9205c58 CI39596445555 passed all7
-  after fixing cached test RequestGuard identity between distinct browser actors.
-  Real parallel harness3a41437 CI39597673255 passed ALL7, five races EACH database/PHP.
-  Evidence docs/ci/l2-real-concurrency-verified-matrix.json +six CI proof artifacts.
-  Current read-only catalog IDs integration (for financial frontend) CI pending.
-- Next concerns after FULL green: lifecycle/cancel/refund/paid/expiry; real parallel
-  workers; order APIs/receipt/manual approvals; storefront wiring; final docs/tag.
+## Current state and authorization
+- L1 and L2 are complete implementation checkpoints. `l2-complete` is fixed at
+  5120dadbb1a60cf91877165c4ac09e1dbd783b2b, CI39602866142 ALL7 SUCCESS.
+  Each SQL/PHP job:218 tests,6789/6790 assertions (valid race outcome variation).
+- docs/L2_ACCEPTANCE.md maps every financial finding, evidence and deferred scope.
+- Owner authorized documentation refresh and PR merge into main, NOT L3 or deploy.
+  Keep work on arena/c101d8c3-shopnext. Merge using an explicit numbered GitHub PR;
+  never switch to or push directly to main. Do not move the completion tag.
+- After each commit wait for ALL7 backend.yml jobs green before another concern;
+  a red must be diagnosed/fixed, never bypassed. Read before writing; no secrets.
+- Five REAL separate-process/connection same-DB scenarios run in each SQL/PHP job.
+  Frontend fetch doubles are not SQL concurrency or rendered-browser evidence.
+- Integer Toman, exact fractions through discounts/VAT, final-line half-up only;
+  largest-remainder components are DISPLAY ONLY; signed rounding_adjustment.
+- ALL COD exempt minute expiry; configurable default7day unshipped admin FLAG,
+  NEVER automatic cancellation. Default non-COD unpaid/verification expiry30min.
+- Full wallet only; no mixed payments. COD/card need explicit authorized payment
+  confirmation; delivery never means paid. Actual-paid wallet refund once; redeemed
+  coupon usage retained. No gateway/SMS/loyalty formula/business Filament resources.
+- Preserve BOTH carts on login merge conflict. Checkout only valid owned account
+  cart/version/address; configured tariffs required. No invented zones/free shipping.
+- Host/browser/TLS/RTL/a11y/backup restore remain UNVERIFIED; tag/merge is not launch
+  certification. STOP after integration and await explicit L3 approval.
 
-## Standing rules / gate
-- Fixed branch arena/c101d8c3-shopnext ONLY. Small commits; push and inspect FULL
-  green CI after EVERY commit before next concern. Read red logs/annotations and
-  fix without test bypass. Unexecuted = UNVERIFIED. Never print secrets.
-- L1 completed/tagged l1-complete on7acd649; owner explicitly APPROVED L2.
-  Implement the financial core/manual methods/API/minimal storefront financial wiring.
-  NO gateway adapters, SMS integrations or Filament business resources. Final L2
-  requires full matrix green and l2-complete tag, THEN stop for L3 approval.
-- Latest approved rounding: exact rationals through auto/fixed-coupon allocation/VAT;
-  round once per final line. Integer coupon allocation DISPLAY ONLY; signed explicit
-  rounding_adjustment. Two1-Toman lines auto50% +fixedcoupon1 ->final0, not1.
-- Latest approved merge: login succeeds on limit conflict; preserve BOTH carts,
-  all-or-nothing merge rejection and explicit conflict; checkout valid account cart only.
-- docs/PRICING.md records other approved pricing, full-wallet/manual/COD/expiry defaults.
-  No tariffs/zone mapping supplied: fail closed. L2 is NOT complete. Money04cdcab
-  CI39578549164 and schema66b2187 CI39579280000 both seven-job SUCCESS. This new pricing
-  checkpoint4a76d51 passed CI39581254064 (7/7 green, each matrix173/6437). Pending: cart/login merge, order/reservation,
-  wallet/order integration, manual payments, expiry, APIs/UI, real concurrency.
-- Legacy users.wallet_balance is an IMMUTABLE OPENING SNAPSHOT, not live balance.
-  New User accessor uses Ledger SUM, so AuthController identity now reports live balance.
-  Ledger primitives63088db passed CI39582169761 (7/7, each matrix180/6482).
-  Exact recorded evidence: docs/ci/l2-wallet-primitives-verified-matrix.json.
-  Ledger does NOT mark paid/refunded or orchestrate stock/coupon/order transitions.
-- Current change: CartService +login/register merge (secure token HASH persistence,
-  optimistic versions, all-or-nothing preserve-both conflict, explicit auth/cart DTO).
-  Cart domain/login8080bfe passed CI39583400561 (7/7, each matrix187/6525).
-  First2202ee7 was red only because JSON test omitted withCredentials; fixed fixture,
-  not production cookie encryption or assertions. Forced password rotation defers merge.
-- Current change: CartRequest/CartController, named throttle and CSRF-protected
-  GET/PUT /api/cart, POST /api/quote, authenticated POST /api/cart/merge retry;
-  Secure HttpOnly host-only Strict guest cookie issued on first successful mutation.
-  Tests enforce real CSRF and browser cookie readback.03238d6 passed CI39584222988
-  (7/7 SUCCESS, each matrix192/6615); evidence docs/ci/l2-cart-api-verified-matrix.json.
-  Storefront financial wiring and order/checkout APIs remain NOT implemented.
-- Current hardening: financial JSON bound30,000 bytes, Money requires64-bit PHP,
-  deploy-check integer64 and Persian cart validation messages.8178a52 passed
-  CI39584953220 (all7 SUCCESS, each matrix193/6619); exact evidence recorded in
-  docs/ci/l2-pricing-cart-wallet-hardening-verified-matrix.json.
-- Before final L2: complete exact concurrent wallet/stock/coupon
-  tests and all outstanding lifecycle/API/UI/docs. Do not create l2-complete early.
-- Actual browser/host/TLS/RTL/a11y/backup restore UNVERIFIED. The tag is an
-  implementation checkpoint, NOT launch/commerce certification.
+## Historical L1 evidence (current L2 evidence linked above)
 
-## Executed evidence
 - Code1c0d09c, run39539510764:7 jobs SUCCESS;160 Pest/1028 assertions per EACH
   PHP8.2/8.3 × MySQL8.0/MariaDB10.6/11.4, Pint/fresh/down/up/real SQL.
 - Runtime8.2.34/8.3.35, DB8.0.46/10.6.28/11.4.13. GD+Imagick both exercised.
@@ -132,25 +96,9 @@
   importer must be explicit. Persist/back up APP_KEY; never regenerate existing key.
 - Host CLI/web PHP equivalence, exact proxy IPs/TLS/permissions/PCNTL/process limits,
   no-terminal FTP and key/DB/media restore are UNVERIFIED until owner checklist.
--23 original photos were NOT mirrored: placeholders explicit. Existing storefront
-  catalog/account/checkout mocks are not trusted backend services. Legacy code is
+-23 original photos were NOT mirrored: placeholders explicit. Financial storefront flows use authoritative Laravel APIs;
+  other explicitly inactive prototypes are not trusted backend services. Legacy code is
   reference-only, excluded from build. Never start/deploy the archived Node server.
 
 Read README, ARCHITECTURE, DATABASE, SECURITY, HOSTING, ACCEPTANCE, CI_RESULTS and
 L1_AUTH before changing scope. Historical PhaseA/L0 docs are not current approval.
-
-
-## L2 final reconciliation gate
-- Read docs/L2_ACCEPTANCE.md for complete financial finding/test status and boundaries.
-- Code40abc65 CI39601812389 ALL7 green,217 tests/job; assertions6786/6787 depend on
-  valid cancel/pay winner. docs/ci/l2-code-verified-matrix.json has actual per-job results.
-- Five real separate-process same-DB races EACH of six PHP/SQL jobs; no simulation.
-- Financial frontend uses authoritative APIs; no local money/fake paid orders/legal
-  IDs or gateway/loyalty formulas. Browser/host/restore remain UNVERIFIED.
-- Current final concern: documentation/finding reconciliation, explicit TOMAN and
-  absent-export assertions. Commit it; wait for ALL7 backend.yml jobs green. A red
-  must be diagnosed/fixed and rerun; never tag on partial green.
-- ONLY THEN annotated l2-complete points to that exact final commit, with final CI
-  run URL/SHA in the tag message. STOP after tagging; wait for L3 authorization.
-- No gateway/SMS/business Filament resources. Real tariffs/owned saved addresses
-  required; no invented tariff/region/legal identity. General CRUD/content remain L3.
