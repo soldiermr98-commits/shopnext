@@ -1,3 +1,13 @@
+# Bulk domain formatter correction — PENDING full CI
+
+- 00ff000 push39862556040/PR39862563152 fast Pint RED, expensive jobs correctly
+ skipped. Actual reporter: ProductBulkTest unary_operator_spaces/no_unused_imports/
+ not_operator_with_successor_space. Removed unused Product import; expanded embedded
+ preincrement callback into explicit postincrement statement + nested guard.
+- No backend runtime tests executed in this red run; bulk remains UNVERIFIED.
+ WAIT ALL8 for correction before next concern. Variant integrity ca4de24 remains
+ verified327tests8966/8967assertions per SQL job/all5 races. No checkpoint approval.
+
 # Current continuation — bulk price/category domain PENDING CI
 
 - Ca4de24 variant integrity VERIFIED push39861719109/PR39861724632 ALL8.

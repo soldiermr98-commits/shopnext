@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Financial\Money;
 use App\Models\ActivityLog;
-use App\Models\Product;
 use App\Models\User;
 use App\Services\Categories;
 use App\Services\ProductBulk;
@@ -92,8 +91,11 @@ it('L3a bulk category replacement and clear affect only selected products and au
     expect(DB::table('category_product')->where('product_id', $first->id)->count())->toBe(0);
     $writes = 0;
     ActivityLog::creating(function (ActivityLog $log) use (&$writes): void {
-        if (in_array($log->action, ['bulk.categories', 'bulk.price'], true) && ++$writes === 2) {
-            throw new RuntimeException('Injected late bulk audit failure.');
+        if (in_array($log->action, ['bulk.categories', 'bulk.price'], true)) {
+            $writes++;
+            if ($writes === 2) {
+                throw new RuntimeException('Injected late bulk audit failure.');
+            }
         }
     });
     try {
