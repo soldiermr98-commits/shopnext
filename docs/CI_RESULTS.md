@@ -1,10 +1,14 @@
-# L3a process revision — execution pending
+# L3a process revision — eight gates verified; artifact correction pending
 
-Fast independent Pint --test/dry-run gates all original seven jobs (eight total).
-No database container or app boot in the style job. CI diagnostic reports now get
-redacted summaries and per-job artifacts even on failure. Local shell syntax and
-Python report-tooling tests executed; full workflow validation remains PENDING.
-Next concern only after all eight jobs green. No gate/assertion is removed.
+7c67d9b / [push CI39726383989](https://github.com/soldiermr98-commits/shopnext/actions/runs/39726383989)
+and [PR CI39726390029](https://github.com/soldiermr98-commits/shopnext/actions/runs/39726390029):
+ALL8 SUCCESS on both. Independent Pint --test gates the original seven jobs;
+no database container or application boot in the fast style job. Python diagnostics
+redaction/exit-code tests passed. GitHub skipped diagnostic artifact uploads because
+upload-artifact v4 excludes hidden directories by default. This correction explicitly
+includes the isolated, redacted `.ci-reports/` directory (not other hidden files).
+Artifact delivery remains UNVERIFIED until the correction's full workflow and
+artifact inventory are inspected. No gate/assertion is removed.
 
 # L3a shell checkpoint — verified, NOT full L3a
 
