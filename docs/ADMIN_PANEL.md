@@ -254,3 +254,39 @@ lookups are scoped. Color swatches only render six-digit hex; images only safe
 48-hex PNG references. Term route is intentionally absent from top-level navigation
 because it requires context; the real parent row links to it. Products next only
 after complete green editor regressions. Full L3a remains IN PROGRESS.
+
+## Attribute/term editors verified; product metadata foundation pending
+
+B430903 passed ALL8 on39743792019/39743800775. Each SQL job292 tests8592/8593
+assertions and all five genuine races. Previous AttributeEditorTest rows are now
+REAL/tested. [Exact editor matrix](ci/l3a-attribute-editor-verified-matrix.json).
+
+The new Products service is metadata-only (no product buttons yet). All four draft
+types persist; variable publication requires variants. Brand/slug/global service
+SKU checks, Toman integers (including Persian/Arabic digits, rejecting floats),
+short/full description, SEO, regular/sale/flash windows, status and UTC publication
+are real domain operations pending CI. Direct stock input is prohibited; no stock
+quantity is assigned by metadata saves. Initial zero is the existing SQL default.
+Effective scheduled publication is a read predicate at the UTC boundary, not an
+unaudited background status mutation. Raw status remains scheduled. Soft-deletion
+retains all rows/pivots, reserves identifiers and blocks public pricing/catalog;
+restore preserves the prior status. Brand names are eagerly current, not stale
+legacy strings. New migration refuses lossy editorial-state rollback.
+
+screen | action | REAL/tested | test name
+--- | --- | --- | ---
+Product domain only | six-role list/create/update/delete/restore + audit | PENDING CI | ProductServiceTest: L3a product metadata independently gates six roles and persists create update soft delete restore actor audits
+Product domain only | four types/strict Toman/prohibited inventory/type guard | PENDING CI | ProductServiceTest: L3a product metadata accepts all four draft types and rejects float money direct inventory unsafe prices and type changes
+Product domain only | reserved slugs/global service SKUs/variable publish guard | PENDING CI | ProductServiceTest: L3a product metadata reserves deleted slugs and cross table SKUs and blocks missing variable matrix publication
+Public catalog + authoritative pricing | UTC schedule/deleted visibility and Unicode slug route | PENDING CI | ProductServiceTest: L3a product publication applies one UTC predicate to public Unicode routes and authoritative pricing before after schedule and trash
+Product domain only | exact UTC sale/flash boundary/zero Toman | PENDING CI | ProductServiceTest: L3a product sale windows persist exact UTC and retain lowest regular sale flash and zero pricing without floats
+Product domain only | safe persisted rich text/SEO/live brand/delete protection | PENDING CI | ProductServiceTest: L3a product rich text SEO and brands persist safely while deleted products retain reference protection
+Product domain only | update/delete/restore audit rollback | PENDING CI | ProductServiceTest: L3a product metadata rolls back update soft delete and restore if explicit actor audit fails
+Product domain only | both fresh staff flags/all operations | PENDING CI | ProductServiceTest: L3a product operations refresh both staff safety flags before every write or list
+Product domain only |1000-row four-query list/excluded heavy HTML | PENDING CI | ProductServiceTest: L3a product thousand row lists eager load live brand names in four queries without long rich text hydration
+Product migration | refuse lossy rollback/resurrection | PENDING CI | ProductServiceTest: L3a product migration refuses lossy rollback instead of silently resurrecting trashed products
+
+Next after full green: product variants/matrix/content/gallery/relations/bulk domain
+sub-steps and actual screens, then media, then ledger-backed stock actions. This
+foundation is NOT a claim of complete digital fulfillment, bundle automation or
+full L3a. Existing L2 inventory/checkout semantics are not replaced or invented.

@@ -222,3 +222,15 @@ type changes; product usage protects term deletion. New SQL composite ownership 
 hex constraints complement (not replace) Persian service validation. Attribute
 screens, product assignment/matrix, media registry and stock actions are not
 implemented by this service sub-step. Runtime status remains pending its own CI.
+
+## L3a product metadata foundation — pending runtime
+
+Products metadata service uses CatalogAccess actor/mutex, policy checks and explicit
+atomic CatalogAudit for create/update/soft-delete/restore. Inventory is prohibited
+in this contract; zero new stock uses the existing SQL default. CatalogInput rejects
+float/exponent/decimal coercion, normalizes Persian/Arabic digits to canonical
+bounded Toman integers. Product now sanitizes the actual full_description column
+(the legacy description alias remains compatible). CatalogPublication centralizes
+effective UTC schedule/trash availability for catalog and pricing, without changing
+financial fractions, tax/coupon/shipping/wallet/order mechanics or inventing a cron
+publish mutation. Matrix, content graph, bulk actions and UI remain next sub-steps.

@@ -1,3 +1,20 @@
+# Attribute/term editors VERIFIED; product metadata core pending CI
+
+B430903 / [push CI39743792019](https://github.com/soldiermr98-commits/shopnext/actions/runs/39743792019)
+and [PR CI39743800775](https://github.com/soldiermr98-commits/shopnext/actions/runs/39743800775):
+ALL8 SUCCESS. All six SQL jobs292 tests8592/8593assertions and five actual financial
+races. [Exact editor matrix](ci/l3a-attribute-editor-verified-matrix.json). All new
+attribute/term route/action/owner/hex/image/large-list regressions executed.
+
+Next sub-step adds Products metadata service, strict integer/Persian digit parser,
+full_description sanitizing cast, SEO/publication/trash columns, actor-audited
+soft-delete/restore and bounded eager brand lists. Shared CatalogPublication applies
+the same effective UTC scheduled/deleted visibility to public catalog and locked
+pricing; no cron status rewrite, no financial arithmetic changes. Unicode slug
+routes retain bounded Unicode letter/number/separator validation (Laravel UTF-8).
+No product editor exposed yet, no matrix/gallery/content graph/bulk/media/stock
+implementation claimed. New core runtime PENDING CI; stock input is prohibited.
+
 # Attribute/term DOMAIN VERIFIED; editor runtime pending CI
 
 Ec044d4 / [push CI39741032336](https://github.com/soldiermr98-commits/shopnext/actions/runs/39741032336)

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Financial;
 
 use App\Models\User;
+use App\Services\CatalogPublication;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -34,7 +35,7 @@ final class PricingService
         foreach ($items as $key => $input) {
             $product = $products->get($input['product_id']);
             $variant = $input['variant_id'] === null ? null : $variants->get($input['variant_id']);
-            if (! $product || $product->status !== 'published' || ($input['variant_id'] !== null && (! $variant || $variant->product_id !== $product->id)) || ($product->type === 'variable' && ! $variant)) {
+            if (! $product || ! CatalogPublication::visible($product, $now) || ($input['variant_id'] !== null && (! $variant || $variant->product_id !== $product->id)) || ($product->type === 'variable' && ! $variant)) {
                 $this->fail('items', 'کالا یا تنوع انتخاب‌شده در دسترس نیست.');
             }
             $source = $variant ?? $product;

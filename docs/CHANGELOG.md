@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-22 — Attribute/term editors verified; product core started
+
+- B430903 passed both ALL8 matrices39743792019/39743800775,292tests8592/8593assertions.
+- Product metadata service, real full-description sanitization, strict integer
+  input, effective UTC publication and guarded soft-delete/restore pending CI.
+- No product screen, media library or stock adjustment claimed yet.
+
 ## 2026-10-22 — L3a attribute/term domain verified, editors pending
 
 - Ec044d4 ALL8 on push39741032336/PR39741037990;280tests8384/8385assertions.

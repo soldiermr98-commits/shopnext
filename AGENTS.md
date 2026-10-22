@@ -1,3 +1,23 @@
+# Current continuation — product metadata foundation pending CI
+
+- B430903 attribute/term EDITORS VERIFIED: push39743792019/PR39743800775 ALL8;
+ 292tests8592/8593assertions/job, all5 real SQL races. Manifest committed next at
+ docs/ci/l3a-attribute-editor-verified-matrix.json. Taxonomy core/screens verified.
+- NEW Products service metadata-only: fresh actor/taxonomy mutex, all four draft
+ types, SKU checks across root/variant tables, Persian/Arabic integer parser without
+ floats, real full_description cast, existing sale/flash UTC fields, SEO/status,
+ guarded soft-delete/restore and bounded four-query brand eager lists. No stock
+ write; provided stock prohibited. Variable publish requires existing variants.
+- New migration adds published_at/meta/deleted_at/index, refuses lossy rollback.
+ CatalogPublication is shared effective UTC scheduled/trash predicate in catalog
+ and authoritative pricing; financial arithmetic untouched. Unicode product slug
+ route bounded255; Laravel12.70 toSymfonyRoute UTF-8 verified upstream.
+- ProductServiceTest role/price/type/SKU/schedule/description/rollback/staff flags/
+ big-list cases newly added, ALL PENDING runtime CI. No product UI exposed yet.
+- WAIT ALL8 before next concern; red -> fix. Then variants/matrix/content/gallery/
+ relations/bulk/product UI -> media -> stock adjustment service/action, followed by
+ branding/navigation/cache/deploy checks/final docs/tag. No checkpoint approval.
+
 # Current continuation — attribute/term editors pending CI
 
 - Ec044d4 attribute/term DOMAIN VERIFIED: push39741032336/PR39741037990 ALL8;

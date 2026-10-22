@@ -158,3 +158,14 @@ pivot's composite (term_id,attribute_id) FK prevents attributing another owner's
 term to a product, and referenced term/product deletion is restricted. Root and
 term mutations share the existing taxonomy serialization mutex; no stock or
 financial columns changed. No product assignment screen exists in this sub-step.
+
+## L3a product metadata foundation — runtime pending
+
+Migration2026_10_22_000003 adds nullable Gregorian UTC published_at, SEO fields,
+soft deleted_at and publication index. New editorial state refuses destructive
+rollback. Root identifiers remain reserved while trashed; all pivots/FKs remain.
+Existing sale/flash TIMESTAMP fields are retained; editor-service dates explicitly
+bound to1970-01-02 inclusive through2038-01-19 exclusive for all SQL versions.
+Scheduled status becomes effectively visible at published_at without rewriting
+status. Both public catalog and authoritative pricing reject trashed/not-yet-live
+products. No monetary/stock schema, ledger or financial calculation changed.

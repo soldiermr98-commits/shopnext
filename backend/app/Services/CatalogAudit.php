@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 final class CatalogAudit
 {
-    private const SAFE = ['id', 'name', 'title', 'slug', 'origin_country', 'is_official', 'image', 'logo', 'parent_id', 'order_index', 'status', 'type', 'price', 'sale_price', 'brand_id', 'hex', 'attribute_id'];
+    private const SAFE = ['id', 'name', 'title', 'slug', 'origin_country', 'is_official', 'image', 'logo', 'parent_id', 'order_index', 'status', 'type', 'price', 'sale_price', 'brand_id', 'hex', 'attribute_id', 'sku', 'published_at', 'deleted_at'];
 
     public function write(User $actor, Model $record, string $action, array $before, array $after): void
     {
