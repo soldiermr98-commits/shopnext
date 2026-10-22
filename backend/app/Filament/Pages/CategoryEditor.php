@@ -155,7 +155,7 @@ final class CategoryEditor extends Page
         }
     }
 
-    public function _uploadErrored(string $name, ?string $errorsInJson, bool $isMultiple): void
+    public function _uploadErrored(mixed $name, mixed $errorsInJson, mixed $isMultiple): void
     {
         $this->actor();
         abort_unless($name === 'imageUpload', 422);

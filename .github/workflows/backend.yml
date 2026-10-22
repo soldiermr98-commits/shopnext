@@ -155,7 +155,7 @@ jobs:
         working-directory: backend
         run: |
           composer validate --strict
-          composer install --prefer-dist --no-interaction --no-progress
+          bash ../tools/ci/run-check.sh backend-install composer install --prefer-dist --no-interaction --no-progress
           composer check-platform-reqs
           cp .env.example .env
           php artisan key:generate --force --no-interaction

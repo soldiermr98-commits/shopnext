@@ -1,3 +1,14 @@
+# Upload callback inheritance compatibility correction — no tests bypassed
+
+ab6cb04 / push CI39734264577 and PR CI39734271475: style/frontend green;
+six SQL jobs failed at Composer application boot (exit255), before Pest. Source
+inspection confirms Filament5.10.3 InteractsWithSchemas already uses WithFileUploads;
+BasePage therefore inherits its untyped _uploadErrored parameters. The override must
+not narrow these inherited mixed parameters to string/bool. Match them with mixed;
+keep actor authorization and Persian rejection. Composer app-boot output is now also
+captured by the redacted report wrapper, closing this remaining diagnostic gap.
+Corrected editor still PENDING full CI; no brands or later concern begun.
+
 # Category editor upload-state failure diagnosed; fix pending
 
 8850e70 / push CI39733779080 and PR CI39733786115: all six SQL jobs RED,
