@@ -538,3 +538,26 @@ will be added only on the later reason+actor ledger service.
 
 Media library, stock ledger/adjustment actions/bulk stock and final delivery remain
 pending. Their buttons are not displayed or represented as working yet.
+
+
+## Product continuation VERIFIED on fast combination —49e5924
+
+The three ProductBulkEditor rows above are now **REAL/tested on fast SQL**:
+[push39870376321](https://github.com/soldiermr98-commits/shopnext/actions/runs/39870376321).
+Pint and PHP8.3/MariaDB10.6 SUCCESS;392 tests/9616 assertions and all5 genuine
+financial races. Live parsed evidence: `ci/l3a-product-pages-fast-verified.json`.
+Frontend was intentionally skipped and other five SQL combinations not executed.
+
+| Delivered page/domain | REAL/tested on fast SQL | Remaining verification |
+|---|---|---|
+| Product content domain + content Page | Rich text, gallery ordered paths/main/alt, spec groups/FAQ, publication-safe related/upsell/cross-sell, scoped policies/audit/rollback | Full matrix; real browser pointer/RTL/a11y |
+| Product metadata Page | Four draft types, SKU/slug/SEO, publication/sale/flash Tehran↔UTC, eager paginated brands, soft trash/restore, content/variation/bulk links | Full matrix; real browser |
+| Variation Page | Per-SKU price/calendar/image, parent scope/locked ID, safe upload, protected trash/restore, eager owned option names | Full matrix; real browser |
+| Matrix Page | Bounded owner-scoped choices, real atomic generator, duplicate guards, canonical idempotence/no overwrites, six roles | Full matrix; real browser |
+| Bulk Page + category read optimization | Scoped exact percent prices/category replace/clear, no fake success on invalid input, six roles,50-product category before-snapshot in5 SELECTs | Full matrix; real browser |
+
+This table supersedes earlier PENDING rows for these implementations, without
+claiming browser execution. Stock remains read-only; **media library and stock
+ledger/adjustment/bulk-stock actions are still not delivered**. Those, remaining
+branding/nav/cache/deploy checks and final consolidated handoff are next. No
+l3a-complete tag, L3b work or deployment approval has been made.

@@ -1,3 +1,30 @@
+# Current continuation — all product pages fast VERIFIED; media NEXT
+
+- Active branch arena/0f9a69e5-shopnext, base39b64b4 (merged PR2). No active new PR
+ yet; owner wants full six-way matrix only PR updates/tags, not intermediate pushes.
+- Latest code49e5924 actual fast push39870376321 SUCCESS: Pint and PHP8.3/
+ MariaDB10.6,392tests9616assertions, all5 genuine financial races. Frontend SKIPPED,
+ other5 SQL combinations not executed. Live asserted exact manifest:
+ docs/ci/l3a-product-pages-fast-verified.json. This is NOT full-matrix acceptance.
+- ProductContent domain + ProductContentEditor, ProductEditor, VariantEditor,
+ VariantMatrixEditor and ProductBulkEditor now registered and fast REAL/tested:
+ six-role/revoked actions, uploads/order/main/alt, grouped specs/FAQ/relations,
+ SEO/UTC schedule edges, matrix idempotence/owned terms, exact bulk prices/category
+ replace/clear, parent locks and bounded queries. Labels batched; bulk category
+ snapshot50 products5 SQL reads; lists1000 fixtures with30-row pages. All state
+ writes through verified services. Inventory still READ ONLY in product pages.
+- NEXT media library: folders/replace/alt/usage/protected deletion, queued WebP+
+ thumbnail generation with safe synchronous fallback and safe legacy reference
+ integration. Keep SVG/executable rejection and transactional upload cleanup.
+- THEN stock adjustment ledger/service/actions (reason+actor, no negative stock)
+ and bulk stock on that same service, not direct DB/ORM setters. Then branding/
+ navigation/cache/deploy and seven final handoff docs; full six-way PR matrix,
+ tag l3a-complete only after full scope green, wait tag CI, stop for approval.
+- Owner says NO intermediate checkpoint approval. No early tag, L3b work, gateway/
+ SMS/OTP/new credentials/SSR/deployment authorization. Browser pointer/visual/RTL/
+ a11y/real host/TLS/restore still UNVERIFIED. Reuse retained Jalali candidate;
+ do not repeat candidate trials. CI fast selector d571989 has3 local contract tests.
+
 # Current continuation — bulk admin UI PENDING fast CI
 
 - D162ce3 matrix UI VERIFIED fast push39869734415: Pint+PHP8.3/MariaDB10.6

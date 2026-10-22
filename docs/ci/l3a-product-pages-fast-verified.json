@@ -1,0 +1,22 @@
+{
+  "scope": "Fast push ONLY; not a full six-way matrix or frontend result",
+  "sha": "49e5924478dbff311d0bd5b9c95db838edfa6550",
+  "push_run": 39870376321,
+  "style": "success",
+  "backend": {
+    "job": "PHP 8.3 / mariadb:10.6",
+    "conclusion": "success",
+    "tests": 392,
+    "assertions": 9616,
+    "races": [
+      "cancel_pay",
+      "coupon_capacity",
+      "last_stock",
+      "mark_paid",
+      "wallet_spend"
+    ]
+  },
+  "frontend": "intentionally skipped",
+  "other_sql_combinations": "not executed",
+  "browser": "UNVERIFIED"
+}
