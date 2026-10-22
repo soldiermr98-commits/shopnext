@@ -182,6 +182,11 @@ jobs:
               print('::notice::' + text[offset:offset+2800].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
           PYMIGRATE
           exit "$result"
+      - name: Isolated rollback and reapply before the full suite
+        working-directory: backend
+        run: |
+          bash ../tools/ci/run-check.sh migration-rollback php artisan migrate:rollback --force --no-interaction
+          bash ../tools/ci/run-check.sh migration-reapply php artisan migrate --force --no-interaction
       - uses: actions/setup-node@v4
         if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
         with:

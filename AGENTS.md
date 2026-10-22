@@ -1,3 +1,18 @@
+# Variant matrix CI diagnostic correction — RED, do not advance concern
+
+- A645b97 first push39859934377/PR39859939853 RED: style+frontend passed;
+ six SQL Pest jobs failed. Actual annotations: MigrationLifecycleTest failed,
+ followed by missing variant_attribute_terms in variant tests (11failed/314passed,
+ 8839 assertions on MariaDB10.6). Initial forward migration succeeded.
+- Artifact and job-log blob downloads unavailable (EOF). Existing annotations show
+ first60k chars and last3k only; root lifecycle detail in middle is inaccessible.
+- Added explicit isolated artisan rollback/reapply preflight before Pest in all six
+ SQL jobs, with existing redacted run-check reports. This exposes actual DDL error
+ directly and prevents misleading cascade of a half-rolled-back schema. It does
+ NOT replace MigrationLifecycleTest/full suite or suppress any exit code.
+- NEXT read actual rollback diagnostic, fix that same concern, wait ALL8 green.
+ No product content/UI/media/stock concern yet, no completion/tag/approval pause.
+
 # Current continuation — variant matrix domain PENDING runtime CI
 
 - Numeric-slug identity guard67d2824 VERIFIED push39747554267 and PR39747560377

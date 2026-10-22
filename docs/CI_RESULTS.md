@@ -474,3 +474,13 @@ all eight live job conclusions SUCCESS. New Variants domain/migration and
 VariantServiceTest are UNVERIFIED pending the next full CI matrix. Executed local
 preflight: git diff --check only; no local PHP/Composer/database runtime claim.
 No full L3a completion tag; product content/UI, media, stock and final handoff remain.
+
+
+Variant domain a645b97: [push39859934377](https://github.com/soldiermr98-commits/shopnext/actions/runs/39859934377)
+RED. Fast Pint and frontend passed; six SQL suites failed. Actual MariaDB10.6
+annotations:11failed/314passed,8839 assertions; lifecycle rollback test failed,
+then variant tests reported missing variant_attribute_terms. Forward migration
+was successful. Blob artifacts/log download unavailable; no root DDL explanation
+claimed yet. Added isolated artisan rollback/reapply to each existing SQL job,
+using redacted reports, before the unchanged full Pest suite. Await actual error;
+all variant domain acceptance remains UNVERIFIED. No next concern started.
