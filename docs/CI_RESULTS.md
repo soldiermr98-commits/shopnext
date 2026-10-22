@@ -1,3 +1,11 @@
+# Production integration formatting gate caught imports before SQL matrix
+
+1db58d3 / CI39731080971 and PR CI39731085282: fast Pint correctly failed
+`AdminDatesTest.php` (`fully_qualified_strict_types`, `ordered_imports`). No Pest or
+long SQL matrix ran, exactly the intended fast-failure behavior. Add explicit
+Carbon/InstalledVersions imports; no rules changed and no formatting repair runs
+inside CI. Corrected production integration remains PENDING full eight-gate CI.
+
 # Jalali production integration — pending full matrix
 
 abd17e4 / [push CI39730442729](https://github.com/soldiermr98-commits/shopnext/actions/runs/39730442729)

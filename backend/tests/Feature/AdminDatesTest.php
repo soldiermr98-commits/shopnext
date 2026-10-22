@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Filament\Support\AdminDate;
 use App\Support\Persian;
+use Carbon\Carbon;
+use Composer\InstalledVersions;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
@@ -58,7 +60,7 @@ class AdminDateHarness extends Component implements HasSchemas
 uses(RefreshDatabase::class);
 
 it('L3a renders the retained Jalali picker saves selected state as Gregorian UTC and reloads at Tehran midnight', function () {
-    expect(Composer\InstalledVersions::getPrettyVersion('filament/forms'))->toBe('v5.10.3');
+    expect(InstalledVersions::getPrettyVersion('filament/forms'))->toBe('v5.10.3');
     $fixtures = json_decode(file_get_contents(base_path('../tools/ci/jalali/cases.json')), true, 512, JSON_THROW_ON_ERROR);
     foreach ($fixtures as $fixture) {
         $id = FinancialFixtures::product();
@@ -74,7 +76,7 @@ it('L3a renders the retained Jalali picker saves selected state as Gregorian UTC
 });
 
 it('L3a formats table and infolist dates in Persian without database queries or mutating timestamps', function () {
-    $utc = Carbon\Carbon::parse('2026-03-21 20:30:00', 'UTC');
+    $utc = Carbon::parse('2026-03-21 20:30:00', 'UTC');
     DB::enableQueryLog();
     DB::flushQueryLog();
     for ($i = 0; $i < 1000; $i++) {
