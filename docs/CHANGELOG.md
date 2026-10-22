@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-22 — L3a category verified; brands service started
+
+- Category editor69388b7 passed ALL8,250tests/job8107/8108assertions, five real SQL
+  races each. Fixed rejected-upload error persistence and replacement recovery.
+- Brands service/policy/shared catalog lock+redacted audit helpers and service
+  regressions added; new runtime CI pending, brand screen not wired yet.
+
 ## 2026-10-22 — L3a category editor wired (runtime pending)
 
 - Category service fddb89a passed all eight gates,240 tests per SQL job.

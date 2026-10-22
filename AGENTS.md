@@ -1,3 +1,17 @@
+# Current continuation — brands domain service pending CI
+
+- Category editor69388b7 verified: push39734575452/PR39734581936 ALL8 GREEN;
+ 250tests/job8107/8108assertions, all5 genuine SQL races in each. Exact manifest
+ docs/ci/l3a-category-verified-matrix.json. Rejected temporary uploads stay blocked;
+ valid replacement recovery passed. Category UI reorder cap500 siblings explicit.
+- Brands service/policy plus shared CatalogAccess/CatalogAudit helpers now added,
+ no brand UI yet. New BrandServiceTest covers six roles, persisted CRUD/logo,
+ validation/delete protection, stale staff flags, audit rollback/redaction, big lists.
+- This new service sub-step PENDING CI. Wait ALL8 green, fix red before proceeding.
+- NEXT brand screen through real Brands service; then attributes/terms -> products
+ -> media -> stock adjustments. Branding/navigation + production caches still due.
+ No L3a-complete tag or L3b approval; owner says continue without checkpoint pauses.
+
 # Current continuation — category editor runtime pending
 
 - fddb89a category service: push39732115679/PR39732121080 ALL8 GREEN;240 tests/job,

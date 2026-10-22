@@ -26,6 +26,7 @@ use App\Models\User;
 use App\Observers\AdminActivity;
 use App\Policies\ActivityLogPolicy;
 use App\Policies\AddressPolicy;
+use App\Policies\BrandPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\FoundationPolicy;
 use App\Policies\OrderPolicy;
@@ -65,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Address::class, AddressPolicy::class);
         Gate::policy(Category::class, CategoryPolicy::class);
-        Gate::policy(Brand::class, FoundationPolicy::class);
+        Gate::policy(Brand::class, BrandPolicy::class);
         Gate::policy(Product::class, ProductPolicy::class);
         Gate::policy(ProductVariant::class, ProductVariantPolicy::class);
         Gate::policy(Order::class, OrderPolicy::class);

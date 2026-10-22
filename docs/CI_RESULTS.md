@@ -1,3 +1,19 @@
+# Category editor VERIFIED; brands domain service pending CI
+
+69388b7 / [push CI39734575452](https://github.com/soldiermr98-commits/shopnext/actions/runs/39734575452)
+and [PR CI39734581936](https://github.com/soldiermr98-commits/shopnext/actions/runs/39734581936):
+ALL8 SUCCESS. EACH six PHP/SQL job250tests8107/8108assertions and all5 actual SQL
+process races. Exact evidence: [category matrix](ci/l3a-category-verified-matrix.json).
+Real category screen/form/buttons, temporary SVG rejection, no false persistence,
+valid replacement, failed-upload cleanup, SEO, tree/slug guards, both reorder
+directions, delete and1000-row pagination/query bounds all executed successfully.
+No visual/end-to-end browser/host/a11y/TLS/restore proof.
+
+Next taxonomy sub-step introduces only Brands domain service/policy and shared
+catalog lock/default-redacted audit helpers. Role/CRUD/slug/logo/delete/query/audit
+regressions written, runtime PENDING CI. No brand screen yet, no next business
+concern until ALL8 green. Category reorder limit500 siblings remains documented.
+
 # Upload callback inheritance compatibility correction — no tests bypassed
 
 ab6cb04 / push CI39734264577 and PR CI39734271475: style/frontend green;

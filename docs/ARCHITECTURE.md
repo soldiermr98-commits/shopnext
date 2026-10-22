@@ -208,5 +208,7 @@ a taxonomy SQL mutex, explicit policy and actor-aware transactional audit. No
 Filament write bypass or category screen is introduced in this service sub-step.
 SafeUpload raster output can be referenced only when the local media file exists;
 free-form URLs, SVG and path traversal are rejected. Parent labels are eager-loaded
-on30-record pages. SEO metadata is stored only (no L4-L6 SSR injection). Service
-runtime validation remains pending its full CI; remaining taxonomy comes next.
+on30-record pages. SEO metadata is stored only (no L4-L6 SSR injection). Service and actual category editor
+runtime validation passed CI39734575452/39734581936. Brands now adds shared
+CatalogAccess (fresh actor + taxonomy mutex) and CatalogAudit (transaction-required,
+default-redacted actor audit); new brand-service runtime verification is pending.

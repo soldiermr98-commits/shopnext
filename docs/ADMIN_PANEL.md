@@ -148,11 +148,37 @@ parent changes use the real parent field with cycle validation.
 
 screen | action | REAL/tested | test name
 --- | --- | --- | ---
-Category tree | role-gated route/new/edit/save/delete/move/explore | PENDING CI | CategoryEditorTest: L3a category screen and every mutation deny each excluded role independently
-Category tree | new/edit/image/SEO/child exploration/root/back/up/down/delete | PENDING CI | CategoryEditorTest: L3a category screen persists edit image SEO tree navigation both reorder directions and guarded deletion
-Category tree | SVG/duplicate/cycle errors and failed-upload cleanup | PENDING CI | CategoryEditorTest: L3a category screen rejects invalid upload duplicate slug and cyclic parents without false success or orphan files
-Category tree | previous/next pagination;1000-row query bounds | PENDING CI | CategoryEditorTest: L3a category screen paginates large root lists without N plus one category queries
+Category tree | role-gated route/new/edit/save/delete/move/explore | REAL, CI39734575452/39734581936 | CategoryEditorTest: L3a category screen and every mutation deny each excluded role independently
+Category tree | new/edit/image/SEO/child exploration/root/back/up/down/delete | REAL, CI39734575452/39734581936 | CategoryEditorTest: L3a category screen persists edit image SEO tree navigation both reorder directions and guarded deletion
+Category tree | SVG/duplicate/cycle errors and failed-upload cleanup | REAL, CI39734575452/39734581936 | CategoryEditorTest: L3a category screen rejects invalid upload duplicate slug and cyclic parents without false success or orphan files
+Category tree | previous/next pagination;1000-row query bounds | REAL, CI39734575452/39734581936 | CategoryEditorTest: L3a category screen paginates large root lists without N plus one category queries
 
 Service-only checkpoint fddb89a passed ALL8 on push39732115679 and PR39732121080,
 240tests/PHP job (PHP8.2MySQL8:7983 assertions). Screen verification is separate and
 must pass its own CI before brands/attributes. No visual/browser/a11y claim.
+
+### Category screen runtime verified
+
+69388b7: ALL8 SUCCESS on push39734575452 and PR39734581936. Each SQL job250tests,
+8107/8108 assertions; all5 real financial races each. Exact manifest:
+[category verified matrix](ci/l3a-category-verified-matrix.json). Upload rejection
+is preserved before schema validation; a valid replacement recovers correctly.
+The documented500-sibling reorder limit remains; full L3a is still incomplete.
+
+## Brands service sub-step — screen not wired yet
+
+Brands uses the fresh Category-style product-management policy and shared catalog
+SQL lock/audit helpers. It persists name/unique slug/country/official flag/safe raster
+logo, protects product-referenced deletion, and paginates30 rows. Unknown audit
+attributes are redacted by default; failures roll back the mutation transaction.
+
+screen | action | REAL/tested | test name
+--- | --- | --- | ---
+Brand domain (no panel button yet) | list/create/update/delete six roles | PENDING CI | BrandServiceTest: L3a brand service independently enforces all six roles for list create update delete and explicit actor audit
+Brand domain | slug/logo/product-delete guards | PENDING CI | BrandServiceTest: L3a brand service protects unique slugs referenced brands and raster logo validation with Persian errors
+Brand domain | stale active/password flags | PENDING CI | BrandServiceTest: L3a brand service checks fresh staff flags before writing
+Brand domain | audit rollback/default redaction | PENDING CI | BrandServiceTest: L3a brand and audit roll back together and catalog audit redacts unknown fields
+Brand domain |1000-row query bound | PENDING CI | BrandServiceTest: L3a brand lists use three bounded queries for one thousand rows
+
+Next after all eight gates green: brand screen/buttons through Brands, then
+attributes/terms. Product/media/stock/branding/deployment-cache concerns remain.

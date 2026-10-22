@@ -98,8 +98,9 @@ production deployment or later L3 sub-phases. L3a is authorized; STOP after its 
 
 Fast Pint + all seven original gates are retained (eight total). Jalali3.1.0
 passed the single runtime trial and retained integration CI39731170215/39731176780
-(230 tests per SQL job). Taxonomy now starts with the category domain service;
-its policy/SEO/mutex schema and tests are pending their own CI. The actual category
-screen, remaining taxonomy, products, media and stock adjustments are not complete.
+(230 tests per SQL job). Category service/editor passed CI39734575452/39734581936
+(250 tests per SQL job); brands service tests are pending their own CI. Brand UI,
+attributes/terms, products, media, stock adjustments and remaining foundation tasks
+are not complete. Category sibling reorder currently has an explicit500-row limit.
 See docs/ADMIN_PANEL.md for action-by-action evidence. No l3a-complete tag or later
 phase/production approval. Real browser/host/RTL/a11y/TLS/restore stay UNVERIFIED.
