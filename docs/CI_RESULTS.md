@@ -1,3 +1,11 @@
+## Exact Pint issue observed; fix pending runtime gate
+
+cfee362 / CI39724272554 finally exposes the actual diagnostic:
+app/Filament/Widgets/CronHeartbeat.php, self_static_accessor. The class is final,
+so its internal authorization call now uses self::canView(), with identical guard
+semantics. No rules/assertions disabled. All preceding failed backend jobs stopped
+at Pint; they do not count as executed Pest evidence. Rerun ALL7 after this fix.
+
 ## Diagnostic transport bug found and reproduced locally
 
 9731aa7 / CI39724063635 still failed Pint. The JSON report has no final newline;
