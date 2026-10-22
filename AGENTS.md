@@ -1,3 +1,20 @@
+# Current continuation — product content domain fast VERIFIED; editor PENDING
+
+- 503214f actual fast push39867647967 SUCCESS style+PHP8.3/MariaDB10.6;
+ 352tests9122assertions. Frontend intentionally skipped; not full-matrix proof.
+- NEW registered ProductContentEditor Page /admin/products/{product}/content:
+ RichEditor attachments OFF (verified Filament5.10.3 source), SafeUpload gallery
+ append within save, reorder drag/buttons, main/alt, grouped specs/FAQ and searchable
+ related/upsell/cross_sell. Locked context, fresh policies, bounded relation lookups,
+ domain writes and upload cleanup via shared trait, no price/stock fields.
+- Livewire/HTTP tests six roles/revoked actions/save/reload, real uploads/reorder/
+ main/alt/relations/clear and SVG/locked-context guards PENDING runtime fast CI.
+ Browser drag/visual/a11y still UNVERIFIED. Content UI has no top-level navigation;
+ link it from upcoming product list/editor. Product metadata/variants/bulk UI due.
+- WAIT selected fast CI green, then product/variation/bulk pages -> media -> stock
+ ledger reason+actor + bulk -> branding/nav/cache/finaldocs/full PR matrix/tag/stop.
+ Active arena/0f9a69e5-shopnext, no approval checkpoint or premature completion tag.
+
 # Current continuation — product content domain PENDING fast runtime
 
 - CI selector d571989 VERIFIED actual push39866911447: Pint + PHP8.3/MariaDB10.6

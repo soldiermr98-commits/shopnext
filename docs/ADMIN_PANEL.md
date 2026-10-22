@@ -423,3 +423,29 @@ kind. Relation input replaces all three kinds; omitted content sections remain
 unchanged. Existing metadata service already covers SEO and scheduled sale/flash
 fields. No drag-and-drop screen, upload library or product editor UI is claimed
 until those actions are implemented and exercised. Browser interaction UNVERIFIED.
+
+
+### Product content domain fast VERIFIED; Filament content editor PENDING
+
+All seven domain rows above are **REAL/tested on the fast combination**:
+[push39867647967](https://github.com/soldiermr98-commits/shopnext/actions/runs/39867647967),
+352 tests/9122 assertions, Pint + PHP8.3/MariaDB10.6 SUCCESS. Other databases and
+frontend were not executed in this fast push; full PR/tag verification remains due.
+
+New `/admin/products/{product}/content` Page is registered but runtime **PENDING**.
+It edits an existing product; the upcoming product list will provide its link.
+RichEditor file attachments are explicitly disabled; gallery uploads use SafeUpload
+and are appended in the same service-backed save. Native reorder drag handles and
+reorder buttons update form state; Save persists order/main/alt/content together.
+Reload explicitly discards unsaved state and reads the database. Relation selectors
+search at most30 products and resolve selected labels with one bounded query/kind.
+
+| Screen | Action | REAL/tested | Test name (ProductContentEditorTest) |
+|---|---|---|---|
+| Product content editor | HTTP/Livewire access, save/reload/upload handlers, six roles and stale revoked roles | Implemented; runtime UNVERIFIED | L3a content page independently gates six roles and every action after role revocation |
+| Product content editor | Safe real upload; save/reload ordered gallery, main/alt; all relation selectors; clear while retaining shared file | Implemented; runtime UNVERIFIED | L3a content page safely uploads persists ordered gallery alt main and all three relationship selectors |
+| Product content editor | Locked product context; reject SVG, no orphan files/false success | Implemented; runtime UNVERIFIED | L3a content page locks its product context and rejects executable upload without orphan files or false success |
+
+Browser drag-and-drop gestures, visual RTL and a11y remain UNVERIFIED; tests exercise
+persisted reordered form state, not a browser pointer. Full product/variation/bulk
+pages, media library and stock ledger actions are still pending.
