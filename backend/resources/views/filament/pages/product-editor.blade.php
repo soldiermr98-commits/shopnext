@@ -1,6 +1,7 @@
 <x-filament-panels::page>
     @if ($errors->any())<ul role="alert">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>@endif
     @if ($notice)<p role="status">{{ $notice }}</p>@endif
+    <a href="{{ \App\Filament\Pages\ProductBulkEditor::getUrl() }}">عملیات گروهی محصول‌ها</a>
     <x-filament::button type="button" wire:click="newProduct">محصول جدید</x-filament::button>
     <form wire:submit="save">
         {{ $this->form }}

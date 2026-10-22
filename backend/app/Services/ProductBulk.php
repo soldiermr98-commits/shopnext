@@ -61,9 +61,10 @@ final class ProductBulk
             if (Category::whereIn('id', $categoryIds)->count() !== count($categoryIds)) {
                 $this->fail('categories', 'دسته انتخاب‌شده معتبر نیست.');
             }
+            $memberships = DB::table('category_product')->whereIn('product_id', $products->modelKeys())->orderBy('category_id')->get()->groupBy('product_id');
             foreach ($products as $record) {
                 Gate::forUser($actor)->authorize('update', $record);
-                $before = DB::table('category_product')->where('product_id', $record->id)->orderBy('category_id')->pluck('category_id')->all();
+                $before = ($memberships->get($record->id) ?? collect())->pluck('category_id')->all();
                 DB::table('category_product')->where('product_id', $record->id)->delete();
                 foreach ($categoryIds as $id) {
                     DB::table('category_product')->insert(['product_id' => $record->id, 'category_id' => $id]);

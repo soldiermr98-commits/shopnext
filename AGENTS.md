@@ -1,3 +1,21 @@
+# Current continuation — bulk admin UI PENDING fast CI
+
+- D162ce3 matrix UI VERIFIED fast push39869734415: Pint+PHP8.3/MariaDB10.6
+ SUCCESS (exact counts in live annotations). Six roles/idempotent generate and
+ duplicate dimension rejection tested; owner-scoped lookups and locked parent.
+- NEW ProductBulkEditor registered /admin/product-bulk + product-list link:
+ bounded searchable products50/categories30, exact integer% price and category
+ replace/clear actions through ProductBulk, fresh policies, real affected-row
+ notices, error mapping. No stock action yet (reserved for reason+actor service).
+- ProductBulk.categories now snapshots all selected category memberships once,
+ not per product; new50-product five-SELECT assertion plus page six-role/revoked
+ writes/persist/clear/error/no-false-success cases PENDING fast runtime CI.
+- WAIT fast green. NEXT media library folders/replace/alt/usage/protected deletion/
+ queued WebP+thumb/sync fallback, then stock ledger reason+actor/service/actions and
+ bulk on it. Branding/nav/cache/deploy and final seven docs/full six-way PR/tag
+ evidence still due. No l3a-complete until entire scope green; stop only at approval.
+ Active arena/0f9a69e5-shopnext, no production authorization or Jalali new trial.
+
 # Current continuation — matrix UI PENDING fast CI
 
 - 31686d4 variation page VERIFIED fast push39869291945: Pint+PHP8.3/MariaDB10.6

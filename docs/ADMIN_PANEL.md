@@ -515,3 +515,26 @@ stock/prices/SKUs/trash and reports zero newly created rows honestly on reruns.
 
 Bulk UI, media and reason+actor stock actions plus final delivery remain due.
 Browser pointer/visual/a11y and full new SQL matrix remain UNVERIFIED.
+
+
+### Matrix page fast VERIFIED; bulk-action page PENDING
+
+Both VariantMatrixEditor rows above are **REAL/tested on fast SQL**:
+[push39869734415](https://github.com/soldiermr98-commits/shopnext/actions/runs/39869734415),
+Pint+PHP8.3/MariaDB10.6 SUCCESS. No full-matrix/browser claim.
+
+New `/admin/product-bulk` is registered in navigation and linked from products.
+Selectors are bounded50 products/30 categories with batched selected-label reads.
+Price action updates root and active variant prices through exact ProductBulk;
+category action explicitly replaces/clears only selected memberships. UI confirms
+the destructive category clear. There is no direct/bulk stock setter. Stock action
+will be added only on the later reason+actor ledger service.
+
+| Screen / domain | Action | REAL/tested | Test name (ProductBulkEditorTest) |
+|---|---|---|---|
+| Bulk products | Six-role HTTP/Livewire and revoked price/category actions; actual scoped price replacement/category clear/audit | Implemented; runtime UNVERIFIED | L3a bulk page independently gates six roles and revoked actions while persisting price category and clear |
+| Bulk products | Empty selection/fractional percent rejected without writes or success notice | Implemented; runtime UNVERIFIED | L3a bulk page rejects fractional percentages and missing selection without a success notice or mutation |
+| Bulk category domain | Snapshot50 selected memberships in5 SELECTs, not50 per-record lookups | Implemented; runtime UNVERIFIED | L3a category bulk snapshots fifty selected memberships in five SQL reads rather than per product queries |
+
+Media library, stock ledger/adjustment actions/bulk stock and final delivery remain
+pending. Their buttons are not displayed or represented as working yet.
