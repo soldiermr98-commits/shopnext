@@ -472,3 +472,25 @@ search30, list page30 with eager names and no rich-text hydration.
 
 Variation/matrix and bulk pages, media, reason+actor stock, final handoff remain
 due. Existing Jalali component is reused, not a new candidate trial.
+
+
+### Product metadata editor fast VERIFIED; variation editor PENDING
+
+All four ProductEditor rows above are **REAL/tested on fast SQL**:
+[push39868756342](https://github.com/soldiermr98-commits/shopnext/actions/runs/39868756342),
+369 tests/9377 assertions; Pint + PHP8.3/MariaDB10.6 green, not a full-matrix run.
+
+New `/admin/products/{product}/variants` is linked from variable product rows.
+Stock and canonical option identities are read-only. Manual SKU metadata, prices,
+sale/flash schedules, safe image uploads and soft trash/restore call Variants
+services; no hard delete. Existing stock/history/publication guards remain in the
+domain. Matrix generation UI remains separate forthcoming work.
+
+| Screen | Action | REAL/tested | Test name (VariantEditorTest) |
+|---|---|---|---|
+| Variations | HTTP/Livewire six roles and revoked new/edit/save/trash/restore/toggle/upload actions; actual price persistence | Implemented; runtime UNVERIFIED | L3a variation page gates six roles and revoked CRUD trash and upload actions and persists metadata |
+| Variations | Safe image upload; locked variable-parent context; cross-parent edit/restore rejection | Implemented; runtime UNVERIFIED | L3a variation page uploads real safe images and scopes edits and restores to its locked variable parent |
+| Variation list |1000-row fixture,30-row page; seven queries including fresh actors and eager option labels | Implemented; runtime UNVERIFIED | L3a variation page eager loads option labels on a thousand row fixture in seven bounded queries |
+
+Fast checks will verify these; browser UI interactions and all other SQL combinations
+for the new scope remain UNVERIFIED until their actual execution.

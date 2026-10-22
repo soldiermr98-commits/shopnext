@@ -10,6 +10,7 @@ use App\Filament\Pages\BrandEditor;
 use App\Filament\Pages\CategoryEditor;
 use App\Filament\Pages\ProductContentEditor;
 use App\Filament\Pages\ProductEditor;
+use App\Filament\Pages\VariantEditor;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
@@ -31,7 +32,7 @@ it('uses a local-assets Filament login and explicitly registered policy-gated ca
     $response->assertOk();
     expect($response->getContent())->not->toContain('fonts.bunny.net', 'fonts.googleapis.com', 'ui-avatars.com');
     // Catalog editors are explicitly registered Pages using domain services.
-    expect(Filament::getPanel('admin')->getPages())->toContain(CategoryEditor::class, BrandEditor::class, AttributeEditor::class, AttributeTermEditor::class, ProductContentEditor::class, ProductEditor::class);
+    expect(Filament::getPanel('admin')->getPages())->toContain(CategoryEditor::class, BrandEditor::class, AttributeEditor::class, AttributeTermEditor::class, ProductContentEditor::class, ProductEditor::class, VariantEditor::class);
     expect(Filament::getPanel('admin')->getResources())->toBeEmpty();
     Livewire::test(StaffLogin::class)->assertFormFieldIsHidden('remember');
     expect(is_file(public_path('images/staff-avatar.svg')))->toBeTrue();

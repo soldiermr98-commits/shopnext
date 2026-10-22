@@ -1,3 +1,17 @@
+# Current continuation — variation editor PENDING fast CI
+
+- Df03105 product editor VERIFIED push39868756342 fast Pint+MariaDB10.6/PHP8.3;
+ 369tests9377assertions. All metadata CRUD/types/SEO/errors/list/UTC dates green.
+- NEW /admin/products/{product}/variants, linked from variable product rows:
+ service-backed per-SKU prices/schedules/image/trash/restore, read-only inventory
+ and canonical options, scoped locked parent, fresh authorization, bounded eager
+ lists. SafeUpload cleanup uses shared trait. Matrix generator UI still NEXT.
+- VariantEditorTest six-role/revoked handlers/CRUD/upload/parent-scope/locked IDs
+ and1000-row seven-query page fixture PENDING actual fast CI.
+- WAIT fast green then matrix/bulk UI, media, stock ledger+bulk, final branding/
+ caches/deploy/docs/full PR six-way matrix, final tag then approval stop only.
+ Active arena/0f9a69e5-shopnext. No early completion or new Jalali trial.
+
 # Current continuation — product metadata editor PENDING fast CI
 
 - 44b690c content Editor VERIFIED fast push39868230626: Pint+PHP8.3/MariaDB10.6

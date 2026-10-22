@@ -576,3 +576,9 @@ SUCCESS: Pint+PHP8.3/MariaDB10.6,360 tests/9195 assertions. Product metadata pag
 and four new test groups now PENDING separate fast verification; no broader DB/
 frontend/browser claim. Existing AdminDate component reused for schedules; no
 Jalali candidate re-evaluation and no completion tag.
+
+
+Product metadata df03105 fast [push39868756342](https://github.com/soldiermr98-commits/shopnext/actions/runs/39868756342)
+SUCCESS: Pint+PHP8.3/MariaDB10.6,369 passed/9377 assertions, including saved Tehran
+publication/sale/flash UTC conversion and redisplay. Variation page/tests now
+PENDING next fast CI. No full SQL/frontend/browser result or final tag claimed.

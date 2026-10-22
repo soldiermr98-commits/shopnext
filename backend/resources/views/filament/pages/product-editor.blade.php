@@ -23,6 +23,7 @@
                 @else
                     <x-filament::button type="button" wire:click="edit({{ $product->id }})">ویرایش {{ $product->title }}</x-filament::button>
                     <a href="{{ \App\Filament\Pages\ProductContentEditor::getUrl(['product' => $product->id]) }}">محتوا و گالری {{ $product->title }}</a>
+                    @if ($product->type === 'variable')<a href="{{ \App\Filament\Pages\VariantEditor::getUrl(['product' => $product->id]) }}">تنوع‌های {{ $product->title }}</a>@endif
                     <x-filament::button type="button" color="danger" wire:click="delete({{ $product->id }})" wire:confirm="محصول به سطل زباله منتقل شود؟">حذف {{ $product->title }}</x-filament::button>
                 @endif
                 </td>
