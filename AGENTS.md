@@ -1,28 +1,314 @@
-# Shopnext handoff — L2 complete; main integration, 2026-10-22
+# Current continuation — bulk domain VERIFIED; product content/UI NEXT
 
-## Current state and authorization
-- L1 and L2 are complete implementation checkpoints. `l2-complete` is fixed at
-  5120dadbb1a60cf91877165c4ac09e1dbd783b2b, CI39602866142 ALL7 SUCCESS.
-  Each SQL/PHP job:218 tests,6789/6790 assertions (valid race outcome variation).
-- docs/L2_ACCEPTANCE.md maps every financial finding, evidence and deferred scope.
-- Owner authorized documentation refresh and PR merge into main, NOT L3 or deploy.
-  Keep work on arena/c101d8c3-shopnext. Merge using an explicit numbered GitHub PR;
-  never switch to or push directly to main. Do not move the completion tag.
-- After each commit wait for ALL7 backend.yml jobs green before another concern;
-  a red must be diagnosed/fixed, never bypassed. Read before writing; no secrets.
-- Five REAL separate-process/connection same-DB scenarios run in each SQL/PHP job.
-  Frontend fetch doubles are not SQL concurrency or rendered-browser evidence.
-- Integer Toman, exact fractions through discounts/VAT, final-line half-up only;
-  largest-remainder components are DISPLAY ONLY; signed rounding_adjustment.
-- ALL COD exempt minute expiry; configurable default7day unshipped admin FLAG,
-  NEVER automatic cancellation. Default non-COD unpaid/verification expiry30min.
-- Full wallet only; no mixed payments. COD/card need explicit authorized payment
-  confirmation; delivery never means paid. Actual-paid wallet refund once; redeemed
-  coupon usage retained. No gateway/SMS/loyalty formula/business Filament resources.
-- Preserve BOTH carts on login merge conflict. Checkout only valid owned account
-  cart/version/address; configured tariffs required. No invented zones/free shipping.
-- Host/browser/TLS/RTL/a11y/backup restore remain UNVERIFIED; tag/merge is not launch
-  certification. STOP after integration and await explicit L3 approval.
+- 5e5db96 ProductBulk VERIFIED push39862703481/PR39862709665 ALL8 SUCCESS.
+ Each SQL job339tests9037/9038assertions; all5 genuine financial races each.
+ Manifest docs/ci/l3a-product-bulk-verified-matrix.json parsed from live annotations
+ with job count/conclusion/tests/races assertions. Bulk service has no stock API.
+- Variant integrity ca4de24 previously ALL8/327tests; actual cart/COD snapshots,
+ SQL owner/membership/dimension/trashed-combination guards verified on all6 SQL.
+- Pint bulk callback style corrected from actual fast-gate diagnostics; expensive
+ jobs skipped on red (39862556040), all rerun green after fix. Migration rollback
+1553 fixed via parent index preservation; isolated rollback gate kept permanently.
+- NEXT: product content/gallery-main-alt/order/spec groups/FAQ/relations domain,
+ then real product + variant + bulk UI backed by verified services. Next media
+ folders/replace/alt/usage/protected delete/queued conversions/sync fallback, then
+ stock reason+actor ledger/service/actions (including bulk stock). Branding/nav/
+ cache/deploy-check and all seven final handoff docs/evidence/tag remain due.
+- No intermediate approval checkpoint. Full L3a NOT complete, no l3a-complete tag,
+ no L3b work, no production deployment or new credentials. Browser/host/TLS/a11y/
+ restore UNVERIFIED. PR2 open; branch arena/b4d40ed7-shopnext only.
+
+# Bulk domain formatter correction — PENDING full CI
+
+- 00ff000 push39862556040/PR39862563152 fast Pint RED, expensive jobs correctly
+ skipped. Actual reporter: ProductBulkTest unary_operator_spaces/no_unused_imports/
+ not_operator_with_successor_space. Removed unused Product import; expanded embedded
+ preincrement callback into explicit postincrement statement + nested guard.
+- No backend runtime tests executed in this red run; bulk remains UNVERIFIED.
+ WAIT ALL8 for correction before next concern. Variant integrity ca4de24 remains
+ verified327tests8966/8967assertions per SQL job/all5 races. No checkpoint approval.
+
+# Current continuation — bulk price/category domain PENDING CI
+
+- Ca4de24 variant integrity VERIFIED push39861719109/PR39861724632 ALL8.
+ Live conclusions and parsed test/race counts saved in new manifest
+ docs/ci/l3a-variant-integrity-verified-matrix.json. Actual cart/order zero-stock
+ protection and raw SQL ownership/unique/membership regressions passed ALL6.
+- NEW ProductBulk service: fresh actor/taxonomy lock, max50 selected products,
+ category replacement/clear max30, all-or-none exact whole-% integer half-up prices
+ across roots + active variants max1000 rows. Regular/sale/flash scaled together;
+ calendars, inventory, trash, immutable orders unchanged. No direct stock API.
+- ProductBulkTest six roles, exact prices/stock/calendar, selection/overflow late
+ rollback, category isolation/clear/audit rollback, stale safety flags and excessive
+ legacy variant expansion all PENDING actual CI. No new UI exposed yet.
+- WAIT ALL8. Then content/gallery/FAQ/spec groups/related/upsell/cross-sell domain
+ and actual product/variant/bulk UI -> media -> reason/actor stock service/actions
+ -> branding/nav/cache/deploy/full docs/evidence/tag. Continue without checkpoint
+ approval. No full L3a tag and no L3b work or deployment authorization.
+
+# Current continuation — variant domain VERIFIED; two security regressions pending
+
+- 7363831 VERIFIED push39860899337/PR39860906651 ALL8.325tests8952assertions
+ each SQL job; all5 genuine financial races each. Live parsed/checked manifest
+ docs/ci/l3a-variant-domain-verified-matrix.json. Style gate and full frontend green.
+- Actual rollback1553 variant_active_list FK dependency fixed by preserving parent
+ index. Isolated rollback/reapply + narrow down/up/orphan FK test ALL6 green.
+- Two NEW security regressions pending CI: real CartService + COD Checkout history
+ guards while stock0/parentdraft; changing catalog SKU/price preserves snapshots.
+ Direct SQL ownership/membership/dimension uniqueness and trash key reservation.
+ No domain behavior changed in this regression commit. WAIT ALL8 before NEXT.
+- NEXT product content/gallery/relations/bulk domain + real product UI -> media ->
+ reason/actor stock ledger/action -> branding/nav/cache/deploy checks and final
+ seven handoff docs/evidence/l3a-complete, then STOP for L3b approval only. Owner
+ explicitly says no intermediate checkpoint approval. No full completion tag.
+
+# Variant matrix rollback fix — actual error confirmed, re-verification PENDING
+
+- D098af2 diagnostic run39860602687 (PR39860608126): style/frontend SUCCESS;
+ all six isolated rollback checks fail. Read actual annotations from MySQL8 and
+ MariaDB10.6: SQLSTATE HY000/1553 Cannot drop index variant_active_list: needed in
+ a foreign key constraint. No guessing: InnoDB replaced implicit product_id index.
+- Fix: migration down ensures standalone product_id index BEFORE dropping matrix
+ indexes/table; never disables/drops FK. Lifecycle test additionally down/up this
+ one migration and directly proves orphan insert remains rejected after down.
+- Wait ALL8 on correction, then resolve any remaining variant tests. Only then
+ next concern content/gallery/relations/bulk/product UI -> media -> stock etc.
+- No checkpoints approval, no full completion/tag. All new variant tests still
+ UNVERIFIED pending actual matrix success. Original L2 invariants untouched.
+
+# Variant matrix CI diagnostic correction — RED, do not advance concern
+
+- A645b97 first push39859934377/PR39859939853 RED: style+frontend passed;
+ six SQL Pest jobs failed. Actual annotations: MigrationLifecycleTest failed,
+ followed by missing variant_attribute_terms in variant tests (11failed/314passed,
+ 8839 assertions on MariaDB10.6). Initial forward migration succeeded.
+- Artifact and job-log blob downloads unavailable (EOF). Existing annotations show
+ first60k chars and last3k only; root lifecycle detail in middle is inaccessible.
+- Added explicit isolated artisan rollback/reapply preflight before Pest in all six
+ SQL jobs, with existing redacted run-check reports. This exposes actual DDL error
+ directly and prevents misleading cascade of a half-rolled-back schema. It does
+ NOT replace MigrationLifecycleTest/full suite or suppress any exit code.
+- NEXT read actual rollback diagnostic, fix that same concern, wait ALL8 green.
+ No product content/UI/media/stock concern yet, no completion/tag/approval pause.
+
+# Current continuation — variant matrix domain PENDING runtime CI
+
+- Numeric-slug identity guard67d2824 VERIFIED push39747554267 and PR39747560377
+ ALL8 success (read live job conclusions). No Jalali re-trial or taxonomy redo.
+- NEW Variants service: fresh authorization/actor+taxonomy serialization, bounded
+ Cartesian generation100 combinations/call and500 retained variants/product,
+ canonical option ownership/unique combinations, root/variant SKU reservation,
+ zero initial stock/no direct inventory writes, sale/flash UTC metadata, safe image
+ references, soft-delete/restore. In-use or last published variation protected.
+- New migration adds combination identity/trash and composite owner/membership FKs;
+ rollback refuses data loss. Pricing/catalog omit trashed variants; arithmetic and
+ immutable L2 tag untouched. Existing legacy null-combination variants preserved.
+- New VariantServiceTest cases are UNVERIFIED until ALL8 actual CI jobs succeed.
+ Local git diff --check only. No local PHP/Composer; no runtime substitutes.
+- NEXT after ALL8: product content/gallery/relations/bulk and actual product UI,
+ then media -> stock reason+actor ledger/action -> branding/navigation/cache/deploy
+ checks and all seven handoff docs/full evidence/l3a-complete. Do not pause for
+ intermediate approval; do not tag early; stop only for L3b approval when complete.
+
+# Current continuation — product core VERIFIED; identity guard pending CI
+
+- 85bea48 product metadata foundation VERIFIED: push39746880119/PR39746886226
+ ALL8,308tests8782/8783assertions/job, all5 genuine races. Manifest now added
+ docs/ci/l3a-product-core-verified-matrix.json. Stock remains prohibited in metadata.
+- Narrow guard before variants: reserve ASCII-numeric slugs because retained public
+ endpoint accepts slug OR numeric ID; otherwise saved slug could alias another
+ product's ID/price. ProductServiceTest new persistence/HTTP identity regression
+ PENDING CI. No legacy values silently renamed, no SSR/redirect expansion.
+- WAIT ALL8 for this correction, then NEXT product variants/matrix domain -> content/
+ gallery/relations/bulk -> real product UI, then media -> reason/actor stock service
+ and actions. Branding/navigation/cache/deploy checks/final docs/tag still due.
+- Owner says continue L3a without checkpoint approval. No full completion tag yet.
+
+# Current continuation — product metadata foundation pending CI
+
+- B430903 attribute/term EDITORS VERIFIED: push39743792019/PR39743800775 ALL8;
+ 292tests8592/8593assertions/job, all5 real SQL races. Manifest committed next at
+ docs/ci/l3a-attribute-editor-verified-matrix.json. Taxonomy core/screens verified.
+- NEW Products service metadata-only: fresh actor/taxonomy mutex, all four draft
+ types, SKU checks across root/variant tables, Persian/Arabic integer parser without
+ floats, real full_description cast, existing sale/flash UTC fields, SEO/status,
+ guarded soft-delete/restore and bounded four-query brand eager lists. No stock
+ write; provided stock prohibited. Variable publish requires existing variants.
+- New migration adds published_at/meta/deleted_at/index, refuses lossy rollback.
+ CatalogPublication is shared effective UTC scheduled/trash predicate in catalog
+ and authoritative pricing; financial arithmetic untouched. Unicode product slug
+ route bounded255; Laravel12.70 toSymfonyRoute UTF-8 verified upstream.
+- ProductServiceTest role/price/type/SKU/schedule/description/rollback/staff flags/
+ big-list cases newly added, ALL PENDING runtime CI. No product UI exposed yet.
+- WAIT ALL8 before next concern; red -> fix. Then variants/matrix/content/gallery/
+ relations/bulk/product UI -> media -> stock adjustment service/action, followed by
+ branding/navigation/cache/deploy checks/final docs/tag. No checkpoint approval.
+
+# Current continuation — attribute/term editors pending CI
+
+- Ec044d4 attribute/term DOMAIN VERIFIED: push39741032336/PR39741037990 ALL8;
+ 280tests8384/8385assertions per SQL job; all5 financial races. Exact manifest:
+ docs/ci/l3a-attribute-domain-verified-matrix.json. Actual SQL hex CHECK and owner
+ composite FK passed all six SQL runtimes. Prior brand/category regressions green.
+- NEW AttributeEditor/AttributeTermEditor, explicit provider registration and
+ StaffAuth assertions; Persian views, real service CRUD/pagination, hex picker and
+ guarded swatch, shared safe image adapter. Term slug attributes/{attribute}/terms;
+ navigation false (requires context), Locked owner/editing IDs, invalid owner404.
+- AttributeEditorTest: six-role real CRUD/fresh role denial, image preserve,
+ SVG recovery/duplicate cleanup, hex/type/usage guards, locked/cross-owner404,
+ 1000-row pagination/query cases. ALL new editor runtime PENDING CI.
+- WAIT ALL8, red -> diagnose/fix. Only after full green continue products -> media
+ -> stock adjustments, then branding/navigation/production-cache/deploy checks and
+ final docs/tag. No owner checkpoint approval needed; full L3a still incomplete.
+
+# Current continuation — attribute/term domain pending CI
+
+- Brand editor5db7749 verified both ALL8 matrices39737666522/39737671288:
+ 270tests8266/8267assertions, five genuine races/job. Category remains green.
+- Reporter correction9c3493a ALL8 GREEN on39739168248/39739172687; latest-tail
+ annotation is bounded3000 chars, artifacts/18000-char summaries unchanged.
+- NEW Attributes service + CatalogAttribute/AttributeTerm models/TaxonomyPolicy,
+ master/term/pivot migration now added. Product pivot has composite owner FK; hex
+ SQL CHECK; service #RGB -> canonical #RRGGBB; safe images/type/scoped slug/delete
+ usage guards; explicit transactional actor audit. NO attribute/term UI yet.
+- AttributeServiceTest new six-role/SQL/image/rollback/big-list regressions PENDING
+ CI. WAIT ALL8; red -> fix before next concern. Then attribute/term screens with
+ swatch/upload and action tests -> products -> media -> stock. Branding/cache due.
+- Owner says continue to full L3a without checkpoint approval; no tag until verified.
+
+# Current continuation — brand editor VERIFIED; bounded report tail pending CI
+
+- 5db7749 brand editor/shared image adapter: push39737666522/PR39737671288 ALL8
+  GREEN;270tests8266/8267assertions per SQL job; all5 real SQL races each. Exact
+  docs/ci/l3a-brand-verified-matrix.json. Category image regressions remain green.
+- Tiny reporter-only fix: annotation tail6000 ->3000 to fit measured4096 limit,
+  retaining newest failures/counts. Full artifacts/summaries unchanged. Python3
+  tooling tests locally passed. Full CI for this correction is PENDING.
+- WAIT ALL8 then NEXT attributes/terms (hex swatch/image), followed strictly by
+  products -> media -> stock adjustments. Branding/navigation/production caches
+  still due. No new owner approval needed. No l3a-complete tag until all is verified.
+
+# Current continuation — brand editor/shared image regression pending
+
+- Brand domain4c24e6f push39736016898/PR39736022048 ALL8 GREEN;261tests/job,
+  PHP8.2MySQL8:8159assertions. Category screen earlier69388b7 verified250tests.
+- BrandEditor now registered as explicit Page with real service-backed fields,
+  logo/country/official flag, new/edit/save/delete and30-row Persian pagination.
+  Shared HandlesCatalogImage extracts the proven category upload safety; both
+  CategoryEditorTest and new BrandEditorTest are gates. StaffAuthTest now explicitly
+  asserts these Pages are registered; no auto-writing CRUD Resource introduced.
+- This new editor/adapter commit PENDING CI. Wait ALL8; fix red before next concern.
+- NEXT attributes/terms including hex swatch/image -> products -> media -> stock.
+  Branding/navigation + production caches still due. No l3a-complete tag or L3b work.
+  Continue without approval pauses until full L3a is actually verified.
+
+# Current continuation — brands domain service pending CI
+
+- Category editor69388b7 verified: push39734575452/PR39734581936 ALL8 GREEN;
+ 250tests/job8107/8108assertions, all5 genuine SQL races in each. Exact manifest
+ docs/ci/l3a-category-verified-matrix.json. Rejected temporary uploads stay blocked;
+ valid replacement recovery passed. Category UI reorder cap500 siblings explicit.
+- Brands service/policy plus shared CatalogAccess/CatalogAudit helpers now added,
+ no brand UI yet. New BrandServiceTest covers six roles, persisted CRUD/logo,
+ validation/delete protection, stale staff flags, audit rollback/redaction, big lists.
+- This new service sub-step PENDING CI. Wait ALL8 green, fix red before proceeding.
+- NEXT brand screen through real Brands service; then attributes/terms -> products
+ -> media -> stock adjustments. Branding/navigation + production caches still due.
+ No L3a-complete tag or L3b approval; owner says continue without checkpoint pauses.
+
+# Current continuation — category editor runtime pending
+
+- fddb89a category service: push39732115679/PR39732121080 ALL8 GREEN;240 tests/job,
+  PHP8.2MySQL8:7983assertions. Real service guards/audits/query bounds verified.
+- CategoryEditor now wired explicitly in panel, schema/forms/upload/SEO/tree,
+  root/child navigation,30-row Persian pagination, real up/down sibling reorder,
+  guarded delete. Reorder batch limit500 siblings is explicit; larger levels
+  fail with Persian validation, no fake success. Parent search max50.
+- CategoryEditorTest new screen/button/six-role/query/file-cleanup tests PENDING
+  CI. WAIT ALL8 green; red -> diagnose/fix before next concern.
+- Then continue taxonomy brands -> attributes/terms, products -> media -> stock;
+  no further owner checkpoint approval needed. Full L3a NOT complete, no tag.
+
+# Current continuation — category service sub-step
+
+- Retained Jalali integration e5f6d6b: CI39731170215 + PR39731176780 ALL8 GREEN;
+  230tests/PHP job (PHP8.2MySQL8:7886assertions). Date controls/displays runtime
+  verified, not actual visual/browser/RTL/a11y proof.
+- Taxonomy started ONLY with Categories domain service and policy/SEO/mutex schema.
+  CategoryServiceTest covers six roles, real persistence, tree/reorder/delete
+  guards, safe image reference, query bounds and transactional actor audit.
+  This new sub-step is PENDING CI; wait ALL8 before the next concern.
+- NEXT: wire actual category panel screen/actions through Categories and test each;
+  then brands -> attributes/terms -> products -> media -> stock adjustment service.
+  Category screen still NOT IMPLEMENTED. No checkpoint approval needed; continue
+  to full verified L3a, update required docs/tag only then STOP for L3b approval.
+
+# Latest continuation — Jalali integration, not L3a completion
+
+- Process gates/artifacts verified. Atomic race-result publication fixed actual
+  partial-JSON read; original five real SQL races and all financial assertions intact.
+- ONE candidate runtime trial GREEN:85db44e, CI39728458608 (eight gates+trial).
+  Twelve shipped-JS selection/midnight/timezone cases, Livewire SQL save/reload25
+  assertions. Retain ariaieboy/filament-jalali3.1.0; no second package trial.
+- Composer-generated production lock captured/verified from CI39730442729:
+  SHA256 d5edf8d6dc1944ddac6829f743caa33e24e7738b669ccf7d48886e9a82091138;
+  only ariaieboy/filament-jalali3.1.0 and ariaieboy/jalali1.1.0 added. Existing
+  versions unchanged. Temporary resolver/trial jobs removed, original eight remain.
+- Current integration commit adds AdminDate field/column/infolist helper and
+  permanent regression tests. Runtime status PENDING until its CI is inspected.
+- Continue without owner checkpoint approval: after ALL8 green, taxonomy (categories
+  first, then brands and attributes/terms) -> products -> media -> stock adjustments.
+  No business catalog/media/stock action implemented yet; no completion tag.
+- Host, end-to-end browser, visual RTL, a11y, TLS and restore remain UNVERIFIED.
+
+# Shopnext handoff — L3a in progress, 2026-10-22
+
+## Current state and authorization — L3a active, 2026-10-22
+- Owner approved L2 and authorized ONLY L3a foundation/catalog; STOP after verified
+  l3a-complete and request approval before L3b-L3e. No L4-L6 gateway/SMS/OTP or
+  credential pages, SEO server-side injection or deployment authorization.
+- Fixed ACTIVE branch arena/b4d40ed7-shopnext, based on merged main686e57f.
+  Never use the old merged session branch or push directly to main.
+- L2 immutable l2-complete=5120dad, CI39602866142 ALL7 success,218 tests/job.
+  All financial contracts in docs/PRICING.md and L2_ACCEPTANCE.md remain binding.
+- Every small commit MUST pass all eight backend.yml jobs (fast style + six PHP8.2/8.3 x
+  MySQL8/MariaDB10.6/11.4 plus frontend) before the next concern. Red -> diagnose
+  and fix without bypass. Unexecuted = UNVERIFIED; never print secrets.
+- Every panel screen/action/widget must have a real service/policy and Pest test,
+  per six-role legacy matrix. Maintain docs/ADMIN_PANEL.md action/test inventory.
+  No fake success or stock/wallet/order-total/status field editing. Stock/wallet
+  adjustments require reason/actor/audit; order changes use OrderLifecycle.
+- L3a: shell, categories/tree/reorder/SEO/image, brands, attributes/terms, products
+  (all four types, variants/matrix, relations/content/SEO/schedules/bulk actions),
+  media/folders/replace/alt/usage protection; catalog soft delete/restore.
+- Persian/RTL/local Vazirmatn, Persian digits/Toman/Jalali edge conversion; Gregorian
+  UTC storage. Jalali3.1.0 passed ONE actual runtime trial on Filament5.10.3; metadata alone
+  is NOT runtime/browser compatibility. No unreviewed new CDN/dependency.
+- No N+1, bounded/paginated lists, deferred heavy widgets. Safe validated media,
+  queued WebP/thumbnails plus safe sync fallback; no SVG/executables/in-use delete.
+- End L3a: README/ARCHITECTURE/DATABASE/ADMIN_PANEL/CI_RESULTS/CHANGELOG/AGENTS,
+  exact CI evidence, REAL/test table and UNVERIFIED list; then tag and STOP.
+- Shell98cfd43 CI39724414478 ALL7 green,226 tests/job and6844/6845 assertions;
+  all5 real L2 races executed per job. docs/ci/l3a-shell-verified-matrix.json.
+- Owner approved06c0371 shell and instructed CONTINUE L3a to completion, no new
+  approval between concerns. First process fix: fast independent Pint --test job,
+  matrix gated on it, redacted logs/artifacts/summaries. This adds an eighth job;
+  preserve original six SQL/PHP +frontend gates and require ALL8 green.
+- Jalali candidate gets ONE runtime iteration only. If not green, fall back to
+  Jalali read-only display +standard Gregorian picker with adjacent Jalali preview;
+  document tradeoff. No iterative dependency troubleshooting.
+- Implementation order NOW: taxonomy -> products -> media -> stock adjustments.
+  Stock still NEVER editable directly; reasoned service actions only. Do not reorder
+  scope based on older plans. Resources/actions need tests and ADMIN_PANEL rows.
+  No resources/stock services/Jalali picker complete yet. Do NOT tag L3a.
+- Pint can use --format=agent through tools/ci/pint-check.sh; --test exit retained.
+  JSON lacks final newline: annotation MUST start a fresh line. Prior missing
+  diagnostics were transport, not waived tests. Exact fixed style rule was
+  self_static_accessor in final CronHeartbeat. Native local PHP/vendor absent;
+  no local PHP runtime proof. ZIP logs can EOF; use check-run annotations.
+- Host/browser/TLS/RTL/a11y/restore remain UNVERIFIED. Respect L2 exact rational
+  pricing, full wallet/manual methods, ALL COD minute-expiry exemption,7day warning
+  only, preserve-both cart conflicts and fail-closed unconfigured shipping.
 
 ## Historical L1 evidence (current L2 evidence linked above)
 

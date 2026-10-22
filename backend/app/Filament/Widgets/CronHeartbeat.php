@@ -19,6 +19,8 @@ final class CronHeartbeat extends Widget
 
     public function status(): array
     {
+        abort_unless(self::canView(), 403);
+
         return app(Heartbeat::class)->status();
     }
 }

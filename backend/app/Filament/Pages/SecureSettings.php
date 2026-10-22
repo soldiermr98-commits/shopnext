@@ -17,6 +17,16 @@ final class SecureSettings extends Page
 
     public ?string $newValue = '';
 
+    public static function getNavigationLabel(): string
+    {
+        return 'تنظیمات محرمانه';
+    }
+
+    public function getTitle(): string
+    {
+        return 'تنظیمات محرمانه';
+    }
+
     public static function canAccess(): bool
     {
         return auth()->check() && Permissions::allows(auth()->user(), 'settings');

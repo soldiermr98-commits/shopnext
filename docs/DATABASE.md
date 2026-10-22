@@ -130,3 +130,42 @@ Cross-row money equality is enforced transactionally by domain services, not by
 pretending a CHECK constraint can inspect other tables. Six real database/PHP CI
 jobs cover constraints, rollback, triggers, races and no-dev migration smoke.
 Host restore/import/large-dataset performance remain UNVERIFIED.
+
+
+## L3a shell slice (in progress)
+No schema or production data changes in this concern. Heartbeat reads existing
+scheduler_heartbeats with2 bounded queries. Stock adjustment history, soft-deleted
+catalog relations, attribute terms and media usage schema are still pending L3a.
+Do not infer stock-ledger/media-library existence from the existing stock counters
+or safe upload primitive. ADMIN_PANEL.md records each unimplemented action.
+
+## L3a category editor foundation (verified CI39734575452/39734581936)
+
+Migration2026_10_22_000001 adds nullable category meta_title160/meta_description320
+and an order_index/id pagination index. `catalog_locks` contains the seeded
+`taxonomy` mutex row, locked in each category mutation transaction after fresh
+actor authorization. It serializes reparent/reorder/delete validation; existing
+category parent FK and unique slug remain authoritative. No stock/financial schema
+changed. Category delete currently guarded hard delete; product soft deletion is
+not implemented by this migration. Panel category editor is wired and runtime-tested; visual/browser/host checks remain UNVERIFIED.
+
+## L3a attribute/term foundation (new runtime pending)
+
+Migration2026_10_22_000002 adds catalog_attributes (unique slug, enum type),
+attribute_terms (owner-scoped unique slug, nullable canonical hex/image, order index)
+and product_attribute_terms. Terms use an actual SQL hex-format CHECK. The product
+pivot's composite (term_id,attribute_id) FK prevents attributing another owner's
+term to a product, and referenced term/product deletion is restricted. Root and
+term mutations share the existing taxonomy serialization mutex; no stock or
+financial columns changed. No product assignment screen exists in this sub-step.
+
+## L3a product metadata foundation — runtime pending
+
+Migration2026_10_22_000003 adds nullable Gregorian UTC published_at, SEO fields,
+soft deleted_at and publication index. New editorial state refuses destructive
+rollback. Root identifiers remain reserved while trashed; all pivots/FKs remain.
+Existing sale/flash TIMESTAMP fields are retained; editor-service dates explicitly
+bound to1970-01-02 inclusive through2038-01-19 exclusive for all SQL versions.
+Scheduled status becomes effectively visible at published_at without rewriting
+status. Both public catalog and authoritative pricing reject trashed/not-yet-live
+products. No monetary/stock schema, ledger or financial calculation changed.

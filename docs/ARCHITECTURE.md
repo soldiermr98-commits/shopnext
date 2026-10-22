@@ -191,3 +191,46 @@ Frontends never calculate totals; signed rounding reconciliation is part of invo
 projection. Private receipts never travel through public media routes. Cron enqueues
 bounded100 expiry +100 COD-warning candidates, rechecked while locked. No persistent
 worker/Redis/Supervisor is required. Production cron/hard timeout is UNVERIFIED.
+
+
+## L3a authorized, in progress — shell slice
+Panel locale is fa through scoped persistent AdminLocale middleware; storefront/API
+locale is not globally changed. Custom Vazirmatn explicitly uses LocalFontProvider,
+never Filament's custom-font CDN fallback. Cron stays lazy/read-only and checks
+permission inside status(), not only menu visibility. Six-role/Persian/query-bound
+regressions executed in CI39724414478 ALL7 green on98cfd43. No new business resource yet.
+Full action/status plan and date-picker evaluation: ADMIN_PANEL.md.
+
+## L3a taxonomy service foundation — not a finished editor
+
+Categories owns category mutations behind fresh per-transaction role checks,
+a taxonomy SQL mutex, explicit policy and actor-aware transactional audit. No
+Filament write bypass or category screen is introduced in this service sub-step.
+SafeUpload raster output can be referenced only when the local media file exists;
+free-form URLs, SVG and path traversal are rejected. Parent labels are eager-loaded
+on30-record pages. SEO metadata is stored only (no L4-L6 SSR injection). Service and actual category editor
+runtime validation passed CI39734575452/39734581936. Brands now adds shared
+CatalogAccess (fresh actor + taxonomy mutex) and CatalogAudit (transaction-required,
+default-redacted actor audit); new brand-service runtime verification is pending.
+
+## L3a attributes — domain sub-step, not a finished screen
+
+Attributes service owns master/term CRUD with product-management policies,
+CatalogAccess fresh actor locks and taxonomy mutex, CatalogAudit actor/redaction,
+scoped uniqueness and cross-owner validation. Existing terms prevent unsafe master
+type changes; product usage protects term deletion. New SQL composite ownership and
+hex constraints complement (not replace) Persian service validation. Attribute
+screens, product assignment/matrix, media registry and stock actions are not
+implemented by this service sub-step. Runtime status remains pending its own CI.
+
+## L3a product metadata foundation — pending runtime
+
+Products metadata service uses CatalogAccess actor/mutex, policy checks and explicit
+atomic CatalogAudit for create/update/soft-delete/restore. Inventory is prohibited
+in this contract; zero new stock uses the existing SQL default. CatalogInput rejects
+float/exponent/decimal coercion, normalizes Persian/Arabic digits to canonical
+bounded Toman integers. Product now sanitizes the actual full_description column
+(the legacy description alias remains compatible). CatalogPublication centralizes
+effective UTC schedule/trash availability for catalog and pricing, without changing
+financial fractions, tax/coupon/shipping/wallet/order mechanics or inventing a cron
+publish mutation. Matrix, content graph, bulk actions and UI remain next sub-steps.

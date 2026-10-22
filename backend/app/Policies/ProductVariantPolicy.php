@@ -25,4 +25,9 @@ final class ProductVariantPolicy extends FoundationPolicy
     {
         return $this->viewAny($user);
     }
+
+    public function restore(User $user, Model $record): bool
+    {
+        return $this->viewAny($user);
+    }
 }

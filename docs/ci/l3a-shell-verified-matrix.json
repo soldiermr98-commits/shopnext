@@ -1,0 +1,97 @@
+{
+  "sha": "98cfd43ce8204cd7629461a219a1eb72e9a0473d",
+  "run_id": 39724414478,
+  "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39724414478",
+  "scope": "Shell slice ONLY; NOT L3a completion or rendered-browser acceptance",
+  "jobs": [
+    {
+      "name": "Storefront and archived security regression tests",
+      "conclusion": "success",
+      "id": 119644948774
+    },
+    {
+      "name": "PHP 8.3 / mariadb:11.4",
+      "conclusion": "success",
+      "id": 119644949049,
+      "tests": 226,
+      "assertions": 6845,
+      "executed_l2_races": [
+        "REAL_FINANCIAL_RACE last_stock workers=8 separate-PIDs/connections overlapping; {\"rejected\":7,\"success\":1}",
+        "REAL_FINANCIAL_RACE coupon_capacity workers=8 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":3}",
+        "REAL_FINANCIAL_RACE wallet_spend workers=6 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":1}",
+        "REAL_FINANCIAL_RACE mark_paid workers=6 separate-PIDs/connections overlapping; {\"success\":6}",
+        "REAL_FINANCIAL_RACE cancel_pay workers=2 separate-PIDs/connections overlapping; {\"rejected\":1,\"success\":1}"
+      ]
+    },
+    {
+      "name": "PHP 8.2 / mysql:8.0",
+      "conclusion": "success",
+      "id": 119644949068,
+      "tests": 226,
+      "assertions": 6844,
+      "executed_l2_races": [
+        "REAL_FINANCIAL_RACE last_stock workers=8 separate-PIDs/connections overlapping; {\"rejected\":7,\"success\":1}",
+        "REAL_FINANCIAL_RACE coupon_capacity workers=8 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":3}",
+        "REAL_FINANCIAL_RACE wallet_spend workers=6 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":1}",
+        "REAL_FINANCIAL_RACE mark_paid workers=6 separate-PIDs/connections overlapping; {\"success\":6}",
+        "REAL_FINANCIAL_RACE cancel_pay workers=2 separate-PIDs/connections overlapping; {\"success\":1,\"rejected\":1}"
+      ]
+    },
+    {
+      "name": "PHP 8.2 / mariadb:11.4",
+      "conclusion": "success",
+      "id": 119644949131,
+      "tests": 226,
+      "assertions": 6845,
+      "executed_l2_races": [
+        "REAL_FINANCIAL_RACE last_stock workers=8 separate-PIDs/connections overlapping; {\"rejected\":7,\"success\":1}",
+        "REAL_FINANCIAL_RACE coupon_capacity workers=8 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":3}",
+        "REAL_FINANCIAL_RACE wallet_spend workers=6 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":1}",
+        "REAL_FINANCIAL_RACE mark_paid workers=6 separate-PIDs/connections overlapping; {\"success\":6}",
+        "REAL_FINANCIAL_RACE cancel_pay workers=2 separate-PIDs/connections overlapping; {\"rejected\":1,\"success\":1}"
+      ]
+    },
+    {
+      "name": "PHP 8.3 / mysql:8.0",
+      "conclusion": "success",
+      "id": 119644949136,
+      "tests": 226,
+      "assertions": 6844,
+      "executed_l2_races": [
+        "REAL_FINANCIAL_RACE last_stock workers=8 separate-PIDs/connections overlapping; {\"rejected\":7,\"success\":1}",
+        "REAL_FINANCIAL_RACE coupon_capacity workers=8 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":3}",
+        "REAL_FINANCIAL_RACE wallet_spend workers=6 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":1}",
+        "REAL_FINANCIAL_RACE mark_paid workers=6 separate-PIDs/connections overlapping; {\"success\":6}",
+        "REAL_FINANCIAL_RACE cancel_pay workers=2 separate-PIDs/connections overlapping; {\"success\":1,\"rejected\":1}"
+      ]
+    },
+    {
+      "name": "PHP 8.3 / mariadb:10.6",
+      "conclusion": "success",
+      "id": 119644949139,
+      "tests": 226,
+      "assertions": 6844,
+      "executed_l2_races": [
+        "REAL_FINANCIAL_RACE last_stock workers=8 separate-PIDs/connections overlapping; {\"rejected\":7,\"success\":1}",
+        "REAL_FINANCIAL_RACE coupon_capacity workers=8 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":3}",
+        "REAL_FINANCIAL_RACE wallet_spend workers=6 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":1}",
+        "REAL_FINANCIAL_RACE mark_paid workers=6 separate-PIDs/connections overlapping; {\"success\":6}",
+        "REAL_FINANCIAL_RACE cancel_pay workers=2 separate-PIDs/connections overlapping; {\"success\":1,\"rejected\":1}"
+      ]
+    },
+    {
+      "name": "PHP 8.2 / mariadb:10.6",
+      "conclusion": "success",
+      "id": 119644949274,
+      "tests": 226,
+      "assertions": 6844,
+      "executed_l2_races": [
+        "REAL_FINANCIAL_RACE last_stock workers=8 separate-PIDs/connections overlapping; {\"rejected\":7,\"success\":1}",
+        "REAL_FINANCIAL_RACE coupon_capacity workers=8 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":3}",
+        "REAL_FINANCIAL_RACE wallet_spend workers=6 separate-PIDs/connections overlapping; {\"rejected\":5,\"success\":1}",
+        "REAL_FINANCIAL_RACE mark_paid workers=6 separate-PIDs/connections overlapping; {\"success\":6}",
+        "REAL_FINANCIAL_RACE cancel_pay workers=2 separate-PIDs/connections overlapping; {\"success\":1,\"rejected\":1}"
+      ]
+    }
+  ]
+}

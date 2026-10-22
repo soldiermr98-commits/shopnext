@@ -1,0 +1,93 @@
+{
+  "sha": "ca4de24177e7f12f5491dc1dd5a57694a5736c92",
+  "push_run": 39861719109,
+  "pr_run": 39861724632,
+  "jobs": [
+    {
+      "job": "Fast Pint formatting dry-run",
+      "conclusion": "success"
+    },
+    {
+      "job": "Storefront and archived security regression tests",
+      "conclusion": "success"
+    },
+    {
+      "job": "PHP 8.2 / mysql:8.0",
+      "conclusion": "success",
+      "tests": 327,
+      "assertions": 8967,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "job": "PHP 8.3 / mariadb:10.6",
+      "conclusion": "success",
+      "tests": 327,
+      "assertions": 8967,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "job": "PHP 8.2 / mariadb:11.4",
+      "conclusion": "success",
+      "tests": 327,
+      "assertions": 8966,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "job": "PHP 8.3 / mariadb:11.4",
+      "conclusion": "success",
+      "tests": 327,
+      "assertions": 8966,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "job": "PHP 8.2 / mariadb:10.6",
+      "conclusion": "success",
+      "tests": 327,
+      "assertions": 8966,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "job": "PHP 8.3 / mysql:8.0",
+      "conclusion": "success",
+      "tests": 327,
+      "assertions": 8966,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    }
+  ]
+}

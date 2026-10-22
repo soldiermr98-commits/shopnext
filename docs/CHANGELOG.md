@@ -1,5 +1,71 @@
 # Changelog
 
+## 2026-10-22 — Attribute/term editors verified; product core started
+
+- B430903 passed both ALL8 matrices39743792019/39743800775,292tests8592/8593assertions.
+- Product metadata service, real full-description sanitization, strict integer
+  input, effective UTC publication and guarded soft-delete/restore pending CI.
+- No product screen, media library or stock adjustment claimed yet.
+
+## 2026-10-22 — L3a attribute/term domain verified, editors pending
+
+- Ec044d4 ALL8 on push39741032336/PR39741037990;280tests8384/8385assertions.
+- Wired real context-scoped master/term screens, hex picker/swatch, safe upload,
+  fresh role guards and pagination; new live action regressions pending CI.
+
+## 2026-10-22 — L3a attribute/term domain started
+
+- Brand screen5db7749 passed ALL8,270tests8266/8267assertions per SQL job.
+- Bounded diagnostic tail correction9c3493a passed both full matrices.
+- Added master/term schema/policies/services, scoped hex/image/usage/owner validation
+  and real SQL/query/role/audit regressions; new CI pending, no screen yet.
+
+## 2026-10-22 — L3a brand editor wired (runtime pending)
+
+- Brand domain4c24e6f passed ALL8,261tests per SQL job.
+- Registered service-backed brand Page, shared verified image-upload safety with
+  category editor, added per-button/role/logo/cleanup/query/pagination regressions.
+- New UI regression matrix pending; attributes/products/media/stock remain next.
+
+## 2026-10-22 — L3a category verified; brands service started
+
+- Category editor69388b7 passed ALL8,250tests/job8107/8108assertions, five real SQL
+  races each. Fixed rejected-upload error persistence and replacement recovery.
+- Brands service/policy/shared catalog lock+redacted audit helpers and service
+  regressions added; new runtime CI pending, brand screen not wired yet.
+
+## 2026-10-22 — L3a category editor wired (runtime pending)
+
+- Category service fddb89a passed all eight gates,240 tests per SQL job.
+- Wired policy-gated category tree/schema/SEO/safe uploads, real sibling movement,
+  deletion protection and Persian pagination; screen/button tests await CI.
+
+## 2026-10-22 — L3a category service started (not an editor yet)
+
+- Jalali production integration e5f6d6b passed all eight gates,230 tests per SQL job.
+- Added category policy/service/SEO+mutex migration and six-role, persistence,
+  validation/image/query-bound/audit-rollback tests; new sub-step CI pending.
+- No category panel buttons, brands/attributes/products/media/stock claimed done.
+
+## 2026-10-22 — L3a process gates and retained Jalali (not complete)
+
+- Added independent Pint dry-run before original seven jobs, redacted readable
+  summaries/artifacts; fixed hidden artifact uploads and actual race result-file
+  publication. All eight gates verified; financial code/invariants unchanged.
+- One Jalali3.1.0 runtime trial passed against Filament5.10.3. Integrated actual
+  Composer-generated lock, shared date controls/displays and permanent tests;
+  integration CI pending. No catalog/media/stock business UI claimed complete.
+
+## 2026-10-22 — L3a started (not complete)
+
+- Owner authorized foundation/catalog only; later admin phases remain gated.
+- Active session branch CI enabled; added panel-only Persian/RTL and explicit local
+  Vazirmatn, translated health/settings labels and widget read authorization.
+- Added six-role/HTTP/query-bound shell regressions; runtime CI39724414478 ALL7 green on98cfd43;226 tests/backend job.
+- Created ADMIN_PANEL screen/action/test inventory and honest Jalali candidate
+  evaluation against locked Filament5.10.3. No catalog/media action claimed yet.
+
+
 ## 2026-10-22 — L2 main integration handoff
 
 - Confirmed l2-complete at5120dad and final CI39602866142: ALL7 SUCCESS.

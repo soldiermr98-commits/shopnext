@@ -1,11 +1,12 @@
 <x-filament-widgets::widget>
     <x-filament::section>
         @php($status = $this->status())
-        <p>Cron last ran {{ $status['minutes'] === null ? 'never' : $status['minutes'].' minutes ago' }}.</p>
+        <h2>وضعیت زمان‌بند و صف</h2>
+        <p>آخرین اجرای زمان‌بند: {{ $status['minutes'] === null ? 'هنوز اجرا نشده' : \App\Support\Persian::digits($status['minutes']).' دقیقه پیش' }}</p>
         @if ($status['stale'] || ! $status['workerHealthy'])
-            <p role="alert">Warning: cron or database queue heartbeat is stale or unhealthy.</p>
+            <p role="alert">هشدار: زمان‌بند یا پردازش صف پایگاه‌داده به‌روز و سالم نیست.</p>
         @else
-            <p>Database queue heartbeat is healthy.</p>
+            <p>پردازش صف پایگاه‌داده سالم است.</p>
         @endif
     </x-filament::section>
 </x-filament-widgets::widget>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Financial\PricingService;
+use App\Services\CatalogPublication;
 use App\Services\RichText;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,7 @@ final class CatalogController
     public function index(Request $r)
     {
         $r->validate(['page' => ['sometimes', 'integer', 'between:1,10000'], 'limit' => ['sometimes', 'integer', 'between:1,50'], 'search' => ['nullable', 'string', 'max:200']]);
-        $q = DB::table('products')->where('status', 'published');
+        $q = CatalogPublication::query();
         if ($r->filled('search')) {
             $q->where('title', 'like', '%'.$r->input('search').'%');
         }
@@ -26,7 +27,7 @@ final class CatalogController
 
     public function show(string $slug)
     {
-        $p = DB::table('products')->where('status', 'published')->where(fn ($q) => $q->where('slug', $slug)->orWhere('id', ctype_digit($slug) ? $slug : 0))->first();
+        $p = CatalogPublication::query()->where(fn ($q) => $q->where('slug', $slug)->orWhere('id', ctype_digit($slug) ? $slug : 0))->first();
         abort_unless($p, 404);
 
         return response()->json(['product' => $this->project([$p])[0], 'related' => []]);
@@ -35,17 +36,18 @@ final class CatalogController
     private function project(array $products): array
     {
         $ids = array_map(fn ($p) => $p->id, $products);
-        $variants = DB::table('product_variants')->whereIn('product_id', $ids)->orderBy('id')->limit(5001)->get();
+        $variants = DB::table('product_variants')->whereNull('deleted_at')->whereIn('product_id', $ids)->orderBy('id')->limit(5001)->get();
         abort_if($variants->count() > 5000, 503, 'کاتالوگ نیاز به بخش‌بندی دارد.');
         $groups = $variants->groupBy('product_id');
         $categories = DB::table('category_product')->whereIn('product_id', $ids)->get()->groupBy('product_id');
+        $brands = DB::table('brands')->whereIn('id', array_unique(array_filter(array_map(fn ($p) => $p->brand_id, $products))))->pluck('name', 'id');
         $prices = app(PricingService::class);
 
-        return array_map(function ($p) use ($groups, $categories, $prices): array {
+        return array_map(function ($p) use ($groups, $categories, $brands, $prices): array {
             $unit = $prices->unitPrice($p);
             $vs = ($groups->get($p->id) ?? collect())->map(fn ($v) => ['id' => (string) $v->id, 'productId' => (string) $p->id, 'sku' => $v->sku, 'colorName' => $v->color_name, 'colorHex' => $v->color_hex, 'size' => $v->size, 'price' => $v->price, 'salePrice' => $prices->unitPrice($v) < $v->price ? $prices->unitPrice($v) : null, 'stock' => $v->stock, 'image' => $this->image($v->image)])->all();
 
-            return ['id' => (string) $p->id, 'title' => $p->title, 'slug' => $p->slug, 'sku' => $p->sku, 'brand' => $p->brand ?? '', 'categoryIds' => ($categories->get($p->id) ?? collect())->pluck('category_id')->map(fn ($id) => (string) $id)->all(), 'type' => $p->type, 'price' => $p->price, 'salePrice' => $unit < $p->price ? $unit : null, 'stock' => $p->type === 'variable' ? array_sum(array_column($vs, 'stock')) : $p->stock, 'rating' => (float) $p->rating, 'reviewsCount' => $p->reviews_count, 'mainImage' => $this->image($p->main_image), 'galleryImages' => [], 'shortDescription' => strip_tags($p->short_description ?? ''), 'fullDescription' => app(RichText::class)->clean($p->full_description), 'status' => 'published', 'featured' => (bool) $p->featured, 'tags' => json_decode($p->tags ?? '[]', true), 'attributes' => json_decode($p->attributes ?? '{}', true), 'specifications' => json_decode($p->specifications ?? '[]', true), 'variants' => $vs, 'createdAt' => $p->created_at];
+            return ['id' => (string) $p->id, 'title' => $p->title, 'slug' => $p->slug, 'sku' => $p->sku, 'brand' => $brands->get($p->brand_id) ?? $p->brand ?? '', 'categoryIds' => ($categories->get($p->id) ?? collect())->pluck('category_id')->map(fn ($id) => (string) $id)->all(), 'type' => $p->type, 'price' => $p->price, 'salePrice' => $unit < $p->price ? $unit : null, 'stock' => $p->type === 'variable' ? array_sum(array_column($vs, 'stock')) : $p->stock, 'rating' => (float) $p->rating, 'reviewsCount' => $p->reviews_count, 'mainImage' => $this->image($p->main_image), 'galleryImages' => [], 'shortDescription' => strip_tags($p->short_description ?? ''), 'fullDescription' => app(RichText::class)->clean($p->full_description), 'status' => 'published', 'featured' => (bool) $p->featured, 'tags' => json_decode($p->tags ?? '[]', true), 'attributes' => json_decode($p->attributes ?? '{}', true), 'specifications' => json_decode($p->specifications ?? '[]', true), 'variants' => $vs, 'createdAt' => $p->created_at];
         }, $products);
     }
 

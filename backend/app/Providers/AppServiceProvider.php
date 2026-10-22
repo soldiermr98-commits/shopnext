@@ -7,9 +7,11 @@ namespace App\Providers;
 use App\Filament\Auth\StaffLoginResponse;
 use App\Models\ActivityLog;
 use App\Models\Address;
+use App\Models\AttributeTerm;
 use App\Models\Banner;
 use App\Models\BlogPost;
 use App\Models\Brand;
+use App\Models\CatalogAttribute;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Coupon;
@@ -26,11 +28,14 @@ use App\Models\User;
 use App\Observers\AdminActivity;
 use App\Policies\ActivityLogPolicy;
 use App\Policies\AddressPolicy;
+use App\Policies\BrandPolicy;
+use App\Policies\CategoryPolicy;
 use App\Policies\FoundationPolicy;
 use App\Policies\OrderPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\ProductVariantPolicy;
 use App\Policies\SettingPolicy;
+use App\Policies\TaxonomyPolicy;
 use App\Policies\UserPolicy;
 use App\Support\Permissions;
 use App\Support\Phone;
@@ -57,14 +62,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        foreach ([User::class, Address::class, Category::class, Brand::class, Product::class, ProductVariant::class, Order::class, OrderItem::class, Coupon::class, BlogPost::class, Banner::class, Setting::class, Transaction::class, ReturnRequest::class, ReturnItem::class, CategoryProduct::class] as $model) {
+        foreach ([User::class, Address::class, Category::class, Brand::class, CatalogAttribute::class, AttributeTerm::class, Product::class, ProductVariant::class, Order::class, OrderItem::class, Coupon::class, BlogPost::class, Banner::class, Setting::class, Transaction::class, ReturnRequest::class, ReturnItem::class, CategoryProduct::class] as $model) {
             $model::observe(AdminActivity::class);
         }
         Gate::define('dashboard', fn (User $user): bool => Permissions::allows($user, 'dashboard'));
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Address::class, AddressPolicy::class);
-        Gate::policy(Category::class, FoundationPolicy::class);
-        Gate::policy(Brand::class, FoundationPolicy::class);
+        Gate::policy(Category::class, CategoryPolicy::class);
+        Gate::policy(Brand::class, BrandPolicy::class);
+        Gate::policy(CatalogAttribute::class, TaxonomyPolicy::class);
+        Gate::policy(AttributeTerm::class, TaxonomyPolicy::class);
         Gate::policy(Product::class, ProductPolicy::class);
         Gate::policy(ProductVariant::class, ProductVariantPolicy::class);
         Gate::policy(Order::class, OrderPolicy::class);

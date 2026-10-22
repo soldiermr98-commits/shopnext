@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Financial;
 
 use App\Models\User;
+use App\Services\CatalogPublication;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -24,7 +25,7 @@ final class PricingService
         $now = CarbonImmutable::now('UTC');
         $coupon = $this->coupon($code, $user, $now, $lock);
         $products = DB::table('products')->whereIn('id', array_column($items, 'product_id'))->orderBy('id')->when($lock, fn ($q) => $q->lockForUpdate())->get()->keyBy('id');
-        $variants = DB::table('product_variants')->whereIn('id', array_filter(array_column($items, 'variant_id')))->orderBy('id')->when($lock, fn ($q) => $q->lockForUpdate())->get()->keyBy('id');
+        $variants = DB::table('product_variants')->whereNull('deleted_at')->whereIn('id', array_filter(array_column($items, 'variant_id')))->orderBy('id')->when($lock, fn ($q) => $q->lockForUpdate())->get()->keyBy('id');
         $categories = DB::table('category_product')->whereIn('product_id', $products->keys())->when($lock, fn ($q) => $q->sharedLock())->get()->groupBy('product_id');
         $prepared = [];
         $eligible = Fraction::of(0);
@@ -34,7 +35,7 @@ final class PricingService
         foreach ($items as $key => $input) {
             $product = $products->get($input['product_id']);
             $variant = $input['variant_id'] === null ? null : $variants->get($input['variant_id']);
-            if (! $product || $product->status !== 'published' || ($input['variant_id'] !== null && (! $variant || $variant->product_id !== $product->id)) || ($product->type === 'variable' && ! $variant)) {
+            if (! $product || ! CatalogPublication::visible($product, $now) || ($input['variant_id'] !== null && (! $variant || $variant->product_id !== $product->id)) || ($product->type === 'variable' && ! $variant)) {
                 $this->fail('items', 'کالا یا تنوع انتخاب‌شده در دسترس نیست.');
             }
             $source = $variant ?? $product;
