@@ -30,6 +30,8 @@ final class CategoryEditor extends Page
     use WithFileUploads;
     use WithPagination;
 
+    private const IMAGE_ERROR = 'تصویر PNG، JPEG یا WebP حداکثر ۲ مگابایت و ۲۰۴۸ پیکسل انتخاب کنید.';
+
     protected string $view = 'filament.pages.category-editor';
 
     protected static ?string $slug = 'categories';
@@ -109,6 +111,10 @@ final class CategoryEditor extends Page
     {
         $actor = $this->actor();
         $this->notice = '';
+        // Schema validation must not erase a rejected temporary-file upload.
+        if ($this->getErrorBag()->has('imageUpload')) {
+            throw ValidationException::withMessages(['imageUpload' => self::IMAGE_ERROR]);
+        }
         $state = $this->form->getState();
         $newImage = null;
         try {
@@ -125,7 +131,7 @@ final class CategoryEditor extends Page
                 $messages = [];
                 foreach ($exception->errors() as $key => $errors) {
                     $messages[$key === 'file' ? 'imageUpload' : 'data.'.$key] = match ($key) {
-                        'file' => ['تصویر PNG، JPEG یا WebP حداکثر ۲ مگابایت و ۲۰۴۸ پیکسل انتخاب کنید.'],
+                        'file' => [self::IMAGE_ERROR],
                         'content' => ['متن توضیحات بیش از حد مجاز است.'],
                         default => $errors,
                     };
@@ -139,6 +145,22 @@ final class CategoryEditor extends Page
         $this->form->fill($record->getAttributes());
         $this->notice = 'دسته‌بندی ذخیره شد.';
         unset($this->records);
+    }
+
+    public function updatedImageUpload(): void
+    {
+        $this->actor();
+        if ($this->imageUpload !== null) {
+            $this->resetValidation('imageUpload');
+        }
+    }
+
+    public function _uploadErrored(string $name, ?string $errorsInJson, bool $isMultiple): void
+    {
+        $this->actor();
+        abort_unless($name === 'imageUpload', 422);
+        $this->dispatch('upload:errored', name: $name)->self();
+        throw ValidationException::withMessages(['imageUpload' => self::IMAGE_ERROR]);
     }
 
     public function delete(int $id): void

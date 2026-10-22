@@ -80,8 +80,9 @@ it('L3a category screen rejects invalid upload duplicate slug and cyclic parents
     $this->actingAs($actor, 'web');
     $root = app(Categories::class)->save($actor, ['title' => 'ریشه', 'slug' => 'root']);
     $child = app(Categories::class)->save($actor, ['title' => 'فرزند', 'slug' => 'child', 'parent_id' => $root->id]);
-    Livewire::test(CategoryEditor::class)->fillForm(['title' => 'تصویر', 'slug' => 'bad-image'])->set('imageUpload', UploadedFile::fake()->createWithContent('bad.svg', '<svg onload="alert(1)"></svg>'))->call('save')->assertHasErrors('imageUpload')->assertSet('notice', '');
+    Livewire::test(CategoryEditor::class)->fillForm(['title' => 'تصویر', 'slug' => 'bad-image'])->set('imageUpload', UploadedFile::fake()->createWithContent('bad.svg', '<svg onload="alert(1)"></svg>'))->assertHasErrors('imageUpload')->call('save')->assertHasErrors('imageUpload')->assertSet('notice', '');
     expect(Storage::disk('local')->allFiles('media'))->toBeEmpty();
+    expect(Category::where('slug', 'bad-image')->exists())->toBeFalse();
     Livewire::test(CategoryEditor::class)->fillForm(['title' => 'تکراری', 'slug' => 'root'])->set('imageUpload', UploadedFile::fake()->image('safe.png', 16, 16))->call('save')->assertHasErrors('data.slug')->assertSet('notice', '');
     expect(Storage::disk('local')->allFiles('media'))->toBeEmpty();
     Livewire::test(CategoryEditor::class)->call('edit', $root->id)->fillForm(['title' => 'چرخه', 'slug' => 'root', 'parent_id' => $child->id])->call('save')->assertHasErrors('data.parent_id');
@@ -105,4 +106,16 @@ it('L3a category screen paginates large root lists without N plus one category q
     expect(count($queries))->toBeLessThanOrEqual(5);
     $component->call('nextPage')->assertSee('>category-30</td>', false)->assertDontSee('>category-999</td>', false);
     $component->call('previousPage')->assertSee('>category-0</td>', false)->assertDontSee('>category-30</td>', false);
+});
+
+it('L3a category screen recovers a rejected temporary upload only after a valid replacement', function () {
+    Storage::fake('local');
+    $this->actingAs(User::factory()->create(['role' => 'admin']), 'web');
+    $component = Livewire::test(CategoryEditor::class)->fillForm(['title' => 'جایگزین', 'slug' => 'replacement'])
+        ->set('imageUpload', UploadedFile::fake()->createWithContent('bad.svg', '<svg></svg>'))->assertHasErrors('imageUpload')
+        ->call('save')->assertHasErrors('imageUpload')->assertSet('notice', '');
+    expect(Category::count())->toBe(0);
+    $component->set('imageUpload', UploadedFile::fake()->image('safe.png', 16, 16))->call('save')->assertHasNoErrors()->assertSet('notice', 'دسته‌بندی ذخیره شد.');
+    $category = Category::where('slug', 'replacement')->firstOrFail();
+    Storage::disk('local')->assertExists('media/'.basename($category->image));
 });

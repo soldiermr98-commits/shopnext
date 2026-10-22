@@ -1,3 +1,18 @@
+# Category editor upload-state failure diagnosed; fix pending
+
+8850e70 / push CI39733779080 and PR CI39733786115: all six SQL jobs RED,
+1 failed248 passed per job. Failure at CategoryEditorTest.php:83: after SVG temporary
+upload rejection, clicking Save left no validation error. Existing Livewire config
+already applies MediaRequest::FILE_RULES to temporary uploads. The form's getState
+validation cleared that non-schema upload error while the upload property was null.
+
+Fix: reject a pending imageUpload error BEFORE schema validation, translate the
+upload error callback in Persian, and clear it only on a successfully replaced
+TemporaryUploadedFile (or explicit new-form reset). Keep SafeUpload checks and
+failed-new-file cleanup unchanged. Preserve failure assertion, assert no category
+was created, add successful valid-replacement recovery test. No gate bypass or
+next concern. Editor runtime remains PENDING until full corrected CI succeeds.
+
 # Category domain service VERIFIED; actual editor pending CI
 
 fddb89a / [push CI39732115679](https://github.com/soldiermr98-commits/shopnext/actions/runs/39732115679)
