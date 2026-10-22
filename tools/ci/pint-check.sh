@@ -7,6 +7,7 @@ trap 'rm -f "$report"' EXIT
 status=0
 vendor/bin/pint --test --format=agent > "$report" || status=$?
 cat "$report"
+printf '\n'
 if [ "$status" -ne 0 ]; then
   python3 - "$report" <<'PYREPORT'
 import json, sys

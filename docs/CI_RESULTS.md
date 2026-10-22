@@ -1,3 +1,13 @@
+## Diagnostic transport bug found and reproduced locally
+
+9731aa7 / CI39724063635 still failed Pint. The JSON report has no final newline;
+our cat output joined the FIRST workflow annotation onto the JSON line, so GitHub
+did not recognize it. This explains missing diagnostics; earlier report-schema/
+lint hypotheses were NOT an observed style diagnosis. Added an explicit newline.
+Executed isolated wrapper tests with a stub Pint (not real PHP/Pint): nonzero1 and
+success0 preserved, and a standalone annotation exists even without JSON newline.
+Actual Pint/runtimes still require the next complete matrix; no gate bypass.
+
 ## Reporter shape follow-up (still RED)
 
 f2c8356 / CI39723879111: Pint agent result fail was observed, but no files/errors
