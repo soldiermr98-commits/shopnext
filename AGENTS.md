@@ -1,3 +1,22 @@
+# Current continuation — variant matrix domain PENDING runtime CI
+
+- Numeric-slug identity guard67d2824 VERIFIED push39747554267 and PR39747560377
+ ALL8 success (read live job conclusions). No Jalali re-trial or taxonomy redo.
+- NEW Variants service: fresh authorization/actor+taxonomy serialization, bounded
+ Cartesian generation100 combinations/call and500 retained variants/product,
+ canonical option ownership/unique combinations, root/variant SKU reservation,
+ zero initial stock/no direct inventory writes, sale/flash UTC metadata, safe image
+ references, soft-delete/restore. In-use or last published variation protected.
+- New migration adds combination identity/trash and composite owner/membership FKs;
+ rollback refuses data loss. Pricing/catalog omit trashed variants; arithmetic and
+ immutable L2 tag untouched. Existing legacy null-combination variants preserved.
+- New VariantServiceTest cases are UNVERIFIED until ALL8 actual CI jobs succeed.
+ Local git diff --check only. No local PHP/Composer; no runtime substitutes.
+- NEXT after ALL8: product content/gallery/relations/bulk and actual product UI,
+ then media -> stock reason+actor ledger/action -> branding/navigation/cache/deploy
+ checks and all seven handoff docs/full evidence/l3a-complete. Do not pause for
+ intermediate approval; do not tag early; stop only for L3b approval when complete.
+
 # Current continuation — product core VERIFIED; identity guard pending CI
 
 - 85bea48 product metadata foundation VERIFIED: push39746880119/PR39746886226

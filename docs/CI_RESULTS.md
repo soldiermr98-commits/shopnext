@@ -464,3 +464,13 @@ and Composer solve records remain historical; their smaller counts are supersede
 Local native PHP/Pint syntax/style are not database/Pest evidence. Full acceptance
 on the owner's real browser, host, TLS, FTP, cron/process limits and restore remains
 **UNVERIFIED**: [ACCEPTANCE](ACCEPTANCE.md). No L2 or production launch approval.
+
+
+## L3a variant matrix domain — runtime PENDING
+
+67d2824 numeric-slug guard is VERIFIED: [push39747554267](https://github.com/soldiermr98-commits/shopnext/actions/runs/39747554267)
+and [PR39747560377](https://github.com/soldiermr98-commits/shopnext/actions/runs/39747560377)
+all eight live job conclusions SUCCESS. New Variants domain/migration and
+VariantServiceTest are UNVERIFIED pending the next full CI matrix. Executed local
+preflight: git diff --check only; no local PHP/Composer/database runtime claim.
+No full L3a completion tag; product content/UI, media, stock and final handoff remain.

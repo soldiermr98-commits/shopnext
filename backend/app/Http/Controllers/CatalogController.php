@@ -36,7 +36,7 @@ final class CatalogController
     private function project(array $products): array
     {
         $ids = array_map(fn ($p) => $p->id, $products);
-        $variants = DB::table('product_variants')->whereIn('product_id', $ids)->orderBy('id')->limit(5001)->get();
+        $variants = DB::table('product_variants')->whereNull('deleted_at')->whereIn('product_id', $ids)->orderBy('id')->limit(5001)->get();
         abort_if($variants->count() > 5000, 503, 'کاتالوگ نیاز به بخش‌بندی دارد.');
         $groups = $variants->groupBy('product_id');
         $categories = DB::table('category_product')->whereIn('product_id', $ids)->get()->groupBy('product_id');

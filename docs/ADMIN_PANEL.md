@@ -304,3 +304,30 @@ screen | action | REAL/tested | test name
 Product metadata domain | reject numeric slug alias, preserve ID/slug identity and actual prices | PENDING CI | ProductServiceTest: L3a product slugs reserve the numeric ID namespace so a saved slug cannot resolve to another product
 
 No product screen/matrix/gallery/bulk/media/stock completion is inferred.
+
+
+## L3a continuation — variant matrix domain (runtime PENDING)
+
+The numeric-slug guard67d2824 is VERIFIED: push39747554267 and PR39747560377
+completed all eight jobs. The following new implementation is **UNVERIFIED**
+until its actual SQL matrix completes; it is not a claim of a delivered UI.
+
+| Screen / domain | Action | REAL / tested status | Pest test name (VariantServiceTest) |
+|---|---|---|---|
+| Products / variations (UI still pending) | Service list/create/update/trash/restore and actor audit; all six roles | Implemented; runtime UNVERIFIED | L3a variants independently gate all six roles on list save matrix delete restore and audit the actor |
+| Product matrix domain | Bounded Cartesian generation; canonical combinations; idempotent reruns preserve SKU/prices/stock/trash | Implemented; runtime UNVERIFIED | L3a Cartesian matrix canonicalizes dimensions and never overwrites existing prices SKUs stock or trash on rerun |
+| Product matrix domain | Owner/duplicate/expansion validation; entire batch rollback on second-row SKU collision | Implemented; runtime UNVERIFIED | L3a matrix rejects wrong owners duplicates excessive expansion and rolls back earlier rows on SKU collision |
+| Variation metadata | Persian errors; integer money, root/variant SKU uniqueness, sale/flash windows, safe stored-image references; no stock field | Implemented; runtime UNVERIFIED | L3a variant validation rejects direct inventory floats duplicate SKU combinations invalid sales and unsafe images in Persian |
+| Variation lifecycle | Stock/history/cart guard; last published variation guard; reserved deleted identities; restore scoped to parent | Implemented; runtime UNVERIFIED | L3a variant parent identity term ownership stock and publication protections survive soft deletion |
+| Variation list domain | 1,000-row fixture; page30 with eager option labels, six queries | Implemented; runtime UNVERIFIED | L3a variant thousand row lists eagerly load bounded option labels in six queries |
+| Public catalog / authoritative pricing | Trashed variation never projected or quoted despite stale positive stock | Implemented; runtime UNVERIFIED | L3a deleted variants are absent from catalog and rejected by authoritative pricing even with stale stock |
+| Variation audit / migration | Transaction rollback on audit failure; refuse lossy migration rollback | Implemented; runtime UNVERIFIED | L3a variant audit failures atomically roll back metadata option membership deletion and restoration; L3a variant migration refuses lossy rollback of persisted combinations or trash |
+| Variation authorization | Refresh safety flags before every operation | Implemented; runtime UNVERIFIED | L3a variant actions reauthorize stale actors after either safety flag changes |
+
+Matrix limits:1–4 attributes,1–20 terms/dimension, at most100 Cartesian combinations
+per operation and500 retained rows/product (trash included). Generation is atomic,
+skips existing combinations including trash, and never resets inventory/prices/SKUs.
+Existing legacy variants without matrix keys remain valid. New variants start at
+zero stock; stocking is reserved for the later reason+actor adjustment service.
+Variation option membership is protected by composite product/term-owner FKs.
+Retained historical variants and SKUs cannot be reassigned across products.

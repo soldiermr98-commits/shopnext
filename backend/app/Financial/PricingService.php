@@ -25,7 +25,7 @@ final class PricingService
         $now = CarbonImmutable::now('UTC');
         $coupon = $this->coupon($code, $user, $now, $lock);
         $products = DB::table('products')->whereIn('id', array_column($items, 'product_id'))->orderBy('id')->when($lock, fn ($q) => $q->lockForUpdate())->get()->keyBy('id');
-        $variants = DB::table('product_variants')->whereIn('id', array_filter(array_column($items, 'variant_id')))->orderBy('id')->when($lock, fn ($q) => $q->lockForUpdate())->get()->keyBy('id');
+        $variants = DB::table('product_variants')->whereNull('deleted_at')->whereIn('id', array_filter(array_column($items, 'variant_id')))->orderBy('id')->when($lock, fn ($q) => $q->lockForUpdate())->get()->keyBy('id');
         $categories = DB::table('category_product')->whereIn('product_id', $products->keys())->when($lock, fn ($q) => $q->sharedLock())->get()->groupBy('product_id');
         $prepared = [];
         $eligible = Fraction::of(0);
