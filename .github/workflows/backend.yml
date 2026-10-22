@@ -116,7 +116,7 @@ jobs:
           composer show --locked pestphp/pest
       - name: Pint
         working-directory: backend
-        run: vendor/bin/pint --test
+        run: bash ../tools/ci/pint-check.sh
       - name: Migrate dedicated test database
         working-directory: backend
         run: |

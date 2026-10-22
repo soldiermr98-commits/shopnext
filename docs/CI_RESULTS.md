@@ -1,3 +1,11 @@
+## L3a first execution: RED, not accepted
+
+1b0cb02 / CI39723437326: frontend succeeded; all six backend jobs failed Pint
+before Pest. No PHP runtime tests claimed. Full log download failed with EOF from
+GitHub log storage, so Pint now retains --test and its original failing exit code
+and emits only file/rule metadata to annotations. This is diagnostic visibility,
+NOT a waiver or formatter auto-fix. Determine exact style issue from the rerun.
+
 # L3a current concern — CI pending
 
 New active branch arena/b4d40ed7-shopnext is enabled in backend.yml. Persian/local-font
