@@ -348,8 +348,8 @@ jobs:
           data = Path('composer.lock').read_bytes()
           packed = base64.b64encode(zlib.compress(data)).decode()
           print('::notice title=lock-sha256::' + hashlib.sha256(data).hexdigest())
-          for index, start in enumerate(range(0, len(packed), 2500)):
-              print(f'::notice title=lock-part-{index:03d}::' + packed[start:start+2500])
+          for index, start in enumerate(range(0, len(packed), 25000)):
+              print(f'::notice title=lock-part-{index:03d}::' + packed[start:start+25000])
           PYLOCK
       - uses: actions/upload-artifact@v4
         if: always()

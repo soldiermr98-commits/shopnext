@@ -1,3 +1,15 @@
+# Composer lock validated — public transport correction
+
+b1e8e28 / [push CI39729633416](https://github.com/soldiermr98-commits/shopnext/actions/runs/39729633416)
+and [PR CI39729638018](https://github.com/soldiermr98-commits/shopnext/actions/runs/39729638018):
+all eight original gates SUCCESS on both; separate lock generation/strict validation
+SUCCESS on push. The public lock artifact uploaded (50074 bytes); annotation transport
+retained only nine2500-character parts plus checksum, not the complete compressed
+stream. Local decompression correctly failed and NO production dependency files
+were written. Increase part size (below GitHub's annotation limit) to keep the complete
+public compressed lock within the per-step notice count. Continue verifying SHA256
+before writing. No runtime trial repetition, dependency guessing or gate bypass.
+
 # Strict lock warning diagnosed; standard patch-range constraint correction
 
 f63cd60 / [push CI39729265124](https://github.com/soldiermr98-commits/shopnext/actions/runs/39729265124):
