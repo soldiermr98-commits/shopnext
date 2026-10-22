@@ -1,3 +1,19 @@
+# Bounded diagnostics VERIFIED; attribute/term domain pending CI
+
+9c3493a / [push CI39739168248](https://github.com/soldiermr98-commits/shopnext/actions/runs/39739168248)
+and [PR CI39739172687](https://github.com/soldiermr98-commits/shopnext/actions/runs/39739172687):
+ALL8 SUCCESS. Three diagnostic-tool tests including newest-tail retention passed;
+full six SQL jobs and frontend unchanged.
+
+Next taxonomy sub-step adds catalog_attributes, attribute_terms and a composite
+owner-enforced product_attribute_terms pivot; shared product-management policies,
+fresh/mutex-serialized Attributes service and explicit actor audit. Hex #RGB is
+canonicalized to #RRGGBB, image terms reference existing SafeUpload rasters only.
+Tests cover six-role CRUD, scoped uniqueness/type and usage guards, actual SQL hex
+and owner constraints, safe images, audit rollback and1000-row query bounds.
+New domain runtime remains PENDING CI. No attribute/term screen or product mutation
+is exposed yet; no media/stock/later-phase concern started.
+
 # Brand editor VERIFIED; diagnostic tail bound correction pending
 
 5db7749 / [push CI39737666522](https://github.com/soldiermr98-commits/shopnext/actions/runs/39737666522)

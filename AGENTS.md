@@ -1,3 +1,18 @@
+# Current continuation — attribute/term domain pending CI
+
+- Brand editor5db7749 verified both ALL8 matrices39737666522/39737671288:
+ 270tests8266/8267assertions, five genuine races/job. Category remains green.
+- Reporter correction9c3493a ALL8 GREEN on39739168248/39739172687; latest-tail
+ annotation is bounded3000 chars, artifacts/18000-char summaries unchanged.
+- NEW Attributes service + CatalogAttribute/AttributeTerm models/TaxonomyPolicy,
+ master/term/pivot migration now added. Product pivot has composite owner FK; hex
+ SQL CHECK; service #RGB -> canonical #RRGGBB; safe images/type/scoped slug/delete
+ usage guards; explicit transactional actor audit. NO attribute/term UI yet.
+- AttributeServiceTest new six-role/SQL/image/rollback/big-list regressions PENDING
+ CI. WAIT ALL8; red -> fix before next concern. Then attribute/term screens with
+ swatch/upload and action tests -> products -> media -> stock. Branding/cache due.
+- Owner says continue to full L3a without checkpoint approval; no tag until verified.
+
 # Current continuation — brand editor VERIFIED; bounded report tail pending CI
 
 - 5db7749 brand editor/shared image adapter: push39737666522/PR39737671288 ALL8

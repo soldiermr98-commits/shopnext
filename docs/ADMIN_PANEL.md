@@ -209,3 +209,24 @@ visual RTL/a11y and host checks remain UNVERIFIED. Next after ALL8: attributes/t
 regressions passed too. [Exact matrix](ci/l3a-brand-verified-matrix.json).
 Next: attributes/terms after a reporter-only annotation-bound correction passes
 all eight gates. Full L3a still IN PROGRESS; no browser/visual/a11y/host claim.
+
+## Attribute/term domain sub-step — no screen yet, pending CI
+
+Attributes service stores select/color/image master attributes and scoped terms,
+canonicalizes3/6-digit hex to uppercase6-digit form, validates existing safe image
+references, rejects cross-owner term updates, guards referenced deletes and type
+changes while terms exist. SQL adds canonical hex CHECK and composite term-owner
+FK on product_attribute_terms; the pivot is a domain foundation, not a fake product
+assignment action. Fresh six-role policy, taxonomy mutex and explicit transactional
+CatalogAudit are required for every mutation.
+
+screen | action | REAL/tested | test name
+--- | --- | --- | ---
+Attribute/term domain | list/create/update/delete six roles | PENDING CI | AttributeServiceTest: L3a attributes and terms independently enforce six roles and persist all CRUD with actual actor audits
+Attribute/term domain | scoped slug/type/hex/owner/product usage guards + SQL constraints | PENDING CI | AttributeServiceTest: L3a attribute validation preserves scoped slugs hex ownership and product usage with real SQL constraints
+Attribute/term domain | required safe image/preserved image | PENDING CI | AttributeServiceTest: L3a image terms require existing safe raster references and preserve images on unrelated edits
+Attribute/term domain | audit rollback/stale roles | PENDING CI | AttributeServiceTest: L3a attribute and term audits roll back writes and stale roles cannot mutate them
+Attribute/term domain |1000-row count/owner eager loading | PENDING CI | AttributeServiceTest: L3a attribute and term thousand row lists bound eager counts and owner labels
+
+Next after ALL8: actual attribute and term screens/buttons including hex swatch and
+image upload; only then products. Full L3a still IN PROGRESS, no completion tag.

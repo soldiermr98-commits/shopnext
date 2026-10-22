@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-22 — L3a attribute/term domain started
+
+- Brand screen5db7749 passed ALL8,270tests8266/8267assertions per SQL job.
+- Bounded diagnostic tail correction9c3493a passed both full matrices.
+- Added master/term schema/policies/services, scoped hex/image/usage/owner validation
+  and real SQL/query/role/audit regressions; new CI pending, no screen yet.
+
 ## 2026-10-22 — L3a brand editor wired (runtime pending)
 
 - Brand domain4c24e6f passed ALL8,261tests per SQL job.

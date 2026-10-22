@@ -212,3 +212,13 @@ on30-record pages. SEO metadata is stored only (no L4-L6 SSR injection). Service
 runtime validation passed CI39734575452/39734581936. Brands now adds shared
 CatalogAccess (fresh actor + taxonomy mutex) and CatalogAudit (transaction-required,
 default-redacted actor audit); new brand-service runtime verification is pending.
+
+## L3a attributes — domain sub-step, not a finished screen
+
+Attributes service owns master/term CRUD with product-management policies,
+CatalogAccess fresh actor locks and taxonomy mutex, CatalogAudit actor/redaction,
+scoped uniqueness and cross-owner validation. Existing terms prevent unsafe master
+type changes; product usage protects term deletion. New SQL composite ownership and
+hex constraints complement (not replace) Persian service validation. Attribute
+screens, product assignment/matrix, media registry and stock actions are not
+implemented by this service sub-step. Runtime status remains pending its own CI.

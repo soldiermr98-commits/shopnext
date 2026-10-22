@@ -148,3 +148,13 @@ actor authorization. It serializes reparent/reorder/delete validation; existing
 category parent FK and unique slug remain authoritative. No stock/financial schema
 changed. Category delete currently guarded hard delete; product soft deletion is
 not implemented by this migration. Panel category editor is wired and runtime-tested; visual/browser/host checks remain UNVERIFIED.
+
+## L3a attribute/term foundation (new runtime pending)
+
+Migration2026_10_22_000002 adds catalog_attributes (unique slug, enum type),
+attribute_terms (owner-scoped unique slug, nullable canonical hex/image, order index)
+and product_attribute_terms. Terms use an actual SQL hex-format CHECK. The product
+pivot's composite (term_id,attribute_id) FK prevents attributing another owner's
+term to a product, and referenced term/product deletion is restricted. Root and
+term mutations share the existing taxonomy serialization mutex; no stock or
+financial columns changed. No product assignment screen exists in this sub-step.
