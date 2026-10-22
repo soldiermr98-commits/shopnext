@@ -210,3 +210,13 @@ it('L3a product migration refuses lossy rollback instead of silently resurrectin
     expect(fn () => $migration->down())->toThrow(RuntimeException::class);
     expect(Product::onlyTrashed()->find($product->id))->not->toBeNull();
 });
+
+it('L3a product slugs reserve the numeric ID namespace so a saved slug cannot resolve to another product', function () {
+    $actor = User::factory()->create(['role' => 'admin']);
+    $service = app(Products::class);
+    $owner = $service->save($actor, ['title' => 'اصل', 'slug' => 'original', 'sku' => 'ORIGINAL', 'price' => 100, 'status' => 'published']);
+    expect(fn () => $service->save($actor, ['title' => 'ابهام', 'slug' => (string) $owner->id, 'sku' => 'ALIAS', 'price' => 200, 'status' => 'published']))->toThrow(ValidationException::class);
+    $other = $service->save($actor, ['title' => 'دوم', 'slug' => 'item-'.$owner->id, 'sku' => 'OTHER', 'price' => 200, 'status' => 'published']);
+    $this->getJson('/api/products/'.$owner->id)->assertOk()->assertJsonPath('product.id', (string) $owner->id)->assertJsonPath('product.price', 100);
+    $this->getJson('/api/products/'.$other->slug)->assertOk()->assertJsonPath('product.id', (string) $other->id)->assertJsonPath('product.price', 200);
+});

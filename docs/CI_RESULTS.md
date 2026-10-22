@@ -1,3 +1,18 @@
+# Product metadata VERIFIED; numeric slug identity guard pending CI
+
+85bea48 / [push CI39746880119](https://github.com/soldiermr98-commits/shopnext/actions/runs/39746880119)
+and [PR CI39746886226](https://github.com/soldiermr98-commits/shopnext/actions/runs/39746886226):
+ALL8 SUCCESS; all six SQL jobs308tests8782/8783assertions and five real financial
+races. [Exact core matrix](ci/l3a-product-core-verified-matrix.json).
+
+Before variants, close an identity ambiguity found in the retained public endpoint:
+it accepts either slug or numeric ID, so purely ASCII-numeric slugs could alias a
+different product ID. New/edited metadata now reserves that namespace and returns
+Persian validation, rather than changing existing URLs or inventing redirects.
+Regression rejects an alias and checks both canonical ID and mixed slug resolve to
+the correct real persisted prices. This narrow guard's CI is PENDING. Legacy
+production numeric slugs require reviewed cleanup; none are silently renamed.
+
 # Attribute/term editors VERIFIED; product metadata core pending CI
 
 B430903 / [push CI39743792019](https://github.com/soldiermr98-commits/shopnext/actions/runs/39743792019)

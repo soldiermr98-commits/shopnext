@@ -26,6 +26,7 @@ final class Products
         'required' => 'این فیلد الزامی است.', 'required_if' => 'زمان انتشار برای محصول زمان‌بندی‌شده الزامی است.',
         'string' => 'مقدار متنی معتبر وارد کنید.', 'max' => 'مقدار واردشده بیش از حد مجاز است.',
         'unique' => 'این نامک یا شناسه کالا قبلاً ثبت شده است.', 'regex' => 'قالب مقدار واردشده معتبر نیست.',
+        'not_regex' => 'نامک صرفاً عددی لاتین برای شناسه داخلی رزرو شده است.',
         'in' => 'مقدار انتخاب‌شده معتبر نیست.', 'boolean' => 'مقدار انتخاب‌شده معتبر نیست.',
         'exists' => 'برند معتبر نیست.', 'integer' => 'عدد صحیح وارد کنید.',
         'prohibited' => 'موجودی فقط با عملیات تعدیل دارای دلیل و عامل تغییر می‌کند.',
@@ -64,7 +65,7 @@ final class Products
             }
             $rules = [
                 'title' => ['required', 'string', 'max:255'],
-                'slug' => ['required', 'string', 'max:255', 'regex:/^[\pL\pN]+(?:[-_][\pL\pN]+)*$/uD', Rule::unique('products', 'slug')->ignore($id)],
+                'slug' => ['required', 'string', 'max:255', 'not_regex:/^[0-9]+$/D', 'regex:/^[\pL\pN]+(?:[-_][\pL\pN]+)*$/uD', Rule::unique('products', 'slug')->ignore($id)],
                 'sku' => ['required', 'string', 'max:100', 'regex:/^[A-Za-z0-9]+(?:[-_.][A-Za-z0-9]+)*$/D', Rule::unique('products', 'sku')->ignore($id), Rule::unique('product_variants', 'sku')],
                 'type' => ['required', Rule::in(['simple', 'variable', 'digital', 'bundle'])],
                 'brand_id' => ['nullable', 'integer', Rule::exists('brands', 'id')],

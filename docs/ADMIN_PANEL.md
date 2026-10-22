@@ -290,3 +290,17 @@ Next after full green: product variants/matrix/content/gallery/relations/bulk do
 sub-steps and actual screens, then media, then ledger-backed stock actions. This
 foundation is NOT a claim of complete digital fulfillment, bundle automation or
 full L3a. Existing L2 inventory/checkout semantics are not replaced or invented.
+
+### Product core verified; numeric identity follow-up pending
+
+85bea48 passed push39746880119/PR39746886226 ALL8,308tests8782/8783assertions
+and five actual SQL races/job. All ProductServiceTest core rows above are now
+REAL/tested. [Exact core matrix](ci/l3a-product-core-verified-matrix.json).
+A narrow pre-variant guard reserves ASCII-numeric slugs for the retained ID route;
+no silent legacy identifier rewrite or SEO redirect is introduced.
+
+screen | action | REAL/tested | test name
+--- | --- | --- | ---
+Product metadata domain | reject numeric slug alias, preserve ID/slug identity and actual prices | PENDING CI | ProductServiceTest: L3a product slugs reserve the numeric ID namespace so a saved slug cannot resolve to another product
+
+No product screen/matrix/gallery/bulk/media/stock completion is inferred.

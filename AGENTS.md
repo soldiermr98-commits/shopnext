@@ -1,3 +1,17 @@
+# Current continuation — product core VERIFIED; identity guard pending CI
+
+- 85bea48 product metadata foundation VERIFIED: push39746880119/PR39746886226
+ ALL8,308tests8782/8783assertions/job, all5 genuine races. Manifest now added
+ docs/ci/l3a-product-core-verified-matrix.json. Stock remains prohibited in metadata.
+- Narrow guard before variants: reserve ASCII-numeric slugs because retained public
+ endpoint accepts slug OR numeric ID; otherwise saved slug could alias another
+ product's ID/price. ProductServiceTest new persistence/HTTP identity regression
+ PENDING CI. No legacy values silently renamed, no SSR/redirect expansion.
+- WAIT ALL8 for this correction, then NEXT product variants/matrix domain -> content/
+ gallery/relations/bulk -> real product UI, then media -> reason/actor stock service
+ and actions. Branding/navigation/cache/deploy checks/final docs/tag still due.
+- Owner says continue L3a without checkpoint approval. No full completion tag yet.
+
 # Current continuation — product metadata foundation pending CI
 
 - B430903 attribute/term EDITORS VERIFIED: push39743792019/PR39743800775 ALL8;
