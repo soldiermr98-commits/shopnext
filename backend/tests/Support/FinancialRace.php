@@ -44,11 +44,12 @@ final class FinancialRace
             self::waitFor($dir, count($inputs), '.result');
             $results = [];
             foreach ($processes as $i => $p) {
+                $exitCode = proc_close($p);
+                unset($processes[$i]);
                 $result = json_decode(file_get_contents($dir.'/'.$i.'.result'), true, 512, JSON_THROW_ON_ERROR);
-                if (proc_close($p) !== 0 || $result['status'] === 'unexpected') {
+                if ($exitCode !== 0 || $result['status'] === 'unexpected') {
                     throw new \RuntimeException('Real worker unexpected failure: '.($result['exception'] ?? 'exit').' SQLSTATE='.($result['sql_state'] ?? 'n/a').' driver='.($result['driver_code'] ?? 'n/a'));
                 }
-                unset($processes[$i]);
                 $results[] = $result;
             }
             $fingerprint = hash('sha256', DB::selectOne('SELECT DATABASE() AS name')->name);

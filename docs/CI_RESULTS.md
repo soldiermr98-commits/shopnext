@@ -1,3 +1,21 @@
+# Process correction: real result-publication race found; fix pending CI
+
+e62a8f8 / [push CI39726822127](https://github.com/soldiermr98-commits/shopnext/actions/runs/39726822127): ALL8 SUCCESS.
+[PR CI39726826102](https://github.com/soldiermr98-commits/shopnext/actions/runs/39726826102):
+7/8 SUCCESS; PHP8.2/MariaDB11.4 failed the cancel/pay race with JsonException in
+FinancialRace.php:47. The worker created `.result` before finishing its JSON write;
+the parent treated existence as completion. No evidence of a financial invariant
+failure; that run is nevertheless NOT accepted. Redacted diagnostics now actually
+upload: all eight diagnostic artifacts are present in the PR run inventory,
+including `diagnostics-php8.2-mariadb-11.4.` with the failure (5615 bytes).
+
+Fix: publish worker results by same-directory atomic rename after a checked,
+closed write; reap each worker before decoding. Existing separate-PID/SQL-session,
+overlap, last-stock, coupon, wallet, paid-once and cancel/pay assertions unchanged.
+Two new PHP regression tests exercise complete large JSON/replacement and invalid
+JSON fail-closed publication. Execution of this correction remains PENDING CI.
+No rerun-to-hide, retries, sequential fallback, financial code or L2 tag changes.
+
 # L3a process revision — eight gates verified; artifact correction pending
 
 7c67d9b / [push CI39726383989](https://github.com/soldiermr98-commits/shopnext/actions/runs/39726383989)

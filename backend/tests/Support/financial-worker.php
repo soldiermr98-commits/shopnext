@@ -10,6 +10,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Tests\Support\AtomicRaceResult;
 
 require __DIR__.'/../../vendor/autoload.php';
 $app = require __DIR__.'/../../bootstrap/app.php';
@@ -42,5 +43,5 @@ try {
     // Never write raw SQL, env, exception messages or arguments to a public CI artifact.
     $result = ['status' => 'unexpected', 'exception' => $e::class, 'sql_state' => $e instanceof QueryException ? ($e->errorInfo[0] ?? null) : null, 'driver_code' => $e instanceof QueryException ? ($e->errorInfo[1] ?? null) : null];
 }
-file_put_contents($base.'.result', json_encode([...$identity, ...$result, 'started' => $started, 'finished' => microtime(true)], JSON_THROW_ON_ERROR));
+AtomicRaceResult::publish($base.'.result', [...$identity, ...$result, 'started' => $started, 'finished' => microtime(true)]);
 exit($result['status'] === 'unexpected' ? 72 : 0);
