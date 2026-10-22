@@ -318,3 +318,40 @@ jobs:
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7
+
+  jalali-lock:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[jalali-lock-once]')
+    needs: style
+    name: Capture Composer-generated Jalali lock
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: intl, mbstring, gd, zip, bcmath
+          tools: composer:v2
+          coverage: none
+      - name: Generate lock without changing any application code or rerunning candidate trial
+        working-directory: backend
+        run: |
+          bash ../tools/ci/run-check.sh jalali-lock composer require ariaieboy/filament-jalali:3.1.0 --no-interaction --prefer-dist --no-progress --no-scripts
+          composer validate --strict
+          python3 - <<'PYLOCK'
+          import base64, hashlib, zlib
+          from pathlib import Path
+          data = Path('composer.lock').read_bytes()
+          packed = base64.b64encode(zlib.compress(data)).decode()
+          print('::notice title=lock-sha256::' + hashlib.sha256(data).hexdigest())
+          for index, start in enumerate(range(0, len(packed), 2500)):
+              print(f'::notice title=lock-part-{index:03d}::' + packed[start:start+2500])
+          PYLOCK
+      - uses: actions/upload-artifact@v4
+        with:
+          name: composer-generated-jalali-lock
+          path: |
+            backend/composer.json
+            backend/composer.lock
+          if-no-files-found: error
+          retention-days: 7

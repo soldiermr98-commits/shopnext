@@ -1,3 +1,22 @@
+# Single Jalali runtime trial GREEN — retain candidate
+
+85db44e / [push CI39728458608](https://github.com/soldiermr98-commits/shopnext/actions/runs/39728458608):
+all eight original gates plus the ONE candidate trial SUCCESS.
+[PR CI39728463127](https://github.com/soldiermr98-commits/shopnext/actions/runs/39728463127):
+all eight original gates SUCCESS (trial skipped, not repeated).
+ariaieboy/filament-jalali3.1.0 on Filament5.10.3: shipped JS day-selection,
+Gregorian serialization and Jalali redisplay succeeded for12 cases (4 dates ×
+Tehran/UTC/New_York runtime timezones), including midnight, Nowruz and leap day.
+Livewire/Pest actual candidate view/save/Gregorian UTC SQL/reload:1test25assertions.
+No end-to-end browser clicking, visual RTL, a11y or deployment proof claimed.
+Candidate passed the permitted runtime iteration; retain it, not the fallback.
+
+Next commit captures a real Composer-generated lock in a disposable no-scripts
+resolver job, without rerunning or troubleshooting the candidate. Public lock data
+is available as an artifact plus compressed check annotations with SHA256, because
+this sandbox cannot execute Composer natively. Production lock integration is still
+PENDING. All original eight gates remain mandatory before the integration concern.
+
 # Single Jalali trial launch
 
 9129142 / [push CI39728110052](https://github.com/soldiermr98-commits/shopnext/actions/runs/39728110052)
