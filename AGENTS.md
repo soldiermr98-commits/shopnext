@@ -1,3 +1,21 @@
+# Current continuation — product content domain PENDING fast runtime
+
+- CI selector d571989 VERIFIED actual push39866911447: Pint + PHP8.3/MariaDB10.6
+ SUCCESS, frontend intentionally SKIPPED. PR/tag six-way selector locally tested.
+ Full matrix is still mandatory for final L3a delivery, not claimed by fast CI.
+- NEW ProductContent domain: fresh actor, transaction/audit; existing rich-text
+ cast; ordered gallery paths + separate alt map/main membership; grouped specs;
+ sanitized per-product FAQ; ordered related/upsell/cross_sell with SQL FKs/unique/
+ no-self CHECK. New migration refuses lossy rollback. No stock/price inputs.
+- Catalog now projects gallery/alt/FAQ and batches only publication-visible related
+ IDs (draft/future/trash excluded); re-sanitizes FAQ imports. ProductContentTest
+ six roles/safety flags/limits/order/audit rollback/SQL/self/publicity and1000-row
+ fixture with50-item six-query projection PENDING actual CI. UI still pending.
+- Next after fast green: actual product/variation/bulk + content editor UI with
+ service-backed actions/tests, then media -> reason+actor stock ledger + bulk ->
+ final branding/navigation/cache/deploy/docs + full PR matrix/tag/approval stop.
+- Active branch arena/0f9a69e5-shopnext only; no approval checkpoint or early tag.
+
 # Active continuation — arena/0f9a69e5-shopnext, CI scope update pending
 
 - PR2 merged at39b64b4; working on NEW ACTIVE arena/0f9a69e5-shopnext. Older

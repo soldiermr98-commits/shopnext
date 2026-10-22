@@ -397,3 +397,29 @@ stock), branding/navigation/cache/deploy checks/final handoff also remain pendin
 No full L3a completion tag or L3b approval request; browser/host/RTL/a11y/restore
 still UNVERIFIED. No stock setter added, and the L2 financial implementation/tag
 is unchanged except the necessary fail-closed trashed-variant eligibility guard.
+
+
+## Active continuation — product content domain (runtime PENDING)
+
+The new active branch is arena/0f9a69e5-shopnext after PR2 merge. Per owner, fast
+push CI is Pint + PHP8.3/MariaDB10.6; PR/tag runs retain the full six-way matrix
+and frontend. Fast workflow39866911447 actually passed both selected jobs; the
+frontend was intentionally skipped. This does NOT claim a full new SQL matrix.
+
+| Screen / domain | Action | REAL/tested | Test name (ProductContentTest) |
+|---|---|---|---|
+| Product content (UI pending) | Fresh policy-protected read/save; sanitized rich text, spec groups and FAQ, actor audit | Implemented; runtime UNVERIFIED | L3a product content independently gates six roles on reads and transactional audited writes |
+| Gallery domain | Persist ordered paths, select main image, alt replacement and safe clear without deleting shared files | Implemented; runtime UNVERIFIED | L3a product gallery persists exact drag order main selection alt replacement and safe clear |
+| Content validation | Persian limits; safe uploaded paths; disallow stock/price/self/missing/duplicate relations | Implemented; runtime UNVERIFIED | L3a product content validates Persian limits and forbids inventory prices unsafe paths and invalid relation identities |
+| Related/upsell/cross-sell | Ordered replacement/clear; exclude draft/future/trashed targets from public projection; SQL self CHECK | Implemented; runtime UNVERIFIED | L3a related upsell cross sell retain order and never publicly expose draft scheduled or trashed targets |
+| Content audit/storage | Roll back content and relations on audit failure; refuse lossy rollback; sanitize imported FAQ on read | Implemented; runtime UNVERIFIED | L3a content and relation audits roll back together and migration refuses lossy editorial rollback |
+| Content authorization | Refresh stale actor safety flags for reads/writes | Implemented; runtime UNVERIFIED | L3a product content refreshes safety flags on reads and writes |
+| Public list | 1000-row fixture;50 products; batched relations in six catalog SQL queries | Implemented; runtime UNVERIFIED | L3a product content projection batches relations for fifty products without per product SQL |
+
+Gallery is limited to20 owned uploaded PNG references; path arrays preserve the
+legacy storefront contract, with a separate alt map. Specs are at most100 ordered
+group/key/value rows; FAQ20 sanitized question/answer rows; relations30 targets per
+kind. Relation input replaces all three kinds; omitted content sections remain
+unchanged. Existing metadata service already covers SEO and scheduled sale/flash
+fields. No drag-and-drop screen, upload library or product editor UI is claimed
+until those actions are implemented and exercised. Browser interaction UNVERIFIED.

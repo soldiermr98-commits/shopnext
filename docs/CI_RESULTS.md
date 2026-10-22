@@ -554,3 +554,10 @@ arena branch and tag triggers, and skips frontend on fast pushes. Three local
 PENDING. Fast green is not six-way SQL/frontend evidence. Final l3a-complete remains
 blocked on complete scope plus an actual full-matrix green run. Older ALL8-per-push
 instructions are superseded, not the SQL tests or financial race requirements.
+
+
+Fast selector d571989 actual [push39866911447](https://github.com/soldiermr98-commits/shopnext/actions/runs/39866911447):
+Pint + PHP8.3/MariaDB10.6 SUCCESS; frontend intentionally SKIPPED, no other DB jobs.
+New ProductContent domain/migration/public projection/tests are PENDING the next
+fast run. Local git diff --check passes; PHP/database claims await actual CI.
+No full-matrix or delivered editor UI claim. Final tag remains blocked.
