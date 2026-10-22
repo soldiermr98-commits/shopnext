@@ -230,3 +230,27 @@ Attribute/term domain |1000-row count/owner eager loading | PENDING CI | Attribu
 
 Next after ALL8: actual attribute and term screens/buttons including hex swatch and
 image upload; only then products. Full L3a still IN PROGRESS, no completion tag.
+
+## Attribute/term domain verified; real editors wired, runtime pending
+
+Ec044d4: push39741032336/PR39741037990 ALL8;280tests8384/8385assertions and
+all5 genuine financial races per SQL job. [Exact matrix](ci/l3a-attribute-domain-verified-matrix.json).
+The previous domain rows are now REAL/tested by AttributeServiceTest. New editor
+rows below remain pending until their own full matrix; no browser/visual claim.
+
+screen | action | REAL/tested | test name
+--- | --- | --- | ---
+/admin/attributes and /admin/attributes/{attribute}/terms | six-role routes/new/edit/save/delete + fresh authorization and actual actor audits | PENDING CI | AttributeEditorTest: L3a attribute and term screens gate six roles recheck every action and persist CRUD audit and swatches
+Term editor | required safe image/upload/preservation | PENDING CI | AttributeEditorTest: L3a term screen persists a safe required image and preserves it on unrelated edits
+Term editor | SVG rejection/recovery and duplicate orphan cleanup | PENDING CI | AttributeEditorTest: L3a term screen blocks SVG until valid replacement and cleans new files on duplicate failure
+Attribute/term editors | bad hex/type change/referenced term delete rejection | PENDING CI | AttributeEditorTest: L3a attribute and term screens reject bad hex unsafe type changes and used term deletion
+Term editor | locked parent and scoped edit/delete404 | PENDING CI | AttributeEditorTest: L3a term screen locks owner context and scopes record actions to that owner
+Attribute editor |1000-row bounded counts + previous/next | PENDING CI | AttributeEditorTest: L3a attribute screen paginates one thousand rows with bounded count queries and previous next actions
+Term editor |1000-row scoped eager list + previous/next | PENDING CI | AttributeEditorTest: L3a term screen paginates one thousand owner scoped rows with bounded queries and previous next actions
+
+All write buttons delegate to Attributes; required color/image depends on the
+fresh server-side owner type. Owner/editing identifiers are Locked; all record
+lookups are scoped. Color swatches only render six-digit hex; images only safe
+48-hex PNG references. Term route is intentionally absent from top-level navigation
+because it requires context; the real parent row links to it. Products next only
+after complete green editor regressions. Full L3a remains IN PROGRESS.

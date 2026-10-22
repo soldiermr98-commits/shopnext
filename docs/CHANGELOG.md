@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-22 — L3a attribute/term domain verified, editors pending
+
+- Ec044d4 ALL8 on push39741032336/PR39741037990;280tests8384/8385assertions.
+- Wired real context-scoped master/term screens, hex picker/swatch, safe upload,
+  fresh role guards and pagination; new live action regressions pending CI.
+
 ## 2026-10-22 — L3a attribute/term domain started
 
 - Brand screen5db7749 passed ALL8,270tests8266/8267assertions per SQL job.

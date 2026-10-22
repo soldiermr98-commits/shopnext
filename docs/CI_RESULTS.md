@@ -1,3 +1,21 @@
+# Attribute/term DOMAIN VERIFIED; editor runtime pending CI
+
+Ec044d4 / [push CI39741032336](https://github.com/soldiermr98-commits/shopnext/actions/runs/39741032336)
+and [PR CI39741037990](https://github.com/soldiermr98-commits/shopnext/actions/runs/39741037990):
+ALL8 SUCCESS, each SQL job280 tests8384/8385assertions and all5 real financial
+races. Exact [attribute domain matrix](ci/l3a-attribute-domain-verified-matrix.json).
+All domain role/SQL hex and composite owner FK/usage/safe-image/audit/query cases
+executed against PHP8.2/8.3 × MySQL8/MariaDB10.6/11.4.
+
+This sub-step now registers AttributeEditor and context-locked AttributeTermEditor
+at /admin/attributes and /admin/attributes/{attribute}/terms. Actual service-backed
+CRUD, color picker plus guarded canonical hex swatch, safe image upload and Persian
+previous/next pagination. New action tests cover six roles and post-mount role
+revocation, persisted audit/hex/order/image, SVG recovery/orphan cleanup, type and
+usage guards, locked owner/cross-owner404 and1000-row query bounds. New screens
+remain PENDING their own CI; browser/visual/keyboard accessibility UNVERIFIED.
+Products/media/stock remain next, not started by this editor sub-step.
+
 # Bounded diagnostics VERIFIED; attribute/term domain pending CI
 
 9c3493a / [push CI39739168248](https://github.com/soldiermr98-commits/shopnext/actions/runs/39739168248)

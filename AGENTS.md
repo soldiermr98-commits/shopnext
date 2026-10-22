@@ -1,3 +1,20 @@
+# Current continuation — attribute/term editors pending CI
+
+- Ec044d4 attribute/term DOMAIN VERIFIED: push39741032336/PR39741037990 ALL8;
+ 280tests8384/8385assertions per SQL job; all5 financial races. Exact manifest:
+ docs/ci/l3a-attribute-domain-verified-matrix.json. Actual SQL hex CHECK and owner
+ composite FK passed all six SQL runtimes. Prior brand/category regressions green.
+- NEW AttributeEditor/AttributeTermEditor, explicit provider registration and
+ StaffAuth assertions; Persian views, real service CRUD/pagination, hex picker and
+ guarded swatch, shared safe image adapter. Term slug attributes/{attribute}/terms;
+ navigation false (requires context), Locked owner/editing IDs, invalid owner404.
+- AttributeEditorTest: six-role real CRUD/fresh role denial, image preserve,
+ SVG recovery/duplicate cleanup, hex/type/usage guards, locked/cross-owner404,
+ 1000-row pagination/query cases. ALL new editor runtime PENDING CI.
+- WAIT ALL8, red -> diagnose/fix. Only after full green continue products -> media
+ -> stock adjustments, then branding/navigation/production-cache/deploy checks and
+ final docs/tag. No owner checkpoint approval needed; full L3a still incomplete.
+
 # Current continuation — attribute/term domain pending CI
 
 - Brand editor5db7749 verified both ALL8 matrices39737666522/39737671288:
