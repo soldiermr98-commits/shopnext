@@ -1,3 +1,15 @@
+# Strict lock warning diagnosed; standard patch-range constraint correction
+
+f63cd60 / [push CI39729265124](https://github.com/soldiermr98-commits/shopnext/actions/runs/39729265124):
+all eight original gates SUCCESS; lock-capture job RED. Now-visible Composer output:
+`require.ariaieboy/filament-jalali : exact version constraints (3.1.0) should be avoided`.
+[PR CI39729268688](https://github.com/soldiermr98-commits/shopnext/actions/runs/39729268688):
+all eight original gates SUCCESS. Correct ONLY the production requirement to
+`~3.1.0` (patch-compatible), while the committed generated lock will pin3.1.0.
+Upstream tag inventory confirms3.1.0 is latest. Retain composer validate --strict;
+do not suppress its exit status. The compatibility trial itself remains exactly
+one green execution, not retried. Corrected lock capture remains PENDING CI.
+
 # Lock capture diagnostics correction (NOT a second candidate trial)
 
 4b220fa / [push CI39728908907](https://github.com/soldiermr98-commits/shopnext/actions/runs/39728908907):
