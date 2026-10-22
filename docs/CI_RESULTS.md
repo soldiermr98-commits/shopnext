@@ -1,3 +1,15 @@
+# Lock capture diagnostics correction (NOT a second candidate trial)
+
+4b220fa / [push CI39728908907](https://github.com/soldiermr98-commits/shopnext/actions/runs/39728908907):
+all eight original gates SUCCESS; separate lock-capture job FAILED (exit1).
+[PR CI39728914778](https://github.com/soldiermr98-commits/shopnext/actions/runs/39728914778):
+all eight original gates SUCCESS. The lock job's strict-validation output was not
+wrapped and lock upload was skipped on failure. Full job-log retrieval also fails
+in this sandbox; do not invent a root cause. Add capture/summary and always-on
+public-lock/checksum artifacts to diagnose without changing constraints or bypassing
+strict validation. The already-green single runtime candidate trial is NOT repeated.
+Production lock still unchanged; no next business concern started.
+
 # Single Jalali runtime trial GREEN — retain candidate
 
 85db44e / [push CI39728458608](https://github.com/soldiermr98-commits/shopnext/actions/runs/39728458608):

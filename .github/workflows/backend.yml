@@ -337,7 +337,11 @@ jobs:
         working-directory: backend
         run: |
           bash ../tools/ci/run-check.sh jalali-lock composer require ariaieboy/filament-jalali:3.1.0 --no-interaction --prefer-dist --no-progress --no-scripts
-          composer validate --strict
+          bash ../tools/ci/run-check.sh jalali-lock-validation composer validate --strict
+      - name: Emit public lock and checksum even when strict validation fails
+        if: always()
+        working-directory: backend
+        run: |
           python3 - <<'PYLOCK'
           import base64, hashlib, zlib
           from pathlib import Path
@@ -348,10 +352,19 @@ jobs:
               print(f'::notice title=lock-part-{index:03d}::' + packed[start:start+2500])
           PYLOCK
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: composer-generated-jalali-lock
           path: |
             backend/composer.json
             backend/composer.lock
           if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: composer-lock-diagnostics
+          path: .ci-reports/
+          include-hidden-files: true
+          if-no-files-found: warn
           retention-days: 7
