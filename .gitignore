@@ -19,3 +19,6 @@ backend/public/fonts/filament/
 # Local Python syntax-check artifacts.
 __pycache__/
 *.pyc
+
+# Redacted ephemeral CI reports; never application data.
+.ci-reports/

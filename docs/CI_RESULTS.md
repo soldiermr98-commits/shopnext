@@ -1,3 +1,11 @@
+# L3a process revision — execution pending
+
+Fast independent Pint --test/dry-run gates all original seven jobs (eight total).
+No database container or app boot in the style job. CI diagnostic reports now get
+redacted summaries and per-job artifacts even on failure. Local shell syntax and
+Python report-tooling tests executed; full workflow validation remains PENDING.
+Next concern only after all eight jobs green. No gate/assertion is removed.
+
 # L3a shell checkpoint — verified, NOT full L3a
 
 98cfd43 / [CI39724414478](https://github.com/soldiermr98-commits/shopnext/actions/runs/39724414478):

@@ -14,7 +14,48 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  style:
+    name: Fast Pint formatting dry-run
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: intl, mbstring, gd, zip, bcmath
+          tools: composer:v2
+          coverage: none
+      - name: Composer cache directory
+        id: cache
+        working-directory: backend
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.cache.outputs.dir }}
+          key: composer-${{ runner.os }}-8.3-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-8.3-
+      - name: Install formatter from committed lock without application boot or database
+        working-directory: backend
+        run: bash ../tools/ci/run-check.sh style-install composer install --prefer-dist --no-interaction --no-progress --no-scripts
+      - name: Pint formatting dry-run (never repairs or bypasses a failure)
+        working-directory: backend
+        run: |
+          bash ../tools/ci/run-check.sh pint bash ../tools/ci/pint-check.sh
+          git diff --exit-code
+      - name: Test diagnostic redaction and exit-code preservation
+        run: python3 tools/ci/test-reports.py
+      - name: Publish style diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: style-diagnostics
+          path: .ci-reports/
+          if-no-files-found: warn
+          retention-days: 7
+
   frontend:
+    needs: style
     name: Storefront and archived security regression tests
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -28,11 +69,20 @@ jobs:
           bun-version: '1.4.3'
       - name: Install exact frontend lock
         run: bun install --frozen-lockfile
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
+      - run: bash tools/ci/run-check.sh frontend-typecheck npm run typecheck
+      - run: bash tools/ci/run-check.sh frontend-tests npm test
+      - run: bash tools/ci/run-check.sh frontend-build npm run build
+      - name: Publish frontend diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-diagnostics
+          path: .ci-reports/
+          if-no-files-found: warn
+          retention-days: 7
 
   backend:
+    needs: style
     name: PHP ${{ matrix.php }} / ${{ matrix.db.image }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -114,9 +164,6 @@ jobs:
           composer show --locked laravel/framework
           composer show --locked filament/filament
           composer show --locked pestphp/pest
-      - name: Pint
-        working-directory: backend
-        run: bash ../tools/ci/pint-check.sh
       - name: Migrate dedicated test database
         working-directory: backend
         run: |
@@ -190,3 +237,15 @@ jobs:
           path: build/shopnext-l1.zip
           retention-days: 7
           if-no-files-found: error
+
+      - name: Publish readable matrix diagnostics even on failure
+        if: always()
+        run: python3 tools/ci/publish-report.py /tmp/migrate-result.log /tmp/pest-result.log /tmp/package-result.log
+      - name: Upload matrix diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-php${{ matrix.php }}-${{ matrix.db.family }}-${{ matrix.db.series }}
+          path: .ci-reports/
+          if-no-files-found: warn
+          retention-days: 7

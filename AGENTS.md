@@ -27,8 +27,16 @@
   exact CI evidence, REAL/test table and UNVERIFIED list; then tag and STOP.
 - Shell98cfd43 CI39724414478 ALL7 green,226 tests/job and6844/6845 assertions;
   all5 real L2 races executed per job. docs/ci/l3a-shell-verified-matrix.json.
-- Documentation consolidation is current; require its full green too before next
-  concern: stock adjustment history/catalog services, then actual resources/media.
+- Owner approved06c0371 shell and instructed CONTINUE L3a to completion, no new
+  approval between concerns. First process fix: fast independent Pint --test job,
+  matrix gated on it, redacted logs/artifacts/summaries. This adds an eighth job;
+  preserve original six SQL/PHP +frontend gates and require ALL8 green.
+- Jalali candidate gets ONE runtime iteration only. If not green, fall back to
+  Jalali read-only display +standard Gregorian picker with adjacent Jalali preview;
+  document tradeoff. No iterative dependency troubleshooting.
+- Implementation order NOW: taxonomy -> products -> media -> stock adjustments.
+  Stock still NEVER editable directly; reasoned service actions only. Do not reorder
+  scope based on older plans. Resources/actions need tests and ADMIN_PANEL rows.
   No resources/stock services/Jalali picker complete yet. Do NOT tag L3a.
 - Pint can use --format=agent through tools/ci/pint-check.sh; --test exit retained.
   JSON lacks final newline: annotation MUST start a fresh line. Prior missing

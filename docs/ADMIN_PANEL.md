@@ -80,3 +80,14 @@ No policy grant to Support simply because a field looks convenient to show.
 7. Final docs/evidence and ALL7 green, tag l3a-complete, STOP for approval.
 
 No live host/browser/performance/load result is inferred from source inspection.
+
+
+## Approved continuation/process revision
+06c0371 shell approved; continue L3a without another checkpoint approval. Process
+first: independent fast Pint --test (formatting dry-run, no MySQL/app boot), then
+original six SQL/PHP +frontend jobs. Thus ALL8 jobs must pass, not seven by silently
+omitting a previous job. Redacted diagnostic logs are uploaded even on failure and
+written to job summaries; raw .env/application databases are never artifacts.
+Next: ONE candidate Jalali runtime iteration, fallback if not green; then taxonomy,
+products, media, stock-adjustment action/service, in that order. Older implementation
+ordering above is superseded. No l3a-complete until the complete approved scope.
