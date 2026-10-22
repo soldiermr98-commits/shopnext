@@ -6,6 +6,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Auth\StaffLogin;
 use App\Filament\Auth\StaffProfile;
+use App\Filament\Pages\BrandEditor;
 use App\Filament\Pages\CategoryEditor;
 use App\Filament\Pages\SecureSettings;
 use App\Filament\Pages\StaffDashboard;
@@ -31,7 +32,7 @@ final class AdminPanelProvider extends PanelProvider
     {
         return $panel->default()->id('admin')->path('admin')->authGuard('web')
             ->brandName('Shopnext')->font('Vazirmatn', url: fn (): string => asset('fonts/vazirmatn.css'), provider: LocalFontProvider::class)->login(StaffLogin::class)->profile(StaffProfile::class, isSimple: true)
-            ->pages([StaffDashboard::class, SecureSettings::class, CategoryEditor::class])->widgets([CronHeartbeat::class])
+            ->pages([StaffDashboard::class, SecureSettings::class, CategoryEditor::class, BrandEditor::class])->widgets([CronHeartbeat::class])
             // Only the locale middleware persists onto Livewire; no remote font provider.
             ->middleware([AdminLocale::class], isPersistent: true)
             ->middleware([

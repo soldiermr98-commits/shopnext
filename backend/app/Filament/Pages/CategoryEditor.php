@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Filament\Concerns\HandlesCatalogImage;
 use App\Models\Category;
 use App\Models\User;
 use App\Services\Categories;
-use App\Services\SafeUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -16,21 +16,15 @@ use Filament\Pages\Page;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-use Throwable;
 
 final class CategoryEditor extends Page
 {
-    use WithFileUploads;
+    use HandlesCatalogImage;
     use WithPagination;
-
-    private const IMAGE_ERROR = 'تصویر PNG، JPEG یا WebP حداکثر ۲ مگابایت و ۲۰۴۸ پیکسل انتخاب کنید.';
 
     protected string $view = 'filament.pages.category-editor';
 
@@ -43,8 +37,6 @@ final class CategoryEditor extends Page
 
     #[Locked]
     public ?int $parentId = null;
-
-    public ?TemporaryUploadedFile $imageUpload = null;
 
     public string $notice = '';
 
@@ -111,56 +103,14 @@ final class CategoryEditor extends Page
     {
         $actor = $this->actor();
         $this->notice = '';
-        // Schema validation must not erase a rejected temporary-file upload.
-        if ($this->getErrorBag()->has('imageUpload')) {
-            throw ValidationException::withMessages(['imageUpload' => self::IMAGE_ERROR]);
-        }
+        $this->assertImageReady();
         $state = $this->form->getState();
-        $newImage = null;
-        try {
-            if ($this->imageUpload !== null) {
-                $newImage = app(SafeUpload::class)->store($this->imageUpload);
-                $state['image'] = '/media/'.$newImage;
-            }
-            $record = app(Categories::class)->save($actor, $state, $this->editingId);
-        } catch (Throwable $exception) {
-            if ($newImage !== null) {
-                Storage::disk('local')->delete('media/'.$newImage);
-            }
-            if ($exception instanceof ValidationException) {
-                $messages = [];
-                foreach ($exception->errors() as $key => $errors) {
-                    $messages[$key === 'file' ? 'imageUpload' : 'data.'.$key] = match ($key) {
-                        'file' => [self::IMAGE_ERROR],
-                        'content' => ['متن توضیحات بیش از حد مجاز است.'],
-                        default => $errors,
-                    };
-                }
-                throw ValidationException::withMessages($messages);
-            }
-            throw $exception;
-        }
+        $record = $this->persistCatalogImage($state, 'image', fn (array $data): Category => app(Categories::class)->save($actor, $data, $this->editingId));
         $this->editingId = $record->id;
         $this->imageUpload = null;
         $this->form->fill($record->getAttributes());
         $this->notice = 'دسته‌بندی ذخیره شد.';
         unset($this->records);
-    }
-
-    public function updatedImageUpload(): void
-    {
-        $this->actor();
-        if ($this->imageUpload !== null) {
-            $this->resetValidation('imageUpload');
-        }
-    }
-
-    public function _uploadErrored(mixed $name, mixed $errorsInJson, mixed $isMultiple): void
-    {
-        $this->actor();
-        abort_unless($name === 'imageUpload', 422);
-        $this->dispatch('upload:errored', name: $name)->self();
-        throw ValidationException::withMessages(['imageUpload' => self::IMAGE_ERROR]);
     }
 
     public function delete(int $id): void
@@ -223,7 +173,7 @@ final class CategoryEditor extends Page
         return $id === null || $id === '' ? null : Category::query()->whereKey($id)->value('title');
     }
 
-    private function actor(): User
+    protected function actor(): User
     {
         $actor = auth('web')->user()?->fresh();
         abort_unless($actor !== null, 403);

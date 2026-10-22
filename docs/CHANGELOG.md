@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-22 — L3a brand editor wired (runtime pending)
+
+- Brand domain4c24e6f passed ALL8,261tests per SQL job.
+- Registered service-backed brand Page, shared verified image-upload safety with
+  category editor, added per-button/role/logo/cleanup/query/pagination regressions.
+- New UI regression matrix pending; attributes/products/media/stock remain next.
+
 ## 2026-10-22 — L3a category verified; brands service started
 
 - Category editor69388b7 passed ALL8,250tests/job8107/8108assertions, five real SQL

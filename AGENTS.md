@@ -1,3 +1,17 @@
+# Current continuation — brand editor/shared image regression pending
+
+- Brand domain4c24e6f push39736016898/PR39736022048 ALL8 GREEN;261tests/job,
+  PHP8.2MySQL8:8159assertions. Category screen earlier69388b7 verified250tests.
+- BrandEditor now registered as explicit Page with real service-backed fields,
+  logo/country/official flag, new/edit/save/delete and30-row Persian pagination.
+  Shared HandlesCatalogImage extracts the proven category upload safety; both
+  CategoryEditorTest and new BrandEditorTest are gates. StaffAuthTest now explicitly
+  asserts these Pages are registered; no auto-writing CRUD Resource introduced.
+- This new editor/adapter commit PENDING CI. Wait ALL8; fix red before next concern.
+- NEXT attributes/terms including hex swatch/image -> products -> media -> stock.
+  Branding/navigation + production caches still due. No l3a-complete tag or L3b work.
+  Continue without approval pauses until full L3a is actually verified.
+
 # Current continuation — brands domain service pending CI
 
 - Category editor69388b7 verified: push39734575452/PR39734581936 ALL8 GREEN;

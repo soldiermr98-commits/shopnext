@@ -174,11 +174,30 @@ attributes are redacted by default; failures roll back the mutation transaction.
 
 screen | action | REAL/tested | test name
 --- | --- | --- | ---
-Brand domain (no panel button yet) | list/create/update/delete six roles | PENDING CI | BrandServiceTest: L3a brand service independently enforces all six roles for list create update delete and explicit actor audit
-Brand domain | slug/logo/product-delete guards | PENDING CI | BrandServiceTest: L3a brand service protects unique slugs referenced brands and raster logo validation with Persian errors
-Brand domain | stale active/password flags | PENDING CI | BrandServiceTest: L3a brand service checks fresh staff flags before writing
-Brand domain | audit rollback/default redaction | PENDING CI | BrandServiceTest: L3a brand and audit roll back together and catalog audit redacts unknown fields
-Brand domain |1000-row query bound | PENDING CI | BrandServiceTest: L3a brand lists use three bounded queries for one thousand rows
+Brand domain (no panel button yet) | list/create/update/delete six roles | REAL, CI39736016898/39736022048 | BrandServiceTest: L3a brand service independently enforces all six roles for list create update delete and explicit actor audit
+Brand domain | slug/logo/product-delete guards | REAL, CI39736016898/39736022048 | BrandServiceTest: L3a brand service protects unique slugs referenced brands and raster logo validation with Persian errors
+Brand domain | stale active/password flags | REAL, CI39736016898/39736022048 | BrandServiceTest: L3a brand service checks fresh staff flags before writing
+Brand domain | audit rollback/default redaction | REAL, CI39736016898/39736022048 | BrandServiceTest: L3a brand and audit roll back together and catalog audit redacts unknown fields
+Brand domain |1000-row query bound | REAL, CI39736016898/39736022048 | BrandServiceTest: L3a brand lists use three bounded queries for one thousand rows
 
 Next after all eight gates green: brand screen/buttons through Brands, then
 attributes/terms. Product/media/stock/branding/deployment-cache concerns remain.
+
+## Brand screen — newly wired, execution pending CI
+
+Brand domain4c24e6f passed all eight gates on push39736016898 and PR39736022048:
+261tests per SQL job (PHP8.2MySQL8:8159assertions). BrandEditor is now explicitly
+registered as a policy-checked Page, not an auto-writing Resource. Its forms/actions
+use Brands, SafeUpload and shared HandlesCatalogImage; the same retained upload
+safety implementation is shared with CategoryEditor and both regressions remain.
+
+screen | action | REAL/tested | test name
+--- | --- | --- | ---
+Brands | route/new/edit/save/delete six roles + stale role | PENDING CI | BrandEditorTest: L3a brand screen independently gates all six roles and rechecks every mutation after role revocation
+Brands | logo/country/official flag/edit/preserved logo/product-delete guard | PENDING CI | BrandEditorTest: L3a brand screen persists safe logos preserves existing logos and blocks product referenced deletion
+Brands | SVG rejection/replacement/duplicate-failure cleanup | PENDING CI | BrandEditorTest: L3a brand screen rejects temporary SVG recovers with replacement and cleans files after duplicate slug failure
+Brands |1000-row query bound + previous/next | PENDING CI | BrandEditorTest: L3a brand screen paginates one thousand rows with bounded list queries and real previous next buttons
+
+No fake-success notice occurs before actual service persistence. Brand delete is
+reference-protected hard delete; no unimplemented restore button. User browser,
+visual RTL/a11y and host checks remain UNVERIFIED. Next after ALL8: attributes/terms.

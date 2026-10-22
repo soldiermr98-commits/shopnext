@@ -1,3 +1,17 @@
+# Brand domain VERIFIED; brand screen/shared image adapter pending CI
+
+4c24e6f / [push CI39736016898](https://github.com/soldiermr98-commits/shopnext/actions/runs/39736016898)
+and [PR CI39736022048](https://github.com/soldiermr98-commits/shopnext/actions/runs/39736022048):
+ALL8 SUCCESS. Each SQL/PHP job261tests (PHP8.2MySQL8:8159 assertions). Six roles,
+real brand CRUD/actor audit, fresh flags, Persian slug/logo/referenced-delete
+failures, audit rollback/default redaction and1000-row3-query pagination executed.
+
+BrandEditor now wired through Brands. Shared HandlesCatalogImage extracts the
+already-verified category upload guard, Persian callback, safe storage and failed
+persistence cleanup; CategoryEditor tests remain unchanged. Brand screen button,
+role, logo/cleanup and1000-row query/pagination regressions added. New screen and
+shared-adapter regression runtime remains PENDING CI; attributes/terms not begun.
+
 # Category editor VERIFIED; brands domain service pending CI
 
 69388b7 / [push CI39734575452](https://github.com/soldiermr98-commits/shopnext/actions/runs/39734575452)
