@@ -494,3 +494,24 @@ domain. Matrix generation UI remains separate forthcoming work.
 
 Fast checks will verify these; browser UI interactions and all other SQL combinations
 for the new scope remain UNVERIFIED until their actual execution.
+
+
+### Variation editor fast VERIFIED; matrix generator UI PENDING
+
+All three VariationEditor rows above are **REAL/tested in fast SQL**:
+[push39869291945](https://github.com/soldiermr98-commits/shopnext/actions/runs/39869291945),
+377 tests/9493 assertions, Pint+PHP8.3/MariaDB10.6 green.
+
+Matrix Page `/admin/products/{product}/matrix` is registered and linked from the
+variation list. Attribute search30; term search/labels20 and owner-scoped; at most4
+dimensions, domain cap100 combinations/call/500 retained variants. Duplicate
+attribute rows fail instead of silently overwriting. Generation never resets
+stock/prices/SKUs/trash and reports zero newly created rows honestly on reruns.
+
+| Screen | Action | REAL/tested | Test name (VariantMatrixEditorTest) |
+|---|---|---|---|
+| Variant matrix | Six-role HTTP/Livewire gates; revoked generation; owner-scoped selections; create/idempotent rerun/locked parent | Implemented; runtime UNVERIFIED | L3a matrix page independently gates six roles reauthorizes generation and idempotently persists owned combinations |
+| Variant matrix | Duplicate dimensions rejected before persistence, no false success | Implemented; runtime UNVERIFIED | L3a matrix page rejects repeated dimensions without persisting a partial matrix |
+
+Bulk UI, media and reason+actor stock actions plus final delivery remain due.
+Browser pointer/visual/a11y and full new SQL matrix remain UNVERIFIED.

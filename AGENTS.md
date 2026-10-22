@@ -1,3 +1,19 @@
+# Current continuation — matrix UI PENDING fast CI
+
+- 31686d4 variation page VERIFIED fast push39869291945: Pint+PHP8.3/MariaDB10.6
+ SUCCESS,377tests9493assertions. Safe upload/parent context/all six roles/trash/
+ restore/1000-row seven-query label page actually tested. Other DBs not rerun yet.
+- NEW VariantMatrixEditor at /admin/products/{product}/matrix linked from variants:
+ bounded searchable attributes + owner-scoped term multi-selects,4 dimensions,
+ initial price/prefix, real Variants.generate, explicit skip/no-overwrite result.
+ Duplicate dimensions rejected, locked parent, policy refreshed for every write
+ and option lookup. Tests six roles/revoked generation/idempotence/ownership/locks
+ and duplicate no-partial-write PENDING actual fast CI.
+- WAIT fast green, then bulk price/category page -> media -> stock ledger with
+ reason+actor and bulk atop it -> branding/nav/cache/deploy/docs/full PR matrix,
+ l3a-complete only on complete green scope, then stop for approval. No checkpoints.
+ Active arena/0f9a69e5-shopnext; no early tag or production authorization.
+
 # Current continuation — variation editor PENDING fast CI
 
 - Df03105 product editor VERIFIED push39868756342 fast Pint+MariaDB10.6/PHP8.3;
