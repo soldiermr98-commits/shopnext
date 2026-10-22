@@ -1,3 +1,16 @@
+# Current continuation — category editor runtime pending
+
+- fddb89a category service: push39732115679/PR39732121080 ALL8 GREEN;240 tests/job,
+  PHP8.2MySQL8:7983assertions. Real service guards/audits/query bounds verified.
+- CategoryEditor now wired explicitly in panel, schema/forms/upload/SEO/tree,
+  root/child navigation,30-row Persian pagination, real up/down sibling reorder,
+  guarded delete. Reorder batch limit500 siblings is explicit; larger levels
+  fail with Persian validation, no fake success. Parent search max50.
+- CategoryEditorTest new screen/button/six-role/query/file-cleanup tests PENDING
+  CI. WAIT ALL8 green; red -> diagnose/fix before next concern.
+- Then continue taxonomy brands -> attributes/terms, products -> media -> stock;
+  no further owner checkpoint approval needed. Full L3a NOT complete, no tag.
+
 # Current continuation — category service sub-step
 
 - Retained Jalali integration e5f6d6b: CI39731170215 + PR39731176780 ALL8 GREEN;

@@ -1,3 +1,18 @@
+# Category domain service VERIFIED; actual editor pending CI
+
+fddb89a / [push CI39732115679](https://github.com/soldiermr98-commits/shopnext/actions/runs/39732115679)
+and [PR CI39732121080](https://github.com/soldiermr98-commits/shopnext/actions/runs/39732121080):
+ALL8 SUCCESS on both. Each PHP/SQL job passed240 tests (PHP8.2MySQL8:7983 assertions).
+All five real financial races retained. New category persistence, independent six
+roles for all service operations, Persian failures, tree/slug/reorder/delete guards,
+safe raster references, stale actor and audit rollback, four-query301-row list all
+executed. Schema migration and real no-dev package smoke passed.
+
+Next same taxonomy sub-step wires CategoryEditor through the service. New tests
+cover each button, image upload/cleanup/SEO/real reorder and delete, fresh denied
+roles and1000-row paginated rendering. This actual screen's execution remains
+PENDING CI; no brand/attribute/product/media/stock concern started yet.
+
 # Retained Jalali VERIFIED; category service sub-step pending CI
 
 e5f6d6b / [push CI39731170215](https://github.com/soldiermr98-commits/shopnext/actions/runs/39731170215)

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-22 — L3a category editor wired (runtime pending)
+
+- Category service fddb89a passed all eight gates,240 tests per SQL job.
+- Wired policy-gated category tree/schema/SEO/safe uploads, real sibling movement,
+  deletion protection and Persian pagination; screen/button tests await CI.
+
 ## 2026-10-22 — L3a category service started (not an editor yet)
 
 - Jalali production integration e5f6d6b passed all eight gates,230 tests per SQL job.

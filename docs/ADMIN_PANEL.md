@@ -123,12 +123,36 @@ hard delete; product soft-delete/restore remains a later required concern.
 
 screen | action | REAL/tested | test name
 --- | --- | --- | ---
-Category domain (no panel button yet) | list/create/update/reparent/reorder/delete | PENDING CI; service tests written | CategoryServiceTest: L3a category service independently enforces six roles for every operation and records the actual actor
-Category domain | cycle/slug/order/delete protection | PENDING CI | CategoryServiceTest: L3a category service rejects cycles duplicate slugs foreign ordering and referenced deletion with Persian errors
-Category domain | safe image reference | PENDING CI | CategoryServiceTest: L3a category service accepts only existing safely rasterized image references
-Category domain | stale role and audit rollback | PENDING CI | CategoryServiceTest: L3a category service refreshes authorization and rolls back the mutation if its actor audit fails
-Category domain | big-list pagination/parent labels | PENDING CI | CategoryServiceTest: L3a category big lists paginate and eager load parents in four bounded queries
+Category domain (no panel button yet) | list/create/update/reparent/reorder/delete | REAL, CI39732115679/39732121080 | CategoryServiceTest: L3a category service independently enforces six roles for every operation and records the actual actor
+Category domain | cycle/slug/order/delete protection | REAL, CI39732115679/39732121080 | CategoryServiceTest: L3a category service rejects cycles duplicate slugs foreign ordering and referenced deletion with Persian errors
+Category domain | safe image reference | REAL, CI39732115679/39732121080 | CategoryServiceTest: L3a category service accepts only existing safely rasterized image references
+Category domain | stale role and audit rollback | REAL, CI39732115679/39732121080 | CategoryServiceTest: L3a category service refreshes authorization and rolls back the mutation if its actor audit fails
+Category domain | big-list pagination/parent labels | REAL, CI39732115679/39732121080 | CategoryServiceTest: L3a category big lists paginate and eager load parents in four bounded queries
 
 Next after all eight gates green: wire/test the actual category screen and each
 button through this service, then brands, then attributes/terms. Do not describe
 taxonomy, products, media, stock or full L3a as complete at this service checkpoint.
+
+## Category tree screen — newly wired, runtime PENDING CI
+
+CategoryEditor is explicitly registered in the panel and policy-gated on every
+entry point using a fresh actor. Root/child exploration and30-row pagination are
+Persian; parent search is bounded to50 results. Image upload delegates to SafeUpload,
+then Categories; failed category persistence cleans the new file. Existing safe
+images are preserved on edits without an upload. SEO is metadata only, no SSR.
+Sibling movement calls the real complete-sibling reorder service (max500 siblings
+per reorder; larger lists remain paginated/readable and return a Persian limit
+error, not false success). Guarded category delete remains hard delete, not product
+soft-delete. Category restore and drag-tree reparent are not exposed as fake buttons;
+parent changes use the real parent field with cycle validation.
+
+screen | action | REAL/tested | test name
+--- | --- | --- | ---
+Category tree | role-gated route/new/edit/save/delete/move/explore | PENDING CI | CategoryEditorTest: L3a category screen and every mutation deny each excluded role independently
+Category tree | new/edit/image/SEO/child exploration/root/back/up/down/delete | PENDING CI | CategoryEditorTest: L3a category screen persists edit image SEO tree navigation both reorder directions and guarded deletion
+Category tree | SVG/duplicate/cycle errors and failed-upload cleanup | PENDING CI | CategoryEditorTest: L3a category screen rejects invalid upload duplicate slug and cyclic parents without false success or orphan files
+Category tree | previous/next pagination;1000-row query bounds | PENDING CI | CategoryEditorTest: L3a category screen paginates large root lists without N plus one category queries
+
+Service-only checkpoint fddb89a passed ALL8 on push39732115679 and PR39732121080,
+240tests/PHP job (PHP8.2MySQL8:7983 assertions). Screen verification is separate and
+must pass its own CI before brands/attributes. No visual/browser/a11y claim.

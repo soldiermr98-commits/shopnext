@@ -24,6 +24,13 @@ final class Categories
         return Category::query()->with('parent:id,title')->orderBy('order_index')->orderBy('id')->paginate(30);
     }
 
+    public function children(User $actor, ?int $parentId): LengthAwarePaginator
+    {
+        Gate::forUser($actor->fresh())->authorize('viewAny', Category::class);
+
+        return Category::query()->with('parent:id,title')->where('parent_id', $parentId)->orderBy('order_index')->orderBy('id')->paginate(30);
+    }
+
     public function save(User $actor, array $input, ?int $id = null): Category
     {
         return DB::transaction(function () use ($actor, $input, $id): Category {
