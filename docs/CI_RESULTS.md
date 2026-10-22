@@ -1,3 +1,11 @@
+## Reporter shape follow-up (still RED)
+
+f2c8356 / CI39723879111: Pint agent result fail was observed, but no files/errors
+were exposed at the assumed keys. No runtime evidence or style diagnosis claimed.
+The annotation emitter now includes all bounded metadata fields, excluding diff/
+source/code content, without assuming a report schema. --test and its nonzero exit
+remain unchanged. Do not proceed to catalog while this gate is red.
+
 ## Pint diagnostics follow-up
 
 8968d45 / CI39723650644 still failed Pint; no file-rule annotations appeared.

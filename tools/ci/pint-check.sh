@@ -8,18 +8,24 @@ status=0
 vendor/bin/pint --test --format=agent > "$report" || status=$?
 cat "$report"
 if [ "$status" -ne 0 ]; then
-  php -r '
-    $report = json_decode(file_get_contents($argv[1]), true);
-    if (! is_array($report)) {
-        echo "::notice::Pint failed without a JSON report; inspect the job output.\n";
-        exit;
-    }
-    foreach (array_merge($report["files"] ?? [], $report["errors"] ?? []) as $file) {
-        $safe = ["name" => $file["name"] ?? $file["path"] ?? "unknown", "fixers" => $file["appliedFixers"] ?? $file["fixers"] ?? $file["issues"] ?? [], "error" => isset($file["message"]) ? mb_substr($file["message"], 0, 500) : null];
-        $message = json_encode($safe, JSON_UNESCAPED_SLASHES);
-        echo "::notice title=Pint style diagnostics::".str_replace(["%", "\r", "\n"], ["%25", "%0D", "%0A"], $message)."\n";
-    }
-    echo "::notice title=Pint result::".($report["result"] ?? "unknown")."\n";
-  ' "$report"
+  python3 - "$report" <<'PYREPORT'
+import json, sys
+
+def metadata(value):
+    if isinstance(value, dict):
+        return {k: metadata(v) for k, v in value.items()
+                if k not in {'diff', 'code', 'content', 'before', 'after', 'source'}}
+    if isinstance(value, list):
+        return [metadata(v) for v in value]
+    return value
+
+try:
+    report = metadata(json.load(open(sys.argv[1])))
+    message = json.dumps(report, ensure_ascii=False)[:30000]
+except (ValueError, OSError):
+    message = 'Pint failed without a readable JSON report; inspect job output.'
+message = message.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+print('::notice title=Pint diagnostics::' + message)
+PYREPORT
 fi
 exit "$status"
