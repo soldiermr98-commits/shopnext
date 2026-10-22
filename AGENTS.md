@@ -1,3 +1,15 @@
+# Current continuation — brand editor VERIFIED; bounded report tail pending CI
+
+- 5db7749 brand editor/shared image adapter: push39737666522/PR39737671288 ALL8
+  GREEN;270tests8266/8267assertions per SQL job; all5 real SQL races each. Exact
+  docs/ci/l3a-brand-verified-matrix.json. Category image regressions remain green.
+- Tiny reporter-only fix: annotation tail6000 ->3000 to fit measured4096 limit,
+  retaining newest failures/counts. Full artifacts/summaries unchanged. Python3
+  tooling tests locally passed. Full CI for this correction is PENDING.
+- WAIT ALL8 then NEXT attributes/terms (hex swatch/image), followed strictly by
+  products -> media -> stock adjustments. Branding/navigation/production caches
+  still due. No new owner approval needed. No l3a-complete tag until all is verified.
+
 # Current continuation — brand editor/shared image regression pending
 
 - Brand domain4c24e6f push39736016898/PR39736022048 ALL8 GREEN;261tests/job,

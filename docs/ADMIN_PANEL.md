@@ -193,11 +193,19 @@ safety implementation is shared with CategoryEditor and both regressions remain.
 
 screen | action | REAL/tested | test name
 --- | --- | --- | ---
-Brands | route/new/edit/save/delete six roles + stale role | PENDING CI | BrandEditorTest: L3a brand screen independently gates all six roles and rechecks every mutation after role revocation
-Brands | logo/country/official flag/edit/preserved logo/product-delete guard | PENDING CI | BrandEditorTest: L3a brand screen persists safe logos preserves existing logos and blocks product referenced deletion
-Brands | SVG rejection/replacement/duplicate-failure cleanup | PENDING CI | BrandEditorTest: L3a brand screen rejects temporary SVG recovers with replacement and cleans files after duplicate slug failure
-Brands |1000-row query bound + previous/next | PENDING CI | BrandEditorTest: L3a brand screen paginates one thousand rows with bounded list queries and real previous next buttons
+Brands | route/new/edit/save/delete six roles + stale role | REAL, CI39737666522/39737671288 | BrandEditorTest: L3a brand screen independently gates all six roles and rechecks every mutation after role revocation
+Brands | logo/country/official flag/edit/preserved logo/product-delete guard | REAL, CI39737666522/39737671288 | BrandEditorTest: L3a brand screen persists safe logos preserves existing logos and blocks product referenced deletion
+Brands | SVG rejection/replacement/duplicate-failure cleanup | REAL, CI39737666522/39737671288 | BrandEditorTest: L3a brand screen rejects temporary SVG recovers with replacement and cleans files after duplicate slug failure
+Brands |1000-row query bound + previous/next | REAL, CI39737666522/39737671288 | BrandEditorTest: L3a brand screen paginates one thousand rows with bounded list queries and real previous next buttons
 
 No fake-success notice occurs before actual service persistence. Brand delete is
 reference-protected hard delete; no unimplemented restore button. User browser,
 visual RTL/a11y and host checks remain UNVERIFIED. Next after ALL8: attributes/terms.
+
+### Brand screen runtime verified
+
+5db7749 passed ALL8 on push39737666522/PR39737671288. Each SQL job270 tests,
+8266/8267assertions and all5 real financial races. Shared category upload adapter
+regressions passed too. [Exact matrix](ci/l3a-brand-verified-matrix.json).
+Next: attributes/terms after a reporter-only annotation-bound correction passes
+all eight gates. Full L3a still IN PROGRESS; no browser/visual/a11y/host claim.

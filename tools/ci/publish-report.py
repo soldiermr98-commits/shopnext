@@ -41,7 +41,7 @@ def publish(path, label):
         with open(summary, 'a') as out:
             out.write('\n### ' + name + '\n<pre>' + html.escape(text[-18000:]) + '</pre>\n')
     # Always begin the annotation on its own line, even for JSON without newline.
-    message = text[-6000:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+    message = text[-3000:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
     print('\n::notice title=' + name + '::' + message)
 
 

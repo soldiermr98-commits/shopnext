@@ -1,3 +1,20 @@
+# Brand editor VERIFIED; diagnostic tail bound correction pending
+
+5db7749 / [push CI39737666522](https://github.com/soldiermr98-commits/shopnext/actions/runs/39737666522)
+and [PR CI39737671288](https://github.com/soldiermr98-commits/shopnext/actions/runs/39737671288):
+ALL8 SUCCESS on both. Each SQL job270 tests8266/8267assertions; all5 actual financial
+races each. Exact [brand matrix](ci/l3a-brand-verified-matrix.json). All brand
+buttons/roles/persistence/logo/rejected-upload recovery/cleanup and1000-row query
+checks executed. Category shared image adapter regressions remained green.
+
+Before larger attribute/product suites, correct the existing diagnostic publisher's
+6000-character tail to3000: the measured GitHub annotation limit is4096, so the old
+size can truncate the most recent failure/test total. Full redacted artifacts and
+18000-character job summaries are unchanged. New local regression verifies the
+latest failure marker survives within the bound; all3 Python tooling tests passed.
+This tiny reporter-only correction's full CI is PENDING. Attributes/terms next;
+no package iterations or business/financial changes in this correction.
+
 # Brand domain VERIFIED; brand screen/shared image adapter pending CI
 
 4c24e6f / [push CI39736016898](https://github.com/soldiermr98-commits/shopnext/actions/runs/39736016898)

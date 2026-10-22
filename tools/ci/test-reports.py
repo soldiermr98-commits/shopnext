@@ -18,6 +18,20 @@ class ReportTests(unittest.TestCase):
         for secret in ['example-secret-value', 'example-bearer-token', 'user:password']:
             self.assertNotIn(secret, value)
 
+    def test_annotation_preserves_latest_failure_within_measured_github_limit(self):
+        import contextlib
+        import io
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'failure.log'
+            path.write_text('x' * 12000 + '\nlatest-failure-marker')
+            output = io.StringIO()
+            with patch.object(reports, 'ROOT', Path(directory)), patch.dict(reports.os.environ, {'GITHUB_STEP_SUMMARY': str(Path(directory) / 'summary.md')}), contextlib.redirect_stdout(output):
+                reports.publish(path, 'bounded-fixture')
+            notice = next(line for line in output.getvalue().splitlines() if line.startswith('::notice'))
+            self.assertLess(len(notice.split('::', 2)[2]), 4096)
+            self.assertIn('latest-failure-marker', notice)
+
     def test_wrapper_preserves_success_and_failure_and_standalone_annotation(self):
         for code in [0, 7]:
             with tempfile.TemporaryDirectory() as directory:
