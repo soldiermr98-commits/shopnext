@@ -542,3 +542,15 @@ This proves services, not delivered product/variation/bulk editor screens. Next
 content/gallery/spec/FAQ/relations and actual UI, followed by media and reason+
 actor stock, then remaining branding/navigation/cache/deploy/full handoff. No
 l3a-complete tag or L3b/deployment approval. Real browser/host acceptance UNVERIFIED.
+
+
+## Active continuation: revised CI budget (runtime PENDING)
+
+Owner authorizes Pint + PHP8.3/MariaDB10.6 only on intermediate branch pushes;
+full original six SQL combinations and frontend on PR updates and tags. The
+workflow now selects its matrix deterministically after style, includes the active
+arena branch and tag triggers, and skips frontend on fast pushes. Three local
+`python3 tools/ci/test-matrix.py` contract tests pass; actual workflow execution
+PENDING. Fast green is not six-way SQL/frontend evidence. Final l3a-complete remains
+blocked on complete scope plus an actual full-matrix green run. Older ALL8-per-push
+instructions are superseded, not the SQL tests or financial race requirements.

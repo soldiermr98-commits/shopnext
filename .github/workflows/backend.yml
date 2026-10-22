@@ -2,7 +2,8 @@ name: Backend and frontend verification
 
 on:
   push:
-    branches: [main, arena/c101d8c3-shopnext, arena/b4d40ed7-shopnext]
+    branches: [main, 'arena/**']
+    tags: ['**']
   pull_request:
   workflow_dispatch:
 
@@ -15,11 +16,22 @@ concurrency:
 
 jobs:
   style:
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      full: ${{ steps.matrix.outputs.full }}
     name: Fast Pint formatting dry-run
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+      - name: Select and test event-based verification scope
+        id: matrix
+        env:
+          CI_EVENT: ${{ github.event_name }}
+          CI_REF_TYPE: ${{ github.ref_type }}
+        run: |
+          python3 tools/ci/test-matrix.py
+          python3 tools/ci/select-matrix.py
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
@@ -56,6 +68,7 @@ jobs:
           retention-days: 7
 
   frontend:
+    if: needs.style.outputs.full == 'true'
     needs: style
     name: Storefront and archived security regression tests
     runs-on: ubuntu-24.04
@@ -90,12 +103,7 @@ jobs:
     timeout-minutes: 20
     strategy:
       fail-fast: false
-      matrix:
-        php: ['8.2', '8.3']
-        db:
-          - {image: 'mysql:8.0', series: '8.0.', family: mysql}
-          - {image: 'mariadb:10.6', series: '10.6.', family: mariadb}
-          - {image: 'mariadb:11.4', series: '11.4.', family: mariadb}
+      matrix: ${{ fromJSON(needs.style.outputs.matrix) }}
     services:
       mysql:
         image: ${{ matrix.db.image }}

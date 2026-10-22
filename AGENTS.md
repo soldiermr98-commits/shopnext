@@ -1,3 +1,17 @@
+# Active continuation — arena/0f9a69e5-shopnext, CI scope update pending
+
+- PR2 merged at39b64b4; working on NEW ACTIVE arena/0f9a69e5-shopnext. Older
+ branch/status instructions below are historical and superseded; never switch.
+- Owner revised CI: intermediate branch pushes Pint + PHP8.3/MariaDB10.6 only;
+ PR updates and tags full six-way SQL + frontend. Full matrix green required before
+ l3a-complete, then stop for approval. No intermediate approval checkpoints.
+- NEW deterministic matrix selector + three local unit tests passed; workflow
+ triggers arena/** and tags, style prerequisite outputs matrix/full selection.
+ Runtime workflow verification PENDING push; no full-matrix claim for fast runs.
+- NEXT after fast green: product content/gallery/main/alt/spec groups/FAQ/relations
+ domain, actual product/variant/bulk pages; media; ledger reason+actor stock + bulk;
+ final docs and full PR matrix. Existing metadata/variants/bulk services verified.
+
 # Current continuation — bulk domain VERIFIED; product content/UI NEXT
 
 - 5e5db96 ProductBulk VERIFIED push39862703481/PR39862709665 ALL8 SUCCESS.
