@@ -1,3 +1,20 @@
+# Current continuation — product metadata editor PENDING fast CI
+
+- 44b690c content Editor VERIFIED fast push39868230626: Pint+PHP8.3/MariaDB10.6
+ SUCCESS,360tests9195assertions. Upload/reorder/main/alt/relations/SVG/locked-context
+ and six-role Livewire/HTTP tests actually passed; browser gestures still unverified.
+- NEW registered /admin/products ProductEditor: all four draft types, title/slug/SKU,
+ brand search bounded30, prices/SEO/scheduled sale+flash+publication using retained
+ AdminDate, featured, read-only stock listing, soft trash/restore, paginated eager
+ brand list and link to service-backed content page. Domain-only mutation routes.
+- ProductEditorTest six roles/revoked actions/create/update/trash/restore/types/
+ domain error mapping/1000-row bounded list and Tehran UTC date persistence/reload
+ PENDING actual fast CI. No stock field; variation and bulk pages still due.
+- WAIT fast green then variations/matrix and bulk pages; media; stock ledger with
+ reason+actor and bulk on it; branding/cache/deploy/final seven docs/full PR matrix
+ then l3a-complete tag and stop. No checkpoint approval and no early tag.
+ Active branch arena/0f9a69e5-shopnext.
+
 # Current continuation — product content domain fast VERIFIED; editor PENDING
 
 - 503214f actual fast push39867647967 SUCCESS style+PHP8.3/MariaDB10.6;

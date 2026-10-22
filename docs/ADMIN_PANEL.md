@@ -449,3 +449,26 @@ search at most30 products and resolve selected labels with one bounded query/kin
 Browser drag-and-drop gestures, visual RTL and a11y remain UNVERIFIED; tests exercise
 persisted reordered form state, not a browser pointer. Full product/variation/bulk
 pages, media library and stock ledger actions are still pending.
+
+
+### Content editor fast VERIFIED; product metadata editor PENDING
+
+All three content editor rows above are now **REAL/tested on fast SQL**:
+[push39868230626](https://github.com/soldiermr98-commits/shopnext/actions/runs/39868230626),
+360 tests/9195 assertions, Pint and PHP8.3/MariaDB10.6 green. Browser pointer/visual
+checks and other DB combinations remain UNVERIFIED for the new scope.
+
+New registered `/admin/products` metadata editor exposes the content-page link,
+all four types, SKU/slug, price/sale/flash schedules, brand, SEO and publication;
+stock is read-only. It uses Products services for every save/trash/restore; brand
+search30, list page30 with eager names and no rich-text hydration.
+
+| Screen | Action | REAL/tested | Test name (ProductEditorTest) |
+|---|---|---|---|
+| Products | HTTP/Livewire six roles; new/edit/save/trash/restore/trash toggle, revoked roles | Implemented; runtime UNVERIFIED | L3a product screen independently gates six roles and every CRUD trash toggle action after revocation |
+| Products | Four draft types; real price/SKU/variable publication validation | Implemented; runtime UNVERIFIED | L3a product screen persists all four draft types and maps real service price SKU and publication errors |
+| Products |1000-row list;30-item page; bounded eager brand queries, no description load | Implemented; runtime UNVERIFIED | L3a product screen pages one thousand rows with bounded eager brands and without rich text hydration |
+| Products | Tehran publication/sale/flash edge conversion and saved UTC redisplay | Implemented; runtime UNVERIFIED | L3a product page saves Tehran scheduled publication sale and flash windows as Gregorian UTC and redisplays them |
+
+Variation/matrix and bulk pages, media, reason+actor stock, final handoff remain
+due. Existing Jalali component is reused, not a new candidate trial.
