@@ -1,0 +1,245 @@
+[
+  {
+    "url": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1600&q=80",
+    "locations": [
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 22
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80",
+    "locations": [
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 29
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80",
+    "locations": [
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 36
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80",
+    "locations": [
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 48
+      },
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 128
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80",
+    "locations": [
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 61
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=800&q=80",
+    "locations": [
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 89
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
+    "locations": [
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 91
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
+    "locations": [
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 163
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=800&q=80",
+    "locations": [
+      {
+        "file": "client/src/lib/fallbackData.ts",
+        "line": 195
+      }
+    ]
+  },
+  {
+    "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuDJNTAvUuzXk8a9LCrUeLBI0fzid9uznykq_yEmQuFj3-KwUypK1oM0vRheb0bvaAwjHrviGu_CgmFbDW6HYLhZWWvp4HoPjB94vtLPXKfqjR973F1bAcA140Oev53bdgQnFurTToJwqzXSxAVhBO74BCSS_O3y0fyIE3lfi9pyZCu9RuS7JA7LloniRbzqZtTNdZSJXZpfNSOiCOeOVCliY9B2xtWryFGxkEzCoWEDBEmyHhXtGg6vlQ",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 94
+      },
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 763
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=600&q=80",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 133
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 145
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 156
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=600&q=80",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 168
+      }
+    ]
+  },
+  {
+    "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuD9JrX7rDJM65TIIr6lVlJuMS4Q4flsFPw6yjjRnneabX3xcLpoYnf27ioS3N4hxDOL8YSrvWqW6YjQMq_ohyPmQj3TM1H7bCdleU6bLPGzZertcbDr1TUIwUYahDnKNgk_A05sLAnt2XVhljqBhGL4CJTxm1nuguWy-AF2w7gt9Qb5lmcsD63OfpWVlLP6AiVM0bsbfimOmWQUyAtVauKtUvwGbMeiitqCPFL1wwvXCGFcq9-5i3FPIg",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 276
+      },
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 441
+      }
+    ]
+  },
+  {
+    "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuC7nW99NmXe-6hD1rUbnubu4v439Krx7_1QYoNGnXywnUkwqHGXvYYrmK7nVk4LMiMbAISPXHxwcbQjd21QinFa08bTLXSHUKE-aD33v63vQTtwHAgh7qPziuzVf83rmyn5uWLLUREGrc8hzO0975OWAlAA2-16Mwcpw8Vl-NJxHJ151ABj4ebLSC8IeUoxtMrqW8pcSUwNVFGqQu99mgSfWhY2qeOYBiLhhjFuLTvPksZcqInOQLvaCA",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 396
+      },
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 639
+      }
+    ]
+  },
+  {
+    "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBBDwCS1d1sGSymoFrUD_WevdMxOqmlDSAlPIviwVXbaVG8dkfsZBV2wW1LXZ94DY0a4aqcnyFnI-VqHEPr8tewarVFipLwo4cnpqYrGPRfcx440-mMRUA4076WGIjcAyBaa8_MQk7YuYSBSfxH9UHzbof14VBRd9dd-J0u2yJtzNQt16vfNQwdGyFgFqn4hFjv4b6kXPSYCYgvhU5K8EowuEoo--t4S_q6a8JwwL5i6f4cTRCr6fIU8g",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 404
+      }
+    ]
+  },
+  {
+    "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuAG-06_ILMVc7AgDKGAXZKCm8JFmRe4KTkjTwrVjZgqJeYLdVWmoGVKwwOyfxAkbYzZXCCcbBqLDM4Kol4hjAExHK43jtUlDqxBb2LRmOo_Kh1UzwepS2pZOkiN-TCp4yCMJE7GCN3YYnUVSet_vnjG-s5i4wneuLa-6y8p4QFGD9Wizq7CH6tnUHkfdAhMYe6FQOTlKLP0QVDzpwE-c6mjSiXBmcyHK201G31ErjVLUEpyhIciMUmFoA",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 412
+      }
+    ]
+  },
+  {
+    "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuDGAPAKIeqq7MOT7FFqENHpefWpqmFYkEPycMNXFSqBGJ42VgNLS-EXO8A_8_u7dyGfczAq6QkhiM_F9anYYIGgW5qTmjhuR-AV2cQNgXXjHj22lgyyTzH5gh7jZjhPMwU52WjGip6oF2r45K-gfMHZHRhyCFhYxkwrxS9mhz4hvpnyEpT_xGBk2-O00WDUPdwz6tqu167f8xgDl4noF1AX6ZhGkKXZQ9j-lJgWm-auksz-OgzsJzVXdw",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 433
+      }
+    ]
+  },
+  {
+    "url": "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=300&q=80",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 1213
+      },
+      {
+        "file": "client/src/pages/storefront/AccountPage.tsx",
+        "line": 1422
+      }
+    ]
+  },
+  {
+    "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuCKyyLWggWCe-CKyfifTQeBV-Bn1g2BPVPzjrJXgqGBpKtijzaGSsjj7DhE35xSAcP-X2SLBZTOwxuMsiCiS4Y2WB3uaTR7oR-d_uUmpJkrhUvglQjDjIqhbuMUf3oBdX8P13JGrr0gDg2RMq3tOcBnpC-o7TzFVho2B1WyAwkQVl3APSmX4CExxoy18jvbX4UL3lkIwAH42K3fqOmaRzYTtiqpeDV9GINTEBON9ufBDNyetQkFdHex0w",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/CartPage.tsx",
+        "line": 115
+      },
+      {
+        "file": "client/src/pages/storefront/HomePage.tsx",
+        "line": 264
+      },
+      {
+        "file": "client/src/store/cartStore.ts",
+        "line": 43
+      },
+      {
+        "file": "client/src/store/cartStore.ts",
+        "line": 55
+      }
+    ]
+  },
+  {
+    "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuAuqbuA4ZEn1-HmsFigNDBdGpflyZ1l67Jla6nxKmMdIdxdYXqMSOrnq9xEMc_QGwqKchKnffpeUKvZal6c-xrHIUZZRDQ_Kw_zQHfb9xSuCE0BbOyd3MqZlagPmyqJfSOMHBKC1vJlwXXgHgHoxsw9_f1wRqhsBNL8uXIQUG1_taV0xMJeBtOi337jON9ZTma-Sm2Zs0NUmAnpzESmtTBAtTZ8PjIZxJmuhOZxxbeTCZsiGnJhGYerCA",
+    "locations": [
+      {
+        "file": "client/src/pages/storefront/HomePage.tsx",
+        "line": 282
+      }
+    ]
+  },
+  {
+    "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuD_BrusloBIxWl9QbQlMv8UcxFzIQELTXKpK37ZRuEkM7L2Nzynt92YTpRWUi0pn_QsjWzVEmHaR4p5zAjJzcx2ild8yE_XmSVBuaPesh-2kiuBE5SzmDYAXq6KwAuOneNCKwTyZqXGdUKHzmkXmWLUWvxSdxPiqXBg5hRPtAOZiBMvQDDTZwKuuZQp2q3rFUH0GdrAeUMtERg3Y8MR7AMDlg6WTiLc9_V30dAETAVT8uV5WwUWNbJZzQ",
+    "locations": [
+      {
+        "file": "client/src/store/cartStore.ts",
+        "line": 74
+      },
+      {
+        "file": "client/src/store/cartStore.ts",
+        "line": 86
+      }
+    ]
+  }
+]

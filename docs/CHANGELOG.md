@@ -1,0 +1,142 @@
+# Changelog
+
+## 2026-10-22 — L2 main integration handoff
+
+- Confirmed l2-complete at5120dad and final CI39602866142: ALL7 SUCCESS.
+- Refreshed README, handoff and acceptance/evidence docs to remove stale pending
+  claims; retained unverified host/browser/restore and L3 approval boundaries.
+- Enabled the full backend/frontend workflow on main pushes as well as session
+  pushes and PRs, so the merge commit is independently verified.
+- Integration is through a reviewed/check-gated PR, not a direct push to main.
+- Completion tag remains immutable; no gateway/SMS/L3/deployment scope added.
+
+## 2026-10-21 — L2 financial implementation and CI gate
+
+- Atomic repriced checkout, immutable snapshots/reservations/idempotency; complete
+  manual/full-wallet lifecycle, actual-paid once-only wallet refunds and actor events.
+- ALL COD exempt minute expiry; configurable7day admin warning only; bounded cron.
+- Owner/role/CSRF/throttled financial APIs, sanitized private receipts and server-only
+  financial storefront values; deferred prototype writes labeled/disabled.
+- Five real parallel process/connection scenarios in EACH of six SQL/PHP jobs;
+  latest code40abc65 / CI39601812389 all7 green. Finding status: L2_ACCEPTANCE.md.
+- Final documentation commit must pass full matrix before l2-complete is tagged.
+  No gateway/SMS, loyalty formula, business Filament CRUD or deployment acceptance.
+
+## Earlier L2 checkpoints (historical)
+
+- Exact rational shared pricing, scoped/time-limited coupons, automatic rules,
+  inclusive/exclusive VAT and fail-closed zone/method shipping; display-only integer
+  coupon allocation and explicit signed rounding adjustment.
+- Constrained financial schema, append-only ledger SQL triggers, authoritative
+  balance accessor, locked/idempotent full-debit/actual-paid-refund primitives.
+- Versioned server carts, token hashes, preserve-both atomic login merge and clear
+  conflict contract; CSRF-protected cart/quote/retry API and secure guest cookie.
+- Named regression/property tests, full six-way real SQL plus frontend CI evidence
+  in CI_RESULTS/ci/l2-*. No parallel/concurrency or complete order/payment proof yet.
+- Outstanding: checkout transaction/reservations/state machine/manual approvals,
+  expiry, order/owner APIs, storefront financial wiring, real parallel tests and
+  final per-finding/docs/tag gate. No gateways/SMS/business Filament resources.
+
+
+## 2026-10-21 — L1c/L1d implementation checkpoint
+
+- Closed native staff flooding: persistent IP lockout before credential lookup,
+  identical known/absent-account notification, correct-password blocking and expiry.
+- Encrypted Laravel setting casts, constant masked/isSet DTOs, explicit nonempty
+  newValue writes, preservation on omission/empty; Filament response clearing;
+  actual SQL/API/Livewire/exception/formatted-log secrecy tests.
+- Default-redacted create/update/delete admin activity plus safe media-upload audit.
+- Same-domain SPA/API routing, strict self-hosted headers/CSP, exact CORS/hosts,
+  trusted proxies/body cap; raster re-encoding with GD AND Imagick/SVG rejection;
+  sanitized rich HTML and actual UTC database session tests.
+- One minutely scheduler and bounded database worker/queued heartbeat/dashboard;
+  deploy-check with real runtime/DB/queue probes and unsafe/failure tests.
+- Committed-source no-dev ZIP builder, actual extracted HTTP/asset/migration smoke,
+  one-hour offline activation and POST/HTTPS/header-token self-deleting runner.
+- Code1c0d09c run39539510764:160 Pest/1028 assertions in each six-way DB job,
+  frontend/legacy/build and real upload-package smoke green. Failed intermediate
+  runs diagnosed/fixed; see CI_RESULTS. Final release marker l1-complete is applied
+  only AFTER final documentation CI is also green.
+- Hosting instructions for terminal/no-terminal; owner real-browser acceptance
+  checklist remains ALL UNVERIFIED. No launch/commerce claim or L2 implementation.
+
+## 2026-10-21 — L1a + auth/role/Filament slice, six-way CI
+
+- MySQL8 + MariaDB10.6/11.4 × PHP8.2/8.3, identical integrity tests/rollback.
+- Full14-table/175-column explicit mapping, missing legacy fields, canonical Toman,
+  composite owner/variant/return FKs, normalized lines, portable CHECK/JSON/utf8mb4.
+- Actual Sanctum4.3.3 solve; cookie-only auth/real CSRF/rate limits/password proof,
+  revoked sessions, frontend transport +4 tests (now7 Node cases total).
+- All18 application models default-deny policies, independent66-case6-role matrix.
+- Native Filament staff login/password-only profile and gated dashboard, env-only
+  first-admin provisioning/no resets; forced current-password rotation/no remember.
+- Code531d4e9 passes131 Pest/728 assertions on all6 jobs; frontend/legacy green.
+  Red failures read/fixed, retained in [CI evidence](CI_RESULTS.md).
+- Overall L1 still incomplete: settings security/perimeter/logging/operations/host
+  acceptance pending. No L2 pricing/payment/SMS/checkout/business resources.
+
+## 2026-10-21 — Real CI, Composer-resolved Laravel skeleton and constrained schema
+
+- Green current-repo baseline on frontend and PHP8.2/8.3/MySQL8 before scaffolding.
+- Official Laravel12 generated by CI; actual Composer update selected Filament5.10.3
+  on PHP8.2. Lock committed; same lock verified on PHP8.3. Fixed create-project hook
+  failure before reporting success (failed run links retained).
+- Pint, migrate:fresh and3 Pest tests/6 assertions passed for the skeleton matrix.
+- Initial constrained schema + direct SQL FK/unique/CHECK/transaction/rollback/
+  seed-guard cases:24 Pest tests/42 assertions pass on both matrix versions.
+- Dedicated test DB guards, strict source and local native PHP/Pint syntax/style
+  checks. L1 remains IN PROGRESS, not complete. No pricing/payment/SMS/resources.
+- [Real CI links, versions, counts and outstanding scope](CI_RESULTS.md).
+
+## 2026-10-20 — L0 Laravel migration preparation; L1 blocked
+
+- Owner approved Laravel/MySQL + Filament replacement, React/Vite storefront retained;
+  L0+L1 authorized, stop before L2 (supersedes earlier Phase B wording below).
+- `d1fa8c4`: git-renamed storefront into client/, Node/sql.js/tests into legacy/,
+  archived React admin outside the active build; reserved backend/ status directory.
+- `ecb59fb`: vendored licensed font/icon files with hash checks, removed static CDN
+  resources; original23 image URLs inventoried and replaced with explicit local
+  placeholders, NOT mirrored photos. Added3 asset tests alongside171 legacy tests.
+- Added full replacement spec/all29 finding-to-test contracts and shared-host/no-SSH/
+  offline queue/cron/deploy-check plan. Retained exact legacy architecture/schema
+  in *_LEGACY.md; rewrote current README/architecture/ER/security/agent handoff.
+- Laravel12/PHP8.2 floor, target8.3 + Filament5 compatibility choice documented;
+  Laravel13 would drop8.2. Composer resolution/actual dependency lock pending.
+- L1 NOT implemented: no Composer/MySQL/pdo_mysql execution environment, no Laravel
+  scaffold/Pest/migrations/auth/Filament/deploy-check. No L2 domain work or provider
+  calls. Legacy tests do not certify Laravel. Launch stays NO-GO.
+- Real execution and honest limitations: [L0_RESULTS](L0_RESULTS.md).
+
+## 2026-10-20 — Phase A security foundation
+
+Approved direction: preserve UI, incrementally replace backend/domain core.
+Session branch fixed by Arena: `arena/c101d8c3-shopnext`; no alternate branch created.
+
+- Replace demo/default-admin auth and client promotion with cookie-only JWT sessions.
+- Require external strong signing secret and fresh-admin bootstrap password;
+  enforce first-login password rotation; bcrypt cost 12; no auth credentials in JSON.
+- Add 15-minute access, 7-day absolute rotating refresh, replay/session revocation,
+  real password change and logout; remove JS-readable tokens/demo login preset.
+- Explicit permissions on every admin operation; manager cannot access settings/logs.
+- Add Helmet, strict origin/CORS policy, auth/OTP rate limits and all-operation Zod
+  schemas; authorize admin before parsing body; protect order ownership reads.
+- Remove unsafe demo OTP auth; return 503 pending real transport (no SMS integration).
+- Write-only settings secret patches and masked/isSet GET/PUT responses; safe client DTO.
+- Propagate disk failures; private atomic temp exports and memory rollback; transactional
+  backend/order rewrite remains outstanding.
+- Add Vitest/Supertest isolated suite: 171 passing security regression tests.
+- Type-check/build pass at every implementation step; frontend large-chunk warning remains.
+
+Commits before this documentation checkpoint:
+`e64954a` auth; `14477af` perimeter/settings; `271457b` regression runner;
+`6b9e84a` revocation/persistence review; `1a0f6c7` pre-parse authorization.
+See [security foundation](SECURITY_FOUNDATION.md), [audit status update](AUDIT_REPORT.md#phase-a-status-update--2026-10-20).
+Phase B is not approved; no payment/SMS transport/pricing rewrite performed.
+
+## 2026-10-20 — Audit/documentation baseline
+
+- Phase 1 discovery/dependency/feature inventory (`36c934f`).
+- Phase 2 architecture/API/schema/frontend/actual flow documentation (`0d39bd0`).
+- Phase 3 executed audit, full reachable history scan and decision memo (`73ff0b8`).
+- Baseline launch assessment: NO-GO. Historical reports retained; Phase A status
+  addendum takes precedence for resolved/partially mitigated security items.

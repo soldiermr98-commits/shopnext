@@ -1,100 +1,89 @@
-# دیجی‌استایل (ویستا استایل) | پلتفرم فروشگاه آنلاین و پنل مدیریت
+# Shopnext — L1 foundation and L2 financial core
 
-پلتفرم پیشرفته تجارت الکترونیک پوشاک و سبک زندگی معاصر ایران با بازآفرینی دقیق و پیکسل‌به‌پیکسل طرح‌های Google Stitch، پشتیبانی کامل از زبان فارسی (RTL)، تقویم جلالی (شمسی)، واحد پولی تومان، پایگاه داده SQLite با قابلیت تعویض به PostgreSQL/MySQL، معماری تمیز و پنل مدیریت جامع.
+Persian RTL React/Vite storefront with Laravel 12, Sanctum and Filament 5 for
+PHP shared hosting. **L1 and L2 implementations are CI-verified.**
+The `l2-complete` tag points to `5120dad`; this is NOT production launch approval.
+L3 has not been authorized. [Financial coverage and limits](docs/L2_ACCEPTANCE.md).
+Actual host/browser/TLS acceptance is **UNVERIFIED**: [run the checklist](docs/ACCEPTANCE.md).
 
----
+## Implemented and executed
 
-## 🚀 ویژگی‌های کلیدی
+- Complete 14-table/175-column legacy schema mapping, normalized relations,
+  FK/deletion/unique/CHECK integrity, integer **Toman**, UTC application and DB sessions.
+- Customer cookie-only Sanctum/CSRF, login/password throttles, session revocation;
+  OTP fails closed with 503. No JWT/bearer issuance or demo identity fallback.
+- Six-role policies; native Filament staff login/flood lockout, forced initial
+  password change, current-password proof and other-session revocation.
+- Encrypted, write-only secret settings with constant masks/isSet; authorized
+  Filament settings page. Empty/omitted newValue preserves the old value.
+- Redacted admin model create/update/delete audit plus media-upload audit.
+- Self-hosted CSP/security headers, strict CORS/host/proxy trust, 3 MiB body limit,
+  validated/re-encoded raster uploads, SVG blocked, sanitized rich-text casts.
+- Single scheduler cron, bounded database worker, queued heartbeat and dashboard
+  stale warning; `php artisan deploy-check` with fail-closed readiness diagnostics.
+- No-dev upload ZIP builder and optional, token-protected, self-deleting migration runner.
 
-### ۱. ویترین فروشگاه (Storefront)
-- **صفحه اصلی (Home):** نوار اطلاعیه‌ها، هدر چسبان با جستجوی زنده (Live Search)، مگامنو، اسلایدر هیرو، دسته‌بندی‌های دایره‌ای، حراج‌های شگفت‌انگیز با تایمر شمارش معکوس جلالی، پرفروش‌ترین‌ها، بنرهای تبلیغاتی چندستونه، نوار برندهای رسمی (هاکوپیان، چرم مشهد، درسا، مارال چرم)، نمادهای اعتماد و الکترونیک، مجله سبک زندگی و عضویت خبرنامه.
-- **کاتالوگ و فروشگاه (Shop):** فیلترهای پیشرفته بر اساس دسته‌بندی درختی، برند، محدوده قیمت، موجودی انبار، مرتب‌سازی چندگانه، برچسب‌های تخفیف و کشوی فیلتر ریسپانسیو موبایل.
-- **جزئیات محصول (Product Details):** گالری تصاویر با زوم و انتخاب تصاویر بندانگشتی، انتخاب رنگ با دایره‌های Swatch، انتخاب سایز استاندارد با راهنمای سایز، برچسب اصالت کالا و ارسال رایگان، جدول مشخصات فنی، نقد و بررسی تخصصی، دیدگاه‌های خریداران با امتیازدهی ستاره‌ای، کالاهای مرتبط و نوار خرید چسبان موبایل.
-- **سبد خرید (Cart):** نوار پیشرفت ۳ مرحله‌ای تسویه حساب، محاسبه آنی سود خریدار از تخفیف‌ها، نوار پیشرفت ارسال رایگان (آستانه ۴ میلیون تومان)، اعمال و اعتبارسنجی زنده کدهای تخفیف، و کشوی شناور مینی‌کارت (Mini Cart Drawer).
-- **تسویه حساب و پرداخت (Checkout):** انتخاب استان و شهر با منوی آبشاری هوشمند شهرهای ایران، آدرس پستی دقیق و کد پستی ۱۰ رقمی، انتخاب روش ارسال (پست پیشتاز سراسری و پیک اکسپرس فوری با انتخاب بازه زمانی)، انتخاب درگاه‌های پرداخت شاپرک (سامان کیش SEP، زرین‌پال، پرداخت در محل COD، کیف پول نقدی دیجی‌استایل) و چک‌باکس صدور فاکتور رسمی مالیاتی با کد اقتصادی.
-- **فاکتور رسمی و پیگیری سفارش (Order Success & Tracking):** انیمیشن جشن خرید (Confetti)، کد رهگیری ۲۴ رقمی، شماره بارنامه پستی، پیش‌نمایش چاپی فاکتور رسمی فروش مطابق با استانداردهای دارایی، و رهگیری عمومی سفارش با تایم‌لاین مراحل انبار و پست.
-- **پروفایل کاربری (My Account):** نمایش نشان عضویت طلایی (Gold Member)، موجودی کیف پول و امتیازات دیجی‌کلاب، تاریخچه سفارش‌ها، مدیریت آدرس‌ها و تغییر کلمه عبور.
-- **احراز هویت دومرحله‌ای و OTP:** ورود با شماره موبایل و کد پیامکی یکبارمصرف (OTP آزمایشی: ۱۲۳۴۵)، ورود با کلمه عبور، و ثبت‌نام سریع.
-- **مجله مد دیجی‌استایل (Blog):** آرشیو مقالات سبک زندگی، زمان مطالعه و مطالعه کامل مقاله.
-- **صفحات استاتیک:** درباره ما، تماس با ما، پرسش‌های متداول (FAQ) و قوانین بازگشت کالا.
+**218 Pest tests / 6,789–6,790 assertions in EACH of six real DB jobs**
+at the tagged L2 gate ([CI39602866142](https://github.com/soldiermr98-commits/shopnext/actions/runs/39602866142)):
+PHP 8.2/8.3 × MySQL 8.0 / MariaDB 10.6 / MariaDB 11.4. Frontend typecheck,
+13 transport/store/formatter/local-asset tests +171 archived regressions and build pass separately.
+The PHP8.2/MySQL job also builds/extracts the real ZIP and runs HTTP/runner smoke.
+[CI links and evidence](docs/CI_RESULTS.md) · [Architecture](docs/ARCHITECTURE.md)
+· [Schema](docs/DATABASE.md) · [Security](docs/SECURITY.md).
 
-### ۲. پنل مدیریت حرفه‌ای (/admin)
-- **داشبورد تحلیلی (Dashboard):** کارت‌های شاخص‌های کلیدی عملکرد (KPIs) شامل فروش روز/هفته/ماه، تعداد سفارش‌ها، مشتریان جدید، میانگین ارزش سفارش (AOV)، نرخ تبدیل و هشدارهای کمبود موجودی؛ نمودار خطی روند فروش بر اساس تقویم شمسی با کتابخانه Recharts؛ لیست سریع آخرین سفارش‌ها و کالاهای نیازمند تامین انبار.
-- **مدیریت محصولات (Products):** جدول کامل کالاها با فیلتر دسته‌بندی و جستجو، افزودن کالای جدید، ویرایش، حذف، کنترل موجودی انبار، قیمت‌گذاری حراج و کد SKU.
-- **مدیریت سفارش‌ها (Orders):** فیلتر وضعیت‌های سفارش (در انتظار پرداخت، پردازش انبار، تحویل به پست، تحویل نهایی، لغو شده)، ثبت کد رهگیری و بارنامه پستی و شبیه‌سازی ارسال خودکار پیامک اطلاع‌رسانی به خریدار.
-- **باشگاه مشتریان (Customers):** مشاهده مشخصات، شماره تماس، کد ملی، سطح عضویت طلایی و موجودی کیف پول.
-- **تنظیمات سامانه و درگاه‌ها (Settings):** تنظیم اطلاعات حقوقی شرکت (کد اقتصادی، شناسه ملی، شماره ثبت)، هزینه‌های حمل‌ونقل و سقف ارسال رایگان، کلیدهای محرمانه ماسک‌شده درگاه‌های پرداخت (••••1234) جهت امنیت حداکثری و ارائه‌دهندگان پیامکی.
-- **گزارش وقایع و لاگ‌ها (Audit Logs):** ثبت دقیق کلیه تغییرات، لاگین‌ها و عملیات مدیران همراه با تاریخ جلالی و آدرس IP.
+## L2 financial implementation
 
----
+- One exact rational integer-Toman pricing engine; server-only financial UI totals,
+  VAT/coupon allocation and explicit signed rounding reconciliation.
+- Versioned server carts, hashed guest tokens and preserve-both login merge conflicts.
+- Atomic locked checkout, owned addresses, immutable snapshots, stock/coupon
+  reservations and idempotent full-wallet or manual COD/card-to-card workflows.
+- Once-only lifecycle/refunds to wallet, private sanitized receipts, owner APIs,
+  actor timeline, bounded expiry and warning-only COD review.
+- Five real separate-process same-database race scenarios in each of six SQL/PHP jobs.
 
-## 🛠 مشخصات فنی و معماری
+## Layout and development
 
-- **فرانت‌اند:** React 19 + TypeScript + Vite + Tailwind CSS v4 + React Router v7 + Zustand + Recharts + Canvas Confetti
-- **بک‌اند:** Node.js + Express + SQLite (sql.js) + JWT Authentication (httpOnly Cookies) + bcryptjs
-- **بومی‌سازی:** فونت وزیرمتن (Vazirmatn)، راست‌به‌چپ (RTL)، ارقام فارسی در قیمت‌ها و تقویم جلالی (Shamsi)
-- **حالت‌های نمایشی:** پوسته روشن (Light Mode) و پوسته تاریک (Dark Mode) با متغیرهای CSS توکن‌های رنگی
-
----
-
-## 🔑 اطلاعات ورود پیش‌فرض (Credentials)
-
-### مدیر ارشد سامانه (Super Admin):
-- **نام کاربری / شماره تماس:** `admin` (یا `09123456789`)
-- **کلمه عبور پیش‌فرض:** `change-me-123`
-- *سامانه در اولین ورود تغییر رمز را پیشنهاد می‌دهد.*
-
-### مشتری پیش‌فرض نمونه:
-- **شماره همراه:** `09123456789` (سهراب مظفری - عضویت طلایی)
-- **کد ورود یکبار مصرف پیامکی (OTP):** `12345`
-- **کلمه عبور ورود مستقیم:** `123456`
-
-### کدهای تخفیف فعال نمونه:
-- `VISTA2025` (۱۵۰,۰۰۰ تومان تخفیف برای خریدهای بالای ۱ میلیون تومان)
-- `WINTER25` (۲۰٪ تخفیف زمستانه تا سقف ۵۰۰,۰۰۰ تومان)
-- `FIRSTBUY` (۲۰۰,۰۰۰ تومان تخفیف خرید اول)
-
----
-
-## 📦 نحوه راه‌اندازی و اجرا
+```text
+client/     React/Vite storefront; local fonts/icons/image placeholders
+backend/    Laravel, actual Composer lock, policies, infrastructure and Pest
+legacy/     archived Express/sql.js/React-admin reference; NEVER deploy
+tools/     release builder, offline runner activation and CI smoke scripts
+```
 
 ```bash
-# ۱. نصب پیش‌نیازها
-npm install
-
-# ۲. اجرای سرور توسعه (پورت 3000)
-npm run dev
-
-# ۳. کامپایل و ساخت نسخه نهایی
-npm run build
-
-# ۴. اجرای نسخه پروداکشن
-npm start
+bun install --frozen-lockfile  # Bun1.4.3; Node22.22.3; bun.lock authoritative
+npm run typecheck
+npm test
+npm run build                # client/dist only, not a deployable PHP package
+cd backend
+composer install
+vendor/bin/pint --test
+# Pest refuses any DB except dedicated MySQL-driver shopnext_ci_test/testing.
+vendor/bin/pest --ci
 ```
 
----
+Minimum PHP8.2; target8.3. Actual locks: Laravel12.70.0, Filament5.10.3,
+Sanctum4.3.3, Pest3.8.7, Pint1.30.4. Do not interpret Node/sql.js tests as PHP/DB proof.
 
-## 📂 ساختار پروژه‌
+## Build and deploy
 
+```bash
+bash tools/build-deploy.sh build/shopnext-l2.zip
 ```
-├── server/
-│   ├── db/
-│   │   ├── database.ts      # لایه ایجاد جداول و داده‌های نمونه واقعی
-│   │   └── repository.ts    # الگو مخزن داده‌ها (Repository Pattern)
-│   └── api.ts               # کنترلر جامع REST API تحت مسیر /api
-├── src/
-│   ├── components/
-│   │   ├── layout/          # پوسته‌های StorefrontLayout و AdminLayout
-│   │   └── shared/          # هدر، فوتر، سبد شناور، فرم احراز هویت، نوار پیشرفت
-│   ├── pages/
-│   │   ├── storefront/      # صفحات اصلی، کاتالوگ، جزئیات کالا، سبد، تسویه، فاکتور، پیگیری، پروفایل و مقالات
-│   │   └── admin/           # صفحات داشبورد، محصولات، سفارش‌ها، مشتریان، تنظیمات و لاگ‌ها
-│   ├── lib/
-│   │   ├── api.ts           # کلاینت HTTP ارتباط با سرور
-│   │   └── persian.ts       # توابع تبدیل ارقام، فرمت تومان و تقویم جلالی
-│   └── store/               # استیت‌منیجمنت با Zustand (سبد خرید، احراز هویت، تم و اعلان‌ها)
-├── shared/
-│   └── types.ts             # اینترفیس‌ها و تایپ‌های مشترک کلاینت و سرور
-├── server.ts                # نقطه ورود اکسپرس با سوار کردن میدلورهای Vite
-└── package.json
-```
+
+The builder uses committed HEAD, a fresh no-dev vendor, local SPA/Filament assets,
+private `app/` and sibling `public/`. No live .env, uploads, tests, Node runtime,
+legacy server or active migration runner is included. Generated ZIPs stay out of Git.
+[Terminal and no-terminal instructions](docs/HOSTING.md) include provisioning,
+cron, environment configuration and the optional one-hour offline runner activation.
+
+## Explicit non-goals / launch gate
+
+No gateway adapters, SMS integration, loyalty formula or Filament business
+resources were built. Real tariffs and owned saved addresses are required; missing
+configuration fails closed. General CRUD/content and explicitly inactive prototype
+controls remain outside L2. Original external photos remain local placeholders.
+Real browser behavior, RTL/a11y, hosting permissions, CLI/web PHP equivalence, TLS
+and backups/restore remain UNVERIFIED. Integration into `main` does not authorize
+production deployment or L3. Continue only after explicit owner approval for L3.

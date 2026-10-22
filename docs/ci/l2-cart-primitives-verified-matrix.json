@@ -1,0 +1,60 @@
+{
+  "scope": "L2 server cart primitives/login integration only, NOT l2-complete",
+  "run_id": 39583400561,
+  "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39583400561",
+  "sha": "8080bfea69cb209e990c5a4862bf9b55bbce9853",
+  "jobs": [
+    {
+      "name": "Storefront and archived security regression tests",
+      "conclusion": "success",
+      "job_id": 119166257941
+    },
+    {
+      "name": "PHP 8.2 / mariadb:10.6",
+      "conclusion": "success",
+      "job_id": 119166258333,
+      "tests": 187,
+      "assertions": 6525
+    },
+    {
+      "name": "PHP 8.2 / mariadb:11.4",
+      "conclusion": "success",
+      "job_id": 119166258391,
+      "tests": 187,
+      "assertions": 6525
+    },
+    {
+      "name": "PHP 8.3 / mysql:8.0",
+      "conclusion": "success",
+      "job_id": 119166258464,
+      "tests": 187,
+      "assertions": 6525
+    },
+    {
+      "name": "PHP 8.2 / mysql:8.0",
+      "conclusion": "success",
+      "job_id": 119166258589,
+      "tests": 187,
+      "assertions": 6525
+    },
+    {
+      "name": "PHP 8.3 / mariadb:10.6",
+      "conclusion": "success",
+      "job_id": 119166258622,
+      "tests": 187,
+      "assertions": 6525
+    },
+    {
+      "name": "PHP 8.3 / mariadb:11.4",
+      "conclusion": "success",
+      "job_id": 119166258664,
+      "tests": 187,
+      "assertions": 6525
+    }
+  ],
+  "limitations": [
+    "No real parallel merge proof",
+    "Cart HTTP contracts not yet in this verified SHA",
+    "No order orchestration or storefront financial wiring"
+  ]
+}

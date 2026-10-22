@@ -1,0 +1,61 @@
+{
+  "scope": "L2 cart/quote HTTP contracts, NOT l2-complete",
+  "run_id": 39584222988,
+  "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39584222988",
+  "sha": "03238d6f3c88c7ab1e882a4f085fe67dedb6bf73",
+  "jobs": [
+    {
+      "name": "Storefront and archived security regression tests",
+      "conclusion": "success",
+      "job_id": 119169010507
+    },
+    {
+      "name": "PHP 8.3 / mysql:8.0",
+      "conclusion": "success",
+      "job_id": 119169010650,
+      "tests": 192,
+      "assertions": 6615
+    },
+    {
+      "name": "PHP 8.3 / mariadb:10.6",
+      "conclusion": "success",
+      "job_id": 119169010738,
+      "tests": 192,
+      "assertions": 6615
+    },
+    {
+      "name": "PHP 8.2 / mariadb:10.6",
+      "conclusion": "success",
+      "job_id": 119169010767,
+      "tests": 192,
+      "assertions": 6615
+    },
+    {
+      "name": "PHP 8.3 / mariadb:11.4",
+      "conclusion": "success",
+      "job_id": 119169010890,
+      "tests": 192,
+      "assertions": 6615
+    },
+    {
+      "name": "PHP 8.2 / mysql:8.0",
+      "conclusion": "success",
+      "job_id": 119169010908,
+      "tests": 192,
+      "assertions": 6615
+    },
+    {
+      "name": "PHP 8.2 / mariadb:11.4",
+      "conclusion": "success",
+      "job_id": 119169010927,
+      "tests": 192,
+      "assertions": 6615
+    }
+  ],
+  "limitations": [
+    "No real parallel spend/stock/coupon proof yet",
+    "No order/checkout/payment workflow yet",
+    "Storefront financial wiring not done",
+    "Host/browser acceptance unverified"
+  ]
+}

@@ -1,0 +1,192 @@
+name: Backend and frontend verification
+
+on:
+  push:
+    branches: [main, arena/c101d8c3-shopnext]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Storefront and archived security regression tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.3'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.3'
+      - name: Install exact frontend lock
+        run: bun install --frozen-lockfile
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  backend:
+    name: PHP ${{ matrix.php }} / ${{ matrix.db.image }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3']
+        db:
+          - {image: 'mysql:8.0', series: '8.0.', family: mysql}
+          - {image: 'mariadb:10.6', series: '10.6.', family: mariadb}
+          - {image: 'mariadb:11.4', series: '11.4.', family: mariadb}
+    services:
+      mysql:
+        image: ${{ matrix.db.image }}
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+          MYSQL_ROOT_HOST: '%'
+          MYSQL_DATABASE: shopnext_ci_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mariadb-admin ping --silent || mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+    env:
+      CI_DB_SERIES: ${{ matrix.db.series }}
+      CI_DB_FAMILY: ${{ matrix.db.family }}
+      APP_ENV: testing
+      APP_DEBUG: 'false'
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '3306'
+      DB_DATABASE: shopnext_ci_test
+      DB_USERNAME: root
+      DB_PASSWORD: ''
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: intl, mbstring, pdo_mysql, gd, imagick, zip, curl, bcmath
+          tools: composer:v2
+          coverage: none
+      - name: Verify actual PHP extensions and selected database
+        run: |
+          php --version
+          composer --version
+          php -r 'foreach (["intl","mbstring","pdo_mysql","gd","imagick","zip","curl","bcmath"] as $ext) { if (!extension_loaded($ext)) { fwrite(STDERR, "Missing extension: $ext\n"); exit(1); } } $db = new PDO("mysql:host=127.0.0.1;port=3306;dbname=shopnext_ci_test", "root", ""); echo "::notice::PHP ", PHP_VERSION, "; DB ", $db->query("select version()")->fetchColumn(), PHP_EOL;'
+      - name: Require committed Laravel application and lock
+        run: |
+          test -f backend/composer.json
+          test -f backend/composer.lock
+          test -f backend/artisan
+      - name: Composer cache directory
+        id: cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php }}-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-${{ matrix.php }}-
+      - name: Install committed Composer lock
+        working-directory: backend
+        run: |
+          composer validate --strict
+          composer install --prefer-dist --no-interaction --no-progress
+          composer check-platform-reqs
+          cp .env.example .env
+          php artisan key:generate --force --no-interaction
+          php artisan filament:assets --no-interaction
+      - name: Report resolved versions
+        working-directory: backend
+        run: |
+          composer show --locked laravel/framework
+          composer show --locked filament/filament
+          composer show --locked pestphp/pest
+      - name: Pint
+        working-directory: backend
+        run: vendor/bin/pint --test
+      - name: Migrate dedicated test database
+        working-directory: backend
+        run: |
+          test "$APP_ENV" = testing
+          test "$DB_DATABASE" = shopnext_ci_test
+          set +e
+          php artisan migrate:fresh --force --no-interaction > /tmp/migrate-result.log 2>&1
+          result=$?
+          cat /tmp/migrate-result.log
+          python3 - <<'PYMIGRATE'
+          from pathlib import Path
+          text = Path('/tmp/migrate-result.log').read_text()
+          for offset in range(0, min(len(text), 16000), 2800):
+              print('::notice::' + text[offset:offset+2800].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          PYMIGRATE
+          exit "$result"
+      - name: Pest on selected real database (not SQLite)
+        working-directory: backend
+        run: |
+          set +e
+          vendor/bin/pest --ci --colors=never > /tmp/pest-result.log 2>&1
+          result=$?
+          cat /tmp/pest-result.log
+          python3 - <<'PYRESULT'
+          from pathlib import Path
+          import re
+          text = Path('/tmp/pest-result.log').read_text()
+          # Check annotation messages are truncated by GitHub; preserve root failures,
+          # omit repetitive stack frames, and split into readable bounded chunks.
+          text = re.sub(r'^#\d+.*(?:\n|$)', '', text, flags=re.M)
+          level = '::notice::' if 'FAIL' not in text else '::error::'
+          for offset in range(0, min(len(text), 60000), 2800):
+              chunk = text[offset:offset+2800]
+              print(level + chunk.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          PYRESULT
+          exit "$result"
+
+      - uses: actions/setup-node@v4
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        with:
+          node-version: '22.22.3'
+      - uses: oven-sh/setup-bun@v2
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        with:
+          bun-version: '1.4.3'
+      - name: Publish real financial concurrency evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: financial-concurrency-php${{ matrix.php }}-${{ matrix.db.family }}-${{ matrix.db.series }}-proof
+          path: backend/storage/framework/testing/financial-concurrency-evidence.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Build and exercise real no-dev upload package
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        run: |
+          set +e
+          (bash tools/build-deploy.sh build/shopnext-l1.zip && python3 tools/ci/deploy-smoke.py build/shopnext-l1.zip) > /tmp/package-result.log 2>&1
+          result=$?
+          cat /tmp/package-result.log
+          python3 - <<'PYPACKAGE'
+          from pathlib import Path
+          text = Path('/tmp/package-result.log').read_text()[-12000:]
+          for offset in range(0, len(text), 2800):
+              print('::notice::' + text[offset:offset+2800].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          PYPACKAGE
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        with:
+          name: shopnext-l1-upload
+          path: build/shopnext-l1.zip
+          retention-days: 7
+          if-no-files-found: error

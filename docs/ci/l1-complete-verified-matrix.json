@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-21",
+  "commit": "1c0d09cf9f3d3dc1cde201fd6d0f905fc6156fdf",
+  "run": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39539510764",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "PHP 8.3 / mariadb:11.4",
+      "conclusion": "success",
+      "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39539510764/job/119023774110",
+      "tests": 160,
+      "assertions": 1028,
+      "runtime": "PHP 8.3.35; DB 11.4.13-MariaDB-ubu2404"
+    },
+    {
+      "name": "PHP 8.2 / mysql:8.0",
+      "conclusion": "success",
+      "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39539510764/job/119023774271",
+      "tests": 160,
+      "assertions": 1028,
+      "runtime": "PHP 8.2.34; DB 8.0.46",
+      "package_smoke": "passed; no-dev zip/private-public HTTP/SPA/local-assets/Filament/pending migration/self-delete/replay; TLS simulated"
+    },
+    {
+      "name": "Storefront and archived security regression tests",
+      "conclusion": "success",
+      "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39539510764/job/119023774301"
+    },
+    {
+      "name": "PHP 8.3 / mysql:8.0",
+      "conclusion": "success",
+      "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39539510764/job/119023774303",
+      "tests": 160,
+      "assertions": 1028,
+      "runtime": "PHP 8.3.35; DB 8.0.46"
+    },
+    {
+      "name": "PHP 8.2 / mariadb:10.6",
+      "conclusion": "success",
+      "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39539510764/job/119023774316",
+      "tests": 160,
+      "assertions": 1028,
+      "runtime": "PHP 8.2.34; DB 10.6.28-MariaDB-ubu2204"
+    },
+    {
+      "name": "PHP 8.2 / mariadb:11.4",
+      "conclusion": "success",
+      "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39539510764/job/119023774336",
+      "tests": 160,
+      "assertions": 1028,
+      "runtime": "PHP 8.2.34; DB 11.4.13-MariaDB-ubu2404"
+    },
+    {
+      "name": "PHP 8.3 / mariadb:10.6",
+      "conclusion": "success",
+      "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39539510764/job/119023774393",
+      "tests": 160,
+      "assertions": 1028,
+      "runtime": "PHP 8.3.35; DB 10.6.28-MariaDB-ubu2204"
+    }
+  ],
+  "manual_acceptance": "UNVERIFIED; see docs/ACCEPTANCE.md"
+}

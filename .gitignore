@@ -6,3 +6,16 @@ coverage/
 *.log
 .env*
 !.env.example
+
+data/
+*.db
+*.db.*
+
+# Generated from locked Filament vendor assets during build/deployment.
+backend/public/css/filament/
+backend/public/js/filament/
+backend/public/fonts/filament/
+
+# Local Python syntax-check artifacts.
+__pycache__/
+*.pyc
