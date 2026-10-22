@@ -331,3 +331,25 @@ Existing legacy variants without matrix keys remain valid. New variants start at
 zero stock; stocking is reserved for the later reason+actor adjustment service.
 Variation option membership is protected by composite product/term-owner FKs.
 Retained historical variants and SKUs cannot be reassigned across products.
+
+
+### Variant domain VERIFIED checkpoint7363831 (not full L3a)
+
+All nine domain inventory rows above are now **REAL / tested**, not pending:
+[push39860899337](https://github.com/soldiermr98-commits/shopnext/actions/runs/39860899337)
+and [PR39860906651](https://github.com/soldiermr98-commits/shopnext/actions/runs/39860906651)
+ALL8 SUCCESS;325 Pest tests /8952 assertions in each of six SQL jobs, all five
+actual financial races per job. Manifest: `ci/l3a-variant-domain-verified-matrix.json`.
+This verifies services and public projection, **not a product editor screen**.
+Rollback failure1553 was reproduced and fixed without disabling foreign keys;
+the lifecycle test proves orphan inserts still fail after narrow migration down.
+
+Two additional security regressions are newly added and **PENDING** their own CI:
+
+| Screen / domain | Action | REAL / tested status | Pest test name (VariantServiceTest) |
+|---|---|---|---|
+| Variation identity / financial history | Real cart and COD checkout protect option identity even at zero stock on a draft parent; subsequent catalog price/SKU edits preserve order snapshots | Additional regression UNVERIFIED | L3a variant identity remains protected by real cart and order history with zero stock while financial snapshots stay immutable |
+| Variation matrix SQL | Direct SQL rejects wrong product/term owner/missing membership/repeated dimension and reserves trashed combinations | Additional regression UNVERIFIED | L3a SQL rejects cross product options wrong attribute owners missing membership repeated dimensions and reserved deleted combinations |
+
+No stock adjustment UI, content/gallery/relations/bulk editor or complete product
+screen is claimed by this checkpoint; these and remaining L3a work are still due.

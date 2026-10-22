@@ -495,3 +495,15 @@ Correction preserves a standalone parent index before dropping matrix indexes;
 no FK removed or disabled. Lifecycle regression now separately down/up this one
 migration and asserts a direct orphan-variant insert still fails while down.
 Re-verification PENDING; no new acceptance claim and no next concern started.
+
+
+## L3a variant domain — VERIFIED7363831
+
+[Push39860899337](https://github.com/soldiermr98-commits/shopnext/actions/runs/39860899337)
+and [PR39860906651](https://github.com/soldiermr98-commits/shopnext/actions/runs/39860906651)
+ALL8 SUCCESS. Each real SQL job325 passed/8952 assertions; all5 actual races
+present in live annotations. Parsed and asserted exact live conclusions/counts/
+race names in `ci/l3a-variant-domain-verified-matrix.json`. Corrected rollback and
+full down/up lifecycle pass on PHP8.2/8.3 ×MySQL8/MariaDB10.6/11.4. Product UI and
+remaining L3a scope still pending. Additional cart/order and direct SQL ownership
+regressions added after this checkpoint remain UNVERIFIED until their next run.

@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Financial\CartService;
+use App\Financial\Checkout;
 use App\Financial\PricingService;
+use App\Financial\Rules;
 use App\Models\ActivityLog;
 use App\Models\ProductVariant;
 use App\Models\User;
@@ -12,10 +15,12 @@ use App\Services\Variants;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Tests\Support\FinancialFixtures;
 
 uses(RefreshDatabase::class);
 
@@ -253,3 +258,54 @@ it('L3a variant actions reauthorize stale actors after either safety flag change
         expect($operation)->toThrow(AuthorizationException::class);
     }
 })->with([['is_active', false], ['must_change_password', true]]);
+
+it('L3a variant identity remains protected by real cart and order history with zero stock while financial snapshots stay immutable', function () {
+    $actor = User::factory()->create(['role' => 'admin']);
+    app(Rules::class)->replace($actor, ['shipping' => [['method' => 'post', 'zone' => 'z1', 'type' => 'flat', 'amount' => 0, 'cod' => true]]]);
+    extract(variantMatrixFixture($actor));
+    $service = app(Variants::class);
+    $variant = $service->save($actor, $product->id, ['sku' => 'CHILD', 'price' => 100], termIds: [$red->id]);
+    DB::table('product_variants')->where('id', $variant->id)->update(['stock' => 2]);
+    app(Products::class)->save($actor, ['status' => 'published'], $product->id);
+    $buyer = User::factory()->create();
+    $cart = app(CartService::class)->replace($buyer, null, [['product_id' => $product->id, 'variant_id' => $variant->id, 'quantity' => 1]], 0);
+    DB::table('product_variants')->where('id', $variant->id)->update(['stock' => 0]);
+    app(Products::class)->save($actor, ['status' => 'draft'], $product->id);
+    expect(fn () => $service->delete($actor, $product->id, $variant->id))->toThrow(ValidationException::class);
+    expect(fn () => $service->save($actor, $product->id, [], $variant->id, [$blue->id]))->toThrow(ValidationException::class);
+    DB::table('product_variants')->where('id', $variant->id)->update(['stock' => 2]);
+    app(Products::class)->save($actor, ['status' => 'published'], $product->id);
+    $order = app(Checkout::class)->create($buyer, $cart['version'], FinancialFixtures::address($buyer), 'post', 'cod', null, bin2hex(random_bytes(16)));
+    expect(DB::table('cart_items')->where('product_variant_id', $variant->id)->exists())->toBeFalse();
+    DB::table('product_variants')->where('id', $variant->id)->update(['stock' => 0]);
+    app(Products::class)->save($actor, ['status' => 'draft'], $product->id);
+    expect(fn () => $service->delete($actor, $product->id, $variant->id))->toThrow(ValidationException::class);
+    expect(fn () => $service->save($actor, $product->id, [], $variant->id, [$blue->id]))->toThrow(ValidationException::class);
+    $service->save($actor, $product->id, ['sku' => 'HISTORY-NEW', 'price' => 1100], $variant->id);
+    expect(DB::table('orders')->where('id', $order->id)->value('pricing_snapshot'))->toBe($order->pricing_snapshot);
+    expect(DB::table('order_items')->where('order_id', $order->id)->value('sku'))->toBe('CHILD');
+    expect((int) DB::table('order_items')->where('order_id', $order->id)->value('unit_price'))->toBe(100);
+});
+
+it('L3a SQL rejects cross product options wrong attribute owners missing membership repeated dimensions and reserved deleted combinations', function () {
+    $actor = User::factory()->create(['role' => 'admin']);
+    extract(variantMatrixFixture($actor));
+    $service = app(Variants::class);
+    $variant = $service->save($actor, $product->id, ['sku' => 'CHILD', 'price' => 100], termIds: [$red->id]);
+    $other = app(Products::class)->save($actor, ['title' => 'دیگر', 'slug' => 'other', 'sku' => 'OTHER', 'type' => 'variable', 'price' => 100]);
+    $otherVariant = $service->save($actor, $other->id, ['sku' => 'OTHER-CHILD', 'price' => 100]);
+    DB::table('product_attribute_terms')->insert(['product_id' => $other->id, 'term_id' => $red->id, 'attribute_id' => $color->id]);
+    foreach ([
+        ['variant_id' => $otherVariant->id, 'product_id' => $product->id, 'attribute_id' => $color->id, 'term_id' => $red->id],
+        ['variant_id' => $otherVariant->id, 'product_id' => $other->id, 'attribute_id' => $size->id, 'term_id' => $red->id],
+        ['variant_id' => $otherVariant->id, 'product_id' => $other->id, 'attribute_id' => $color->id, 'term_id' => $blue->id],
+    ] as $row) {
+        expect(fn () => DB::table('variant_attribute_terms')->insert($row))->toThrow(QueryException::class);
+    }
+    DB::table('variant_attribute_terms')->insert(['variant_id' => $otherVariant->id, 'product_id' => $other->id, 'attribute_id' => $color->id, 'term_id' => $red->id]);
+    DB::table('product_attribute_terms')->insert(['product_id' => $other->id, 'term_id' => $blue->id, 'attribute_id' => $color->id]);
+    expect(fn () => DB::table('variant_attribute_terms')->insert(['variant_id' => $otherVariant->id, 'product_id' => $other->id, 'attribute_id' => $color->id, 'term_id' => $blue->id]))->toThrow(QueryException::class);
+    $service->delete($actor, $product->id, $variant->id);
+    expect(fn () => DB::table('product_variants')->insert(['product_id' => $product->id, 'sku' => 'DUPLICATE', 'price' => 1, 'combination_key' => $variant->combination_key]))->toThrow(QueryException::class);
+    expect(DB::table('variant_attribute_terms')->count())->toBe(2);
+});

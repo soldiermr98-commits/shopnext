@@ -1,3 +1,19 @@
+# Current continuation — variant domain VERIFIED; two security regressions pending
+
+- 7363831 VERIFIED push39860899337/PR39860906651 ALL8.325tests8952assertions
+ each SQL job; all5 genuine financial races each. Live parsed/checked manifest
+ docs/ci/l3a-variant-domain-verified-matrix.json. Style gate and full frontend green.
+- Actual rollback1553 variant_active_list FK dependency fixed by preserving parent
+ index. Isolated rollback/reapply + narrow down/up/orphan FK test ALL6 green.
+- Two NEW security regressions pending CI: real CartService + COD Checkout history
+ guards while stock0/parentdraft; changing catalog SKU/price preserves snapshots.
+ Direct SQL ownership/membership/dimension uniqueness and trash key reservation.
+ No domain behavior changed in this regression commit. WAIT ALL8 before NEXT.
+- NEXT product content/gallery/relations/bulk domain + real product UI -> media ->
+ reason/actor stock ledger/action -> branding/nav/cache/deploy checks and final
+ seven handoff docs/evidence/l3a-complete, then STOP for L3b approval only. Owner
+ explicitly says no intermediate checkpoint approval. No full completion tag.
+
 # Variant matrix rollback fix — actual error confirmed, re-verification PENDING
 
 - D098af2 diagnostic run39860602687 (PR39860608126): style/frontend SUCCESS;
