@@ -4,7 +4,10 @@
 **IN PROGRESS, no l3a-complete tag.** L3b-L3e require another explicit approval.
 No gateways/SMS/OTP/credential integrations or server-side SEO injection.
 
-## Current concern: shell and read-only health
+## Verified checkpoint: shell and read-only health
+
+98cfd43 / CI39724414478: ALL7 green;226 tests per SQL/PHP job.
+Exact evidence: ci/l3a-shell-verified-matrix.json. This is not L3a completion.
 
 Locked runtime: Filament5.10.3, Livewire4.4.7, Laravel12.70.0, PHP8.2/8.3.
 Panel-scoped persistent middleware selects fa during rendering/Livewire and restores
@@ -17,10 +20,10 @@ Branding-from-settings and catalog navigation groups are still PENDING.
 
 | Screen | Action | REAL/tested | Test name |
 |---|---|---|---|
-| Staff login | Credential login, logout/password boundary | Existing L1 REAL; current locale/font HTTP test CI PENDING | StaffAuthTest; `L3a renders a Persian RTL panel...` |
-| Dashboard | View skeleton | Current six-role HTTP test CI PENDING | `L3a authorizes dashboard widget and secret page independently...` |
-| Cron widget | Read persisted heartbeat, stale/healthy states | Existing service REAL; Persian/role follow-up CI PENDING | OperationsTest `renders cron age and warning...`; AdminFoundationTest six-role case |
-| Cron widget | Deferred loading, bounded2 queries | CI PENDING | `L3a reads heartbeat with two bounded queries...`; six-role case checks isLazy |
+| Staff login | Credential login, logout/password boundary | Existing L1 REAL; locale/font HTTP REAL / CI39724414478 | StaffAuthTest; `L3a renders a Persian RTL panel...` |
+| Dashboard | View skeleton | REAL / CI39724414478 | `L3a authorizes dashboard widget and secret page independently...` |
+| Cron widget | Read persisted heartbeat, stale/healthy states | Existing service REAL; Persian/role follow-up REAL / CI39724414478 | OperationsTest `renders cron age and warning...`; AdminFoundationTest six-role case |
+| Cron widget | Deferred loading, bounded2 queries | REAL / CI39724414478 | `L3a reads heartbeat with two bounded queries...`; six-role case checks isLazy |
 | Existing secret page | Preserve omitted values / explicit replacement | Existing L1 REAL; translation only in this slice | SettingsSecurityTest (encrypted masks, snapshot secrecy, transactional audit, actor gates) |
 | Categories/tree/reorder | Create/update/delete/restore/reorder/image/SEO | NOT IMPLEMENTED | Pending L3a catalog services/resources |
 | Brands | CRUD/restore/uniqueness | NOT IMPLEMENTED | Pending |
@@ -32,7 +35,8 @@ Branding-from-settings and catalog navigation groups are still PENDING.
 | Panel branding | Settings-backed identity | NOT IMPLEMENTED | Pending typed nonsecret service/policy/tests |
 | Dates | Jalali picker, tables/forms/filters | NOT IMPLEMENTED | Compatibility evaluation below; no conversion widget claimed |
 
-REAL in an older tested slice does not mean the NEW code ran. After every commit,
+The shell code above executed on98cfd43; other rows remain NOT IMPLEMENTED.
+REAL in an older tested slice never implies unrelated new code ran. After every commit,
 wait for ALL7 backend.yml jobs; update evidence before the next concern. A red is
 not waived. Headless/Pest rendering is NOT actual browser RTL/a11y acceptance.
 
@@ -66,7 +70,7 @@ No policy grant to Support simply because a field looks convenient to show.
 
 ## Remaining implementation order (small concerns, green matrix after EACH)
 
-1. Shell authorization/locale/local font/health checkpoint (current).
+1. Shell authorization/locale/local font/health checkpoint (verified98cfd43).
 2. Transactional stock adjustment history and catalog schema/services; retain L2.
 3. Categories/brands/attributes/terms resources with services, policies and soft delete.
 4. Media pipeline with rollback-safe files, WebP/thumbnails, queue fallback and usage.

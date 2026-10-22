@@ -25,9 +25,16 @@
   queued WebP/thumbnails plus safe sync fallback; no SVG/executables/in-use delete.
 - End L3a: README/ARCHITECTURE/DATABASE/ADMIN_PANEL/CI_RESULTS/CHANGELOG/AGENTS,
   exact CI evidence, REAL/test table and UNVERIFIED list; then tag and STOP.
-- Current first concern is shell locale/font/heartbeat authorization, CI branch
-  activation and L3a plan. Catalog/media/stock services and Jalali picker are still
-  PENDING, NOT complete. Do not create l3a-complete now.
+- Shell98cfd43 CI39724414478 ALL7 green,226 tests/job and6844/6845 assertions;
+  all5 real L2 races executed per job. docs/ci/l3a-shell-verified-matrix.json.
+- Documentation consolidation is current; require its full green too before next
+  concern: stock adjustment history/catalog services, then actual resources/media.
+  No resources/stock services/Jalali picker complete yet. Do NOT tag L3a.
+- Pint can use --format=agent through tools/ci/pint-check.sh; --test exit retained.
+  JSON lacks final newline: annotation MUST start a fresh line. Prior missing
+  diagnostics were transport, not waived tests. Exact fixed style rule was
+  self_static_accessor in final CronHeartbeat. Native local PHP/vendor absent;
+  no local PHP runtime proof. ZIP logs can EOF; use check-run annotations.
 - Host/browser/TLS/RTL/a11y/restore remain UNVERIFIED. Respect L2 exact rational
   pricing, full wallet/manual methods, ALL COD minute-expiry exemption,7day warning
   only, preserve-both cart conflicts and fail-closed unconfigured shipping.

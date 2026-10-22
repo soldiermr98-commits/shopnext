@@ -5,7 +5,7 @@
 - Owner authorized foundation/catalog only; later admin phases remain gated.
 - Active session branch CI enabled; added panel-only Persian/RTL and explicit local
   Vazirmatn, translated health/settings labels and widget read authorization.
-- Added six-role/HTTP/query-bound shell regressions; runtime CI still PENDING.
+- Added six-role/HTTP/query-bound shell regressions; runtime CI39724414478 ALL7 green on98cfd43;226 tests/backend job.
 - Created ADMIN_PANEL screen/action/test inventory and honest Jalali candidate
   evaluation against locked Filament5.10.3. No catalog/media action claimed yet.
 

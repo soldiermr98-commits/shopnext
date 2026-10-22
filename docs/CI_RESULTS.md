@@ -1,51 +1,36 @@
-## Exact Pint issue observed; fix pending runtime gate
+# L3a shell checkpoint — verified, NOT full L3a
 
-cfee362 / CI39724272554 finally exposes the actual diagnostic:
-app/Filament/Widgets/CronHeartbeat.php, self_static_accessor. The class is final,
-so its internal authorization call now uses self::canView(), with identical guard
-semantics. No rules/assertions disabled. All preceding failed backend jobs stopped
-at Pint; they do not count as executed Pest evidence. Rerun ALL7 after this fix.
+98cfd43 / [CI39724414478](https://github.com/soldiermr98-commits/shopnext/actions/runs/39724414478):
+ALL7 SUCCESS. EACH of six PHP/database jobs passed226 tests,6844/6845 assertions
+(valid cancel/pay race outcome). All5 REAL separate-process financial races ran in
+EACH job again. Exact per-job results: [shell manifest](ci/l3a-shell-verified-matrix.json).
+Frontend checks and the configured real no-dev package smoke succeeded as well.
 
-## Diagnostic transport bug found and reproduced locally
+Executed new tests: Persian/RTL HTTP shell/local font/scoped locale;6 independent
+role cases for dashboard/widget/secret-page authorization; bounded2-query heartbeat
+and Persian digits. Existing OperationsTest checks actual queue processing and
+Persian stale/healthy rendering. No DB/schema changes in this slice. Catalog/media/
+stock/Jalali controls are still PENDING. No l3a-complete tag or browser/host claim.
 
-9731aa7 / CI39724063635 still failed Pint. The JSON report has no final newline;
-our cat output joined the FIRST workflow annotation onto the JSON line, so GitHub
-did not recognize it. This explains missing diagnostics; earlier report-schema/
-lint hypotheses were NOT an observed style diagnosis. Added an explicit newline.
-Executed isolated wrapper tests with a stub Pint (not real PHP/Pint): nonzero1 and
-success0 preserved, and a standalone annotation exists even without JSON newline.
-Actual Pint/runtimes still require the next complete matrix; no gate bypass.
+## Red history and correction (same concern; no bypass)
 
-## Reporter shape follow-up (still RED)
+- CI39723437326 (1b0cb02),39723650644 (8968d45),39723879111 (f2c8356),
+  39724063635 (9731aa7),39724272554 (cfee362): failed Pint before Pest. Frontend
+  success does NOT make these runs accepted. No PHP runtime proof claimed for them.
+- Job ZIP retrieval returned EOF. Added --test reporter annotations preserving the
+  nonzero exit. A missing newline joined JSON to the first annotation; isolated
+  stub-Pint wrapper tests reproduced and fixed that transport issue while retaining
+  both success0/failure1. These stub tests are NOT actual PHP/Pint execution.
+- Final visible metadata: CronHeartbeat.php, self_static_accessor. Because the
+  class is final, use self::canView(), keeping exactly the same authorization.
+- No Pint rule/test assertion disabled.98cfd43 reran the full matrix to green.
+  Diagnostic schema guesses during troubleshooting were hypotheses, not findings.
 
-f2c8356 / CI39723879111: Pint agent result fail was observed, but no files/errors
-were exposed at the assumed keys. No runtime evidence or style diagnosis claimed.
-The annotation emitter now includes all bounded metadata fields, excluding diff/
-source/code content, without assuming a report schema. --test and its nonzero exit
-remain unchanged. Do not proceed to catalog while this gate is red.
+Documentation-only consolidation of this verified slice is the current commit;
+its own complete matrix must also pass before the next concern. ADMIN_PANEL.md
+separates actual REAL/tested actions from the many pending L3a resources.
 
-## Pint diagnostics follow-up
-
-8968d45 / CI39723650644 still failed Pint; no file-rule annotations appeared.
-Upstream Pint1.30.4 JsonReporter omits lint/exception diagnostics from its JSON
-summary. Use its supported agent reporter, including bounded error metadata, and
-keep the failing exit status. Runtime/Pest still NOT executed or accepted.
-
-## L3a first execution: RED, not accepted
-
-1b0cb02 / CI39723437326: frontend succeeded; all six backend jobs failed Pint
-before Pest. No PHP runtime tests claimed. Full log download failed with EOF from
-GitHub log storage, so Pint now retains --test and its original failing exit code
-and emits only file/rule metadata to annotations. This is diagnostic visibility,
-NOT a waiver or formatter auto-fix. Determine exact style issue from the rerun.
-
-# L3a current concern — CI pending
-
-New active branch arena/b4d40ed7-shopnext is enabled in backend.yml. Persian/local-font
-HTTP rendering, independent six-role page/widget gates and bounded heartbeat reads
-are new regressions. They have NOT executed locally (no PHP/Composer/vendor/MySQL
-in this sandbox); actual evidence must come from the full seven-job CI. No L3a
-completion tag or browser/host claim. Older L2 evidence below remains historical.
+## Completed L2 evidence (historical)
 
 # Current L2 financial evidence
 

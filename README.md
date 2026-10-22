@@ -34,8 +34,8 @@ The PHP8.2/MySQL job also builds/extracts the real ZIP and runs HTTP/runner smok
 ## L3a admin panel — in progress
 
 Current slice: Persian/RTL shell, explicit local Vazirmatn and permission-gated
-cron heartbeat. New code CI is pending; catalog/media/stock/Jalali controls are not
-complete. [Screen/action/test inventory](docs/ADMIN_PANEL.md). No L3a tag yet.
+cron heartbeat. Shell code98cfd43 passed all7 jobs in CI39724414478 (226 backend tests per job);
+catalog/media/stock/Jalali controls are not complete. [Screen/action/test inventory](docs/ADMIN_PANEL.md). No L3a tag yet.
 
 ## L2 financial implementation
 

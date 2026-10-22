@@ -198,5 +198,5 @@ Panel locale is fa through scoped persistent AdminLocale middleware; storefront/
 locale is not globally changed. Custom Vazirmatn explicitly uses LocalFontProvider,
 never Filament's custom-font CDN fallback. Cron stays lazy/read-only and checks
 permission inside status(), not only menu visibility. Six-role/Persian/query-bound
-regressions are added but their CI is pending. No new business resource yet.
+regressions executed in CI39724414478 ALL7 green on98cfd43. No new business resource yet.
 Full action/status plan and date-picker evaluation: ADMIN_PANEL.md.
