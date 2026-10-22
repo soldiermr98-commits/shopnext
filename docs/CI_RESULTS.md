@@ -1,3 +1,10 @@
+## Pint diagnostics follow-up
+
+8968d45 / CI39723650644 still failed Pint; no file-rule annotations appeared.
+Upstream Pint1.30.4 JsonReporter omits lint/exception diagnostics from its JSON
+summary. Use its supported agent reporter, including bounded error metadata, and
+keep the failing exit status. Runtime/Pest still NOT executed or accepted.
+
 ## L3a first execution: RED, not accepted
 
 1b0cb02 / CI39723437326: frontend succeeded; all six backend jobs failed Pint

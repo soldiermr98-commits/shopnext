@@ -5,7 +5,7 @@ set -uo pipefail
 report="$(mktemp)"
 trap 'rm -f "$report"' EXIT
 status=0
-vendor/bin/pint --test --format=json > "$report" || status=$?
+vendor/bin/pint --test --format=agent > "$report" || status=$?
 cat "$report"
 if [ "$status" -ne 0 ]; then
   php -r '
@@ -14,11 +14,12 @@ if [ "$status" -ne 0 ]; then
         echo "::notice::Pint failed without a JSON report; inspect the job output.\n";
         exit;
     }
-    foreach (($report["files"] ?? []) as $file) {
-        $safe = ["name" => $file["name"] ?? $file["path"] ?? "unknown", "fixers" => $file["appliedFixers"] ?? $file["fixers"] ?? $file["issues"] ?? []];
+    foreach (array_merge($report["files"] ?? [], $report["errors"] ?? []) as $file) {
+        $safe = ["name" => $file["name"] ?? $file["path"] ?? "unknown", "fixers" => $file["appliedFixers"] ?? $file["fixers"] ?? $file["issues"] ?? [], "error" => isset($file["message"]) ? mb_substr($file["message"], 0, 500) : null];
         $message = json_encode($safe, JSON_UNESCAPED_SLASHES);
         echo "::notice title=Pint style diagnostics::".str_replace(["%", "\r", "\n"], ["%25", "%0D", "%0A"], $message)."\n";
     }
+    echo "::notice title=Pint result::".($report["result"] ?? "unknown")."\n";
   ' "$report"
 fi
 exit "$status"
