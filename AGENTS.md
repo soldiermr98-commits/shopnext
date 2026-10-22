@@ -1,28 +1,36 @@
-# Shopnext handoff — L2 complete; main integration, 2026-10-22
+# Shopnext handoff — L3a in progress, 2026-10-22
 
-## Current state and authorization
-- L1 and L2 are complete implementation checkpoints. `l2-complete` is fixed at
-  5120dadbb1a60cf91877165c4ac09e1dbd783b2b, CI39602866142 ALL7 SUCCESS.
-  Each SQL/PHP job:218 tests,6789/6790 assertions (valid race outcome variation).
-- docs/L2_ACCEPTANCE.md maps every financial finding, evidence and deferred scope.
-- Owner authorized documentation refresh and PR merge into main, NOT L3 or deploy.
-  Keep work on arena/c101d8c3-shopnext. Merge using an explicit numbered GitHub PR;
-  never switch to or push directly to main. Do not move the completion tag.
-- After each commit wait for ALL7 backend.yml jobs green before another concern;
-  a red must be diagnosed/fixed, never bypassed. Read before writing; no secrets.
-- Five REAL separate-process/connection same-DB scenarios run in each SQL/PHP job.
-  Frontend fetch doubles are not SQL concurrency or rendered-browser evidence.
-- Integer Toman, exact fractions through discounts/VAT, final-line half-up only;
-  largest-remainder components are DISPLAY ONLY; signed rounding_adjustment.
-- ALL COD exempt minute expiry; configurable default7day unshipped admin FLAG,
-  NEVER automatic cancellation. Default non-COD unpaid/verification expiry30min.
-- Full wallet only; no mixed payments. COD/card need explicit authorized payment
-  confirmation; delivery never means paid. Actual-paid wallet refund once; redeemed
-  coupon usage retained. No gateway/SMS/loyalty formula/business Filament resources.
-- Preserve BOTH carts on login merge conflict. Checkout only valid owned account
-  cart/version/address; configured tariffs required. No invented zones/free shipping.
-- Host/browser/TLS/RTL/a11y/backup restore remain UNVERIFIED; tag/merge is not launch
-  certification. STOP after integration and await explicit L3 approval.
+## Current state and authorization — L3a active, 2026-10-22
+- Owner approved L2 and authorized ONLY L3a foundation/catalog; STOP after verified
+  l3a-complete and request approval before L3b-L3e. No L4-L6 gateway/SMS/OTP or
+  credential pages, SEO server-side injection or deployment authorization.
+- Fixed ACTIVE branch arena/b4d40ed7-shopnext, based on merged main686e57f.
+  Never use the old merged session branch or push directly to main.
+- L2 immutable l2-complete=5120dad, CI39602866142 ALL7 success,218 tests/job.
+  All financial contracts in docs/PRICING.md and L2_ACCEPTANCE.md remain binding.
+- Every small commit MUST pass all seven backend.yml jobs (six PHP8.2/8.3 x
+  MySQL8/MariaDB10.6/11.4 plus frontend) before the next concern. Red -> diagnose
+  and fix without bypass. Unexecuted = UNVERIFIED; never print secrets.
+- Every panel screen/action/widget must have a real service/policy and Pest test,
+  per six-role legacy matrix. Maintain docs/ADMIN_PANEL.md action/test inventory.
+  No fake success or stock/wallet/order-total/status field editing. Stock/wallet
+  adjustments require reason/actor/audit; order changes use OrderLifecycle.
+- L3a: shell, categories/tree/reorder/SEO/image, brands, attributes/terms, products
+  (all four types, variants/matrix, relations/content/SEO/schedules/bulk actions),
+  media/folders/replace/alt/usage protection; catalog soft delete/restore.
+- Persian/RTL/local Vazirmatn, Persian digits/Toman/Jalali edge conversion; Gregorian
+  UTC storage. Evaluate date-picker against locked Filament5.10.3; metadata alone
+  is NOT runtime/browser compatibility. No unreviewed new CDN/dependency.
+- No N+1, bounded/paginated lists, deferred heavy widgets. Safe validated media,
+  queued WebP/thumbnails plus safe sync fallback; no SVG/executables/in-use delete.
+- End L3a: README/ARCHITECTURE/DATABASE/ADMIN_PANEL/CI_RESULTS/CHANGELOG/AGENTS,
+  exact CI evidence, REAL/test table and UNVERIFIED list; then tag and STOP.
+- Current first concern is shell locale/font/heartbeat authorization, CI branch
+  activation and L3a plan. Catalog/media/stock services and Jalali picker are still
+  PENDING, NOT complete. Do not create l3a-complete now.
+- Host/browser/TLS/RTL/a11y/restore remain UNVERIFIED. Respect L2 exact rational
+  pricing, full wallet/manual methods, ALL COD minute-expiry exemption,7day warning
+  only, preserve-both cart conflicts and fail-closed unconfigured shipping.
 
 ## Historical L1 evidence (current L2 evidence linked above)
 

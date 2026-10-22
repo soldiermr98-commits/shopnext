@@ -191,3 +191,12 @@ Frontends never calculate totals; signed rounding reconciliation is part of invo
 projection. Private receipts never travel through public media routes. Cron enqueues
 bounded100 expiry +100 COD-warning candidates, rechecked while locked. No persistent
 worker/Redis/Supervisor is required. Production cron/hard timeout is UNVERIFIED.
+
+
+## L3a authorized, in progress — shell slice
+Panel locale is fa through scoped persistent AdminLocale middleware; storefront/API
+locale is not globally changed. Custom Vazirmatn explicitly uses LocalFontProvider,
+never Filament's custom-font CDN fallback. Cron stays lazy/read-only and checks
+permission inside status(), not only menu visibility. Six-role/Persian/query-bound
+regressions are added but their CI is pending. No new business resource yet.
+Full action/status plan and date-picker evaluation: ADMIN_PANEL.md.

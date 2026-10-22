@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-22 — L3a started (not complete)
+
+- Owner authorized foundation/catalog only; later admin phases remain gated.
+- Active session branch CI enabled; added panel-only Persian/RTL and explicit local
+  Vazirmatn, translated health/settings labels and widget read authorization.
+- Added six-role/HTTP/query-bound shell regressions; runtime CI still PENDING.
+- Created ADMIN_PANEL screen/action/test inventory and honest Jalali candidate
+  evaluation against locked Filament5.10.3. No catalog/media action claimed yet.
+
+
 ## 2026-10-22 — L2 main integration handoff
 
 - Confirmed l2-complete at5120dad and final CI39602866142: ALL7 SUCCESS.

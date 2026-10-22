@@ -3,7 +3,7 @@
 Persian RTL React/Vite storefront with Laravel 12, Sanctum and Filament 5 for
 PHP shared hosting. **L1 and L2 implementations are CI-verified.**
 The `l2-complete` tag points to `5120dad`; this is NOT production launch approval.
-L3 has not been authorized. [Financial coverage and limits](docs/L2_ACCEPTANCE.md).
+L3a foundation/catalog is now authorized and IN PROGRESS; later sub-phases need approval. [Financial coverage and limits](docs/L2_ACCEPTANCE.md).
 Actual host/browser/TLS acceptance is **UNVERIFIED**: [run the checklist](docs/ACCEPTANCE.md).
 
 ## Implemented and executed
@@ -30,6 +30,12 @@ PHP 8.2/8.3 × MySQL 8.0 / MariaDB 10.6 / MariaDB 11.4. Frontend typecheck,
 The PHP8.2/MySQL job also builds/extracts the real ZIP and runs HTTP/runner smoke.
 [CI links and evidence](docs/CI_RESULTS.md) · [Architecture](docs/ARCHITECTURE.md)
 · [Schema](docs/DATABASE.md) · [Security](docs/SECURITY.md).
+
+## L3a admin panel — in progress
+
+Current slice: Persian/RTL shell, explicit local Vazirmatn and permission-gated
+cron heartbeat. New code CI is pending; catalog/media/stock/Jalali controls are not
+complete. [Screen/action/test inventory](docs/ADMIN_PANEL.md). No L3a tag yet.
 
 ## L2 financial implementation
 
@@ -86,4 +92,4 @@ configuration fails closed. General CRUD/content and explicitly inactive prototy
 controls remain outside L2. Original external photos remain local placeholders.
 Real browser behavior, RTL/a11y, hosting permissions, CLI/web PHP equivalence, TLS
 and backups/restore remain UNVERIFIED. Integration into `main` does not authorize
-production deployment or L3. Continue only after explicit owner approval for L3.
+production deployment or later L3 sub-phases. L3a is authorized; STOP after its completion tag for approval.

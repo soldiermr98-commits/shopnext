@@ -47,9 +47,9 @@ it('renders cron age and warning on the authorized Filament dashboard widget', f
     Filament::setCurrentPanel(Filament::getPanel('admin'));
     Filament::bootCurrentPanel();
     $this->actingAs(User::factory()->create(['role' => 'admin']));
-    Livewire::test(CronHeartbeat::class)->assertSee('never')->assertSee('Warning:');
+    Livewire::test(CronHeartbeat::class)->assertSee('هنوز اجرا نشده')->assertSee('هشدار:');
     $this->artisan('shopnext:tick')->assertExitCode(0);
-    Livewire::test(CronHeartbeat::class)->assertSee('0 minutes ago')->assertDontSee('Warning:');
+    Livewire::test(CronHeartbeat::class)->assertSee('۰ دقیقه پیش')->assertDontSee('هشدار:');
     $this->actingAs(User::factory()->create());
     expect(CronHeartbeat::canView())->toBeFalse();
 });

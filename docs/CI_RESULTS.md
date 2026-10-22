@@ -1,3 +1,11 @@
+# L3a current concern — CI pending
+
+New active branch arena/b4d40ed7-shopnext is enabled in backend.yml. Persian/local-font
+HTTP rendering, independent six-role page/widget gates and bounded heartbeat reads
+are new regressions. They have NOT executed locally (no PHP/Composer/vendor/MySQL
+in this sandbox); actual evidence must come from the full seven-job CI. No L3a
+completion tag or browser/host claim. Older L2 evidence below remains historical.
+
 # Current L2 financial evidence
 
 Tagged gate:5120dad / [CI39602866142](https://github.com/soldiermr98-commits/shopnext/actions/runs/39602866142),

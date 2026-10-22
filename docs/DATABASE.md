@@ -130,3 +130,11 @@ Cross-row money equality is enforced transactionally by domain services, not by
 pretending a CHECK constraint can inspect other tables. Six real database/PHP CI
 jobs cover constraints, rollback, triggers, races and no-dev migration smoke.
 Host restore/import/large-dataset performance remain UNVERIFIED.
+
+
+## L3a shell slice (in progress)
+No schema or production data changes in this concern. Heartbeat reads existing
+scheduler_heartbeats with2 bounded queries. Stock adjustment history, soft-deleted
+catalog relations, attribute terms and media usage schema are still pending L3a.
+Do not infer stock-ledger/media-library existence from the existing stock counters
+or safe upload primitive. ADMIN_PANEL.md records each unimplemented action.
