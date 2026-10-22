@@ -484,3 +484,14 @@ was successful. Blob artifacts/log download unavailable; no root DDL explanation
 claimed yet. Added isolated artisan rollback/reapply to each existing SQL job,
 using redacted reports, before the unchanged full Pest suite. Await actual error;
 all variant domain acceptance remains UNVERIFIED. No next concern started.
+
+
+D098af2 diagnostic [push39860602687](https://github.com/soldiermr98-commits/shopnext/actions/runs/39860602687)
+/PR39860608126: style and frontend SUCCESS; isolated rollback fails in all six SQL
+jobs. Exact MySQL8/MariaDB10.6 annotation: `SQLSTATE[HY000] General error1553 Cannot
+drop index variant_active_list: needed in a foreign key constraint`. InnoDB had
+replaced the legacy implicit product_id index with the new composite list index.
+Correction preserves a standalone parent index before dropping matrix indexes;
+no FK removed or disabled. Lifecycle regression now separately down/up this one
+migration and asserts a direct orphan-variant insert still fails while down.
+Re-verification PENDING; no new acceptance claim and no next concern started.

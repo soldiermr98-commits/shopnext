@@ -1,3 +1,17 @@
+# Variant matrix rollback fix — actual error confirmed, re-verification PENDING
+
+- D098af2 diagnostic run39860602687 (PR39860608126): style/frontend SUCCESS;
+ all six isolated rollback checks fail. Read actual annotations from MySQL8 and
+ MariaDB10.6: SQLSTATE HY000/1553 Cannot drop index variant_active_list: needed in
+ a foreign key constraint. No guessing: InnoDB replaced implicit product_id index.
+- Fix: migration down ensures standalone product_id index BEFORE dropping matrix
+ indexes/table; never disables/drops FK. Lifecycle test additionally down/up this
+ one migration and directly proves orphan insert remains rejected after down.
+- Wait ALL8 on correction, then resolve any remaining variant tests. Only then
+ next concern content/gallery/relations/bulk/product UI -> media -> stock etc.
+- No checkpoints approval, no full completion/tag. All new variant tests still
+ UNVERIFIED pending actual matrix success. Original L2 invariants untouched.
+
 # Variant matrix CI diagnostic correction — RED, do not advance concern
 
 - A645b97 first push39859934377/PR39859939853 RED: style+frontend passed;

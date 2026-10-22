@@ -34,6 +34,13 @@ return new class extends Migration
         if (DB::table('variant_attribute_terms')->exists() || DB::table('product_variants')->whereNotNull('deleted_at')->orWhereNotNull('combination_key')->exists()) {
             throw new RuntimeException('Variant matrix or trash state exists: use a reviewed forward migration.');
         }
+        // InnoDB may replace the legacy implicit product_id FK index with our
+        // composite list index. Preserve its supporting index before dropping it.
+        if (! Schema::hasIndex('product_variants', ['product_id'])) {
+            Schema::table('product_variants', function (Blueprint $table): void {
+                $table->index('product_id', 'variant_parent_fk_fallback');
+            });
+        }
         Schema::dropIfExists('variant_attribute_terms');
         Schema::table('product_variants', function (Blueprint $table): void {
             $table->dropUnique('variant_combination_unique');
