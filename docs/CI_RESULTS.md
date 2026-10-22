@@ -1,3 +1,14 @@
+# Single Jalali trial launch
+
+9129142 / [push CI39728110052](https://github.com/soldiermr98-commits/shopnext/actions/runs/39728110052)
+and [PR CI39728115386](https://github.com/soldiermr98-commits/shopnext/actions/runs/39728115386):
+all eight required gates SUCCESS; optional trial job correctly skipped.
+Workflow-dispatch API returned HTTP403 Resource not accessible by integration;
+no candidate ran, no credentials requested or changed. Instead the existing push
+trigger launches the disposable trial ONCE using an explicit commit-message marker.
+Later commits without that marker cannot automatically repeat the package trial.
+Trial outcome PENDING. Production dependencies remain unchanged.
+
 # Process gate and artifact delivery verified; single Jalali trial prepared
 
 b3ffbcf / [push CI39727301474](https://github.com/soldiermr98-commits/shopnext/actions/runs/39727301474)
