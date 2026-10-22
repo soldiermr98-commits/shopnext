@@ -1,3 +1,22 @@
+# Process gate and artifact delivery verified; single Jalali trial prepared
+
+b3ffbcf / [push CI39727301474](https://github.com/soldiermr98-commits/shopnext/actions/runs/39727301474)
+and [PR CI39727305225](https://github.com/soldiermr98-commits/shopnext/actions/runs/39727305225):
+ALL8 SUCCESS on both after atomic result publication. Push artifact inventory
+contains all eight diagnostic bundles. The failed PR run described below remains
+historical RED; it was fixed, not erased by a rerun. Financial invariants and all
+five real process/SQL races remain gates.
+
+Next: one opt-in workflow_dispatch Jalali trial, isolated runner checkout only,
+ariaieboy/filament-jalali 3.1.0 against locked Filament5.10.3. Candidate's actual
+shipped JS selection/serialization/re-display runs under three runtime timezones,
+including midnight, Nowruz and leap-day cases. Its actual Filament view, transport
+state, persisted Gregorian UTC timestamp and reload are probed with Livewire/Pest.
+This is NOT yet executed and NOT an end-to-end browser/RTL/a11y claim. Production
+composer.json/lock remain unchanged. An unproven candidate is not accepted; ship
+specified Gregorian-picker/Jalali-preview fallback instead, with no second package
+iteration. All original eight gates must pass this preparation commit first.
+
 # Process correction: real result-publication race found; fix pending CI
 
 e62a8f8 / [push CI39726822127](https://github.com/soldiermr98-commits/shopnext/actions/runs/39726822127): ALL8 SUCCESS.
