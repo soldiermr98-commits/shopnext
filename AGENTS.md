@@ -1,3 +1,21 @@
+# Latest continuation — Jalali integration, not L3a completion
+
+- Process gates/artifacts verified. Atomic race-result publication fixed actual
+  partial-JSON read; original five real SQL races and all financial assertions intact.
+- ONE candidate runtime trial GREEN:85db44e, CI39728458608 (eight gates+trial).
+  Twelve shipped-JS selection/midnight/timezone cases, Livewire SQL save/reload25
+  assertions. Retain ariaieboy/filament-jalali3.1.0; no second package trial.
+- Composer-generated production lock captured/verified from CI39730442729:
+  SHA256 d5edf8d6dc1944ddac6829f743caa33e24e7738b669ccf7d48886e9a82091138;
+  only ariaieboy/filament-jalali3.1.0 and ariaieboy/jalali1.1.0 added. Existing
+  versions unchanged. Temporary resolver/trial jobs removed, original eight remain.
+- Current integration commit adds AdminDate field/column/infolist helper and
+  permanent regression tests. Runtime status PENDING until its CI is inspected.
+- Continue without owner checkpoint approval: after ALL8 green, taxonomy (categories
+  first, then brands and attributes/terms) -> products -> media -> stock adjustments.
+  No business catalog/media/stock action implemented yet; no completion tag.
+- Host, end-to-end browser, visual RTL, a11y, TLS and restore remain UNVERIFIED.
+
 # Shopnext handoff — L3a in progress, 2026-10-22
 
 ## Current state and authorization — L3a active, 2026-10-22
@@ -8,7 +26,7 @@
   Never use the old merged session branch or push directly to main.
 - L2 immutable l2-complete=5120dad, CI39602866142 ALL7 success,218 tests/job.
   All financial contracts in docs/PRICING.md and L2_ACCEPTANCE.md remain binding.
-- Every small commit MUST pass all seven backend.yml jobs (six PHP8.2/8.3 x
+- Every small commit MUST pass all eight backend.yml jobs (fast style + six PHP8.2/8.3 x
   MySQL8/MariaDB10.6/11.4 plus frontend) before the next concern. Red -> diagnose
   and fix without bypass. Unexecuted = UNVERIFIED; never print secrets.
 - Every panel screen/action/widget must have a real service/policy and Pest test,
@@ -19,7 +37,7 @@
   (all four types, variants/matrix, relations/content/SEO/schedules/bulk actions),
   media/folders/replace/alt/usage protection; catalog soft delete/restore.
 - Persian/RTL/local Vazirmatn, Persian digits/Toman/Jalali edge conversion; Gregorian
-  UTC storage. Evaluate date-picker against locked Filament5.10.3; metadata alone
+  UTC storage. Jalali3.1.0 passed ONE actual runtime trial on Filament5.10.3; metadata alone
   is NOT runtime/browser compatibility. No unreviewed new CDN/dependency.
 - No N+1, bounded/paginated lists, deferred heavy widgets. Safe validated media,
   queued WebP/thumbnails plus safe sync fallback; no SVG/executables/in-use delete.

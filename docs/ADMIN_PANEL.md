@@ -91,3 +91,21 @@ written to job summaries; raw .env/application databases are never artifacts.
 Next: ONE candidate Jalali runtime iteration, fallback if not green; then taxonomy,
 products, media, stock-adjustment action/service, in that order. Older implementation
 ordering above is superseded. No l3a-complete until the complete approved scope.
+
+## Retained Jalali date controls — integration pending CI
+
+The ONE candidate trial succeeded on CI39728458608: shipped component day selection
+and Gregorian transport under three runtime timezones, midnight/Nowruz/leap day;
+actual Filament view + SQL save + reload1test25assertions. Use3.1.0, not fallback.
+Production helper `App\Filament\Support\AdminDate`: Jalali DateTimePicker with
+explicit Tehran timezone; Persian read-only columns/infolists; UTC DB serialization.
+No new catalog mutation/action is exposed by this helper alone.
+
+screen | action | REAL/tested | test name
+--- | --- | --- | ---
+Date control (test harness only) | select/save UTC/reload | trial REAL; production regression PENDING CI | AdminDatesTest: L3a renders the retained Jalali picker saves selected state as Gregorian UTC and reloads at Tehran midnight
+Date display helper | Persian Tehran table/infolist; zero DB reads | PENDING CI | AdminDatesTest: L3a formats table and infolist dates in Persian without database queries or mutating timestamps
+Shipped Jalali component | day-select/serialize/redisplay across3 TZ and4 dates | trial REAL; permanent integration PENDING CI | tools/ci/jalali/selection.mjs
+
+These are runtime component/contract checks, NOT end-to-end browser clicking,
+visual RTL, accessibility or host proof. Taxonomy/products/media/stock remain next.

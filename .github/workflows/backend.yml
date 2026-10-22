@@ -5,11 +5,6 @@ on:
     branches: [main, arena/c101d8c3-shopnext, arena/b4d40ed7-shopnext]
   pull_request:
   workflow_dispatch:
-    inputs:
-      jalali_trial:
-        description: 'One isolated Jalali compatibility trial; never changes production lock'
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -187,6 +182,13 @@ jobs:
               print('::notice::' + text[offset:offset+2800].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
           PYMIGRATE
           exit "$result"
+      - uses: actions/setup-node@v4
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        with:
+          node-version: '22.22.3'
+      - name: Retained Jalali shipped component midnight selection and timezone regression
+        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
+        run: bash tools/ci/run-check.sh jalali-selection node tools/ci/jalali/selection.mjs
       - name: Pest on selected real database (not SQLite)
         working-directory: backend
         run: |
@@ -208,10 +210,6 @@ jobs:
           PYRESULT
           exit "$result"
 
-      - uses: actions/setup-node@v4
-        if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
-        with:
-          node-version: '22.22.3'
       - uses: oven-sh/setup-bun@v2
         if: matrix.php == '8.2' && matrix.db.image == 'mysql:8.0'
         with:
@@ -253,113 +251,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: diagnostics-php${{ matrix.php }}-${{ matrix.db.family }}-${{ matrix.db.series }}
-          path: .ci-reports/
-          include-hidden-files: true
-          if-no-files-found: warn
-          retention-days: 7
-
-  jalali-trial:
-    if: >-
-      (github.event_name == 'workflow_dispatch' && inputs.jalali_trial) ||
-      (github.event_name == 'push' && contains(github.event.head_commit.message, '[jalali-trial-once]'))
-    needs: style
-    name: Isolated single Jalali runtime trial
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-          MYSQL_DATABASE: shopnext_ci_test
-        ports: ['3306:3306']
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s --health-timeout=5s --health-retries=12
-    env:
-      APP_ENV: testing
-      DB_CONNECTION: mysql
-      DB_HOST: 127.0.0.1
-      DB_PORT: '3306'
-      DB_DATABASE: shopnext_ci_test
-      DB_USERNAME: root
-      DB_PASSWORD: ''
-    steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: intl, mbstring, pdo_mysql, gd, zip, bcmath
-          tools: composer:v2
-          coverage: none
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22.22.3'
-      - name: Install exactly one candidate in disposable runner checkout
-        working-directory: backend
-        run: |
-          bash ../tools/ci/run-check.sh jalali-install composer require ariaieboy/filament-jalali:3.1.0 --no-interaction --prefer-dist --no-progress
-          cp .env.example .env
-          php artisan key:generate --force --no-interaction
-          php artisan filament:assets --no-interaction
-          cp ../tools/ci/jalali/RuntimeProbe.php tests/Feature/JalaliRuntimeProbeTest.php
-      - name: Actual component selection midnight and runtime timezone probes
-        run: bash tools/ci/run-check.sh jalali-selection node tools/ci/jalali/selection.mjs
-      - name: Actual Filament render select-state save UTC and re-display
-        if: '!cancelled()'
-        working-directory: backend
-        run: bash ../tools/ci/run-check.sh jalali-runtime vendor/bin/pest tests/Feature/JalaliRuntimeProbeTest.php --ci --colors=never
-      - name: Preserve redacted candidate diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: single-jalali-trial-diagnostics
-          path: .ci-reports/
-          include-hidden-files: true
-          if-no-files-found: warn
-          retention-days: 7
-
-  jalali-lock:
-    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[jalali-lock-once]')
-    needs: style
-    name: Capture Composer-generated Jalali lock
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: intl, mbstring, gd, zip, bcmath
-          tools: composer:v2
-          coverage: none
-      - name: Generate lock without changing any application code or rerunning candidate trial
-        working-directory: backend
-        run: |
-          bash ../tools/ci/run-check.sh jalali-lock composer require "ariaieboy/filament-jalali:~3.1.0" --no-interaction --prefer-dist --no-progress --no-scripts
-          bash ../tools/ci/run-check.sh jalali-lock-validation composer validate --strict
-      - name: Public lock transport batch 1 and checksum
-        if: always()
-        run: python3 tools/ci/emit-public-lock.py 0
-      - name: Public lock transport batch 2
-        if: always()
-        run: python3 tools/ci/emit-public-lock.py 9
-      - name: Public lock transport batch 3
-        if: always()
-        run: python3 tools/ci/emit-public-lock.py 18
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: composer-generated-jalali-lock
-          path: |
-            backend/composer.json
-            backend/composer.lock
-          if-no-files-found: error
-          retention-days: 7
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: composer-lock-diagnostics
           path: .ci-reports/
           include-hidden-files: true
           if-no-files-found: warn

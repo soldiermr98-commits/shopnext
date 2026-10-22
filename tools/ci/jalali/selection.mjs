@@ -1,16 +1,11 @@
-// Isolated candidate runtime probe. Not a browser/RTL/accessibility claim.
+// Retained package component regression. Not a browser/RTL/accessibility claim.
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
 const zones = ['Asia/Tehran', 'UTC', 'America/New_York'];
-const cases = [
-  { input: '2026-03-21 00:00:00', day: 2, selected: '2026-03-22 00:00:00', display: '1405/01/02 00:00:00', utc: '2026-03-21 20:30:00' },
-  { input: '2026-03-21 23:59:59', day: 2, selected: '2026-03-22 23:59:59', display: '1405/01/02 23:59:59', utc: '2026-03-22 20:29:59' },
-  { input: '2026-03-20 23:59:59', day: 29, selected: '2026-03-20 23:59:59', display: '1404/12/29 23:59:59', utc: '2026-03-20 20:29:59' },
-  { input: '2025-03-20 00:00:00', day: 30, selected: '2025-03-20 00:00:00', display: '1403/12/30 00:00:00', utc: '2025-03-19 20:30:00' },
-];
+const cases = JSON.parse(await readFile(new URL('./cases.json', import.meta.url), 'utf8'));
 
 if (!process.argv.includes('--probe')) {
   const destination = 'backend/storage/framework/testing/jalali-candidate-selections.json';

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-22 — L3a process gates and retained Jalali (not complete)
+
+- Added independent Pint dry-run before original seven jobs, redacted readable
+  summaries/artifacts; fixed hidden artifact uploads and actual race result-file
+  publication. All eight gates verified; financial code/invariants unchanged.
+- One Jalali3.1.0 runtime trial passed against Filament5.10.3. Integrated actual
+  Composer-generated lock, shared date controls/displays and permanent tests;
+  integration CI pending. No catalog/media/stock business UI claimed complete.
+
 ## 2026-10-22 — L3a started (not complete)
 
 - Owner authorized foundation/catalog only; later admin phases remain gated.
