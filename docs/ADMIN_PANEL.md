@@ -381,3 +381,19 @@ reserved for the later reason+actor ledger service; no direct stock setter exist
 | Bulk categories / audit | Replace/clear only selected products; second-row audit failure rolls back category and price batches | Implemented; runtime UNVERIFIED | L3a bulk category replacement and clear affect only selected products and audit failure rolls back the whole batch |
 | Bulk authorization | Fresh actor safety flags | Implemented; runtime UNVERIFIED | L3a bulk operations reject revoked safety flags even when called with a stale privileged actor |
 | Bulk bounds | Reject1,000 legacy variants + parent before updates | Implemented; runtime UNVERIFIED | L3a bulk price preflights the total legacy variation expansion before changing any row |
+
+
+### Bulk price/category domain VERIFIED5e5db96 (not the bulk UI)
+
+All six ProductBulk inventory rows immediately above are now **REAL / tested**,
+superseding their earlier runtime-PENDING labels. [Push39862703481](https://github.com/soldiermr98-commits/shopnext/actions/runs/39862703481)
+and [PR39862709665](https://github.com/soldiermr98-commits/shopnext/actions/runs/39862709665)
+ALL8 SUCCESS.339 tests/9037–9038 assertions per real SQL job; all5 financial races
+per job. Exact manifest: `ci/l3a-product-bulk-verified-matrix.json`.
+
+Product content/gallery/spec groups/FAQ/relations and actual product/variant/bulk
+screens remain pending. Media and reason+actor stock adjustments (including bulk
+stock), branding/navigation/cache/deploy checks/final handoff also remain pending.
+No full L3a completion tag or L3b approval request; browser/host/RTL/a11y/restore
+still UNVERIFIED. No stock setter added, and the L2 financial implementation/tag
+is unchanged except the necessary fail-closed trashed-variant eligibility guard.

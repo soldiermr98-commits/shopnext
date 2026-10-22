@@ -525,3 +525,20 @@ claimed executed. Exact ProductBulkTest fixers: unary_operator_spaces,
 no_unused_imports, not_operator_with_successor_space. Removed unused import and
 expanded embedded preincrement into explicit postincrement/nested guard. Full
 runtime verification remains PENDING. No concern advanced on a red run.
+
+
+## L3a bulk price/category domain — VERIFIED5e5db96
+
+[Push39862703481](https://github.com/soldiermr98-commits/shopnext/actions/runs/39862703481)
+and [PR39862709665](https://github.com/soldiermr98-commits/shopnext/actions/runs/39862709665)
+ALL8 SUCCESS;339 passed/9037–9038 assertions in each PHP8.2/8.3 ×MySQL8.0/
+MariaDB10.6/11.4 job, all5 genuine financial races per job. The live-check parser
+asserted both eight-job conclusions and all six test/race counts before recording
+`ci/l3a-product-bulk-verified-matrix.json`. Independent style and frontend gates,
+isolated SQL rollback/reapply, full suite and real no-dev package smoke passed.
+The earlier formatting-only red run did not execute/claim expensive SQL jobs.
+
+This proves services, not delivered product/variation/bulk editor screens. Next
+content/gallery/spec/FAQ/relations and actual UI, followed by media and reason+
+actor stock, then remaining branding/navigation/cache/deploy/full handoff. No
+l3a-complete tag or L3b/deployment approval. Real browser/host acceptance UNVERIFIED.

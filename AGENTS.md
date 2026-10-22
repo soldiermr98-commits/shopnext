@@ -1,3 +1,23 @@
+# Current continuation — bulk domain VERIFIED; product content/UI NEXT
+
+- 5e5db96 ProductBulk VERIFIED push39862703481/PR39862709665 ALL8 SUCCESS.
+ Each SQL job339tests9037/9038assertions; all5 genuine financial races each.
+ Manifest docs/ci/l3a-product-bulk-verified-matrix.json parsed from live annotations
+ with job count/conclusion/tests/races assertions. Bulk service has no stock API.
+- Variant integrity ca4de24 previously ALL8/327tests; actual cart/COD snapshots,
+ SQL owner/membership/dimension/trashed-combination guards verified on all6 SQL.
+- Pint bulk callback style corrected from actual fast-gate diagnostics; expensive
+ jobs skipped on red (39862556040), all rerun green after fix. Migration rollback
+1553 fixed via parent index preservation; isolated rollback gate kept permanently.
+- NEXT: product content/gallery-main-alt/order/spec groups/FAQ/relations domain,
+ then real product + variant + bulk UI backed by verified services. Next media
+ folders/replace/alt/usage/protected delete/queued conversions/sync fallback, then
+ stock reason+actor ledger/service/actions (including bulk stock). Branding/nav/
+ cache/deploy-check and all seven final handoff docs/evidence/tag remain due.
+- No intermediate approval checkpoint. Full L3a NOT complete, no l3a-complete tag,
+ no L3b work, no production deployment or new credentials. Browser/host/TLS/a11y/
+ restore UNVERIFIED. PR2 open; branch arena/b4d40ed7-shopnext only.
+
 # Bulk domain formatter correction — PENDING full CI
 
 - 00ff000 push39862556040/PR39862563152 fast Pint RED, expensive jobs correctly
