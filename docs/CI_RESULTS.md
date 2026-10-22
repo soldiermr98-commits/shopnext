@@ -1,3 +1,15 @@
+# Measured annotation limits; bounded multi-step public lock transport
+
+3f727cc / [push CI39730021177](https://github.com/soldiermr98-commits/shopnext/actions/runs/39730021177)
+and [PR CI39730025615](https://github.com/soldiermr98-commits/shopnext/actions/runs/39730025615):
+all eight original gates SUCCESS; separate Composer strict lock capture SUCCESS.
+API measurement:25000-character annotations are truncated to4096 characters.
+Combined with the measured10-notice-per-step quota, a single-step transport cannot
+carry this complete lock. Local integrity checks again refused to write any file.
+Use4000-character parts, up to9 per step in3 distinct steps, with a separate checksum
+in the first step and an explicit capacity guard. No candidate runtime rerun.
+Public Composer artifacts remain available normally on GitHub. Integration PENDING.
+
 # Composer lock validated — public transport correction
 
 b1e8e28 / [push CI39729633416](https://github.com/soldiermr98-commits/shopnext/actions/runs/39729633416)

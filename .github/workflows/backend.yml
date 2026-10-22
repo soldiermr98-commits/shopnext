@@ -338,19 +338,15 @@ jobs:
         run: |
           bash ../tools/ci/run-check.sh jalali-lock composer require "ariaieboy/filament-jalali:~3.1.0" --no-interaction --prefer-dist --no-progress --no-scripts
           bash ../tools/ci/run-check.sh jalali-lock-validation composer validate --strict
-      - name: Emit public lock and checksum even when strict validation fails
+      - name: Public lock transport batch 1 and checksum
         if: always()
-        working-directory: backend
-        run: |
-          python3 - <<'PYLOCK'
-          import base64, hashlib, zlib
-          from pathlib import Path
-          data = Path('composer.lock').read_bytes()
-          packed = base64.b64encode(zlib.compress(data)).decode()
-          print('::notice title=lock-sha256::' + hashlib.sha256(data).hexdigest())
-          for index, start in enumerate(range(0, len(packed), 25000)):
-              print(f'::notice title=lock-part-{index:03d}::' + packed[start:start+25000])
-          PYLOCK
+        run: python3 tools/ci/emit-public-lock.py 0
+      - name: Public lock transport batch 2
+        if: always()
+        run: python3 tools/ci/emit-public-lock.py 9
+      - name: Public lock transport batch 3
+        if: always()
+        run: python3 tools/ci/emit-public-lock.py 18
       - uses: actions/upload-artifact@v4
         if: always()
         with:
