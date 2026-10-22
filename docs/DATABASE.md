@@ -138,3 +138,13 @@ scheduler_heartbeats with2 bounded queries. Stock adjustment history, soft-delet
 catalog relations, attribute terms and media usage schema are still pending L3a.
 Do not infer stock-ledger/media-library existence from the existing stock counters
 or safe upload primitive. ADMIN_PANEL.md records each unimplemented action.
+
+## L3a category editor foundation (runtime pending CI)
+
+Migration2026_10_22_000001 adds nullable category meta_title160/meta_description320
+and an order_index/id pagination index. `catalog_locks` contains the seeded
+`taxonomy` mutex row, locked in each category mutation transaction after fresh
+actor authorization. It serializes reparent/reorder/delete validation; existing
+category parent FK and unique slug remain authoritative. No stock/financial schema
+changed. Category delete currently guarded hard delete; product soft deletion is
+not implemented by this migration. Panel category editor is not wired yet.

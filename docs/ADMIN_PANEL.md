@@ -103,9 +103,32 @@ No new catalog mutation/action is exposed by this helper alone.
 
 screen | action | REAL/tested | test name
 --- | --- | --- | ---
-Date control (test harness only) | select/save UTC/reload | trial REAL; production regression PENDING CI | AdminDatesTest: L3a renders the retained Jalali picker saves selected state as Gregorian UTC and reloads at Tehran midnight
-Date display helper | Persian Tehran table/infolist; zero DB reads | PENDING CI | AdminDatesTest: L3a formats table and infolist dates in Persian without database queries or mutating timestamps
-Shipped Jalali component | day-select/serialize/redisplay across3 TZ and4 dates | trial REAL; permanent integration PENDING CI | tools/ci/jalali/selection.mjs
+Date control (test harness only) | select/save UTC/reload | trial REAL; production regression REAL, CI39731170215 | AdminDatesTest: L3a renders the retained Jalali picker saves selected state as Gregorian UTC and reloads at Tehran midnight
+Date display helper | Persian Tehran table/infolist; zero DB reads | REAL, CI39731170215 | AdminDatesTest: L3a formats table and infolist dates in Persian without database queries or mutating timestamps
+Shipped Jalali component | day-select/serialize/redisplay across3 TZ and4 dates | trial REAL; permanent integration REAL, CI39731170215 | tools/ci/jalali/selection.mjs
 
 These are runtime component/contract checks, NOT end-to-end browser clicking,
 visual RTL, accessibility or host proof. Taxonomy/products/media/stock remain next.
+
+## Taxonomy sub-step: category domain service (screen not wired yet)
+
+`Categories` centralizes fresh role authorization, serialized acyclic reparenting,
+unique slug validation, safe existing raster references, sanitized description/SEO,
+complete sibling reorder and referenced-delete protection. Explicit actor audit is
+transactional even without a web auth context; audit failure rolls back writes.
+Paginated parent labels use eager loading (four queries including fresh actor).
+New policy grants only the existing first three product-management roles; no
+force-delete/restore ability is opened. This initial category delete is a guarded
+hard delete; product soft-delete/restore remains a later required concern.
+
+screen | action | REAL/tested | test name
+--- | --- | --- | ---
+Category domain (no panel button yet) | list/create/update/reparent/reorder/delete | PENDING CI; service tests written | CategoryServiceTest: L3a category service independently enforces six roles for every operation and records the actual actor
+Category domain | cycle/slug/order/delete protection | PENDING CI | CategoryServiceTest: L3a category service rejects cycles duplicate slugs foreign ordering and referenced deletion with Persian errors
+Category domain | safe image reference | PENDING CI | CategoryServiceTest: L3a category service accepts only existing safely rasterized image references
+Category domain | stale role and audit rollback | PENDING CI | CategoryServiceTest: L3a category service refreshes authorization and rolls back the mutation if its actor audit fails
+Category domain | big-list pagination/parent labels | PENDING CI | CategoryServiceTest: L3a category big lists paginate and eager load parents in four bounded queries
+
+Next after all eight gates green: wire/test the actual category screen and each
+button through this service, then brands, then attributes/terms. Do not describe
+taxonomy, products, media, stock or full L3a as complete at this service checkpoint.

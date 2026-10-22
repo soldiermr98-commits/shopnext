@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-22 — L3a category service started (not an editor yet)
+
+- Jalali production integration e5f6d6b passed all eight gates,230 tests per SQL job.
+- Added category policy/service/SEO+mutex migration and six-role, persistence,
+  validation/image/query-bound/audit-rollback tests; new sub-step CI pending.
+- No category panel buttons, brands/attributes/products/media/stock claimed done.
+
 ## 2026-10-22 — L3a process gates and retained Jalali (not complete)
 
 - Added independent Pint dry-run before original seven jobs, redacted readable

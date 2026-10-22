@@ -1,3 +1,17 @@
+# Current continuation — category service sub-step
+
+- Retained Jalali integration e5f6d6b: CI39731170215 + PR39731176780 ALL8 GREEN;
+  230tests/PHP job (PHP8.2MySQL8:7886assertions). Date controls/displays runtime
+  verified, not actual visual/browser/RTL/a11y proof.
+- Taxonomy started ONLY with Categories domain service and policy/SEO/mutex schema.
+  CategoryServiceTest covers six roles, real persistence, tree/reorder/delete
+  guards, safe image reference, query bounds and transactional actor audit.
+  This new sub-step is PENDING CI; wait ALL8 before the next concern.
+- NEXT: wire actual category panel screen/actions through Categories and test each;
+  then brands -> attributes/terms -> products -> media -> stock adjustment service.
+  Category screen still NOT IMPLEMENTED. No checkpoint approval needed; continue
+  to full verified L3a, update required docs/tag only then STOP for L3b approval.
+
 # Latest continuation — Jalali integration, not L3a completion
 
 - Process gates/artifacts verified. Atomic race-result publication fixed actual

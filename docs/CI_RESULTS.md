@@ -1,3 +1,18 @@
+# Retained Jalali VERIFIED; category service sub-step pending CI
+
+e5f6d6b / [push CI39731170215](https://github.com/soldiermr98-commits/shopnext/actions/runs/39731170215)
+and [PR CI39731176780](https://github.com/soldiermr98-commits/shopnext/actions/runs/39731176780):
+ALL8 SUCCESS on both. PHP8.2/MySQL8 passed230 tests7886 assertions, including
+retained date-control SQL UTC save/reload and1000 Persian date renders with zero DB
+queries; shipped JS12 selection/timezone cases passed. All six PHP/SQL jobs and
+original five real concurrency races remained gates. No full browser/host proof.
+
+Next strictly ordered concern starts taxonomy/categories with a real domain
+service, explicit policy, SEO migration and serialization mutex, service-level
+six-role/validation/image/query-count/audit rollback regressions. Screen/buttons
+NOT YET WIRED. Execution of this new category sub-step remains PENDING CI. No
+completion tag, next-phase approval, stock writes or financial behavior changes.
+
 # Production integration formatting gate caught imports before SQL matrix
 
 1db58d3 / CI39731080971 and PR CI39731085282: fast Pint correctly failed

@@ -200,3 +200,13 @@ never Filament's custom-font CDN fallback. Cron stays lazy/read-only and checks
 permission inside status(), not only menu visibility. Six-role/Persian/query-bound
 regressions executed in CI39724414478 ALL7 green on98cfd43. No new business resource yet.
 Full action/status plan and date-picker evaluation: ADMIN_PANEL.md.
+
+## L3a taxonomy service foundation — not a finished editor
+
+Categories owns category mutations behind fresh per-transaction role checks,
+a taxonomy SQL mutex, explicit policy and actor-aware transactional audit. No
+Filament write bypass or category screen is introduced in this service sub-step.
+SafeUpload raster output can be referenced only when the local media file exists;
+free-form URLs, SVG and path traversal are rejected. Parent labels are eager-loaded
+on30-record pages. SEO metadata is stored only (no L4-L6 SSR injection). Service
+runtime validation remains pending its full CI; remaining taxonomy comes next.

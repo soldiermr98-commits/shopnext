@@ -26,6 +26,7 @@ use App\Models\User;
 use App\Observers\AdminActivity;
 use App\Policies\ActivityLogPolicy;
 use App\Policies\AddressPolicy;
+use App\Policies\CategoryPolicy;
 use App\Policies\FoundationPolicy;
 use App\Policies\OrderPolicy;
 use App\Policies\ProductPolicy;
@@ -63,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('dashboard', fn (User $user): bool => Permissions::allows($user, 'dashboard'));
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Address::class, AddressPolicy::class);
-        Gate::policy(Category::class, FoundationPolicy::class);
+        Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Brand::class, FoundationPolicy::class);
         Gate::policy(Product::class, ProductPolicy::class);
         Gate::policy(ProductVariant::class, ProductVariantPolicy::class);

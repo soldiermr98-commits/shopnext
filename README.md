@@ -93,3 +93,13 @@ controls remain outside L2. Original external photos remain local placeholders.
 Real browser behavior, RTL/a11y, hosting permissions, CLI/web PHP equivalence, TLS
 and backups/restore remain UNVERIFIED. Integration into `main` does not authorize
 production deployment or later L3 sub-phases. L3a is authorized; STOP after its completion tag for approval.
+
+### L3a continuation status (not complete)
+
+Fast Pint + all seven original gates are retained (eight total). Jalali3.1.0
+passed the single runtime trial and retained integration CI39731170215/39731176780
+(230 tests per SQL job). Taxonomy now starts with the category domain service;
+its policy/SEO/mutex schema and tests are pending their own CI. The actual category
+screen, remaining taxonomy, products, media and stock adjustments are not complete.
+See docs/ADMIN_PANEL.md for action-by-action evidence. No l3a-complete tag or later
+phase/production approval. Real browser/host/RTL/a11y/TLS/restore stay UNVERIFIED.
