@@ -507,3 +507,13 @@ race names in `ci/l3a-variant-domain-verified-matrix.json`. Corrected rollback a
 full down/up lifecycle pass on PHP8.2/8.3 ×MySQL8/MariaDB10.6/11.4. Product UI and
 remaining L3a scope still pending. Additional cart/order and direct SQL ownership
 regressions added after this checkpoint remain UNVERIFIED until their next run.
+
+
+## L3a variant integrity VERIFIED; bulk domain PENDING
+
+Ca4de24: [push39861719109](https://github.com/soldiermr98-commits/shopnext/actions/runs/39861719109)
+/[PR39861724632](https://github.com/soldiermr98-commits/shopnext/actions/runs/39861724632)
+ALL8 SUCCESS; actual six SQL counts and all5 races/job parsed and asserted in
+`ci/l3a-variant-integrity-verified-matrix.json`. New ProductBulk service and tests
+are UNVERIFIED pending next CI; local git diff --check passed only. No actual bulk
+or product editor UI, media/stock implementation or full L3a tag claimed.

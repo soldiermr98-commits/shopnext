@@ -1,3 +1,21 @@
+# Current continuation — bulk price/category domain PENDING CI
+
+- Ca4de24 variant integrity VERIFIED push39861719109/PR39861724632 ALL8.
+ Live conclusions and parsed test/race counts saved in new manifest
+ docs/ci/l3a-variant-integrity-verified-matrix.json. Actual cart/order zero-stock
+ protection and raw SQL ownership/unique/membership regressions passed ALL6.
+- NEW ProductBulk service: fresh actor/taxonomy lock, max50 selected products,
+ category replacement/clear max30, all-or-none exact whole-% integer half-up prices
+ across roots + active variants max1000 rows. Regular/sale/flash scaled together;
+ calendars, inventory, trash, immutable orders unchanged. No direct stock API.
+- ProductBulkTest six roles, exact prices/stock/calendar, selection/overflow late
+ rollback, category isolation/clear/audit rollback, stale safety flags and excessive
+ legacy variant expansion all PENDING actual CI. No new UI exposed yet.
+- WAIT ALL8. Then content/gallery/FAQ/spec groups/related/upsell/cross-sell domain
+ and actual product/variant/bulk UI -> media -> reason/actor stock service/actions
+ -> branding/nav/cache/deploy/full docs/evidence/tag. Continue without checkpoint
+ approval. No full L3a tag and no L3b work or deployment authorization.
+
 # Current continuation — variant domain VERIFIED; two security regressions pending
 
 - 7363831 VERIFIED push39860899337/PR39860906651 ALL8.325tests8952assertions

@@ -353,3 +353,31 @@ Two additional security regressions are newly added and **PENDING** their own CI
 
 No stock adjustment UI, content/gallery/relations/bulk editor or complete product
 screen is claimed by this checkpoint; these and remaining L3a work are still due.
+
+
+### Variant integrity VERIFIED; bulk price/category domain PENDING
+
+Both added integrity regressions are now **REAL / tested**:
+[push39861719109](https://github.com/soldiermr98-commits/shopnext/actions/runs/39861719109)
+and [PR39861724632](https://github.com/soldiermr98-commits/shopnext/actions/runs/39861724632)
+ALL8. Exact six-job counts/races: `ci/l3a-variant-integrity-verified-matrix.json`.
+
+New ProductBulk domain is implemented but **UNVERIFIED** pending its own matrix.
+It accepts at most50 active selected products. Price changes are whole-percent
+(increase1–1000%, decrease1–100%) using exact rational half-up once per stored
+integer price, across regular/sale/flash fields on roots and active variants.
+Maximum1000 price rows; larger legacy expansions fail before persistence. Trash,
+stock and calendars are untouched. Category replacement/clear is limited to30
+existing categories and does not affect unselected products. Every row is audited
+inside the transaction; any late money bound/audit failure rolls back the batch.
+This is service groundwork, **not a delivered bulk screen**. Bulk stock remains
+reserved for the later reason+actor ledger service; no direct stock setter exists.
+
+| Screen / domain | Action | REAL / tested status | Pest test name (ProductBulkTest) |
+|---|---|---|---|
+| Product bulk (UI pending) | Price/category writes, selected scope, actor audit and independent six-role gates | Implemented; runtime UNVERIFIED | L3a bulk price and category services independently gate all six roles and persist scoped actor audits |
+| Bulk prices | Exact ratio/half-up on root + active variation regular/sale/flash prices; stock/calendars/trash unchanged | Implemented; runtime UNVERIFIED | L3a bulk prices use exact half up integer ratios on roots and active variants without touching stock dates or trash |
+| Bulk validation | Strict integer %, unique bounded IDs, missing/trash rejection; rollback late money overflow | Implemented; runtime UNVERIFIED | L3a bulk mutations reject floats duplicate missing trashed and excessive selections and rollback late money overflow |
+| Bulk categories / audit | Replace/clear only selected products; second-row audit failure rolls back category and price batches | Implemented; runtime UNVERIFIED | L3a bulk category replacement and clear affect only selected products and audit failure rolls back the whole batch |
+| Bulk authorization | Fresh actor safety flags | Implemented; runtime UNVERIFIED | L3a bulk operations reject revoked safety flags even when called with a stale privileged actor |
+| Bulk bounds | Reject1,000 legacy variants + parent before updates | Implemented; runtime UNVERIFIED | L3a bulk price preflights the total legacy variation expansion before changing any row |
