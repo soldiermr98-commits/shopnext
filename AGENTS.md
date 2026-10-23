@@ -1,3 +1,12 @@
+# Image safety prerequisite — formatter correction PENDING runtime
+
+- 985b987 push39883737773 fast Pint RED; SQL correctly skipped. Actual reporter
+ ImageBudgetTest fixers fully_qualified_strict_types/unary_operator_spaces/
+ not_operator_with_successor_space. Replaced qualified exception references with
+ an explicit imported HttpException. No test/guard removed or expensive run claim.
+- WAIT fast green before next media concern. Queue/conversion/usage/delete library
+ still pending; only resource guard + dashboard/CLI health prerequisite implemented.
+
 # Current continuation — shared-host media safety prerequisite PENDING runtime
 
 - Workspace git metadata was stale at base39b64b4; verified EVERY remote5542046

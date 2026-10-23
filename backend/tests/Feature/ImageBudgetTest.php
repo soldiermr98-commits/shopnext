@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses(RefreshDatabase::class);
 
@@ -90,13 +91,13 @@ it('L3a dashboard image warnings independently gate six roles and refresh revoke
     $this->actingAs($actor, 'web');
     $widget = new CronHeartbeat;
     if (! $allowed) {
-        expect(fn () => $widget->imageHealth())->toThrow(Symfony\Component\HttpKernel\Exception\HttpException::class);
+        expect(fn () => $widget->imageHealth())->toThrow(HttpException::class);
 
         return;
     }
     expect($widget->imageHealth())->toBe(app(ImageHostHealth::class)->report());
     DB::table('users')->where('id', $actor->id)->update(['role' => 'support']);
-    expect(fn () => $widget->imageHealth())->toThrow(Symfony\Component\HttpKernel\Exception\HttpException::class);
+    expect(fn () => $widget->imageHealth())->toThrow(HttpException::class);
 })->with([
     ['super_admin', true], ['admin', true], ['shop_manager', true],
     ['content_editor', false], ['support', false], ['customer', false],

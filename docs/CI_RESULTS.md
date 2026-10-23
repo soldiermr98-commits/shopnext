@@ -615,3 +615,9 @@ Shared-host image safety addendum: preflight/resource/reporting implementation a
 new ImageBudgetTest cases PENDING actual fast CI. Local git diff --check only;
 no local PHP/Pest runtime available. Product pages5542046 retained byte-for-byte.
 No queue/original-fallback/delete-protection acceptance claim at this prerequisite.
+
+
+985b987 fast39883737773: Pint RED, SQL/frontend SKIPPED. Actual ImageBudgetTest
+fixers fully_qualified_strict_types/unary_operator_spaces/not_operator_with_successor_space.
+Explicit HttpException import replaces qualified references; no acceptance/runtime
+claim for skipped jobs. Re-verification PENDING.
