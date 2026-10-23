@@ -7,9 +7,11 @@ use App\Models\User;
 use App\Services\DeployHealth;
 use App\Services\Heartbeat;
 use Filament\Facades\Filament;
+use Illuminate\Container\Container;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Schedule;
 use Livewire\Livewire;
 
@@ -63,6 +65,12 @@ it('passes deploy-check against actual PHP extensions and each real matrix datab
     try {
         $this->artisan('optimize')->assertExitCode(0);
         $this->artisan('filament:optimize')->assertExitCode(0);
+        // Cache commands bootstrap a fresh container; restore the test application
+        // and its real transaction connection, not a second uncommitted-data reader.
+        Container::setInstance($this->app);
+        Facade::setFacadeApplication($this->app);
+        Facade::clearResolvedInstances();
+        expect(config('app.env'))->toBe('production');
         $checks = app(DeployHealth::class)->checks();
         foreach ($checks as $name => [$passed, $detail]) {
             expect($passed)->toBeTrue($name.': '.$detail);

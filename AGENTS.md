@@ -662,3 +662,9 @@ post-optimize. Fetched authoritative Laravel12.70 Application: cached booleans
 memoize initial false, not file absence. DeployHealth now checks real resolved
 config/routes cache paths (Filament/icons already actual files); requirement kept.
 Assert message now passed to toBeTrue; pending fresh fast CI then final PR6 SQL.
+
+Dab2e00 fast39891617446 precise failure cron (allcache paths passed). Actual
+optimize config/route commands bootstrap fresh Laravel globalcontainer/facades,
+second DBconnection can't see test's uncommitted heartbeat. Restore original test
+app Container/Facade afterrealcommands + assertproduction env. Realdbconnection/
+readiness kept; no mocking. Fastrecheck next; full PR still not opened.

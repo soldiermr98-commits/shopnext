@@ -672,3 +672,11 @@ immediately after optimize); no cache requirement removed. Added assertion messa
 at toBeTrue so future failures identify the specific readiness row. Recheck pending.
 Manual workflow dispatch lacked integration permission403; normal push CI ran,
 so no credential change/reconnect needed and no bypass/manual fake result.
+
+Dab2e00 fast39891617446: cache manifests passed; same OperationsTest failed on
+cron (429 passed/1 failed). Diagnostic now names exact row. Root cause is actual
+optimize commands bootstrapping a fresh Laravel container/facade application,
+which opens a second SQL connection unable to see RefreshDatabase heartbeat
+fixtures. Test restores its original real app/facade container after actual cache
+commands and explicitly asserts production env; no mocked cache/cron status or
+readiness requirement bypass. Extracted package subprocess check remains separate.
