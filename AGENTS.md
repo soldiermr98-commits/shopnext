@@ -614,3 +614,13 @@ WebP outputs, WebP public serving, no-codec canonical preservation. New named
 six-role and actual persistence/conversion tests pending fast CI. No stock work
 started yet; no full completion claim/tag. Git metadata again restored by comparing
 EVERY remote c104416 blob with workspace before reset --mixed (no files changed).
+
+## Stock implementation PENDING runtime
+
+StockAdjustment service, append-only SQL operations/adjustments reason+actor
+ledger, explicit adjustStock product+variant policies, actual Filament single
+and max50 selected-SKU bulk actions, replay keys, sorted root/variant locks,
+all-or-nothing decrease, audit transaction,6-role and six-SELECT50-row tests.
+Media prerequisite194c83b formatter red (ordered imports + qualified DB migration),
+fix055ba32 fast39890033715 SUCCESS Pint/backend:415/9765; frontend skipped.
+New stock files not yet runtime tested. Full matrix/tag still NOT done.

@@ -610,3 +610,20 @@ is always retained. Without a healthy worker only ≤1MP sources convert inline;
 larger files remain canonical/pending and queue for the bounded minute worker.
 Legacy/pre-library disk files are not automatically scanned/imported; newly
 uploaded catalog and API media are registered. Private receipts are excluded.
+
+## Stock actions — implemented, runtime PENDING
+
+| Screen/domain | Action | REAL/tested status | Named Pest test (StockAdjustmentTest) |
+|---|---|---|---|
+| `/admin/stock-adjustment` | Reason/actor single adjustment, six roles, freshly revoked actions | Implemented; runtime UNVERIFIED | L3a stock single and bulk actions gate six roles and refreshed revoked actors |
+| Same page | Atomic selected50 SKU bulk adjustment, explicit increase/decrease, replay safety | Implemented; runtime UNVERIFIED | L3a bulk stock UI persists reason actor immutable ledger and replay-safe atomic increments |
+| Stock domain | Correct variant parent, no direct setter, integer limits, reason/key conflicts | Implemented; runtime UNVERIFIED | L3a variant adjustments verify parent reject invalid quantities and key conflicts without partial changes |
+| Stock/audit | Entire mutation rollback on audit failure | Implemented; runtime UNVERIFIED | L3a stock mutation rolls back every row ledger operation and audit on audit failure |
+| Bulk domain | Fixed6 SELECTs for50 selected SKUs | Implemented; runtime UNVERIFIED | L3a fifty row bulk stock adjustment has six fixed selects not one select per SKU |
+
+Append-only SQL ledger records actual reason and actor, before/after, signed delta,
+operation ID and UTC time; activity audit redacts reason. Available stock remains
+compatible with existing checkout reservation/release paths; this adjustment
+ledger is not falsely described as a reconstruction of pre-existing order stock
+movements. Simple roots or explicit variants only. The form uses a locked request
+key; retries do not duplicate stock. Click «درخواست جدید» for a new intent.
