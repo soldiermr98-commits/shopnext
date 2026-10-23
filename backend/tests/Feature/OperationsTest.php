@@ -7,9 +7,11 @@ use App\Models\User;
 use App\Services\DeployHealth;
 use App\Services\Heartbeat;
 use Filament\Facades\Filament;
+use Illuminate\Container\Container;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Schedule;
 use Livewire\Livewire;
 
@@ -57,11 +59,27 @@ it('renders cron age and warning on the authorized Filament dashboard widget', f
 it('passes deploy-check against actual PHP extensions and each real matrix database with a fresh queue probe', function () {
     config(['app.env' => 'production', 'app.debug' => false, 'app.url' => 'https://shop.example']);
     $this->artisan('shopnext:tick')->assertExitCode(0);
-    $checks = app(DeployHealth::class)->checks();
-    foreach ($checks as $name => [$passed, $detail]) {
-        expect($passed, $name.': '.$detail)->toBeTrue();
+    foreach (['cache.config', 'cache.routes', 'cache.filament', 'cache.icons'] as $name) {
+        expect(app(DeployHealth::class)->checks()[$name][0], $name)->toBeFalse();
     }
-    $this->artisan('deploy-check')->assertExitCode(0);
+    try {
+        $this->artisan('optimize')->assertExitCode(0);
+        $this->artisan('filament:optimize')->assertExitCode(0);
+        // Cache commands bootstrap a fresh container; restore the test application
+        // and its real transaction connection, not a second uncommitted-data reader.
+        Container::setInstance($this->app);
+        Facade::setFacadeApplication($this->app);
+        Facade::clearResolvedInstances();
+        expect(config('app.env'))->toBe('production');
+        $checks = app(DeployHealth::class)->checks();
+        foreach ($checks as $name => [$passed, $detail]) {
+            expect($passed)->toBeTrue($name.': '.$detail);
+        }
+        $this->artisan('deploy-check')->assertExitCode(0);
+    } finally {
+        Artisan::call('optimize:clear');
+        Artisan::call('filament:optimize-clear');
+    }
 });
 
 it('fails deploy-check for unsafe environment invalid key stale cron non-database queue and failed queue history', function () {

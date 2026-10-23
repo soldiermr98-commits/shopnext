@@ -15,6 +15,7 @@ use App\Models\CatalogAttribute;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Coupon;
+use App\Models\MediaAsset;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -31,6 +32,7 @@ use App\Policies\AddressPolicy;
 use App\Policies\BrandPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\FoundationPolicy;
+use App\Policies\MediaAssetPolicy;
 use App\Policies\OrderPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\ProductVariantPolicy;
@@ -66,6 +68,7 @@ class AppServiceProvider extends ServiceProvider
             $model::observe(AdminActivity::class);
         }
         Gate::define('dashboard', fn (User $user): bool => Permissions::allows($user, 'dashboard'));
+        Gate::policy(MediaAsset::class, MediaAssetPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Address::class, AddressPolicy::class);
         Gate::policy(Category::class, CategoryPolicy::class);

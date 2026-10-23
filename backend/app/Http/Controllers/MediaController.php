@@ -7,6 +7,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MediaRequest;
 use App\Http\Requests\ReadRequest;
 use App\Models\ActivityLog;
+use App\Models\MediaAsset;
+use App\Services\MediaConversions;
+use App\Services\MediaLibrary;
 use App\Services\SafeUpload;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
@@ -25,17 +28,19 @@ final class MediaController
                 'before' => [], 'after' => ['format' => 'png'], 'changed_fields' => ['file'],
             ])->save();
         } catch (\Throwable $exception) {
-            Storage::disk('local')->delete('media/'.$name);
+            app(MediaLibrary::class)->discardNew($name);
             throw $exception;
         }
+
+        app(MediaConversions::class)->schedule(MediaAsset::where('filename', $name)->firstOrFail());
 
         return response()->json(['url' => '/media/'.$name], 201);
     }
 
     public function show(ReadRequest $request, string $file): BinaryFileResponse
     {
-        abort_unless(preg_match('/^[a-f0-9]{48}\.png$/D', $file) && Storage::disk('local')->exists('media/'.$file), 404);
+        abort_unless(preg_match('/^[a-f0-9]{48}\.(?:png|webp)$/D', $file) && Storage::disk('local')->exists('media/'.$file), 404);
 
-        return response()->file(Storage::disk('local')->path('media/'.$file), ['Content-Type' => 'image/png', 'X-Content-Type-Options' => 'nosniff']);
+        return response()->file(Storage::disk('local')->path('media/'.$file), ['Content-Type' => str_ends_with($file, '.webp') ? 'image/webp' : 'image/png', 'X-Content-Type-Options' => 'nosniff', 'Cache-Control' => str_ends_with($file, '.webp') ? 'public, max-age=31536000, immutable' : 'no-cache, max-age=0, must-revalidate']);
     }
 }

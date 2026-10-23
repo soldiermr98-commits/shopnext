@@ -1,0 +1,114 @@
+{
+  "run": 39892158598,
+  "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39892158598",
+  "head_sha": "6a951755e03a79e99dafd6c73afd5cac8dae5097",
+  "scope": "FULL PR: PHP8.2/8.3 \u00d7 MySQL8.0/MariaDB10.6/MariaDB11.4 + frontend + independent Pint",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 120214195562,
+      "name": "Fast Pint formatting dry-run",
+      "conclusion": "success"
+    },
+    {
+      "id": 120214336344,
+      "name": "Storefront and archived security regression tests",
+      "conclusion": "success"
+    },
+    {
+      "id": 120214336464,
+      "name": "PHP 8.3 / mariadb:10.6",
+      "conclusion": "success",
+      "tests": 432,
+      "assertions": 9925,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "id": 120214336489,
+      "name": "PHP 8.2 / mysql:8.0",
+      "conclusion": "success",
+      "tests": 432,
+      "assertions": 9925,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "id": 120214336511,
+      "name": "PHP 8.2 / mariadb:11.4",
+      "conclusion": "success",
+      "tests": 432,
+      "assertions": 9925,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "id": 120214336538,
+      "name": "PHP 8.3 / mariadb:11.4",
+      "conclusion": "success",
+      "tests": 432,
+      "assertions": 9926,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "id": 120214336571,
+      "name": "PHP 8.3 / mysql:8.0",
+      "conclusion": "success",
+      "tests": 432,
+      "assertions": 9925,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    },
+    {
+      "id": 120214336584,
+      "name": "PHP 8.2 / mariadb:10.6",
+      "conclusion": "success",
+      "tests": 432,
+      "assertions": 9925,
+      "races": [
+        "cancel_pay",
+        "coupon_capacity",
+        "last_stock",
+        "mark_paid",
+        "wallet_spend"
+      ]
+    }
+  ],
+  "unverified": [
+    "actual host/TLS",
+    "browser visual RTL/accessibility",
+    "live backup/restore/process-kill DB/filesystem recovery",
+    "production data import/deployment"
+  ],
+  "package_and_retained_jalali": {
+    "job_id": 120214336489,
+    "conclusion": "success",
+    "scope": "PHP8.2/MySQL8.0 only; actual extracted no-dev cache/HTTP/runner smoke and retained midnight selection"
+  }
+}

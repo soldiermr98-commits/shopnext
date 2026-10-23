@@ -21,6 +21,11 @@ final class ProductVariantPolicy extends FoundationPolicy
         return $this->viewAny($user);
     }
 
+    public function adjustStock(User $user, Model $record): bool
+    {
+        return $this->update($user, $record);
+    }
+
     public function delete(User $user, Model $record): bool
     {
         return $this->viewAny($user);

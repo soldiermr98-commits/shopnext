@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-10-23 — L3a media and stock FULL CI verified
+
+- Real media library virtual folders/alt/stable URL replace/live usage/protected
+  deletion; registered canonical PNGs and actual queued WebP/thumb conversion.
+- Cheap pixel/byte/live-memory guards before decode, sequential bounded outputs,
+  no-codec original retention, bounded no-worker sync and policy-gated retry.
+- Reason+actor append-only SQL stock adjustment ledger, idempotent audited single
+  and atomic50-SKU bulk Filament actions; no direct stock or financial setters.
+- Six-role, revocation, actual persistence, queue, resource and query-budget tests.
+- Full PR CI39892158598 passed all8 jobs:432 tests/9925–9926 assertions per
+  each of six SQL targets, five real financial races each; frontend/Pint green.
+  Both real WebP codecs/database worker and extracted no-dev production caches pass.
+  Completion release reference `l3a-complete` requires green tag workflow.
+- No production/browser acceptance or L3b authorization implied.
+
 ## 2026-10-22 — Attribute/term editors verified; product core started
 
 - B430903 passed both ALL8 matrices39743792019/39743800775,292tests8592/8593assertions.

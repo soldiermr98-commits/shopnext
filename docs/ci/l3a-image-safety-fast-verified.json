@@ -1,0 +1,21 @@
+{
+  "scope": "Fast push only; other five SQL combinations and frontend not executed",
+  "sha": "7d37fbc140df588f8791748f4fe5505ac2087202",
+  "push_run": 39884678896,
+  "style": "success",
+  "backend": {
+    "job": "PHP 8.3 / mariadb:10.6",
+    "conclusion": "success",
+    "tests": 405,
+    "assertions": 9679,
+    "races": [
+      "cancel_pay",
+      "coupon_capacity",
+      "last_stock",
+      "mark_paid",
+      "wallet_spend"
+    ]
+  },
+  "browser": "UNVERIFIED",
+  "remaining_media": "Conversion/queue/original fallback/usage/delete protection not implemented by this prerequisite"
+}

@@ -86,7 +86,16 @@ with tempfile.TemporaryDirectory() as temp:
         assert request('/' + entry, 'POST', token_file.read_text())[0] == 404
         probe = "require 'vendor/autoload.php'; $app=require 'bootstrap/app.php'; $app->make(Illuminate\\Contracts\\Console\\Kernel::class)->bootstrap(); exit(Illuminate\\Support\\Facades\\Schema::hasTable('deploy_runner_probes') ? 0 : 1);"
         subprocess.run(['php', '-r', probe], cwd=root / 'app', env=env, check=True, capture_output=True)
-        print('PASS: no-dev zip, local SPA assets, private/public HTTP layout, API separation, Filament, authenticated pending migration, self-delete and replay denial. TLS simulated; actual host remains UNVERIFIED.')
+        for command in ['optimize', 'filament:optimize']:
+            subprocess.run(['php', 'artisan', command, '--no-interaction'], cwd=root / 'app', env=env, check=True, capture_output=True)
+        assert (root / 'app/bootstrap/cache/config.php').is_file()
+        assert list((root / 'app/bootstrap/cache').glob('routes-*.php'))
+        assert (root / 'app/bootstrap/cache/filament/panels/admin.php').is_file()
+        assert (root / 'app/bootstrap/cache/blade-icons.php').is_file()
+        assert request('/admin/login')[0] == 200
+        for path in ['/admin/media-library', '/admin/stock-adjustment']:
+            assert request(path)[0] in [200, 401], 'Cached admin route unavailable: ' + path
+        print('PASS: no-dev zip, local SPA assets, private/public HTTP layout, API separation, Filament, production config/route/component/icon caches, authenticated pending migration, self-delete and replay denial. TLS simulated; actual host remains UNVERIFIED.')
     finally:
         # Bounded safe diagnostics: exception class names, never messages/arguments.
         for log in (root / 'app/storage/logs').glob('*.log'):

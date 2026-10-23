@@ -1,3 +1,61 @@
+# L3a REAL/tested administration inventory
+
+## Current L3a acceptance — FULL VERIFIED
+
+Implementation6a951755e03a79e99dafd6c73afd5cac8dae5097 passed [full CI39892158598](https://github.com/soldiermr98-commits/shopnext/actions/runs/39892158598):
+**all8 jobs SUCCESS** — independent Pint, all6 PHP8.2/8.3 × MySQL8.0/MariaDB10.6/
+MariaDB11.4 targets, frontend typecheck/tests/build. Every SQL target: **432 tests,
+9925–9926 assertions**, all5 real separate-process financial races. Exact per-job
+counts/IDs: [asserted matrix](ci/l3a-complete-verified-matrix.json).
+The PHP8.2/MySQL8.0 job additionally executed the retained Jalali midnight test
+and actual no-dev ZIP extraction/HTTP/migration-runner/cache smoke.
+
+**UNVERIFIED:** real host/TLS, browser visual RTL/a11y, live backup/restore and
+process-kill DB/filesystem crash recovery, production migration/import/deployment.
+CI HTTP/TLS simulation is not host/browser approval. No L3b–L3e work authorized.
+Release reference: `l3a-complete`; tag workflow must independently be green before
+handoff. [Tag CI index](https://github.com/soldiermr98-commits/shopnext/actions?query=branch%3Al3a-complete).
+
+All rows below are **REAL / FULL tested in CI39892158598**, not placeholder
+buttons. Six-role/revoked-actor cases are named in each corresponding test file.
+Folders are virtual labels on files (not arbitrary filesystem paths). Private
+receipts and existing L2 financial invariants remain outside the media library.
+
+| Screen/action | Persisted behavior | Executed named Pest test / file |
+|---|---|---|
+| Categories | Tree, SEO/image, reorder, protected deletion | `L3a category screen persists edit image SEO tree navigation both reorder directions and guarded deletion` — CategoryEditorTest |
+| Brands | Logo/metadata, referenced-delete guard | `L3a brand screen persists safe logos preserves existing logos and blocks product referenced deletion` — BrandEditorTest |
+| Attributes/terms | CRUD, ownership, image/hex swatches | `L3a attribute and term screens gate six roles recheck every action and persist CRUD audit and swatches` — AttributeEditorTest |
+| Product metadata | Four product types, SKU/slug, prices, SEO/publication, trash/restore | `L3a product screen persists all four draft types and maps real service price SKU and publication errors` — ProductEditorTest |
+| Product content | Sanitized descriptions, ordered gallery/alt/main, specs/FAQ, related/upsell/cross-sell | `L3a content page safely uploads persists ordered gallery alt main and all three relationship selectors` — ProductContentEditorTest; ProductContentTest |
+| Tehran/Jalali schedules | Gregorian UTC persistence/reload; Persian presentation | `L3a renders the retained Jalali picker saves selected state as Gregorian UTC and reloads at Tehran midnight` — AdminDatesTest; ProductEditorTest |
+| Variations | Parent-scoped CRUD/trash, image/options/metadata | `L3a variation page uploads real safe images and scopes edits and restores to its locked variable parent` — VariantEditorTest |
+| Cartesian matrix | Owned combinations, duplicate/idempotent generation | `L3a matrix page independently gates six roles reauthorizes generation and idempotently persists owned combinations` — VariantMatrixEditorTest |
+| Bulk price/category | Exact integer price ratios and real replace/clear memberships | `L3a bulk page independently gates six roles and revoked actions while persisting price category and clear` — ProductBulkEditorTest |
+| Media upload/folders/alt/replace | Automatic new catalog/API registration, virtual-folder move, stable URL and actual fresh bytes | `L3a media real upload folder alt replace stable references usage and protected deletion persist audited changes` — MediaLibraryTest |
+| Media live usage/delete | Scalar/JSON refs including drafts/trash, derivative guard, quarantine/rollback | Same real upload/protected-delete test; replacement audit rollback case — MediaLibraryTest |
+| Queued WebP/thumb | Real database job and bounded worker, both GD/Imagick codecs and bounded sizes | `L3a healthy worker persists a real database conversion job and bounded worker creates WebP outputs`; `L3a media WebP output is real and bounded with each configured GD and Imagick driver` — MediaLibraryTest |
+| Media fallback/retry | ≤1MP no-worker sync, large pending queue, no-WebP/codec-failure canonical retention, stale jobs, explicit authorized retry | `L3a missing worker synchronously converts only small images queues larger ones and ignores stale replacement jobs`; no-WebP and partial-output cases — MediaLibraryTest |
+| Shared-host image guard | Predecode byte/pixel/live memory checks, bomb/corrupt/truncated rejection, Persian feedback, CLI/dashboard health | ImageBudgetTest (all named cases); MediaLibraryTest |
+| Single stock action | Available-stock delta, required reason/actor, append-only ledger and policy | `L3a stock single and bulk actions gate six roles and refreshed revoked actors` — StockAdjustmentTest |
+| Bulk stock action | Up to50 explicit SKUs, all-or-nothing, replay key, reason/actor, no direct setter | `L3a bulk stock UI persists reason actor immutable ledger and replay-safe atomic increments`; `L3a bulk decrease rolls back earlier successful rows when a later SKU has insufficient stock` — StockAdjustmentTest |
+| Stock audit/ledger integrity | Same-transaction audit rollback, SQL immutability, variant parent, integer bounds | `L3a stock mutation rolls back every row ledger operation and audit on audit failure`; variant validation case — StockAdjustmentTest |
+| Bounded media/stock lists | Media1000→30/12queries,9 batch usage queries; stock50 adjustment6 SELECTs and ledger30/50 in3 queries | MediaLibraryTest1000-list case; StockAdjustmentTest50-row case |
+| Deploy/cache readiness | Real optimize/Filament/icon caches, missing-cache fail-closed production, queue/cron probes | OperationsTest named actual deploy-check case; extracted no-dev package smoke |
+
+### Operational boundaries
+
+Use canonical PNG URLs for catalog references. A codec failure keeps the sanitized
+canonical image, not an unvalidated original upload. Synchronous work is capped
+at1MP and only allowed with PHP execution time0/unlimited or≥15s; larger images
+remain safe/pending until the minute database worker processes them. Host-specific
+resource recommendations are warnings, not exemptions from readiness failures.
+Stock ledger records adjustments, not invented historic checkout entries; checkout
+reservation/release remains unchanged. Form request key stays locked for retries;
+«درخواست جدید» explicitly starts a different adjustment intent.
+
+## Historical implementation notes (superseded by current REAL table)
+
 # Filament admin panel — L3a execution inventory
 
 2026-10-22. Owner authorized L3a ONLY on arena/b4d40ed7-shopnext, based on main686e57f.
@@ -397,3 +455,267 @@ stock), branding/navigation/cache/deploy checks/final handoff also remain pendin
 No full L3a completion tag or L3b approval request; browser/host/RTL/a11y/restore
 still UNVERIFIED. No stock setter added, and the L2 financial implementation/tag
 is unchanged except the necessary fail-closed trashed-variant eligibility guard.
+
+
+## Active continuation — product content domain (runtime PENDING)
+
+The new active branch is arena/0f9a69e5-shopnext after PR2 merge. Per owner, fast
+push CI is Pint + PHP8.3/MariaDB10.6; PR/tag runs retain the full six-way matrix
+and frontend. Fast workflow39866911447 actually passed both selected jobs; the
+frontend was intentionally skipped. This does NOT claim a full new SQL matrix.
+
+| Screen / domain | Action | REAL/tested | Test name (ProductContentTest) |
+|---|---|---|---|
+| Product content (UI pending) | Fresh policy-protected read/save; sanitized rich text, spec groups and FAQ, actor audit | Implemented; runtime UNVERIFIED | L3a product content independently gates six roles on reads and transactional audited writes |
+| Gallery domain | Persist ordered paths, select main image, alt replacement and safe clear without deleting shared files | Implemented; runtime UNVERIFIED | L3a product gallery persists exact drag order main selection alt replacement and safe clear |
+| Content validation | Persian limits; safe uploaded paths; disallow stock/price/self/missing/duplicate relations | Implemented; runtime UNVERIFIED | L3a product content validates Persian limits and forbids inventory prices unsafe paths and invalid relation identities |
+| Related/upsell/cross-sell | Ordered replacement/clear; exclude draft/future/trashed targets from public projection; SQL self CHECK | Implemented; runtime UNVERIFIED | L3a related upsell cross sell retain order and never publicly expose draft scheduled or trashed targets |
+| Content audit/storage | Roll back content and relations on audit failure; refuse lossy rollback; sanitize imported FAQ on read | Implemented; runtime UNVERIFIED | L3a content and relation audits roll back together and migration refuses lossy editorial rollback |
+| Content authorization | Refresh stale actor safety flags for reads/writes | Implemented; runtime UNVERIFIED | L3a product content refreshes safety flags on reads and writes |
+| Public list | 1000-row fixture;50 products; batched relations in six catalog SQL queries | Implemented; runtime UNVERIFIED | L3a product content projection batches relations for fifty products without per product SQL |
+
+Gallery is limited to20 owned uploaded PNG references; path arrays preserve the
+legacy storefront contract, with a separate alt map. Specs are at most100 ordered
+group/key/value rows; FAQ20 sanitized question/answer rows; relations30 targets per
+kind. Relation input replaces all three kinds; omitted content sections remain
+unchanged. Existing metadata service already covers SEO and scheduled sale/flash
+fields. No drag-and-drop screen, upload library or product editor UI is claimed
+until those actions are implemented and exercised. Browser interaction UNVERIFIED.
+
+
+### Product content domain fast VERIFIED; Filament content editor PENDING
+
+All seven domain rows above are **REAL/tested on the fast combination**:
+[push39867647967](https://github.com/soldiermr98-commits/shopnext/actions/runs/39867647967),
+352 tests/9122 assertions, Pint + PHP8.3/MariaDB10.6 SUCCESS. Other databases and
+frontend were not executed in this fast push; full PR/tag verification remains due.
+
+New `/admin/products/{product}/content` Page is registered but runtime **PENDING**.
+It edits an existing product; the upcoming product list will provide its link.
+RichEditor file attachments are explicitly disabled; gallery uploads use SafeUpload
+and are appended in the same service-backed save. Native reorder drag handles and
+reorder buttons update form state; Save persists order/main/alt/content together.
+Reload explicitly discards unsaved state and reads the database. Relation selectors
+search at most30 products and resolve selected labels with one bounded query/kind.
+
+| Screen | Action | REAL/tested | Test name (ProductContentEditorTest) |
+|---|---|---|---|
+| Product content editor | HTTP/Livewire access, save/reload/upload handlers, six roles and stale revoked roles | Implemented; runtime UNVERIFIED | L3a content page independently gates six roles and every action after role revocation |
+| Product content editor | Safe real upload; save/reload ordered gallery, main/alt; all relation selectors; clear while retaining shared file | Implemented; runtime UNVERIFIED | L3a content page safely uploads persists ordered gallery alt main and all three relationship selectors |
+| Product content editor | Locked product context; reject SVG, no orphan files/false success | Implemented; runtime UNVERIFIED | L3a content page locks its product context and rejects executable upload without orphan files or false success |
+
+Browser drag-and-drop gestures, visual RTL and a11y remain UNVERIFIED; tests exercise
+persisted reordered form state, not a browser pointer. Full product/variation/bulk
+pages, media library and stock ledger actions are still pending.
+
+
+### Content editor fast VERIFIED; product metadata editor PENDING
+
+All three content editor rows above are now **REAL/tested on fast SQL**:
+[push39868230626](https://github.com/soldiermr98-commits/shopnext/actions/runs/39868230626),
+360 tests/9195 assertions, Pint and PHP8.3/MariaDB10.6 green. Browser pointer/visual
+checks and other DB combinations remain UNVERIFIED for the new scope.
+
+New registered `/admin/products` metadata editor exposes the content-page link,
+all four types, SKU/slug, price/sale/flash schedules, brand, SEO and publication;
+stock is read-only. It uses Products services for every save/trash/restore; brand
+search30, list page30 with eager names and no rich-text hydration.
+
+| Screen | Action | REAL/tested | Test name (ProductEditorTest) |
+|---|---|---|---|
+| Products | HTTP/Livewire six roles; new/edit/save/trash/restore/trash toggle, revoked roles | Implemented; runtime UNVERIFIED | L3a product screen independently gates six roles and every CRUD trash toggle action after revocation |
+| Products | Four draft types; real price/SKU/variable publication validation | Implemented; runtime UNVERIFIED | L3a product screen persists all four draft types and maps real service price SKU and publication errors |
+| Products |1000-row list;30-item page; bounded eager brand queries, no description load | Implemented; runtime UNVERIFIED | L3a product screen pages one thousand rows with bounded eager brands and without rich text hydration |
+| Products | Tehran publication/sale/flash edge conversion and saved UTC redisplay | Implemented; runtime UNVERIFIED | L3a product page saves Tehran scheduled publication sale and flash windows as Gregorian UTC and redisplays them |
+
+Variation/matrix and bulk pages, media, reason+actor stock, final handoff remain
+due. Existing Jalali component is reused, not a new candidate trial.
+
+
+### Product metadata editor fast VERIFIED; variation editor PENDING
+
+All four ProductEditor rows above are **REAL/tested on fast SQL**:
+[push39868756342](https://github.com/soldiermr98-commits/shopnext/actions/runs/39868756342),
+369 tests/9377 assertions; Pint + PHP8.3/MariaDB10.6 green, not a full-matrix run.
+
+New `/admin/products/{product}/variants` is linked from variable product rows.
+Stock and canonical option identities are read-only. Manual SKU metadata, prices,
+sale/flash schedules, safe image uploads and soft trash/restore call Variants
+services; no hard delete. Existing stock/history/publication guards remain in the
+domain. Matrix generation UI remains separate forthcoming work.
+
+| Screen | Action | REAL/tested | Test name (VariantEditorTest) |
+|---|---|---|---|
+| Variations | HTTP/Livewire six roles and revoked new/edit/save/trash/restore/toggle/upload actions; actual price persistence | Implemented; runtime UNVERIFIED | L3a variation page gates six roles and revoked CRUD trash and upload actions and persists metadata |
+| Variations | Safe image upload; locked variable-parent context; cross-parent edit/restore rejection | Implemented; runtime UNVERIFIED | L3a variation page uploads real safe images and scopes edits and restores to its locked variable parent |
+| Variation list |1000-row fixture,30-row page; seven queries including fresh actors and eager option labels | Implemented; runtime UNVERIFIED | L3a variation page eager loads option labels on a thousand row fixture in seven bounded queries |
+
+Fast checks will verify these; browser UI interactions and all other SQL combinations
+for the new scope remain UNVERIFIED until their actual execution.
+
+
+### Variation editor fast VERIFIED; matrix generator UI PENDING
+
+All three VariationEditor rows above are **REAL/tested in fast SQL**:
+[push39869291945](https://github.com/soldiermr98-commits/shopnext/actions/runs/39869291945),
+377 tests/9493 assertions, Pint+PHP8.3/MariaDB10.6 green.
+
+Matrix Page `/admin/products/{product}/matrix` is registered and linked from the
+variation list. Attribute search30; term search/labels20 and owner-scoped; at most4
+dimensions, domain cap100 combinations/call/500 retained variants. Duplicate
+attribute rows fail instead of silently overwriting. Generation never resets
+stock/prices/SKUs/trash and reports zero newly created rows honestly on reruns.
+
+| Screen | Action | REAL/tested | Test name (VariantMatrixEditorTest) |
+|---|---|---|---|
+| Variant matrix | Six-role HTTP/Livewire gates; revoked generation; owner-scoped selections; create/idempotent rerun/locked parent | Implemented; runtime UNVERIFIED | L3a matrix page independently gates six roles reauthorizes generation and idempotently persists owned combinations |
+| Variant matrix | Duplicate dimensions rejected before persistence, no false success | Implemented; runtime UNVERIFIED | L3a matrix page rejects repeated dimensions without persisting a partial matrix |
+
+Bulk UI, media and reason+actor stock actions plus final delivery remain due.
+Browser pointer/visual/a11y and full new SQL matrix remain UNVERIFIED.
+
+
+### Matrix page fast VERIFIED; bulk-action page PENDING
+
+Both VariantMatrixEditor rows above are **REAL/tested on fast SQL**:
+[push39869734415](https://github.com/soldiermr98-commits/shopnext/actions/runs/39869734415),
+Pint+PHP8.3/MariaDB10.6 SUCCESS. No full-matrix/browser claim.
+
+New `/admin/product-bulk` is registered in navigation and linked from products.
+Selectors are bounded50 products/30 categories with batched selected-label reads.
+Price action updates root and active variant prices through exact ProductBulk;
+category action explicitly replaces/clears only selected memberships. UI confirms
+the destructive category clear. There is no direct/bulk stock setter. Stock action
+will be added only on the later reason+actor ledger service.
+
+| Screen / domain | Action | REAL/tested | Test name (ProductBulkEditorTest) |
+|---|---|---|---|
+| Bulk products | Six-role HTTP/Livewire and revoked price/category actions; actual scoped price replacement/category clear/audit | Implemented; runtime UNVERIFIED | L3a bulk page independently gates six roles and revoked actions while persisting price category and clear |
+| Bulk products | Empty selection/fractional percent rejected without writes or success notice | Implemented; runtime UNVERIFIED | L3a bulk page rejects fractional percentages and missing selection without a success notice or mutation |
+| Bulk category domain | Snapshot50 selected memberships in5 SELECTs, not50 per-record lookups | Implemented; runtime UNVERIFIED | L3a category bulk snapshots fifty selected memberships in five SQL reads rather than per product queries |
+
+Media library, stock ledger/adjustment actions/bulk stock and final delivery remain
+pending. Their buttons are not displayed or represented as working yet.
+
+
+## Product continuation VERIFIED on fast combination —49e5924
+
+The three ProductBulkEditor rows above are now **REAL/tested on fast SQL**:
+[push39870376321](https://github.com/soldiermr98-commits/shopnext/actions/runs/39870376321).
+Pint and PHP8.3/MariaDB10.6 SUCCESS;392 tests/9616 assertions and all5 genuine
+financial races. Live parsed evidence: `ci/l3a-product-pages-fast-verified.json`.
+Frontend was intentionally skipped and other five SQL combinations not executed.
+
+| Delivered page/domain | REAL/tested on fast SQL | Remaining verification |
+|---|---|---|
+| Product content domain + content Page | Rich text, gallery ordered paths/main/alt, spec groups/FAQ, publication-safe related/upsell/cross-sell, scoped policies/audit/rollback | Full matrix; real browser pointer/RTL/a11y |
+| Product metadata Page | Four draft types, SKU/slug/SEO, publication/sale/flash Tehran↔UTC, eager paginated brands, soft trash/restore, content/variation/bulk links | Full matrix; real browser |
+| Variation Page | Per-SKU price/calendar/image, parent scope/locked ID, safe upload, protected trash/restore, eager owned option names | Full matrix; real browser |
+| Matrix Page | Bounded owner-scoped choices, real atomic generator, duplicate guards, canonical idempotence/no overwrites, six roles | Full matrix; real browser |
+| Bulk Page + category read optimization | Scoped exact percent prices/category replace/clear, no fake success on invalid input, six roles,50-product category before-snapshot in5 SELECTs | Full matrix; real browser |
+
+This table supersedes earlier PENDING rows for these implementations, without
+claiming browser execution. Stock remains read-only; **media library and stock
+ledger/adjustment/bulk-stock actions are still not delivered**. Those, remaining
+branding/nav/cache/deploy checks and final consolidated handoff are next. No
+l3a-complete tag, L3b work or deployment approval has been made.
+
+
+## Shared-host media addendum — safety prerequisite fast VERIFIED
+
+| Screen/domain | Action | REAL/tested | Test (ImageBudgetTest) |
+|---|---|---|---|
+| SafeUpload | Header-first oversized/decompression-bomb dimensions rejection without decode | REAL — fast39883854000 | L3a image headers reject oversized and bomb dimensions before any decoder or storage write |
+| SafeUpload | Corrupt data/file-size ceilings, Persian errors, no stored files | REAL — fast39883854000 | L3a image preflight rejects corrupt data and configured byte ceilings with Persian errors |
+| Image resource budget | Two RGBA buffers/input/reserve vs actual PHP headroom; overflow-safe dimensions; application cap even with unlimited PHP | REAL — fast39883854000 | L3a memory estimates use both RGBA buffers input overhead reserve and live PHP headroom without decoding |
+| Derivative config | At most3 small integer-size outputs | REAL — fast39883854000 | L3a media variant configuration has a small hard cap and bounded integer dimensions |
+| Deploy-check/dashboard | Same limits/WebP report and nonfatal low-resource warnings, zero SQL evaluator | REAL — fast39883854000 | L3a image host recommendations report all limits WebP capabilities and warnings without SQL or failing small-upload readiness |
+| Dashboard | Six roles and fresh revoked-role gate | REAL — fast39883854000 | L3a dashboard image warnings independently gate six roles and refresh revoked actors |
+
+This implements pre-decode safety and host reporting only. Media library,
+conversion/queue/original fallback/usage/delete protection tests are still pending.
+No configuration entry is represented as a delivered conversion action.
+
+
+Follow-up REAL fast39884326049: trusted Persian preflight/decoder messages now
+survive catalog upload-field mapping; MediaRequest/SafeUpload validation Persian.
+Named test: `L3a upload forms preserve the Persian low-memory explanation instead
+of replacing it with a generic file error`. Corrupt-data test also exercises a
+valid PNG IHDR with truncated compressed body, not merely unknown file signatures.
+
+
+Unsupported/missing decoder now gets Persian validation instead of a class error;
+only GD reads an input blob, Imagick reads frame0 from disk. Named test REAL fast39884678896:
+`L3a an unsupported image driver fails with Persian validation without reading an
+unnecessary blob or writing storage`. This does **not** implement library WebP
+fallback: a missing WebP encoder must retain an already safe canonical original
+when the media conversion pipeline is delivered.
+
+## Media library — implemented, runtime PENDING fast CI
+
+| UI/domain action | REAL/tested status | Named Pest test (MediaLibraryTest) |
+|---|---|---|
+| `/admin/media-library`: upload, virtual folder creation/move, alt metadata | Implemented, runtime UNVERIFIED | L3a media real upload folder alt replace stable references usage and protected deletion persist audited changes |
+| Replace canonical PNG atomically, stable reference URL, refreshed derivatives | Implemented, runtime UNVERIFIED | Same real upload/replace test |
+| Live reference counts including gallery/drafts/trash; protected deletion (including derivative references) | Implemented, runtime UNVERIFIED | Same real upload/replace test |
+| Six-role policy and independently revoked actions | Implemented, runtime UNVERIFIED | L3a media page six roles gates upload metadata replace delete and refreshed revoked actors |
+| Missing WebP codec keeps safe original | Implemented, runtime UNVERIFIED | L3a no WebP support keeps canonical original without attempting decode or variants |
+| Queued conversion, small bounded synchronous missing-worker fallback, stale jobs | Implemented, runtime UNVERIFIED | L3a missing worker synchronously converts only small images queues larger ones and ignores stale replacement jobs |
+| 30-file usage batch9 aggregate queries; codec failure partial cleanup | Implemented, runtime UNVERIFIED | L3a media paginated usage has fixed aggregate query count and codec failures keep safe original with no partial variants |
+
+Folders are virtual labels (`کالا/جدید`), not host filesystem paths. Canonical PNG
+is always retained. Without a healthy worker only ≤1MP sources convert inline;
+larger files remain canonical/pending and queue for the bounded minute worker.
+Legacy/pre-library disk files are not automatically scanned/imported; newly
+uploaded catalog and API media are registered. Private receipts are excluded.
+
+## Stock actions — implemented, runtime PENDING
+
+| Screen/domain | Action | REAL/tested status | Named Pest test (StockAdjustmentTest) |
+|---|---|---|---|
+| `/admin/stock-adjustment` | Reason/actor single adjustment, six roles, freshly revoked actions | Implemented; runtime UNVERIFIED | L3a stock single and bulk actions gate six roles and refreshed revoked actors |
+| Same page | Atomic selected50 SKU bulk adjustment, explicit increase/decrease, replay safety | Implemented; runtime UNVERIFIED | L3a bulk stock UI persists reason actor immutable ledger and replay-safe atomic increments |
+| Stock domain | Correct variant parent, no direct setter, integer limits, reason/key conflicts | Implemented; runtime UNVERIFIED | L3a variant adjustments verify parent reject invalid quantities and key conflicts without partial changes |
+| Stock/audit | Entire mutation rollback on audit failure | Implemented; runtime UNVERIFIED | L3a stock mutation rolls back every row ledger operation and audit on audit failure |
+| Bulk domain | Fixed6 SELECTs for50 selected SKUs | Implemented; runtime UNVERIFIED | L3a fifty row bulk stock adjustment has six fixed selects not one select per SKU |
+
+Append-only SQL ledger records actual reason and actor, before/after, signed delta,
+operation ID and UTC time; activity audit redacts reason. Available stock remains
+compatible with existing checkout reservation/release paths; this adjustment
+ledger is not falsely described as a reconstruction of pre-existing order stock
+movements. Simple roots or explicit variants only. The form uses a locked request
+key; retries do not duplicate stock. Click «درخواست جدید» for a new intent.
+
+Media first implementation REAL fast39890033715:415 tests/9765 assertions on
+PHP8.3/MariaDB10.6 + Pint. Subsequent refinements PENDING: catalog/API uploads
+schedule conversions after successful persistence; explicit policy-gated retry
+button; scheduling failure never discards committed canonical reference; skip
+inline conversion if actual PHP time limit is under15 seconds; replacement audit
+rollback and partially rendered derivative cleanup tests. New named tests:
+`L3a media replacement restores canonical bytes metadata and files if its audit
+cannot commit`; `L3a media partially encoded variants are removed on failure and
+original survives`. Stock direct-service denied-role exception assertions corrected
+from HTTP exception to actual Laravel AuthorizationException; runtime recheck pending.
+
+Fast7fdeff4/run39890670001 SUCCESS:427 tests/9879 assertions, all5 financial races,
+Pint + PHP8.3/MariaDB10.6. This verifies media retry, replacement/partial rollback,
+stock single/bulk reason+actor, six actual roles, audit failure rollback and fixed
+query counts implemented above. New final cases PENDING:
+- `L3a healthy worker persists a real database conversion job and bounded worker creates WebP outputs`
+- `L3a media lists one thousand assets thirty at a time with twelve fixed permission pagination and aggregate queries`
+- `L3a bulk decrease rolls back earlier successful rows when a later SKU has insufficient stock`
+- Existing50-SKU query test now also asserts joined ledger30/50 pagination3queries.
+No full matrix/browser acceptance yet; no placeholder UI actions counted as REAL.
+
+Final operational acceptance extension PENDING: OperationsTest's named
+`passes deploy-check against actual PHP extensions and each real matrix database
+with a fresh queue probe` now requires missing production caches to fail, then
+runs actual optimize + filament:optimize and verifies all readiness checks pass,
+with finally cleanup. Extracted no-dev package smoke also builds config/routes/
+Filament components/icons and rechecks login and protected new admin routes.
+
+Cache regression cd06ab8/run39891885027 fast green. Last media correctness checks
+PENDING: named `L3a media WebP output is real and bounded with each configured GD
+and Imagick driver` forces both codecs (not just default GD). Stable canonical
+URL response now revalidates (`no-cache`); actual response bytes after replacement
+are checked. Content-address-independent WebP filenames remain immutable-cacheable.

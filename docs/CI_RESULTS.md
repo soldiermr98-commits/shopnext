@@ -1,3 +1,23 @@
+# L3a final verification evidence
+
+## Current L3a acceptance — FULL VERIFIED
+
+Implementation6a951755e03a79e99dafd6c73afd5cac8dae5097 passed [full CI39892158598](https://github.com/soldiermr98-commits/shopnext/actions/runs/39892158598):
+**all8 jobs SUCCESS** — independent Pint, all6 PHP8.2/8.3 × MySQL8.0/MariaDB10.6/
+MariaDB11.4 targets, frontend typecheck/tests/build. Every SQL target: **432 tests,
+9925–9926 assertions**, all5 real separate-process financial races. Exact per-job
+counts/IDs: [asserted matrix](ci/l3a-complete-verified-matrix.json).
+The PHP8.2/MySQL8.0 job additionally executed the retained Jalali midnight test
+and actual no-dev ZIP extraction/HTTP/migration-runner/cache smoke.
+
+**UNVERIFIED:** real host/TLS, browser visual RTL/a11y, live backup/restore and
+process-kill DB/filesystem crash recovery, production migration/import/deployment.
+CI HTTP/TLS simulation is not host/browser approval. No L3b–L3e work authorized.
+Release reference: `l3a-complete`; tag workflow must independently be green before
+handoff. [Tag CI index](https://github.com/soldiermr98-commits/shopnext/actions?query=branch%3Al3a-complete).
+
+## Historical progress notes (superseded by current acceptance above)
+
 # Product metadata VERIFIED; numeric slug identity guard pending CI
 
 85bea48 / [push CI39746880119](https://github.com/soldiermr98-commits/shopnext/actions/runs/39746880119)
@@ -542,3 +562,141 @@ This proves services, not delivered product/variation/bulk editor screens. Next
 content/gallery/spec/FAQ/relations and actual UI, followed by media and reason+
 actor stock, then remaining branding/navigation/cache/deploy/full handoff. No
 l3a-complete tag or L3b/deployment approval. Real browser/host acceptance UNVERIFIED.
+
+
+## Active continuation: revised CI budget (runtime PENDING)
+
+Owner authorizes Pint + PHP8.3/MariaDB10.6 only on intermediate branch pushes;
+full original six SQL combinations and frontend on PR updates and tags. The
+workflow now selects its matrix deterministically after style, includes the active
+arena branch and tag triggers, and skips frontend on fast pushes. Three local
+`python3 tools/ci/test-matrix.py` contract tests pass; actual workflow execution
+PENDING. Fast green is not six-way SQL/frontend evidence. Final l3a-complete remains
+blocked on complete scope plus an actual full-matrix green run. Older ALL8-per-push
+instructions are superseded, not the SQL tests or financial race requirements.
+
+
+Fast selector d571989 actual [push39866911447](https://github.com/soldiermr98-commits/shopnext/actions/runs/39866911447):
+Pint + PHP8.3/MariaDB10.6 SUCCESS; frontend intentionally SKIPPED, no other DB jobs.
+New ProductContent domain/migration/public projection/tests are PENDING the next
+fast run. Local git diff --check passes; PHP/database claims await actual CI.
+No full-matrix or delivered editor UI claim. Final tag remains blocked.
+
+
+Product content503214f fast [push39867647967](https://github.com/soldiermr98-commits/shopnext/actions/runs/39867647967)
+SUCCESS: Pint + PHP8.3/MariaDB10.6,352 passed/9122 assertions. New content Page/
+Livewire tests now PENDING separate fast CI. No other SQL/frontend/browser claim;
+final six-way matrix still required. Filament5.10.3 upstream HasFileAttachments
+confirms fileAttachments(false) causes saveUploadedFileAttachment to return null;
+rich editors disable attachments while gallery uses SafeUpload exclusively.
+
+
+Content editor44b690c fast [push39868230626](https://github.com/soldiermr98-commits/shopnext/actions/runs/39868230626)
+SUCCESS: Pint+PHP8.3/MariaDB10.6,360 tests/9195 assertions. Product metadata page
+and four new test groups now PENDING separate fast verification; no broader DB/
+frontend/browser claim. Existing AdminDate component reused for schedules; no
+Jalali candidate re-evaluation and no completion tag.
+
+
+Product metadata df03105 fast [push39868756342](https://github.com/soldiermr98-commits/shopnext/actions/runs/39868756342)
+SUCCESS: Pint+PHP8.3/MariaDB10.6,369 passed/9377 assertions, including saved Tehran
+publication/sale/flash UTC conversion and redisplay. Variation page/tests now
+PENDING next fast CI. No full SQL/frontend/browser result or final tag claimed.
+
+
+Variation editor31686d4 fast [push39869291945](https://github.com/soldiermr98-commits/shopnext/actions/runs/39869291945)
+SUCCESS: Pint+PHP8.3/MariaDB10.6,377 passed/9493 assertions. Matrix generator UI
+and tests now PENDING their fast run. Full PR/tag six-way SQL/frontend and actual
+browser validation remain unexecuted for new scope; no early tag/approval stop.
+
+
+Matrix page d162ce3 fast [push39869734415](https://github.com/soldiermr98-commits/shopnext/actions/runs/39869734415)
+SUCCESS: Pint+PHP8.3/MariaDB10.6. Bulk UI and batched category-before snapshots now
+PENDING separate fast CI. Full six-way SQL/frontend and browser checks remain
+UNVERIFIED for continuation scope. No L3a final tag or approval checkpoint.
+
+
+## Product admin continuation fast VERIFIED —49e5924
+
+[Push39870376321](https://github.com/soldiermr98-commits/shopnext/actions/runs/39870376321)
+SUCCESS: Pint plus PHP8.3/MariaDB10.6,392 tests9616 assertions; all5 genuine
+financial races in actual annotations. Parser asserted exactly one SQL job, both
+selected conclusions SUCCESS and frontend SKIPPED before writing
+`ci/l3a-product-pages-fast-verified.json`. No claims for unexecuted SQL combinations,
+frontend, real browser, production host or restore. Earlier product domain and
+page runs are recorded above; no red runs bypassed or candidate Jalali re-trials.
+
+Media library/queued conversion+sync fallback and stock reason+actor ledger/actions/
+bulk stock remain pending. Final handoff and l3a-complete remain blocked until
+complete scope plus a genuine full six-way PR run (and subsequent tag verification).
+
+
+Shared-host image safety addendum: preflight/resource/reporting implementation and
+new ImageBudgetTest cases PENDING actual fast CI. Local git diff --check only;
+no local PHP/Pest runtime available. Product pages5542046 retained byte-for-byte.
+No queue/original-fallback/delete-protection acceptance claim at this prerequisite.
+
+
+985b987 fast39883737773: Pint RED, SQL/frontend SKIPPED. Actual ImageBudgetTest
+fixers fully_qualified_strict_types/unary_operator_spaces/not_operator_with_successor_space.
+Explicit HttpException import replaces qualified references; no acceptance/runtime
+claim for skipped jobs. Re-verification PENDING.
+
+
+17abb0c push39883854000 SUCCESS, Pint120187322935 and PHP8.3/MariaDB10.6
+120187432264:403 tests/9667 assertions. Parsed all5 REAL_FINANCIAL_RACE
+lines from check annotations, asserted complete set. Exact proof
+`docs/ci/l3a-image-safety-fast-verified.json`. Frontend/other5 SQL not executed.
+Image-budget form-message preservation and truncated-body refinement PENDING new
+fast run; media conversion/queue/no-WebP fallback/delete protection remain NEXT.
+
+
+df0b5a5 fast39884326049: Pint120188846225 + PHP8.3/MariaDB10.6
+120189000385 SUCCESS,404 tests/9675 assertions/all5 real financial race lines.
+Exact asserted proof `docs/ci/l3a-image-safety-fast-verified.json`. Real Livewire
+Persian memory feedback and truncated PNG body now verified on this SQL target.
+Other5 SQL/frontend NOT executed. Last defensive missing/invalid-driver Persian
+failure + avoid unused Imagick input blob PENDING fresh fast CI. This is not the
+media-library unsupported-WebP retention/worker fallback acceptance feature.
+
+
+7d37fbc140df588f8791748f4fe5505ac2087202 fast39884678896 SUCCESS:
+Pint120189956207, PHP8.3/MariaDB10.6 check120190110181: 405 tests /
+9679 assertions, all5 actual REAL_FINANCIAL_RACE lines parsed/asserted.
+Updated exact evidence `docs/ci/l3a-image-safety-fast-verified.json`. Unsupported
+decoder Persian rejection and no unnecessary Imagick blob copy verified; this is
+not unsupported-WebP library fallback. Frontend and other5 SQL not run. The
+shared-host safety/reporting prerequisite is fast verified; media library/queue/
+no-worker fallback/no-WebP retention/protected deletion acceptance still pending.
+
+Media194c83b fast39889926070: formatter RED; SQL correctly skipped. Fixed ordered
+imports/qualified migration DB reference in055ba32. Fast39890033715 SUCCESS:
+Pint120207318598/backend120207448329,415 tests/9765 assertions; frontend skipped.
+Stockbd7fa7f fast39890410998: Pint SUCCESS; backend3 failed/422 passed. Three
+negative-role direct-service tests expected HttpException but actual Gate correctly
+throws AuthorizationException. Correcting assertion type only; no guard bypass.
+Further media catalog/API scheduling, public retry, audit rollback/partial-output
+cleanup and all-action actual-role revocation refinements PENDING new fast CI.
+
+7fdeff4 fast39890670001 SUCCESS: Pint120209396410/backend120209544161,
+427 tests/9879 assertions and all5 real financial races parsed from annotations.
+Frontend/other5 SQL intentionally not executed. Final queue/large-list/late-batch
+rollback cases and updated seven docs PENDING fresh fast CI, then final PR full6
+SQL targets + frontend. No completion tag/full result claimed yet.
+
+2f2a5a6 fast39891342991 Pint SUCCESS;429 passed/1 failed. New cache readiness
+regression exposed Laravel12 memoization (`config_loaded_from_cache`/`routes.cached`):
+checking cache booleans before generation pins false within the same app instance.
+Readiness now inspects actual framework-resolved cache file paths (also valid
+immediately after optimize); no cache requirement removed. Added assertion message
+at toBeTrue so future failures identify the specific readiness row. Recheck pending.
+Manual workflow dispatch lacked integration permission403; normal push CI ran,
+so no credential change/reconnect needed and no bypass/manual fake result.
+
+Dab2e00 fast39891617446: cache manifests passed; same OperationsTest failed on
+cron (429 passed/1 failed). Diagnostic now names exact row. Root cause is actual
+optimize commands bootstrapping a fresh Laravel container/facade application,
+which opens a second SQL connection unable to see RefreshDatabase heartbeat
+fixtures. Test restores its original real app/facade container after actual cache
+commands and explicitly asserts production env; no mocked cache/cron status or
+readiness requirement bypass. Extracted package subprocess check remains separate.

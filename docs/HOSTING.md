@@ -232,3 +232,86 @@ media backup-and-restore drill. Static asset headers must also be configured on
 the real web server; PHP middleware cannot decorate files served directly by it.
 If any check fails or is not executed, keep it UNVERIFIED/NO-GO. No L2 work follows
 without explicit owner approval, regardless of the l1-complete implementation tag.
+
+## Image processing on shared hosting (L3a)
+
+Ask the host to set these **web/FPM** values in the hosting panel, `php.ini`, or
+`.user.ini` (CLI PHP may use a different INI):
+
+```ini
+upload_max_filesize = 8M
+post_max_size = 10M
+memory_limit = 256M
+max_execution_time = 60
+```
+
+Do not request unlimited memory/time. `.user.ini` changes can take several minutes;
+verify the actual web PHP values as an authorized dashboard user, not just CLI.
+`php artisan deploy-check` reports these same limits, GD/Imagick WebP capabilities
+and Persian warnings. Recommendations do not waive hard readiness failures.
+Enable GD with WebP or Imagick with WEBP format support; do not enable SVG delegates.
+
+Processing rejects oversized input **before decoding**, using `getimagesize` and a
+conservative estimate `width × height × 4 × 2 + input bytes × 2`, less live PHP
+usage and a 32 MiB reserve. Absolute defaults: `MEDIA_MAX_PIXELS=24000000`,
+`MEDIA_MAX_FILE_BYTES=8388608`, `MEDIA_PROCESSING_MEMORY_BYTES=268435456`.
+They are ceilings, not promises that a 24 MP image fits an already busy 256M
+process. Existing upload/receipt forms still enforce their stricter 2 MiB/2048px
+limits; this change does not widen private receipt or HTTP-body limits. Reduce
+images locally when a Persian size/memory rejection appears. Never raise pixel
+limits simply to suppress a memory warning. Application memory remains bounded
+even if CLI `memory_limit=-1`. Each decode frees its image resource; Imagick reads
+frame zero only. Configured derived outputs are capped at three,64–2048px each.
+
+Queue conversion, safe-canonical no-WebP retention, bounded no-worker fallback
+and in-use deletion protection are now implemented and FULL CI-verified in
+CI39892158598. This is not verification of the actual host or its resource limits.
+
+
+## Media library operation
+
+Use `/admin/media-library` (product-management roles only). Folders are virtual
+labels; never create public upload symlinks or use user input as host paths. Copy
+canonical `/media/{48hex}.png` URLs for catalog references; WebP/thumb filenames
+are managed derivatives. All new catalog/API uploads register automatically;
+pre-existing disk files are not silently scanned/imported. Receipts stay private.
+
+The existing single-minute `shopnext:tick` database worker processes ConvertMedia
+jobs (45s timeout,2 tries), no Redis/Supervisor/persistent worker requirement.
+Healthy-worker uploads queue. Without fresh heartbeat only sources≤1MP process
+synchronously, and only when max_execution_time is unlimited or≥15s; larger images
+remain safe PNG and queue pending work. Native decode is header/memory-budget
+checked and sequential. Missing WebP/resource errors keep canonical PNG; retry
+from the selected media's «تلاش دوباره تبدیل» action after fixing host support.
+No original is removed merely because queue dispatch failed. PHP upload recommendations
+are not permission to widen the existing2MiB/2048px forms or3MiB body ceiling.
+
+Replace preserves canonical URLs; application transaction failures restore old
+bytes/metadata. Delete refuses live references including drafts/trash. File
+quarantine is private/non-routable; after a host/process crash reconcile stale
+`.backup`/`.deleted-*` files against metadata and verified backups manually—never
+bulk-delete by age while requests are active. Database/filesystem crash atomicity
+and actual host process-kill/restore remain UNVERIFIED, not claimed SQL atomicity.
+Production build must retain existing `optimize`, `filament:optimize` and icon-cache
+steps; new registered pages/views are included by that same deployment process.
+
+### Required production cache sequence (after each code/metadata release)
+
+From the **private app** directory with the host's actual production `.env`:
+
+```sh
+php artisan optimize:clear
+php artisan filament:optimize-clear
+php artisan migrate --force
+php artisan optimize
+php artisan filament:optimize
+# filament:optimize runs filament:cache-components and icons:cache.
+php artisan deploy-check
+```
+
+Generate caches **on the host**, never ship caches containing builder paths or
+configuration. The no-dev builder intentionally removes compiled configuration/
+route caches. `deploy-check` now fails production readiness if configuration,
+routes, Filament admin-component or Blade-icon manifests are absent. Resource
+recommendations remain warnings. A failed readiness result is not launch approval.
+Fresh-cron/queue probes and canonical HTTPS remain required independently.

@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Concerns;
 
+use App\Exceptions\ImageProcessingException;
+use App\Models\MediaAsset;
 use App\Models\User;
+use App\Services\MediaConversions;
+use App\Services\MediaLibrary;
 use App\Services\SafeUpload;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Throwable;
@@ -38,16 +41,16 @@ trait HandlesCatalogImage
                 $state[$field] = '/media/'.$newImage;
             }
 
-            return $persist($state);
+            $result = $persist($state);
         } catch (Throwable $exception) {
             if ($newImage !== null) {
-                Storage::disk('local')->delete('media/'.$newImage);
+                app(MediaLibrary::class)->discardNew($newImage);
             }
             if ($exception instanceof ValidationException) {
                 $messages = [];
                 foreach ($exception->errors() as $key => $errors) {
                     $messages[$key === 'file' ? 'imageUpload' : 'data.'.($key === 'content' ? 'description' : $key)] = match ($key) {
-                        'file' => [self::IMAGE_ERROR],
+                        'file' => $exception instanceof ImageProcessingException ? $errors : [self::IMAGE_ERROR],
                         'content' => ['متن توضیحات بیش از حد مجاز است.'],
                         default => $errors,
                     };
@@ -56,6 +59,12 @@ trait HandlesCatalogImage
             }
             throw $exception;
         }
+        if ($newImage !== null) {
+            $asset = MediaAsset::where('filename', $newImage)->firstOrFail();
+            app(MediaConversions::class)->schedule($asset);
+        }
+
+        return $result;
     }
 
     public function updatedImageUpload(): void

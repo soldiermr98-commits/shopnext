@@ -1,3 +1,256 @@
+# CURRENT — L3a implementation FULL VERIFIED; approval boundary is L3b
+
+- Active fixed branch arena/0f9a69e5-shopnext; PR3 OPEN (do not merge unless asked):
+https://github.com/soldiermr98-commits/shopnext/pull/3
+- Implementation6a951755e03a79e99dafd6c73afd5cac8dae5097 FULL PR39892158598
+ALL8 SUCCESS: six PHP8.2/8.3×MySQL8/MariaDB10.6/11.4 jobs432 tests each,
+9925–9926 assertions, all5 real financial races each, independent Pint/frontend.
+Exact asserted proof docs/ci/l3a-complete-verified-matrix.json. MySQL8/PHP8.2 also
+actual retained Jalali midnight + no-dev ZIP/cache/HTTP/runner smoke passed.
+- Actual media virtual folders/replace/alt/live usage/protected deletion, registered
+catalog/API uploads, queued and bounded ≤1MP sync WebP/thumb, no-codec retention,
+retry, real DBworker + forcedGD/Imagick tests; reason/actor append-only stockledger,
+single/atomic50-SKU bulk, replay-key/fresh6-role/query/audit/late-batch rollback.
+- Seven docs + REAL/tested table updated with executed full evidence, historical
+notes clearly superseded. No mock/fake runtime claims or hidden bypasses.
+- RELEASE PROCEDURE: wait docs HEAD PR full8 green, then create immutable annotated
+l3a-complete pointing that exact HEAD and push tag. Wait tag full8 green; report
+both CI links + tag/PR and UNVERIFIED; STOP for user's L3b approval. Never move tag.
+- Actual host/TLS/browser RTL/a11y/live restore/process-kill crash recovery and
+production import/deployment UNVERIFIED. No L3b–L3e/credentials/deploy authorization.
+
+## Historical execution notes (current evidence above supersedes old pending labels)
+
+# CURRENT — remaining L3a implemented; final regression/full verification NEXT
+
+- 7fdeff4 fast39890670001 green Pint/backend427/9879/all5 real financial
+races. Media library/actions/usage/queued + bounded fallback; stock service +
+reason/actor append-only ledger + single/bulk actual Filament actions implemented.
+- NEW last regression cases: actual DB queue/worker WebP output,1000 media→30
+12queries, stock joined ledger30/50 3queries, late-row bulk rollback; backupReady
+prevents partial failed-copy restore corruption. PENDING fast CI before final PR.
+- Seven docs refreshed truthfully pending full6 PHP8.2/8.3×MySQL8/MariaDB10.6/11.4
+and frontend. Need open NEW PR from fixed activebranch, full jobs must ALL green;
+parse evidence, update REAL tables/docs, then immutable l3a-complete tag + tagfullCI.
+Stop for approval only once tag/full success reported. Do not start L3b–L3e.
+- Browser/host/TLS/RTL/a11y/restore/DB-filesystem process-kill atomicity UNVERIFIED.
+No local PHP runtime; no production/deployment/credentials altered.
+
+# Current continuation — image safety prerequisite fast VERIFIED; media library NEXT
+
+- Latest runtime code7d37fbc140df588f8791748f4fe5505ac2087202 pushed on active
+arena/0f9a69e5-shopnext. Fast39884678896 SUCCESS: Pint120189956207 and
+PHP8.3/MariaDB10.6 check120190110181: 405 tests/9679 assertions;
+all5 REAL_FINANCIAL_RACE lines parsed/asserted. Frontend/other5 SQL not executed.
+- Proof docs/ci/l3a-image-safety-fast-verified.json. Prior403/9667 and404/9675
+fast runs also green; first formatter-only red fixed without bypass.
+- Budget/header/file/pixel/memory guards predecode, bomb/truncated body/corrupt
+rejects, capped variant configuration, CLI/dashboard INI+GD/Imagick WebP reports
+and low-resource recommendations, six roles + fresh revocation, real Livewire
+Persian low-memory feedback, unavailable/invalid decoder graceful validation.
+- HOSTING shared-host operator INI note delivered. Existing2MiB/2048px receipt/
+forms remain strict; global8MiB/24MP are ceilings, not an HTTP limit expansion.
+- NEXT actual media asset/library/folder/replace/alt/usage/protected delete plus
+queued WebP/thumb and bounded no-worker/no-WebP safe-canonical fallback tests.
+This prerequisite alone does NOT implement those features. Then stock adjustment
+reason+actor ledger/actions/bulk, final seven docs/nav/branding/cache/deploy checks,
+full PR SQL6+frontend and completion tag before approval stop. No new PR/tag yet.
+- No local PHP runtime; remote selected real SQL tests are the executed evidence.
+No browser/host/TLS/RTL/a11y/restore or full-matrix claim for these new changes.
+
+# Image safety + actual Persian form feedback fast VERIFIED; driver guard PENDING
+
+- df0b5a5 run39884326049 Pint120188846225/backend120189000385 SUCCESS:
+404 tests/9675 assertions and all5 real financial race lines parsed/asserted.
+Proof docs/ci/l3a-image-safety-fast-verified.json. Frontend/other5 SQL not executed.
+- Actual Livewire low-memory upload now preserves Persian budget message, no file
+or metadata mutation; truncated PNG body rejected, GD/Imagick resources unset.
+- Last defensive refinement PENDING fast CI: fail invalid/missing image driver
+with Persian validation instead of class/function errors; only GD reads a blob,
+Imagick reads path/frame0 directly. Added unsupported-driver test (not WebP fallback).
+- NEXT actual media asset/folder/replace/alt/usage/protected delete and conversions/
+queue/no-worker fallback/no-WebP canonical retention tests. Then stock reason+actor
+ledger/actions/bulk; final seven docs/full PR SQL+frontend and completion tag.
+- No approval question, new PR, completion tag, or full-matrix/browser claim.
+
+# Image safety prerequisite fast VERIFIED; upload feedback refinement PENDING
+
+- 17abb0c run39883854000 Pint + PHP8.3/MariaDB10.6 SUCCESS:403/9667,
+ all5 real financial race lines parsed/asserted. Frontend/other5 SQL NOT executed.
+ Exact proof docs/ci/l3a-image-safety-fast-verified.json. No full-matrix claim.
+- New refinement: trusted Persian ImageProcessingException subtype, preserves
+ memory-budget feedback through HandlesCatalogImage; explicit Farsi image rules;
+ truncated PNG header/body case plus actual ProductContentEditor low-budget form
+ test and explicit resource unset. PENDING fresh CI; no bypass/removal.
+- Media library/conversion/queue/no-WebP retention/fallback/in-use protected delete
+ still NEXT after fast green, then stock reason+actor/bulk and final full scope.
+
+# Image safety prerequisite — formatter correction PENDING runtime
+
+- 985b987 push39883737773 fast Pint RED; SQL correctly skipped. Actual reporter
+ ImageBudgetTest fixers fully_qualified_strict_types/unary_operator_spaces/
+ not_operator_with_successor_space. Replaced qualified exception references with
+ an explicit imported HttpException. No test/guard removed or expensive run claim.
+- WAIT fast green before next media concern. Queue/conversion/usage/delete library
+ still pending; only resource guard + dashboard/CLI health prerequisite implemented.
+
+# Current continuation — shared-host media safety prerequisite PENDING runtime
+
+- Workspace git metadata was stale at base39b64b4; verified EVERY remote5542046
+ file hash equals workspace, then reset --mixed5542046 (no files changed) on same
+ active arena/0f9a69e5-shopnext. Existing product pages preserved exactly.
+- NEW ImageBudget header-only preflight before SafeUpload decodes, pixel/file caps,
+ width*height*8 + input*2 memory estimate vs live memory/INI/app ceiling + reserve,
+ Persian rejections, max3 derivative config slots. Existing 2MiB/2048 legacy upload
+ and receipt rules remain stricter. Imagick reads frame0 and frees resources.
+- NEW ImageHostHealth pure report/evaluator, CLI deploy-check limit/WebP info and
+ WARN (recommendations nonfatal), same report on lazy dashboard with fresh six-role
+ access checks. Hosting operator INI note added. New tests PENDING actual fast CI.
+- This is prerequisite only: media asset/folder/usage/delete/conversion/queue/sync
+ fallback features and tests still NEXT; no claim they are implemented by config.
+ Then reason+actor stock and bulk, final docs/full PR matrix/tag/approval stop.
+
+# Current continuation — all product pages fast VERIFIED; media NEXT
+
+- Active branch arena/0f9a69e5-shopnext, base39b64b4 (merged PR2). No active new PR
+ yet; owner wants full six-way matrix only PR updates/tags, not intermediate pushes.
+- Latest code49e5924 actual fast push39870376321 SUCCESS: Pint and PHP8.3/
+ MariaDB10.6,392tests9616assertions, all5 genuine financial races. Frontend SKIPPED,
+ other5 SQL combinations not executed. Live asserted exact manifest:
+ docs/ci/l3a-product-pages-fast-verified.json. This is NOT full-matrix acceptance.
+- ProductContent domain + ProductContentEditor, ProductEditor, VariantEditor,
+ VariantMatrixEditor and ProductBulkEditor now registered and fast REAL/tested:
+ six-role/revoked actions, uploads/order/main/alt, grouped specs/FAQ/relations,
+ SEO/UTC schedule edges, matrix idempotence/owned terms, exact bulk prices/category
+ replace/clear, parent locks and bounded queries. Labels batched; bulk category
+ snapshot50 products5 SQL reads; lists1000 fixtures with30-row pages. All state
+ writes through verified services. Inventory still READ ONLY in product pages.
+- NEXT media library: folders/replace/alt/usage/protected deletion, queued WebP+
+ thumbnail generation with safe synchronous fallback and safe legacy reference
+ integration. Keep SVG/executable rejection and transactional upload cleanup.
+- THEN stock adjustment ledger/service/actions (reason+actor, no negative stock)
+ and bulk stock on that same service, not direct DB/ORM setters. Then branding/
+ navigation/cache/deploy and seven final handoff docs; full six-way PR matrix,
+ tag l3a-complete only after full scope green, wait tag CI, stop for approval.
+- Owner says NO intermediate checkpoint approval. No early tag, L3b work, gateway/
+ SMS/OTP/new credentials/SSR/deployment authorization. Browser pointer/visual/RTL/
+ a11y/real host/TLS/restore still UNVERIFIED. Reuse retained Jalali candidate;
+ do not repeat candidate trials. CI fast selector d571989 has3 local contract tests.
+
+# Current continuation — bulk admin UI PENDING fast CI
+
+- D162ce3 matrix UI VERIFIED fast push39869734415: Pint+PHP8.3/MariaDB10.6
+ SUCCESS (exact counts in live annotations). Six roles/idempotent generate and
+ duplicate dimension rejection tested; owner-scoped lookups and locked parent.
+- NEW ProductBulkEditor registered /admin/product-bulk + product-list link:
+ bounded searchable products50/categories30, exact integer% price and category
+ replace/clear actions through ProductBulk, fresh policies, real affected-row
+ notices, error mapping. No stock action yet (reserved for reason+actor service).
+- ProductBulk.categories now snapshots all selected category memberships once,
+ not per product; new50-product five-SELECT assertion plus page six-role/revoked
+ writes/persist/clear/error/no-false-success cases PENDING fast runtime CI.
+- WAIT fast green. NEXT media library folders/replace/alt/usage/protected deletion/
+ queued WebP+thumb/sync fallback, then stock ledger reason+actor/service/actions and
+ bulk on it. Branding/nav/cache/deploy and final seven docs/full six-way PR/tag
+ evidence still due. No l3a-complete until entire scope green; stop only at approval.
+ Active arena/0f9a69e5-shopnext, no production authorization or Jalali new trial.
+
+# Current continuation — matrix UI PENDING fast CI
+
+- 31686d4 variation page VERIFIED fast push39869291945: Pint+PHP8.3/MariaDB10.6
+ SUCCESS,377tests9493assertions. Safe upload/parent context/all six roles/trash/
+ restore/1000-row seven-query label page actually tested. Other DBs not rerun yet.
+- NEW VariantMatrixEditor at /admin/products/{product}/matrix linked from variants:
+ bounded searchable attributes + owner-scoped term multi-selects,4 dimensions,
+ initial price/prefix, real Variants.generate, explicit skip/no-overwrite result.
+ Duplicate dimensions rejected, locked parent, policy refreshed for every write
+ and option lookup. Tests six roles/revoked generation/idempotence/ownership/locks
+ and duplicate no-partial-write PENDING actual fast CI.
+- WAIT fast green, then bulk price/category page -> media -> stock ledger with
+ reason+actor and bulk atop it -> branding/nav/cache/deploy/docs/full PR matrix,
+ l3a-complete only on complete green scope, then stop for approval. No checkpoints.
+ Active arena/0f9a69e5-shopnext; no early tag or production authorization.
+
+# Current continuation — variation editor PENDING fast CI
+
+- Df03105 product editor VERIFIED push39868756342 fast Pint+MariaDB10.6/PHP8.3;
+ 369tests9377assertions. All metadata CRUD/types/SEO/errors/list/UTC dates green.
+- NEW /admin/products/{product}/variants, linked from variable product rows:
+ service-backed per-SKU prices/schedules/image/trash/restore, read-only inventory
+ and canonical options, scoped locked parent, fresh authorization, bounded eager
+ lists. SafeUpload cleanup uses shared trait. Matrix generator UI still NEXT.
+- VariantEditorTest six-role/revoked handlers/CRUD/upload/parent-scope/locked IDs
+ and1000-row seven-query page fixture PENDING actual fast CI.
+- WAIT fast green then matrix/bulk UI, media, stock ledger+bulk, final branding/
+ caches/deploy/docs/full PR six-way matrix, final tag then approval stop only.
+ Active arena/0f9a69e5-shopnext. No early completion or new Jalali trial.
+
+# Current continuation — product metadata editor PENDING fast CI
+
+- 44b690c content Editor VERIFIED fast push39868230626: Pint+PHP8.3/MariaDB10.6
+ SUCCESS,360tests9195assertions. Upload/reorder/main/alt/relations/SVG/locked-context
+ and six-role Livewire/HTTP tests actually passed; browser gestures still unverified.
+- NEW registered /admin/products ProductEditor: all four draft types, title/slug/SKU,
+ brand search bounded30, prices/SEO/scheduled sale+flash+publication using retained
+ AdminDate, featured, read-only stock listing, soft trash/restore, paginated eager
+ brand list and link to service-backed content page. Domain-only mutation routes.
+- ProductEditorTest six roles/revoked actions/create/update/trash/restore/types/
+ domain error mapping/1000-row bounded list and Tehran UTC date persistence/reload
+ PENDING actual fast CI. No stock field; variation and bulk pages still due.
+- WAIT fast green then variations/matrix and bulk pages; media; stock ledger with
+ reason+actor and bulk on it; branding/cache/deploy/final seven docs/full PR matrix
+ then l3a-complete tag and stop. No checkpoint approval and no early tag.
+ Active branch arena/0f9a69e5-shopnext.
+
+# Current continuation — product content domain fast VERIFIED; editor PENDING
+
+- 503214f actual fast push39867647967 SUCCESS style+PHP8.3/MariaDB10.6;
+ 352tests9122assertions. Frontend intentionally skipped; not full-matrix proof.
+- NEW registered ProductContentEditor Page /admin/products/{product}/content:
+ RichEditor attachments OFF (verified Filament5.10.3 source), SafeUpload gallery
+ append within save, reorder drag/buttons, main/alt, grouped specs/FAQ and searchable
+ related/upsell/cross_sell. Locked context, fresh policies, bounded relation lookups,
+ domain writes and upload cleanup via shared trait, no price/stock fields.
+- Livewire/HTTP tests six roles/revoked actions/save/reload, real uploads/reorder/
+ main/alt/relations/clear and SVG/locked-context guards PENDING runtime fast CI.
+ Browser drag/visual/a11y still UNVERIFIED. Content UI has no top-level navigation;
+ link it from upcoming product list/editor. Product metadata/variants/bulk UI due.
+- WAIT selected fast CI green, then product/variation/bulk pages -> media -> stock
+ ledger reason+actor + bulk -> branding/nav/cache/finaldocs/full PR matrix/tag/stop.
+ Active arena/0f9a69e5-shopnext, no approval checkpoint or premature completion tag.
+
+# Current continuation — product content domain PENDING fast runtime
+
+- CI selector d571989 VERIFIED actual push39866911447: Pint + PHP8.3/MariaDB10.6
+ SUCCESS, frontend intentionally SKIPPED. PR/tag six-way selector locally tested.
+ Full matrix is still mandatory for final L3a delivery, not claimed by fast CI.
+- NEW ProductContent domain: fresh actor, transaction/audit; existing rich-text
+ cast; ordered gallery paths + separate alt map/main membership; grouped specs;
+ sanitized per-product FAQ; ordered related/upsell/cross_sell with SQL FKs/unique/
+ no-self CHECK. New migration refuses lossy rollback. No stock/price inputs.
+- Catalog now projects gallery/alt/FAQ and batches only publication-visible related
+ IDs (draft/future/trash excluded); re-sanitizes FAQ imports. ProductContentTest
+ six roles/safety flags/limits/order/audit rollback/SQL/self/publicity and1000-row
+ fixture with50-item six-query projection PENDING actual CI. UI still pending.
+- Next after fast green: actual product/variation/bulk + content editor UI with
+ service-backed actions/tests, then media -> reason+actor stock ledger + bulk ->
+ final branding/navigation/cache/deploy/docs + full PR matrix/tag/approval stop.
+- Active branch arena/0f9a69e5-shopnext only; no approval checkpoint or early tag.
+
+# Active continuation — arena/0f9a69e5-shopnext, CI scope update pending
+
+- PR2 merged at39b64b4; working on NEW ACTIVE arena/0f9a69e5-shopnext. Older
+ branch/status instructions below are historical and superseded; never switch.
+- Owner revised CI: intermediate branch pushes Pint + PHP8.3/MariaDB10.6 only;
+ PR updates and tags full six-way SQL + frontend. Full matrix green required before
+ l3a-complete, then stop for approval. No intermediate approval checkpoints.
+- NEW deterministic matrix selector + three local unit tests passed; workflow
+ triggers arena/** and tags, style prerequisite outputs matrix/full selection.
+ Runtime workflow verification PENDING push; no full-matrix claim for fast runs.
+- NEXT after fast green: product content/gallery/main/alt/spec groups/FAQ/relations
+ domain, actual product/variant/bulk pages; media; ledger reason+actor stock + bulk;
+ final docs and full PR matrix. Existing metadata/variants/bulk services verified.
+
 # Current continuation — bulk domain VERIFIED; product content/UI NEXT
 
 - 5e5db96 ProductBulk VERIFIED push39862703481/PR39862709665 ALL8 SUCCESS.
@@ -388,3 +641,58 @@
 
 Read README, ARCHITECTURE, DATABASE, SECURITY, HOSTING, ACCEPTANCE, CI_RESULTS and
 L1_AUTH before changing scope. Historical PhaseA/L0 docs are not current approval.
+
+## New continuation: media library runtime PENDING
+
+MediaAsset schema/policy, automatic new SafeUpload catalog registration, real
+MediaLibraryEditor virtual-folder/alt/upload/replace/delete actions, live9-query
+MediaUsage including JSON gallery/drafts/trash/return lines, safe canonical PNG,
+queued ConvertMedia and ≤1MP missing-worker synchronous conversion, two capped
+WebP outputs, WebP public serving, no-codec canonical preservation. New named
+six-role and actual persistence/conversion tests pending fast CI. No stock work
+started yet; no full completion claim/tag. Git metadata again restored by comparing
+EVERY remote c104416 blob with workspace before reset --mixed (no files changed).
+
+## Stock implementation PENDING runtime
+
+StockAdjustment service, append-only SQL operations/adjustments reason+actor
+ledger, explicit adjustStock product+variant policies, actual Filament single
+and max50 selected-SKU bulk actions, replay keys, sorted root/variant locks,
+all-or-nothing decrease, audit transaction,6-role and six-SELECT50-row tests.
+Media prerequisite194c83b formatter red (ordered imports + qualified DB migration),
+fix055ba32 fast39890033715 SUCCESS Pint/backend:415/9765; frontend skipped.
+New stock files not yet runtime tested. Full matrix/tag still NOT done.
+
+Newest refinement PENDING: catalog/API images now schedule conversion only AFTER
+successful metadata persistence, safe scheduling failures retain canonical, retry
+UI action (fresh policy), actual-role stale-action tests, replacement rollback
+and partial conversion cleanup tests, unsupported original and ≤1MP fallback.
+Stockbd7fa7f fast39890410998 Pint green/backend3 failed422 passed: direct Gate
+throws AuthorizationException vs mistakenly asserted HttpException for3 denied
+roles; corrected test type without changing authorization. Need fast rerun, then
+FULL new PR SQL6+frontend, all final docs/tag CI. No completion tag yet.
+
+Final production cache requirement found during docs review: previous deploy-check
+had NO production cache checks despite requested acceptance. Added fail-closed
+config/routes/Filament admin component/Blade icon manifest checks, actual optimize+
+filament:optimize OperationsTest and extracted no-dev package cache smoke.
+Docs corrected: caches generated on host, not falsely described existing builder
+step. PENDING CI. Last2b0c0ba push has not yielded a GitHub run/check yet (remote
+SHA verified exact); need dispatch fast if still absent, no unexecuted green claim.
+
+Final fast2f2a5a6 run39891342991: Pintgreen/backend429pass1fail cache-readiness
+post-optimize. Fetched authoritative Laravel12.70 Application: cached booleans
+memoize initial false, not file absence. DeployHealth now checks real resolved
+config/routes cache paths (Filament/icons already actual files); requirement kept.
+Assert message now passed to toBeTrue; pending fresh fast CI then final PR6 SQL.
+
+Dab2e00 fast39891617446 precise failure cron (allcache paths passed). Actual
+optimize config/route commands bootstrap fresh Laravel globalcontainer/facades,
+second DBconnection can't see test's uncommitted heartbeat. Restore original test
+app Container/Facade afterrealcommands + assertproduction env. Realdbconnection/
+readiness kept; no mocking. Fastrecheck next; full PR still not opened.
+
+Cd06ab8 fast39891885027 GREEN. Cache requirements/real generation and final430
+cases now pass selectedSQL. Added final forced GD+Imagick WebP size checks and
+sameURL replacement response bytes/cache-revalidation regression. Need first final
+PR fullmatrix now (new cases PENDING; styles stillindependentfirst). Full/Tag notdone.
