@@ -621,3 +621,11 @@ No queue/original-fallback/delete-protection acceptance claim at this prerequisi
 fixers fully_qualified_strict_types/unary_operator_spaces/not_operator_with_successor_space.
 Explicit HttpException import replaces qualified references; no acceptance/runtime
 claim for skipped jobs. Re-verification PENDING.
+
+
+17abb0c push39883854000 SUCCESS, Pint120187322935 and PHP8.3/MariaDB10.6
+120187432264:403 tests/9667 assertions. Parsed all5 REAL_FINANCIAL_RACE
+lines from check annotations, asserted complete set. Exact proof
+`docs/ci/l3a-image-safety-fast-verified.json`. Frontend/other5 SQL not executed.
+Image-budget form-message preservation and truncated-body refinement PENDING new
+fast run; media conversion/queue/no-WebP fallback/delete protection remain NEXT.

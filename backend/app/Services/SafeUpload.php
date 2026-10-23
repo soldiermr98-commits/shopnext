@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\ImageProcessingException;
 use App\Http\Requests\MediaRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 final class SafeUpload
 {
@@ -18,26 +18,32 @@ final class SafeUpload
             throw new \LogicException('Unsupported image directory.');
         }
         app(ImageBudget::class)->inspect($file->getRealPath());
-        Validator::make(['file' => $file], ['file' => MediaRequest::FILE_RULES])->validate();
+        Validator::make(['file' => $file], ['file' => MediaRequest::FILE_RULES], [
+            'required' => 'تصویر انتخاب کنید.', 'file' => 'فایل معتبر انتخاب کنید.',
+            'image' => 'تصویر سالم انتخاب کنید.', 'max' => 'حجم تصویر بیش از ۲ مگابایت است.',
+            'mimes' => 'تصویر PNG، JPEG یا WebP انتخاب کنید.', 'extensions' => 'پسوند تصویر معتبر نیست.',
+            'dimensions' => 'ابعاد تصویر بیش از ۲۰۴۸ پیکسل است.',
+        ])->validate();
         $source = file_get_contents($file->getRealPath());
         if ($source === false) {
-            throw ValidationException::withMessages(['file' => 'خواندن تصویر امکان‌پذیر نیست.']);
+            throw ImageProcessingException::withMessages(['file' => 'خواندن تصویر امکان‌پذیر نیست.']);
         }
         if (extension_loaded('gd') && config('security.image_driver', 'auto') !== 'imagick') {
             $image = @imagecreatefromstring($source);
             if (! $image) {
-                throw ValidationException::withMessages(['file' => 'تصویر خراب است یا پردازش آن در این هاست پشتیبانی نمی‌شود.']);
+                throw ImageProcessingException::withMessages(['file' => 'تصویر خراب است یا پردازش آن در این هاست پشتیبانی نمی‌شود.']);
             }
             ob_start();
             try {
                 imagesavealpha($image, true);
                 if (! imagepng($image)) {
-                    throw ValidationException::withMessages(['file' => 'ساخت تصویر امن امکان‌پذیر نیست.']);
+                    throw ImageProcessingException::withMessages(['file' => 'ساخت تصویر امن امکان‌پذیر نیست.']);
                 }
                 $bytes = ob_get_contents();
             } finally {
                 ob_end_clean();
                 imagedestroy($image);
+                unset($image);
             }
         } else {
             \Imagick::setResourceLimit(\Imagick::RESOURCETYPE_MEMORY, 64 * 1024 * 1024);
@@ -52,18 +58,19 @@ final class SafeUpload
                 $image->setImageFormat('png');
                 $bytes = $image->getImageBlob();
             } catch (\ImagickException) {
-                throw ValidationException::withMessages(['file' => 'تصویر خراب است یا منابع پردازش تصویر کافی نیست.']);
+                throw ImageProcessingException::withMessages(['file' => 'تصویر خراب است یا منابع پردازش تصویر کافی نیست.']);
             } finally {
                 $image->clear();
                 $image->destroy();
+                unset($image);
             }
         }
         unset($source);
         if (! is_string($bytes)) {
-            throw ValidationException::withMessages(['file' => 'ساخت تصویر امن امکان‌پذیر نیست.']);
+            throw ImageProcessingException::withMessages(['file' => 'ساخت تصویر امن امکان‌پذیر نیست.']);
         }
         if (strlen($bytes) > 8 * 1024 * 1024) {
-            throw ValidationException::withMessages(['file' => 'حجم خروجی تصویر بیش از حد مجاز است.']);
+            throw ImageProcessingException::withMessages(['file' => 'حجم خروجی تصویر بیش از حد مجاز است.']);
         }
         $name = bin2hex(random_bytes(24)).'.png';
         if (! Storage::disk('local')->put($directory.'/'.$name, $bytes)) {

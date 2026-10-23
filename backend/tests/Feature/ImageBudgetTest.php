@@ -2,17 +2,21 @@
 
 declare(strict_types=1);
 
+use App\Filament\Pages\ProductContentEditor;
 use App\Filament\Widgets\CronHeartbeat;
 use App\Models\User;
 use App\Services\ImageBudget;
 use App\Services\ImageHostHealth;
+use App\Services\Products;
 use App\Services\SafeUpload;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Livewire\Livewire;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses(RefreshDatabase::class);
@@ -34,7 +38,9 @@ it('L3a image headers reject oversized and bomb dimensions before any decoder or
 
 it('L3a image preflight rejects corrupt data and configured byte ceilings with Persian errors', function () {
     Storage::fake('local');
-    foreach ([UploadedFile::fake()->createWithContent('corrupt.png', 'not an image'), UploadedFile::fake()->createWithContent('php.png', '<?php exit;')] as $file) {
+    $tiny = UploadedFile::fake()->image('valid.png', 2, 2);
+    $truncated = UploadedFile::fake()->createWithContent('truncated.png', substr(file_get_contents($tiny->getRealPath()), 0, 33));
+    foreach ([$truncated, UploadedFile::fake()->createWithContent('corrupt.png', 'not an image'), UploadedFile::fake()->createWithContent('php.png', '<?php exit;')] as $file) {
         try {
             app(SafeUpload::class)->store($file);
             $this->fail('Corrupted image unexpectedly accepted.');
@@ -102,3 +108,16 @@ it('L3a dashboard image warnings independently gate six roles and refresh revoke
     ['super_admin', true], ['admin', true], ['shop_manager', true],
     ['content_editor', false], ['support', false], ['customer', false],
 ]);
+
+it('L3a upload forms preserve the Persian low-memory explanation instead of replacing it with a generic file error', function () {
+    Storage::fake('local');
+    Filament::setCurrentPanel(Filament::getPanel('admin'));
+    Filament::bootCurrentPanel();
+    $actor = User::factory()->create(['role' => 'admin']);
+    $product = app(Products::class)->save($actor, ['title' => 'کالا', 'slug' => 'product', 'sku' => 'SKU', 'price' => 100]);
+    $this->actingAs($actor, 'web');
+    config(['media.processing_memory_bytes' => 32 * 1024 * 1024]);
+    Livewire::test(ProductContentEditor::class, ['product' => $product->id])->set('imageUpload', UploadedFile::fake()->image('tiny.png', 2, 2))->call('save')->assertHasErrors('imageUpload')->assertSee('حافظه مجاز هاست')->assertSet('notice', '');
+    expect(Storage::disk('local')->files('media'))->toBe([]);
+    expect($product->fresh()->gallery_images)->toBeNull();
+});

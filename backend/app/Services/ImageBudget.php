@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Illuminate\Validation\ValidationException;
+use App\Exceptions\ImageProcessingException;
 
 /** Header-only checks BEFORE reading the blob or calling either image decoder. */
 final class ImageBudget
@@ -86,6 +86,6 @@ final class ImageBudget
 
     private function fail(string $message): never
     {
-        throw ValidationException::withMessages(['file' => $message]);
+        throw ImageProcessingException::withMessages(['file' => $message]);
     }
 }

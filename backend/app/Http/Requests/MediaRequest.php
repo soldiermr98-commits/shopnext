@@ -22,6 +22,16 @@ final class MediaRequest extends FormRequest
         return ['file' => self::FILE_RULES];
     }
 
+    public function messages(): array
+    {
+        return [
+            'file.required' => 'تصویر انتخاب کنید.', 'file.file' => 'فایل معتبر انتخاب کنید.',
+            'file.image' => 'تصویر سالم انتخاب کنید.', 'file.max' => 'حجم تصویر بیش از ۲ مگابایت است.',
+            'file.mimes' => 'تصویر PNG، JPEG یا WebP انتخاب کنید.', 'file.extensions' => 'پسوند تصویر معتبر نیست.',
+            'file.dimensions' => 'ابعاد تصویر بیش از ۲۰۴۸ پیکسل است.',
+        ];
+    }
+
     public function after(): array
     {
         return [function (Validator $v): void {

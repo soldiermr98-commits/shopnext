@@ -1,3 +1,15 @@
+# Image safety prerequisite fast VERIFIED; upload feedback refinement PENDING
+
+- 17abb0c run39883854000 Pint + PHP8.3/MariaDB10.6 SUCCESS:403/9667,
+ all5 real financial race lines parsed/asserted. Frontend/other5 SQL NOT executed.
+ Exact proof docs/ci/l3a-image-safety-fast-verified.json. No full-matrix claim.
+- New refinement: trusted Persian ImageProcessingException subtype, preserves
+ memory-budget feedback through HandlesCatalogImage; explicit Farsi image rules;
+ truncated PNG header/body case plus actual ProductContentEditor low-budget form
+ test and explicit resource unset. PENDING fresh CI; no bypass/removal.
+- Media library/conversion/queue/no-WebP retention/fallback/in-use protected delete
+ still NEXT after fast green, then stock reason+actor/bulk and final full scope.
+
 # Image safety prerequisite — formatter correction PENDING runtime
 
 - 985b987 push39883737773 fast Pint RED; SQL correctly skipped. Actual reporter

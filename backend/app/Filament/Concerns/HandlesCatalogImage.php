@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Concerns;
 
+use App\Exceptions\ImageProcessingException;
 use App\Models\User;
 use App\Services\SafeUpload;
 use Closure;
@@ -47,7 +48,7 @@ trait HandlesCatalogImage
                 $messages = [];
                 foreach ($exception->errors() as $key => $errors) {
                     $messages[$key === 'file' ? 'imageUpload' : 'data.'.($key === 'content' ? 'description' : $key)] = match ($key) {
-                        'file' => [self::IMAGE_ERROR],
+                        'file' => $exception instanceof ImageProcessingException ? $errors : [self::IMAGE_ERROR],
                         'content' => ['متن توضیحات بیش از حد مجاز است.'],
                         default => $errors,
                     };
