@@ -1,3 +1,25 @@
+# Current continuation — image safety prerequisite fast VERIFIED; media library NEXT
+
+- Latest runtime code7d37fbc140df588f8791748f4fe5505ac2087202 pushed on active
+arena/0f9a69e5-shopnext. Fast39884678896 SUCCESS: Pint120189956207 and
+PHP8.3/MariaDB10.6 check120190110181: 405 tests/9679 assertions;
+all5 REAL_FINANCIAL_RACE lines parsed/asserted. Frontend/other5 SQL not executed.
+- Proof docs/ci/l3a-image-safety-fast-verified.json. Prior403/9667 and404/9675
+fast runs also green; first formatter-only red fixed without bypass.
+- Budget/header/file/pixel/memory guards predecode, bomb/truncated body/corrupt
+rejects, capped variant configuration, CLI/dashboard INI+GD/Imagick WebP reports
+and low-resource recommendations, six roles + fresh revocation, real Livewire
+Persian low-memory feedback, unavailable/invalid decoder graceful validation.
+- HOSTING shared-host operator INI note delivered. Existing2MiB/2048px receipt/
+forms remain strict; global8MiB/24MP are ceilings, not an HTTP limit expansion.
+- NEXT actual media asset/library/folder/replace/alt/usage/protected delete plus
+queued WebP/thumb and bounded no-worker/no-WebP safe-canonical fallback tests.
+This prerequisite alone does NOT implement those features. Then stock adjustment
+reason+actor ledger/actions/bulk, final seven docs/nav/branding/cache/deploy checks,
+full PR SQL6+frontend and completion tag before approval stop. No new PR/tag yet.
+- No local PHP runtime; remote selected real SQL tests are the executed evidence.
+No browser/host/TLS/RTL/a11y/restore or full-matrix claim for these new changes.
+
 # Image safety + actual Persian form feedback fast VERIFIED; driver guard PENDING
 
 - df0b5a5 run39884326049 Pint120188846225/backend120189000385 SUCCESS:

@@ -638,3 +638,13 @@ Persian memory feedback and truncated PNG body now verified on this SQL target.
 Other5 SQL/frontend NOT executed. Last defensive missing/invalid-driver Persian
 failure + avoid unused Imagick input blob PENDING fresh fast CI. This is not the
 media-library unsupported-WebP retention/worker fallback acceptance feature.
+
+
+7d37fbc140df588f8791748f4fe5505ac2087202 fast39884678896 SUCCESS:
+Pint120189956207, PHP8.3/MariaDB10.6 check120190110181: 405 tests /
+9679 assertions, all5 actual REAL_FINANCIAL_RACE lines parsed/asserted.
+Updated exact evidence `docs/ci/l3a-image-safety-fast-verified.json`. Unsupported
+decoder Persian rejection and no unnecessary Imagick blob copy verified; this is
+not unsupported-WebP library fallback. Frontend and other5 SQL not run. The
+shared-host safety/reporting prerequisite is fast verified; media library/queue/
+no-worker fallback/no-WebP retention/protected deletion acceptance still pending.

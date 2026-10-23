@@ -587,7 +587,7 @@ valid PNG IHDR with truncated compressed body, not merely unknown file signature
 
 
 Unsupported/missing decoder now gets Persian validation instead of a class error;
-only GD reads an input blob, Imagick reads frame0 from disk. Named test PENDING:
+only GD reads an input blob, Imagick reads frame0 from disk. Named test REAL fast39884678896:
 `L3a an unsupported image driver fails with Persian validation without reading an
 unnecessary blob or writing storage`. This does **not** implement library WebP
 fallback: a missing WebP encoder must retain an already safe canonical original
