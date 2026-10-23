@@ -668,3 +668,8 @@ optimize config/route commands bootstrap fresh Laravel globalcontainer/facades,
 second DBconnection can't see test's uncommitted heartbeat. Restore original test
 app Container/Facade afterrealcommands + assertproduction env. Realdbconnection/
 readiness kept; no mocking. Fastrecheck next; full PR still not opened.
+
+Cd06ab8 fast39891885027 GREEN. Cache requirements/real generation and final430
+cases now pass selectedSQL. Added final forced GD+Imagick WebP size checks and
+sameURL replacement response bytes/cache-revalidation regression. Need first final
+PR fullmatrix now (new cases PENDING; styles stillindependentfirst). Full/Tag notdone.

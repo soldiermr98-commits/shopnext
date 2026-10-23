@@ -41,6 +41,6 @@ final class MediaController
     {
         abort_unless(preg_match('/^[a-f0-9]{48}\.(?:png|webp)$/D', $file) && Storage::disk('local')->exists('media/'.$file), 404);
 
-        return response()->file(Storage::disk('local')->path('media/'.$file), ['Content-Type' => str_ends_with($file, '.webp') ? 'image/webp' : 'image/png', 'X-Content-Type-Options' => 'nosniff']);
+        return response()->file(Storage::disk('local')->path('media/'.$file), ['Content-Type' => str_ends_with($file, '.webp') ? 'image/webp' : 'image/png', 'X-Content-Type-Options' => 'nosniff', 'Cache-Control' => str_ends_with($file, '.webp') ? 'public, max-age=31536000, immutable' : 'no-cache, max-age=0, must-revalidate']);
     }
 }

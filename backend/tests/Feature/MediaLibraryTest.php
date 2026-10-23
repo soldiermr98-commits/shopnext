@@ -69,6 +69,9 @@ it('L3a media real upload folder alt replace stable references usage and protect
     $page->set('upload', UploadedFile::fake()->image('second.png', 12, 12))->call('replace')->assertHasNoErrors();
     expect($asset->fresh()->sha256)->not->toBe($oldSha);
     expect($asset->fresh()->url())->toBe($url);
+    $response = $this->get($url)->assertOk();
+    expect($response->headers->get('Cache-Control'))->toContain('no-cache');
+    expect(getimagesizefromstring(file_get_contents($response->getFile()->getPathname()))[0])->toBe(12);
     expect($product->fresh()->main_image)->toBe($url);
     $product->delete();
     $page->call('deleteSelected')->assertHasErrors('asset');
@@ -192,3 +195,17 @@ it('L3a media lists one thousand assets thirty at a time with twelve fixed permi
     expect($page->total())->toBe(1000);
     expect($queries)->toHaveCount(12);
 });
+
+it('L3a media WebP output is real and bounded with each configured GD and Imagick driver', function (string $driver) {
+    config(['security.image_driver' => $driver, 'media.variants' => ['thumb' => 64, 'webp' => 128]]);
+    $asset = app(MediaLibrary::class)->upload(User::factory()->create(['role' => 'admin']), UploadedFile::fake()->image('driver.png', 256, 128), []);
+    expect($asset->conversion_status)->toBe('ready');
+    $thumb = getimagesize(Storage::disk('local')->path('media/'.$asset->variants['thumb']));
+    expect($thumb['mime'])->toBe('image/webp');
+    expect($thumb[0])->toBe(64);
+    expect($thumb[1])->toBe(32);
+    $webp = getimagesize(Storage::disk('local')->path('media/'.$asset->variants['webp']));
+    expect($webp[0])->toBe(128);
+    expect($webp[1])->toBe(64);
+    expect(Storage::disk('local')->exists('media/'.$asset->filename))->toBeTrue();
+})->with(['gd', 'imagick']);

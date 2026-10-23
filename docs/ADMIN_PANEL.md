@@ -655,3 +655,9 @@ with a fresh queue probe` now requires missing production caches to fail, then
 runs actual optimize + filament:optimize and verifies all readiness checks pass,
 with finally cleanup. Extracted no-dev package smoke also builds config/routes/
 Filament components/icons and rechecks login and protected new admin routes.
+
+Cache regression cd06ab8/run39891885027 fast green. Last media correctness checks
+PENDING: named `L3a media WebP output is real and bounded with each configured GD
+and Imagick driver` forces both codecs (not just default GD). Stable canonical
+URL response now revalidates (`no-cache`); actual response bytes after replacement
+are checked. Content-address-independent WebP filenames remain immutable-cacheable.
