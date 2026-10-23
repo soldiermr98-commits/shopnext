@@ -85,7 +85,7 @@ it('L3b five thousand order list stays at three queries and detail stays at six 
     }
     $lastId = DB::table('orders')->max('id');
     DB::table('order_items')->insert(['order_id' => $lastId, 'product_id' => F::product(), 'title' => 'قلم ثابت', 'sku' => 'BIG-ITEM', 'quantity' => 1, 'unit_price' => 100, 'line_total' => 100, 'snapshot' => '{}']);
-    DB::table('order_events')->insert(['order_id' => $lastId, 'actor_user_id' => $actor->id, 'actor_name' => $actor->name, 'actor_role' => 'admin', 'action' => 'created', 'created_at' => now('UTC')]);
+    DB::table('order_events')->insert(['order_id' => $lastId, 'actor_user_id' => $actor->id, 'actor_name' => $actor->name, 'actor_role' => 'admin', 'action' => 'created', 'to_status' => 'pending', 'to_payment_state' => 'unpaid', 'created_at' => now('UTC')]);
     DB::enableQueryLog();
     DB::flushQueryLog();
     $page = app(OrderAdminReads::class)->listing($actor, []);
