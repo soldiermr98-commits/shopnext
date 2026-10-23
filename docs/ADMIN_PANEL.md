@@ -764,3 +764,18 @@ PENDING: named `L3a media WebP output is real and bounded with each configured G
 and Imagick driver` forces both codecs (not just default GD). Stable canonical
 URL response now revalidates (`no-cache`); actual response bytes after replacement
 are checked. Content-address-independent WebP filenames remain immutable-cacheable.
+
+## L3b read-side increment (runtime PENDING)
+
+| Screen/action | Status | Named tests (OrderAdminReadsTest) |
+|---|---|---|
+| `/admin/orders` list/search/status/payment/shipping/Jalali date filters | Implemented; runtime UNVERIFIED | `L3b order list filters status payment shipping UTC date and all four searchable identities without exposing snapshots` |
+| Detail immutable item snapshots, totals/rounding, addresses, paginated actor timeline | Implemented; runtime UNVERIFIED | `L3b order detail keeps immutable item prices masks support PII and never serializes private paths or unknown snapshot keys` |
+| 5001 orders →30 rows/3 queries; paginated detail6 queries | Implemented; runtime UNVERIFIED | `L3b five thousand order list stays at three queries and detail stays at six with independent pagination` |
+| Six roles, independent stale-action checks | Implemented; runtime UNVERIFIED | `L3b orders page gates six roles and independently reauthorizes each stale read action` |
+
+Support now admits to the panel credential boundary and redirects to orders,
+NOT the dashboard. Existing dashboard/catalog/settings permissions stay denied.
+Only masked DTOs are hydrated; full address is not selected for Support. Raw
+receipt/storage paths, user models, arbitrary snapshot keys never reach Livewire.
+No order mutations/receipts/print/CSV/customers UI are claimed in this read slice.

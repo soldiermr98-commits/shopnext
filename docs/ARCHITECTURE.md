@@ -262,3 +262,13 @@ bounded Toman integers. Product now sanitizes the actual full_description column
 effective UTC schedule/trash availability for catalog and pricing, without changing
 financial fractions, tax/coupon/shipping/wallet/order mechanics or inventing a cron
 publish mutation. Matrix, content graph, bulk actions and UI remain next sub-steps.
+
+## L3b order-admin read boundary (implementation, runtime pending)
+
+Separate panel capability namespace leaves legacy/customer API authorization
+unchanged. Read service fresh-authorizes and uses explicit projections, not raw
+Order/User serialization. Support sees masked phones and no address/receipt paths;
+admin/manager receive allowlisted immutable address data. Item snapshots are
+scalar-allowlisted; items and actor timeline paginate independently. List filters
+bind parameters, use existing Jalali→UTC picker, and paginate30 rows without
+per-order relationship lookups. No financial writes in this slice.

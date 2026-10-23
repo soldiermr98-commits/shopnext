@@ -32,4 +32,4 @@ it('L3b fresh capability authorization rejects revoked roles inactive and first 
     app(AdminAccess::class)->authorize($actor, 'orders.refund');
     DB::table('users')->where('id', $actor->id)->update($changes);
     expect(fn () => app(AdminAccess::class)->authorize($actor, 'orders.refund'))->toThrow(AuthorizationException::class);
-})->with([['role' => 'support'], ['is_active' => false], ['must_change_password' => true]]);
+})->with([[['role' => 'support']], [['is_active' => false]], [['must_change_password' => true]]]);

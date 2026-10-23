@@ -67,7 +67,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     public function canAccessPanel(Panel $panel): bool
     {
         // First-login staff may access their password profile, never the gated dashboard/resources.
-        return $panel->getId() === 'admin' && $this->is_active && in_array($this->role, ['super_admin', 'admin', 'shop_manager'], true);
+        return $panel->getId() === 'admin' && $this->is_active && in_array($this->role, ['super_admin', 'admin', 'shop_manager', 'support'], true);
     }
 
     public function getFilamentAvatarUrl(): ?string

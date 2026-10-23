@@ -715,3 +715,10 @@ Cd06ab8 fast39891885027 GREEN. Cache requirements/real generation and final430
 cases now pass selectedSQL. Added final forced GD+Imagick WebP size checks and
 sameURL replacement response bytes/cache-revalidation regression. Need first final
 PR fullmatrix now (new cases PENDING; styles stillindependentfirst). Full/Tag notdone.
+
+New pending read-side slice: OrdersEditor page+OrderAdminReads safe projections,
+filters/Jalali UTC dates,5001list constant3queries/detail6queries, maskedSupport
+credential access and dedicated orders login redirect. Dashboard/catalog/settings
+remain denied forSupport. Updated staffauth role fixture only for new permitted
+Support login. AdminCapabilities revocation dataset corrected to nested array
+arguments (not production authorization change). All new runtime pending CI.

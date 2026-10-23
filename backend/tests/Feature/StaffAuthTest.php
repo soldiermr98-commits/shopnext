@@ -51,7 +51,7 @@ it('accepts only authorized active staff at the Filament credential boundary', f
         $component->assertHasFormErrors(['email']);
         $this->assertGuest('web');
     }
-})->with([['super_admin', true], ['admin', true], ['shop_manager', true], ['content_editor', false], ['support', false], ['customer', false]]);
+})->with([['super_admin', true], ['admin', true], ['shop_manager', true], ['content_editor', false], ['support', true], ['customer', false]]);
 
 it('denies inactive staff and direct customer panel access', function () {
     $inactive = User::factory()->create(['role' => 'admin', 'is_active' => false]);
