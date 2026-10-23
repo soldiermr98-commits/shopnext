@@ -36,8 +36,8 @@ final class DeployHealth
         $checks['env.key'] = [is_string($key) && Encrypter::supported($key, config('app.cipher')), 'supported encryption key'];
         $production = config('app.env') === 'production';
         $checks['env.debug'] = [! $production || config('app.debug') === false, 'production debug disabled'];
-        $checks['cache.config'] = [! $production || app()->configurationIsCached(), 'production: php artisan optimize'];
-        $checks['cache.routes'] = [! $production || app()->routesAreCached(), 'production: php artisan optimize'];
+        $checks['cache.config'] = [! $production || is_file(app()->getCachedConfigPath()), 'production: php artisan optimize'];
+        $checks['cache.routes'] = [! $production || is_file(app()->getCachedRoutesPath()), 'production: php artisan optimize'];
         $checks['cache.filament'] = [! $production || is_file(Filament::getPanel('admin')->getComponentCachePath()), 'production: php artisan filament:optimize'];
         $checks['cache.icons'] = [! $production || is_file(app()->bootstrapPath('cache/blade-icons.php')), 'production: php artisan icons:cache'];
         $url = parse_url(config('app.url'));

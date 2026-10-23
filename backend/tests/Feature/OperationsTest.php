@@ -65,7 +65,7 @@ it('passes deploy-check against actual PHP extensions and each real matrix datab
         $this->artisan('filament:optimize')->assertExitCode(0);
         $checks = app(DeployHealth::class)->checks();
         foreach ($checks as $name => [$passed, $detail]) {
-            expect($passed, $name.': '.$detail)->toBeTrue();
+            expect($passed)->toBeTrue($name.': '.$detail);
         }
         $this->artisan('deploy-check')->assertExitCode(0);
     } finally {

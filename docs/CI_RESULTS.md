@@ -663,3 +663,12 @@ cleanup and all-action actual-role revocation refinements PENDING new fast CI.
 Frontend/other5 SQL intentionally not executed. Final queue/large-list/late-batch
 rollback cases and updated seven docs PENDING fresh fast CI, then final PR full6
 SQL targets + frontend. No completion tag/full result claimed yet.
+
+2f2a5a6 fast39891342991 Pint SUCCESS;429 passed/1 failed. New cache readiness
+regression exposed Laravel12 memoization (`config_loaded_from_cache`/`routes.cached`):
+checking cache booleans before generation pins false within the same app instance.
+Readiness now inspects actual framework-resolved cache file paths (also valid
+immediately after optimize); no cache requirement removed. Added assertion message
+at toBeTrue so future failures identify the specific readiness row. Recheck pending.
+Manual workflow dispatch lacked integration permission403; normal push CI ran,
+so no credential change/reconnect needed and no bypass/manual fake result.
