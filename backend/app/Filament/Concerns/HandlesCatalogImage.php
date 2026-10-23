@@ -6,8 +6,8 @@ namespace App\Filament\Concerns;
 
 use App\Exceptions\ImageProcessingException;
 use App\Models\User;
-use App\Services\SafeUpload;
 use App\Services\MediaLibrary;
+use App\Services\SafeUpload;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
