@@ -294,3 +294,24 @@ bulk-delete by age while requests are active. Database/filesystem crash atomicit
 and actual host process-kill/restore remain UNVERIFIED, not claimed SQL atomicity.
 Production build must retain existing `optimize`, `filament:optimize` and icon-cache
 steps; new registered pages/views are included by that same deployment process.
+
+### Required production cache sequence (after each code/metadata release)
+
+From the **private app** directory with the host's actual production `.env`:
+
+```sh
+php artisan optimize:clear
+php artisan filament:optimize-clear
+php artisan migrate --force
+php artisan optimize
+php artisan filament:optimize
+# filament:optimize runs filament:cache-components and icons:cache.
+php artisan deploy-check
+```
+
+Generate caches **on the host**, never ship caches containing builder paths or
+configuration. The no-dev builder intentionally removes compiled configuration/
+route caches. `deploy-check` now fails production readiness if configuration,
+routes, Filament admin-component or Blade-icon manifests are absent. Resource
+recommendations remain warnings. A failed readiness result is not launch approval.
+Fresh-cron/queue probes and canonical HTTPS remain required independently.

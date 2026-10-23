@@ -648,3 +648,10 @@ query counts implemented above. New final cases PENDING:
 - `L3a bulk decrease rolls back earlier successful rows when a later SKU has insufficient stock`
 - Existing50-SKU query test now also asserts joined ledger30/50 pagination3queries.
 No full matrix/browser acceptance yet; no placeholder UI actions counted as REAL.
+
+Final operational acceptance extension PENDING: OperationsTest's named
+`passes deploy-check against actual PHP extensions and each real matrix database
+with a fresh queue probe` now requires missing production caches to fail, then
+runs actual optimize + filament:optimize and verifies all readiness checks pass,
+with finally cleanup. Extracted no-dev package smoke also builds config/routes/
+Filament components/icons and rechecks login and protected new admin routes.

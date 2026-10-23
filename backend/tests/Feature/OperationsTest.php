@@ -57,11 +57,21 @@ it('renders cron age and warning on the authorized Filament dashboard widget', f
 it('passes deploy-check against actual PHP extensions and each real matrix database with a fresh queue probe', function () {
     config(['app.env' => 'production', 'app.debug' => false, 'app.url' => 'https://shop.example']);
     $this->artisan('shopnext:tick')->assertExitCode(0);
-    $checks = app(DeployHealth::class)->checks();
-    foreach ($checks as $name => [$passed, $detail]) {
-        expect($passed, $name.': '.$detail)->toBeTrue();
+    foreach (['cache.config', 'cache.routes', 'cache.filament', 'cache.icons'] as $name) {
+        expect(app(DeployHealth::class)->checks()[$name][0], $name)->toBeFalse();
     }
-    $this->artisan('deploy-check')->assertExitCode(0);
+    try {
+        $this->artisan('optimize')->assertExitCode(0);
+        $this->artisan('filament:optimize')->assertExitCode(0);
+        $checks = app(DeployHealth::class)->checks();
+        foreach ($checks as $name => [$passed, $detail]) {
+            expect($passed, $name.': '.$detail)->toBeTrue();
+        }
+        $this->artisan('deploy-check')->assertExitCode(0);
+    } finally {
+        Artisan::call('optimize:clear');
+        Artisan::call('filament:optimize-clear');
+    }
 });
 
 it('fails deploy-check for unsafe environment invalid key stale cron non-database queue and failed queue history', function () {

@@ -648,3 +648,11 @@ Stockbd7fa7f fast39890410998 Pint green/backend3 failed422 passed: direct Gate
 throws AuthorizationException vs mistakenly asserted HttpException for3 denied
 roles; corrected test type without changing authorization. Need fast rerun, then
 FULL new PR SQL6+frontend, all final docs/tag CI. No completion tag yet.
+
+Final production cache requirement found during docs review: previous deploy-check
+had NO production cache checks despite requested acceptance. Added fail-closed
+config/routes/Filament admin component/Blade icon manifest checks, actual optimize+
+filament:optimize OperationsTest and extracted no-dev package cache smoke.
+Docs corrected: caches generated on host, not falsely described existing builder
+step. PENDING CI. Last2b0c0ba push has not yielded a GitHub run/check yet (remote
+SHA verified exact); need dispatch fast if still absent, no unexecuted green claim.
