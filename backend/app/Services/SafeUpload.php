@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Exceptions\ImageProcessingException;
 use App\Http\Requests\MediaRequest;
+use App\Models\MediaAsset;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -83,6 +84,15 @@ final class SafeUpload
         $name = bin2hex(random_bytes(24)).'.png';
         if (! Storage::disk('local')->put($directory.'/'.$name, $bytes)) {
             throw new \RuntimeException('Unable to store image.');
+        }
+
+        if ($directory === 'media') {
+            try {
+                (new MediaAsset)->forceFill(['filename' => $name, 'sha256' => hash('sha256', $bytes)])->save();
+            } catch (\Throwable $exception) {
+                Storage::disk('local')->delete('media/'.$name);
+                throw $exception;
+            }
         }
 
         return $name;

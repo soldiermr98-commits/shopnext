@@ -603,3 +603,14 @@ ledger/actions/bulk; final seven docs/full PR SQL+frontend and completion tag.
 
 Read README, ARCHITECTURE, DATABASE, SECURITY, HOSTING, ACCEPTANCE, CI_RESULTS and
 L1_AUTH before changing scope. Historical PhaseA/L0 docs are not current approval.
+
+## New continuation: media library runtime PENDING
+
+MediaAsset schema/policy, automatic new SafeUpload catalog registration, real
+MediaLibraryEditor virtual-folder/alt/upload/replace/delete actions, live9-query
+MediaUsage including JSON gallery/drafts/trash/return lines, safe canonical PNG,
+queued ConvertMedia and ≤1MP missing-worker synchronous conversion, two capped
+WebP outputs, WebP public serving, no-codec canonical preservation. New named
+six-role and actual persistence/conversion tests pending fast CI. No stock work
+started yet; no full completion claim/tag. Git metadata again restored by comparing
+EVERY remote c104416 blob with workspace before reset --mixed (no files changed).

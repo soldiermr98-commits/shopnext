@@ -25,6 +25,8 @@ use App\Models\SchedulerHeartbeat;
 use App\Models\Setting;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\MediaAsset;
+use App\Policies\MediaAssetPolicy;
 use App\Observers\AdminActivity;
 use App\Policies\ActivityLogPolicy;
 use App\Policies\AddressPolicy;
@@ -66,6 +68,7 @@ class AppServiceProvider extends ServiceProvider
             $model::observe(AdminActivity::class);
         }
         Gate::define('dashboard', fn (User $user): bool => Permissions::allows($user, 'dashboard'));
+        Gate::policy(MediaAsset::class, MediaAssetPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Address::class, AddressPolicy::class);
         Gate::policy(Category::class, CategoryPolicy::class);

@@ -7,9 +7,9 @@ namespace App\Filament\Concerns;
 use App\Exceptions\ImageProcessingException;
 use App\Models\User;
 use App\Services\SafeUpload;
+use App\Services\MediaLibrary;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Throwable;
@@ -42,7 +42,7 @@ trait HandlesCatalogImage
             return $persist($state);
         } catch (Throwable $exception) {
             if ($newImage !== null) {
-                Storage::disk('local')->delete('media/'.$newImage);
+                app(MediaLibrary::class)->discardNew($newImage);
             }
             if ($exception instanceof ValidationException) {
                 $messages = [];

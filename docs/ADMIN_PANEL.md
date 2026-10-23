@@ -592,3 +592,21 @@ only GD reads an input blob, Imagick reads frame0 from disk. Named test REAL fas
 unnecessary blob or writing storage`. This does **not** implement library WebP
 fallback: a missing WebP encoder must retain an already safe canonical original
 when the media conversion pipeline is delivered.
+
+## Media library — implemented, runtime PENDING fast CI
+
+| UI/domain action | REAL/tested status | Named Pest test (MediaLibraryTest) |
+|---|---|---|
+| `/admin/media-library`: upload, virtual folder creation/move, alt metadata | Implemented, runtime UNVERIFIED | L3a media real upload folder alt replace stable references usage and protected deletion persist audited changes |
+| Replace canonical PNG atomically, stable reference URL, refreshed derivatives | Implemented, runtime UNVERIFIED | Same real upload/replace test |
+| Live reference counts including gallery/drafts/trash; protected deletion (including derivative references) | Implemented, runtime UNVERIFIED | Same real upload/replace test |
+| Six-role policy and independently revoked actions | Implemented, runtime UNVERIFIED | L3a media page six roles gates upload metadata replace delete and refreshed revoked actors |
+| Missing WebP codec keeps safe original | Implemented, runtime UNVERIFIED | L3a no WebP support keeps canonical original without attempting decode or variants |
+| Queued conversion, small bounded synchronous missing-worker fallback, stale jobs | Implemented, runtime UNVERIFIED | L3a missing worker synchronously converts only small images queues larger ones and ignores stale replacement jobs |
+| 30-file usage batch9 aggregate queries; codec failure partial cleanup | Implemented, runtime UNVERIFIED | L3a media paginated usage has fixed aggregate query count and codec failures keep safe original with no partial variants |
+
+Folders are virtual labels (`کالا/جدید`), not host filesystem paths. Canonical PNG
+is always retained. Without a healthy worker only ≤1MP sources convert inline;
+larger files remain canonical/pending and queue for the bounded minute worker.
+Legacy/pre-library disk files are not automatically scanned/imported; newly
+uploaded catalog and API media are registered. Private receipts are excluded.

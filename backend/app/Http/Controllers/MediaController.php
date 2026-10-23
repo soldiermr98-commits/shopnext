@@ -8,6 +8,7 @@ use App\Http\Requests\MediaRequest;
 use App\Http\Requests\ReadRequest;
 use App\Models\ActivityLog;
 use App\Services\SafeUpload;
+use App\Services\MediaLibrary;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -25,7 +26,7 @@ final class MediaController
                 'before' => [], 'after' => ['format' => 'png'], 'changed_fields' => ['file'],
             ])->save();
         } catch (\Throwable $exception) {
-            Storage::disk('local')->delete('media/'.$name);
+            app(MediaLibrary::class)->discardNew($name);
             throw $exception;
         }
 
@@ -34,8 +35,8 @@ final class MediaController
 
     public function show(ReadRequest $request, string $file): BinaryFileResponse
     {
-        abort_unless(preg_match('/^[a-f0-9]{48}\.png$/D', $file) && Storage::disk('local')->exists('media/'.$file), 404);
+        abort_unless(preg_match('/^[a-f0-9]{48}\.(?:png|webp)$/D', $file) && Storage::disk('local')->exists('media/'.$file), 404);
 
-        return response()->file(Storage::disk('local')->path('media/'.$file), ['Content-Type' => 'image/png', 'X-Content-Type-Options' => 'nosniff']);
+        return response()->file(Storage::disk('local')->path('media/'.$file), ['Content-Type' => str_ends_with($file, '.webp') ? 'image/webp' : 'image/png', 'X-Content-Type-Options' => 'nosniff']);
     }
 }
