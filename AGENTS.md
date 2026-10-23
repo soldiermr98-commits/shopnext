@@ -1,3 +1,22 @@
+# CURRENT — L3b APPROVED; capability foundation first slice
+
+- Fixed active branch arena/5024cc01-shopnext from mergedmain9671ee8. NEVER use
+previous arena/0f9a69e5 branch. PR3 merged on request; l3a-complete1e1d8aa immutable.
+- User approved L3b Orders/Customers only; full scope in latest request. Small
+commits/fast Pint+PHP8.3MariaDB10.6 only, full SQL6/frontend on PR/tag. No L5 SMS,
+PDF heavy work, direct status/stock/coupon/wallet/total edits or secret responses.
+- Added panel-only AdminCapabilities18 abilities, AdminAccess fresh authorization,
+explicit six-role108-cell contract in docs/ADMIN_PANEL plus revocation tests.
+Legacy Permissions/API policies unchanged. First slice runtime PENDING fastCI.
+- NEXT masked/eager5000-order paginated list/detail and restricted Support panel
+entry, then domain-backed lifecycle/notes/tracking/private receipts/notifications,
+manual checkout, print/legalsettings/statusdisplay; customer profile/ledger/notes/
+tags/segments/block/export. Every action actual persist+policy+sixroles+tests.
+- No L3b UI/feature completion claim yet; no PR/tag. Stop only after fullgreen +
+l3b-complete and request next approval. Actual browser/host/TLS/restore UNVERIFIED.
+
+## Historical L3a notes (superseded above)
+
 # CURRENT — L3a implementation FULL VERIFIED; approval boundary is L3b
 
 - Active fixed branch arena/0f9a69e5-shopnext; PR3 OPEN (do not merge unless asked):

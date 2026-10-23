@@ -1,3 +1,48 @@
+# L3b Orders/Customers — permission contract and implementation progress
+
+L3a approved at immutable `l3a-complete`1e1d8aa; PR3 merged9671ee8.
+L3b active branch `arena/5024cc01-shopnext`. No L3b completion tag yet.
+
+## Exact six-role panel matrix
+
+A=super_admin/admin, M=shop_manager, E=content_editor, S=support, C=customer.
+Each capability is independently asserted for all six roles. These are panel-only
+permissions; they do not widen customer API policies or domain financial powers.
+Unknown abilities, inactive and must-change-password actors deny by default.
+
+| Panel capability | super_admin | admin | shop_manager | content_editor | support | customer |
+|---|---|---|---|---|---|---|
+| Orders/customers view | yes | yes | yes | no | masked | no |
+| Change shipping/status | yes | yes | yes | no | no | no |
+| Cancel/refund | yes | yes | no | no | no | no |
+| Read/approve/reject private receipts | yes | yes | no | no | no | no |
+| Mark COD collected | yes | yes | no | no | no | no |
+| Manual checkout | yes | yes | no | no | no | no |
+| Tracking/carrier and order notes | yes | yes | yes | no | no | no |
+| Invoice/packing-slip print | yes | yes | yes | no | no | no |
+| Order/customer CSV export | yes | yes | no | no | no | no |
+| Display-only status labels/colors | yes | yes | no | no | no | no |
+| Customer notes/tags/segments | yes | yes | yes | no | no | no |
+| Block/unblock customer | yes | yes | no | no | no | no |
+| Wallet adjustment | yes | yes | no | no | no | no |
+| Full business phone/address | yes | yes | yes | no | no | no |
+
+Support read-only access is restricted to masked DTOs: no full phone/address,
+receipt paths, raw snapshots/notes or financial action payloads. Dashboard,
+settings, catalog and existing legacy role/action matrix stay unchanged.
+Shipping/status permission NEVER implies arbitrary status assignment: lifecycle
+state machine and its stricter per-action permissions remain authoritative.
+
+## L3b REAL/tested status
+
+| Slice | Status | Named tests |
+|---|---|---|
+| Panel capability contract, all108 cells (18×6) | Implemented; runtime UNVERIFIED | `L3b independently defines every cell of the six role panel capability matrix` — AdminCapabilitiesTest |
+| Fresh role/active/password-state revocation | Implemented; runtime UNVERIFIED | `L3b fresh capability authorization rejects revoked roles inactive and first login actors` — AdminCapabilitiesTest |
+| Orders/Customers UI, exports/print/financial actions | NOT IMPLEMENTED in this first slice | No REAL claim |
+
+Everything below is historical L3a evidence, not L3b delivery.
+
 # L3a REAL/tested administration inventory
 
 ## Current L3a acceptance — FULL VERIFIED

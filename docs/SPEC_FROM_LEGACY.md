@@ -1,3 +1,12 @@
+# Current replacement status — L3b approved, implementation in progress
+
+L1/L2 and L3a are verified in their immutable completion tags. L3a approved and
+merged PR3 at9671ee8; l3a-complete remains1e1d8aa. L3b Orders/Customers is now
+approved, NOT complete: permission foundation only; no new UI action delivery
+claim yet. Later phases and SMS integrations remain unauthorized. Current evidence
+and REAL/tested inventory: ADMIN_PANEL.md and CI_RESULTS.md. Host/browser/manual
+acceptance remains UNVERIFIED. Historical checkpoint statements follow.
+
 # Replacement contract derived from legacy
 
 > **2026-10-21 update:** GitHub Actions now provides a real PHP8.2/8.3 + MySQL8

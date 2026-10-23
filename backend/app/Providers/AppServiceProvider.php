@@ -39,6 +39,7 @@ use App\Policies\ProductVariantPolicy;
 use App\Policies\SettingPolicy;
 use App\Policies\TaxonomyPolicy;
 use App\Policies\UserPolicy;
+use App\Support\AdminCapabilities;
 use App\Support\Permissions;
 use App\Support\Phone;
 use Filament\Auth\Http\Responses\Contracts\LoginResponse;
@@ -66,6 +67,9 @@ class AppServiceProvider extends ServiceProvider
     {
         foreach ([User::class, Address::class, Category::class, Brand::class, CatalogAttribute::class, AttributeTerm::class, Product::class, ProductVariant::class, Order::class, OrderItem::class, Coupon::class, BlogPost::class, Banner::class, Setting::class, Transaction::class, ReturnRequest::class, ReturnItem::class, CategoryProduct::class] as $model) {
             $model::observe(AdminActivity::class);
+        }
+        foreach (array_keys(AdminCapabilities::MATRIX) as $ability) {
+            Gate::define('admin.'.$ability, fn (User $user): bool => AdminCapabilities::allows($user, $ability));
         }
         Gate::define('dashboard', fn (User $user): bool => Permissions::allows($user, 'dashboard'));
         Gate::policy(MediaAsset::class, MediaAssetPolicy::class);
