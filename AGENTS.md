@@ -1,3 +1,41 @@
+# CURRENT — L3b read foundation fast VERIFIED; transactional actions NEXT
+
+- Fixed active arena/5024cc01-shopnext. Never use oldbranch0f9a69e5. L3a approved
+l3a-complete1e1d8aa, PR3 mergedmain9671ee8. User authorized L3b only.
+- Latest runtime1350cbc3d82aa94a6268325d34c09b2f28be8a26, fast39897964545
+SUCCESS Pint120232784702/backend120232894921:450/10112/all5 real race lines
+parsed/asserted. Evidence docs/ci/l3b-orders-read-fast-verified.json. Other5SQL/
+frontend NOT run; no L3b PR/tag/completion claim. REAL table updated.
+- AdminCapabilities18 abilities108 matrix cells independently tested; fresh
+AdminAccess. Support only masked orders/customers reads. Support canlog in and
+redirectsOrdersEditor; dashboard/catalog/settings/money/receipt/export/print/fullPII
+denied. Legacy Permissions/API domain privileges unchanged.
+- OrdersEditor actual /admin/orders read list filters/search/Jalali→UTC dates,
+30row projection:5001 rows3queries; nonemptydetail6queries with item50/timeline30
+independent pagination, immutable item snapshots/totals/rounding/address/actors.
+Supportphone masked, address notselected; raw receipt paths and unknownsnapshot
+fields stripped beforeview. No writes implemented in this slice.
+- Tests corrected WITHOUT bypass: nested dataset arrays, immutable snapshotUPDATE
+explicitly rejected; separate INSERT fixture for unknown-key masking, nonempty
+item/event fixtures for6query assertion. Upper-only datefilter now valid.
+- NEXT domain-backed lifecycle actions and legal-only UI options with no-op clear
+messages. Existing OrderLifecycle is sole state writer (cancel/refund/paid/status/
+receipt/reject). Money/stock/coupon only existing services; sorted actor/ownerlocks
+must remain. OrderJournal+audits atomic. Existing paid/cancel/refund no-op branches;
+rejectreceipt replay still needs design/test. No new direct status setter.
+- CRITICAL orders.tracking_code is immutable public48hex lookup token protected
+SQLtrigger! Add distinct carrier/postal shipping_tracking_code; never edit lookup.
+- Then notes internal/customer-visible, stored customer notification events (NO SMS
+untilL5), private receipts/approval/reject, manual checkout withserverpricing,
+HTMLprint/legalsettings/display-only labels, Customers profile/orders/addresses/
+wallet ledger/notes/tags/segments/block+revokesessions, BOM/formula-safe CSV.
+- Full request remains authoritative. Docs six requested paths updated firstslice;
+complete REAL tables/full6SQL+frontend PR/tag only after fullscope. Intermediate
+Pint+PHP8.3MariaDB10.6 only. Tag l3b-complete only fullgreen then STOPapproval.
+- Actual host/TLS/browser RTL/a11y/restore UNVERIFIED; no localPHP/vendor.
+
+## Historical notes (latest state above supersedes older pending labels)
+
 # CURRENT — L3b APPROVED; capability foundation first slice
 
 - Fixed active branch arena/5024cc01-shopnext from mergedmain9671ee8. NEVER use

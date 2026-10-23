@@ -1,0 +1,23 @@
+{
+  "scope": "Fast L3b foundation/orders read slice only; NOT L3b completion",
+  "sha": "1350cbc3d82aa94a6268325d34c09b2f28be8a26",
+  "run": 39897964545,
+  "url": "https://github.com/soldiermr98-commits/shopnext/actions/runs/39897964545",
+  "style": "success",
+  "sql": {
+    "job": "PHP8.3/MariaDB10.6",
+    "check": 120232894921,
+    "tests": 450,
+    "assertions": 10112,
+    "real_financial_races": [
+      "cancel_pay",
+      "coupon_capacity",
+      "last_stock",
+      "mark_paid",
+      "wallet_spend"
+    ]
+  },
+  "frontend": "intentionally skipped",
+  "other_sql_targets": "not executed",
+  "remaining": "Domain actions/notes/tracking/notifications/private receipts/manual checkout/print/status labels; Customers; CSV; final full matrix/tag"
+}

@@ -1,3 +1,12 @@
+# L3b foundation/orders read fast VERIFIED — remaining scope pending
+
+1350cbc/run39897964545 SUCCESS: Pint120232784702 + PHP8.3/MariaDB10.6
+check120232894921,450 tests10112 assertions. All5 actual financial race worker
+lines asserted from readable annotations (one prefix split across chunk boundary;
+matched stable FINANCIAL_RACE+workers content). Exact evidence:
+`ci/l3b-orders-read-fast-verified.json`. Frontend skipped; other5 SQL not executed.
+No L3b full-matrix/completion/host/browser/TLS/restore claim. Historical notes follow.
+
 # L3a final verification evidence
 
 ## Current L3a acceptance — FULL VERIFIED

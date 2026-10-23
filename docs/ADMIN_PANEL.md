@@ -37,8 +37,8 @@ state machine and its stricter per-action permissions remain authoritative.
 
 | Slice | Status | Named tests |
 |---|---|---|
-| Panel capability contract, all108 cells (18×6) | Implemented; runtime UNVERIFIED | `L3b independently defines every cell of the six role panel capability matrix` — AdminCapabilitiesTest |
-| Fresh role/active/password-state revocation | Implemented; runtime UNVERIFIED | `L3b fresh capability authorization rejects revoked roles inactive and first login actors` — AdminCapabilitiesTest |
+| Panel capability contract, all108 cells (18×6) | REAL — fast39897964545 | `L3b independently defines every cell of the six role panel capability matrix` — AdminCapabilitiesTest |
+| Fresh role/active/password-state revocation | REAL — fast39897964545 | `L3b fresh capability authorization rejects revoked roles inactive and first login actors` — AdminCapabilitiesTest |
 | Orders/Customers UI, exports/print/financial actions | NOT IMPLEMENTED in this first slice | No REAL claim |
 
 Everything below is historical L3a evidence, not L3b delivery.
@@ -765,17 +765,24 @@ and Imagick driver` forces both codecs (not just default GD). Stable canonical
 URL response now revalidates (`no-cache`); actual response bytes after replacement
 are checked. Content-address-independent WebP filenames remain immutable-cacheable.
 
-## L3b read-side increment (runtime PENDING)
+## L3b read-side increment — fast VERIFIED
 
 | Screen/action | Status | Named tests (OrderAdminReadsTest) |
 |---|---|---|
-| `/admin/orders` list/search/status/payment/shipping/Jalali date filters | Implemented; runtime UNVERIFIED | `L3b order list filters status payment shipping UTC date and all four searchable identities without exposing snapshots` |
-| Detail immutable item snapshots, totals/rounding, addresses, paginated actor timeline | Implemented; runtime UNVERIFIED | `L3b order detail keeps immutable item prices masks support PII and never serializes private paths or unknown snapshot keys` |
-| 5001 orders →30 rows/3 queries; paginated detail6 queries | Implemented; runtime UNVERIFIED | `L3b five thousand order list stays at three queries and detail stays at six with independent pagination` |
-| Six roles, independent stale-action checks | Implemented; runtime UNVERIFIED | `L3b orders page gates six roles and independently reauthorizes each stale read action` |
+| `/admin/orders` list/search/status/payment/shipping/Jalali date filters | REAL — fast39897964545 | `L3b order list filters status payment shipping UTC date and all four searchable identities without exposing snapshots` |
+| Detail immutable item snapshots, totals/rounding, addresses, paginated actor timeline | REAL — fast39897964545 | `L3b order detail keeps immutable item prices masks support PII and never serializes private paths or unknown snapshot keys` |
+| 5001 orders →30 rows/3 queries; paginated detail6 queries | REAL — fast39897964545 | `L3b five thousand order list stays at three queries and detail stays at six with independent pagination` |
+| Six roles, independent stale-action checks | REAL — fast39897964545 | `L3b orders page gates six roles and independently reauthorizes each stale read action` |
 
 Support now admits to the panel credential boundary and redirects to orders,
 NOT the dashboard. Existing dashboard/catalog/settings permissions stay denied.
 Only masked DTOs are hydrated; full address is not selected for Support. Raw
 receipt/storage paths, user models, arbitrary snapshot keys never reach Livewire.
 No order mutations/receipts/print/CSV/customers UI are claimed in this read slice.
+
+
+Read-slice proof:1350cbc/run39897964545 SUCCESS,450 tests10112 assertions,
+Pint + PHP8.3/MariaDB10.6 only. Exact proof `ci/l3b-orders-read-fast-verified.json`.
+All108 capability cells, restricted Support login, six-role reads, immutable/masked
+DTOs,5001-order3query listing and nonempty6query detail executed. L3b is NOT
+complete: mutations/Customers/CSV/print/private receipts/notifications remain NEXT.
