@@ -629,3 +629,12 @@ lines from check annotations, asserted complete set. Exact proof
 `docs/ci/l3a-image-safety-fast-verified.json`. Frontend/other5 SQL not executed.
 Image-budget form-message preservation and truncated-body refinement PENDING new
 fast run; media conversion/queue/no-WebP fallback/delete protection remain NEXT.
+
+
+df0b5a5 fast39884326049: Pint120188846225 + PHP8.3/MariaDB10.6
+120189000385 SUCCESS,404 tests/9675 assertions/all5 real financial race lines.
+Exact asserted proof `docs/ci/l3a-image-safety-fast-verified.json`. Real Livewire
+Persian memory feedback and truncated PNG body now verified on this SQL target.
+Other5 SQL/frontend NOT executed. Last defensive missing/invalid-driver Persian
+failure + avoid unused Imagick input blob PENDING fresh fast CI. This is not the
+media-library unsupported-WebP retention/worker fallback acceptance feature.

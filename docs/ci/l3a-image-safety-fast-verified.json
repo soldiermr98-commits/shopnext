@@ -1,13 +1,13 @@
 {
   "scope": "Fast push only; other five SQL combinations and frontend not executed",
-  "sha": "17abb0c8b33dff0363ece874773b2142012fdf28",
-  "push_run": 39883854000,
+  "sha": "df0b5a54eadbc060b7d66341b62a3505a7e675c8",
+  "push_run": 39884326049,
   "style": "success",
   "backend": {
     "job": "PHP 8.3 / mariadb:10.6",
     "conclusion": "success",
-    "tests": 403,
-    "assertions": 9667,
+    "tests": 404,
+    "assertions": 9675,
     "races": [
       "cancel_pay",
       "coupon_capacity",

@@ -1,3 +1,18 @@
+# Image safety + actual Persian form feedback fast VERIFIED; driver guard PENDING
+
+- df0b5a5 run39884326049 Pint120188846225/backend120189000385 SUCCESS:
+404 tests/9675 assertions and all5 real financial race lines parsed/asserted.
+Proof docs/ci/l3a-image-safety-fast-verified.json. Frontend/other5 SQL not executed.
+- Actual Livewire low-memory upload now preserves Persian budget message, no file
+or metadata mutation; truncated PNG body rejected, GD/Imagick resources unset.
+- Last defensive refinement PENDING fast CI: fail invalid/missing image driver
+with Persian validation instead of class/function errors; only GD reads a blob,
+Imagick reads path/frame0 directly. Added unsupported-driver test (not WebP fallback).
+- NEXT actual media asset/folder/replace/alt/usage/protected delete and conversions/
+queue/no-worker fallback/no-WebP canonical retention tests. Then stock reason+actor
+ledger/actions/bulk; final seven docs/full PR SQL+frontend and completion tag.
+- No approval question, new PR, completion tag, or full-matrix/browser claim.
+
 # Image safety prerequisite fast VERIFIED; upload feedback refinement PENDING
 
 - 17abb0c run39883854000 Pint + PHP8.3/MariaDB10.6 SUCCESS:403/9667,

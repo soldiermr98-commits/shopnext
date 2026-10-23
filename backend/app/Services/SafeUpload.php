@@ -24,11 +24,19 @@ final class SafeUpload
             'mimes' => 'تصویر PNG، JPEG یا WebP انتخاب کنید.', 'extensions' => 'پسوند تصویر معتبر نیست.',
             'dimensions' => 'ابعاد تصویر بیش از ۲۰۴۸ پیکسل است.',
         ])->validate();
-        $source = file_get_contents($file->getRealPath());
-        if ($source === false) {
-            throw ImageProcessingException::withMessages(['file' => 'خواندن تصویر امکان‌پذیر نیست.']);
+        $driver = (string) config('security.image_driver', 'auto');
+        if (! in_array($driver, ['auto', 'gd', 'imagick'], true)) {
+            throw ImageProcessingException::withMessages(['file' => 'تنظیم پردازش تصویر در هاست معتبر نیست.']);
         }
-        if (extension_loaded('gd') && config('security.image_driver', 'auto') !== 'imagick') {
+        $useGd = extension_loaded('gd') && $driver !== 'imagick';
+        if (! $useGd && ($driver === 'gd' || ! extension_loaded('imagick'))) {
+            throw ImageProcessingException::withMessages(['file' => 'افزونه پردازش تصویر در هاست فعال نیست.']);
+        }
+        if ($useGd) {
+            $source = file_get_contents($file->getRealPath());
+            if ($source === false) {
+                throw ImageProcessingException::withMessages(['file' => 'خواندن تصویر امکان‌پذیر نیست.']);
+            }
             $image = @imagecreatefromstring($source);
             if (! $image) {
                 throw ImageProcessingException::withMessages(['file' => 'تصویر خراب است یا پردازش آن در این هاست پشتیبانی نمی‌شود.']);

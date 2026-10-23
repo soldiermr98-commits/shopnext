@@ -121,3 +121,17 @@ it('L3a upload forms preserve the Persian low-memory explanation instead of repl
     expect(Storage::disk('local')->files('media'))->toBe([]);
     expect($product->fresh()->gallery_images)->toBeNull();
 });
+
+it('L3a an unsupported image driver fails with Persian validation without reading an unnecessary blob or writing storage', function () {
+    Storage::fake('local');
+    config(['security.image_driver' => 'unsupported']);
+    $file = UploadedFile::fake()->image('tiny.png', 2, 2);
+    try {
+        app(SafeUpload::class)->store($file);
+        $this->fail('Unsupported driver unexpectedly accepted.');
+    } catch (ValidationException $exception) {
+        expect($exception->errors()['file'][0])->toContain('تنظیم پردازش تصویر');
+    }
+    expect(Storage::disk('local')->allFiles())->toBe([]);
+    expect(is_file($file->getRealPath()))->toBeTrue();
+});

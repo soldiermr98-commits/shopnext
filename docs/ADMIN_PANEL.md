@@ -579,8 +579,16 @@ conversion/queue/original fallback/usage/delete protection tests are still pendi
 No configuration entry is represented as a delivered conversion action.
 
 
-Follow-up PENDING fast runtime: trusted Persian preflight/decoder messages now
+Follow-up REAL fast39884326049: trusted Persian preflight/decoder messages now
 survive catalog upload-field mapping; MediaRequest/SafeUpload validation Persian.
 Named test: `L3a upload forms preserve the Persian low-memory explanation instead
 of replacing it with a generic file error`. Corrupt-data test also exercises a
 valid PNG IHDR with truncated compressed body, not merely unknown file signatures.
+
+
+Unsupported/missing decoder now gets Persian validation instead of a class error;
+only GD reads an input blob, Imagick reads frame0 from disk. Named test PENDING:
+`L3a an unsupported image driver fails with Persian validation without reading an
+unnecessary blob or writing storage`. This does **not** implement library WebP
+fallback: a missing WebP encoder must retain an already safe canonical original
+when the media conversion pipeline is delivered.
