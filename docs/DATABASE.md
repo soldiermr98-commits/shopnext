@@ -1,3 +1,22 @@
+# L3a schema additions — final matrix pending
+
+- `media_assets`: unique canonical filename, virtual folder/alt, content SHA256,
+conversion state/variant filenames; folder/id index, no private receipt metadata.
+Live usage derives from actual catalog/return references, not a stale counter.
+- `stock_operations`: actor FK, unique(actor,request_key), canonical intent hash,
+row count and UTC time. `stock_adjustments`: operation/actor/product FKs, optional
+composite (variant_id,product_id) FK, signed delta, unsigned before/after,
+required reason/time and indexed product history. SQL CHECK enforces nonzero
+balanced adjustment; UPDATE/DELETE triggers make both ledgers append-only.
+Rollback refuses to discard populated media or adjustment metadata. Export/history
+review required; no production import, truncate, forced FK disable or migration
+execution performed here. Tests use isolated real SQL databases only.
+- Existing normalized categories/brands/attributes/terms/variant combinations and
+editorial gallery alt/FAQ/relations/publication metadata remain authoritative in
+migrations. No order-price/wallet rewrite and no direct admin stock form field.
+
+Historical schema and integrity evidence follows.
+
 # Database — implemented L1 schema and operational data
 
 2026-10-21. Authoritative source: backend/database/migrations. The full mapping

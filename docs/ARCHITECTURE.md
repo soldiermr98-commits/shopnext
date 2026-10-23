@@ -1,3 +1,31 @@
+# L3a catalog/media/stock implementation — final verification pending
+
+Catalog mutations serialize through actor + shared taxonomy mutex, then bounded
+sorted records, with fresh per-action policies and same-transaction redacted audit.
+Media URLs remain canonical48hex PNG; variants48hex WebP are served with explicit
+MIME/nosniff. New uploads register MediaAsset metadata, never private receipts.
+Virtual folder names are labels, never used as filesystem paths. MediaUsage reads
+live references (including drafts/trash and JSON galleries) in9 aggregate queries
+for an entire page, avoiding stale usage counters and row-by-row list queries.
+Delete quarantines files atomically under the catalog mutex with rollback restore.
+Replace backs up/atomically renames the safe PNG, keeps its URL and rejects stale
+conversion jobs by content hash. WebP processing releases each image before the
+next variant, max3 bounded outputs, same ImageBudget preflight as upload.
+No healthy worker: only ≤1MP and execution-time0/unlimited or≥15s converts inline;
+otherwise database queue retains pending PNG. Codec/resource errors retain PNG
+and discard partial derivatives; authorized retry is explicit. Queue/host failures
+must never delete a committed catalog reference.
+
+StockAdjustment is the ONLY new admin inventory write contract: positive bounded
+amount + explicit direction + reason + actor + replay key. Sorted root then
+variant locks match checkout/cancel order. Atomic batches≤50 append immutable SQL
+entries and redacted activity events, or roll back everything. The ledger records
+adjustments, not fabricated historic checkout movements. Available-stock checkout
+reservations/release remain the existing financial implementation. Date storage is
+Gregorian UTC; forms/display retain the ONE verified Jalali library.
+
+Final full matrix/frontend pending. Historical L1/L2 architecture follows.
+
 # Architecture — L1 and L2 implemented; deployment unverified
 
 2026-10-21. L1 and L2 financial code are CI-verified; deployment/browser acceptance

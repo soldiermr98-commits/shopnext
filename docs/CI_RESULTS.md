@@ -657,3 +657,9 @@ negative-role direct-service tests expected HttpException but actual Gate correc
 throws AuthorizationException. Correcting assertion type only; no guard bypass.
 Further media catalog/API scheduling, public retry, audit rollback/partial-output
 cleanup and all-action actual-role revocation refinements PENDING new fast CI.
+
+7fdeff4 fast39890670001 SUCCESS: Pint120209396410/backend120209544161,
+427 tests/9879 assertions and all5 real financial races parsed from annotations.
+Frontend/other5 SQL intentionally not executed. Final queue/large-list/late-batch
+rollback cases and updated seven docs PENDING fresh fast CI, then final PR full6
+SQL targets + frontend. No completion tag/full result claimed yet.

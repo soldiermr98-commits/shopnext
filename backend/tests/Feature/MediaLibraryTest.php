@@ -157,3 +157,38 @@ it('L3a media partially encoded variants are removed on failure and original sur
     expect($asset->fresh()->conversion_status)->toBe('original');
     expect(Storage::disk('local')->files('media'))->toBe(['media/'.$asset->filename]);
 });
+
+it('L3a healthy worker persists a real database conversion job and bounded worker creates WebP outputs', function () {
+    config(['queue.default' => 'database']);
+    foreach (['cron', 'queue'] as $name) {
+        DB::table('scheduler_heartbeats')->insert(['name' => $name, 'completed_at' => now('UTC'), 'worker_failed' => false]);
+    }
+    $actor = User::factory()->create(['role' => 'admin']);
+    $asset = app(MediaLibrary::class)->upload($actor, UploadedFile::fake()->image('queued.png', 8, 8), []);
+    expect($asset->conversion_status)->toBe('pending');
+    expect(DB::table('jobs')->count())->toBe(1);
+    $this->artisan('queue:work', ['connection' => 'database', '--once' => true, '--sleep' => 0, '--tries' => 1, '--timeout' => 30])->assertExitCode(0);
+    expect(DB::table('jobs')->count())->toBe(0);
+    expect($asset->fresh()->conversion_status)->toBe('ready');
+    foreach ($asset->fresh()->variants as $name) {
+        expect(getimagesize(Storage::disk('local')->path('media/'.$name))['mime'])->toBe('image/webp');
+    }
+});
+
+it('L3a media lists one thousand assets thirty at a time with twelve fixed permission pagination and aggregate queries', function () {
+    $actor = User::factory()->create(['role' => 'admin']);
+    $rows = [];
+    for ($i = 1; $i <= 1000; $i++) {
+        $rows[] = ['filename' => str_pad(dechex($i), 48, '0', STR_PAD_LEFT).'.png', 'sha256' => str_repeat('0', 64), 'folder' => 'کالا', 'alt' => 'متن'];
+    }
+    DB::table('media_assets')->insert($rows);
+    DB::enableQueryLog();
+    DB::flushQueryLog();
+    $page = app(MediaLibrary::class)->listing($actor, 'کالا');
+    app(MediaUsage::class)->counts($page->map(fn (MediaAsset $asset): string => $asset->url())->all());
+    $queries = DB::getQueryLog();
+    DB::disableQueryLog();
+    expect($page->count())->toBe(30);
+    expect($page->total())->toBe(1000);
+    expect($queries)->toHaveCount(12);
+});

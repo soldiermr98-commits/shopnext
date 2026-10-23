@@ -77,10 +77,11 @@ final class MediaLibrary
     {
         $new = null;
         $backup = null;
+        $backupReady = false;
         $oldPath = null;
         $obsolete = [];
         try {
-            $asset = DB::transaction(function () use ($actor, $id, $file, &$new, &$backup, &$oldPath, &$obsolete): MediaAsset {
+            $asset = DB::transaction(function () use ($actor, $id, $file, &$new, &$backup, &$backupReady, &$oldPath, &$obsolete): MediaAsset {
                 $actor = app(CatalogAccess::class)->lock($actor, MediaAsset::class);
                 $asset = MediaAsset::whereKey($id)->lockForUpdate()->firstOrFail();
                 Gate::forUser($actor)->authorize('update', $asset);
@@ -88,7 +89,11 @@ final class MediaLibrary
                 $replacement = MediaAsset::where('filename', $new)->firstOrFail();
                 $oldPath = Storage::disk('local')->path('media/'.$asset->filename);
                 $backup = Storage::disk('local')->path('media/'.$new.'.backup');
-                if (! copy($oldPath, $backup) || ! rename(Storage::disk('local')->path('media/'.$new), $oldPath)) {
+                if (! copy($oldPath, $backup)) {
+                    throw new \RuntimeException('Unable to back up media.');
+                }
+                $backupReady = true;
+                if (! rename(Storage::disk('local')->path('media/'.$new), $oldPath)) {
                     throw new \RuntimeException('Unable to atomically replace media.');
                 }
                 $before = $asset->getAttributes();
@@ -101,8 +106,12 @@ final class MediaLibrary
                 return $asset;
             });
         } catch (\Throwable $exception) {
-            if ($backup !== null && is_file($backup) && $oldPath !== null) {
-                rename($backup, $oldPath);
+            if ($backup !== null && is_file($backup)) {
+                if ($backupReady && $oldPath !== null) {
+                    rename($backup, $oldPath);
+                } else {
+                    unlink($backup);
+                }
             }
             if ($new !== null) {
                 $this->discardNew($new);

@@ -1,3 +1,18 @@
+# CURRENT — remaining L3a implemented; final regression/full verification NEXT
+
+- 7fdeff4 fast39890670001 green Pint/backend427/9879/all5 real financial
+races. Media library/actions/usage/queued + bounded fallback; stock service +
+reason/actor append-only ledger + single/bulk actual Filament actions implemented.
+- NEW last regression cases: actual DB queue/worker WebP output,1000 media→30
+12queries, stock joined ledger30/50 3queries, late-row bulk rollback; backupReady
+prevents partial failed-copy restore corruption. PENDING fast CI before final PR.
+- Seven docs refreshed truthfully pending full6 PHP8.2/8.3×MySQL8/MariaDB10.6/11.4
+and frontend. Need open NEW PR from fixed activebranch, full jobs must ALL green;
+parse evidence, update REAL tables/docs, then immutable l3a-complete tag + tagfullCI.
+Stop for approval only once tag/full success reported. Do not start L3b–L3e.
+- Browser/host/TLS/RTL/a11y/restore/DB-filesystem process-kill atomicity UNVERIFIED.
+No local PHP runtime; no production/deployment/credentials altered.
+
 # Current continuation — image safety prerequisite fast VERIFIED; media library NEXT
 
 - Latest runtime code7d37fbc140df588f8791748f4fe5505ac2087202 pushed on active

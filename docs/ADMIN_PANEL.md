@@ -638,3 +638,13 @@ rollback and partially rendered derivative cleanup tests. New named tests:
 cannot commit`; `L3a media partially encoded variants are removed on failure and
 original survives`. Stock direct-service denied-role exception assertions corrected
 from HTTP exception to actual Laravel AuthorizationException; runtime recheck pending.
+
+Fast7fdeff4/run39890670001 SUCCESS:427 tests/9879 assertions, all5 financial races,
+Pint + PHP8.3/MariaDB10.6. This verifies media retry, replacement/partial rollback,
+stock single/bulk reason+actor, six actual roles, audit failure rollback and fixed
+query counts implemented above. New final cases PENDING:
+- `L3a healthy worker persists a real database conversion job and bounded worker creates WebP outputs`
+- `L3a media lists one thousand assets thirty at a time with twelve fixed permission pagination and aggregate queries`
+- `L3a bulk decrease rolls back earlier successful rows when a later SKU has insufficient stock`
+- Existing50-SKU query test now also asserts joined ledger30/50 pagination3queries.
+No full matrix/browser acceptance yet; no placeholder UI actions counted as REAL.

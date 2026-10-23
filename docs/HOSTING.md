@@ -266,3 +266,31 @@ frame zero only. Configured derived outputs are capped at three,64–2048px each
 Queue conversion, no-WebP original retention, synchronous no-worker fallback and
 in-use deletion protection must be verified with the media-library implementation;
 this safety prerequisite alone does not claim those features are delivered.
+
+
+## Media library operation
+
+Use `/admin/media-library` (product-management roles only). Folders are virtual
+labels; never create public upload symlinks or use user input as host paths. Copy
+canonical `/media/{48hex}.png` URLs for catalog references; WebP/thumb filenames
+are managed derivatives. All new catalog/API uploads register automatically;
+pre-existing disk files are not silently scanned/imported. Receipts stay private.
+
+The existing single-minute `shopnext:tick` database worker processes ConvertMedia
+jobs (45s timeout,2 tries), no Redis/Supervisor/persistent worker requirement.
+Healthy-worker uploads queue. Without fresh heartbeat only sources≤1MP process
+synchronously, and only when max_execution_time is unlimited or≥15s; larger images
+remain safe PNG and queue pending work. Native decode is header/memory-budget
+checked and sequential. Missing WebP/resource errors keep canonical PNG; retry
+from the selected media's «تلاش دوباره تبدیل» action after fixing host support.
+No original is removed merely because queue dispatch failed. PHP upload recommendations
+are not permission to widen the existing2MiB/2048px forms or3MiB body ceiling.
+
+Replace preserves canonical URLs; application transaction failures restore old
+bytes/metadata. Delete refuses live references including drafts/trash. File
+quarantine is private/non-routable; after a host/process crash reconcile stale
+`.backup`/`.deleted-*` files against metadata and verified backups manually—never
+bulk-delete by age while requests are active. Database/filesystem crash atomicity
+and actual host process-kill/restore remain UNVERIFIED, not claimed SQL atomicity.
+Production build must retain existing `optimize`, `filament:optimize` and icon-cache
+steps; new registered pages/views are included by that same deployment process.

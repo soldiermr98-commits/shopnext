@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-23 — Remaining L3a media and stock implementation
+
+- Real media library virtual folders/alt/stable URL replace/live usage/protected
+  deletion; registered canonical PNGs and actual queued WebP/thumb conversion.
+- Cheap pixel/byte/live-memory guards before decode, sequential bounded outputs,
+  no-codec original retention, bounded no-worker sync and policy-gated retry.
+- Reason+actor append-only SQL stock adjustment ledger, idempotent audited single
+  and atomic50-SKU bulk Filament actions; no direct stock or financial setters.
+- Six-role, revocation, actual persistence, queue, resource and query-budget tests.
+- Fast7fdeff4 passed427 tests9879 assertions + all5 financial races; final new
+  regression cases, full SQL6/frontend and completion tag still pending.
+- No production/browser acceptance or L3b authorization implied.
+
 ## 2026-10-22 — Attribute/term editors verified; product core started
 
 - B430903 passed both ALL8 matrices39743792019/39743800775,292tests8592/8593assertions.

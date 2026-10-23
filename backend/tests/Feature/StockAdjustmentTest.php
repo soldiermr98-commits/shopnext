@@ -121,4 +121,28 @@ it('L3a fifty row bulk stock adjustment has six fixed selects not one select per
     DB::disableQueryLog();
     expect($selects)->toHaveCount(6);
     expect(DB::table('stock_adjustments')->count())->toBe(50);
+    $this->actingAs($actor, 'web');
+    DB::enableQueryLog();
+    DB::flushQueryLog();
+    $page = (new StockAdjustmentEditor)->ledger();
+    $queries = DB::getQueryLog();
+    DB::disableQueryLog();
+    expect($page->count())->toBe(30);
+    expect($page->total())->toBe(50);
+    expect($queries)->toHaveCount(3);
+});
+
+it('L3a bulk decrease rolls back earlier successful rows when a later SKU has insufficient stock', function () {
+    $actor = User::factory()->create(['role' => 'admin']);
+    $a = app(Products::class)->save($actor, ['title' => 'اول', 'slug' => 'first', 'sku' => 'FIRST', 'price' => 100]);
+    $b = app(Products::class)->save($actor, ['title' => 'دوم', 'slug' => 'second', 'sku' => 'SECOND', 'price' => 100]);
+    $service = app(StockAdjustment::class);
+    $service->adjust($actor, $a->id, null, 5, 'increase', 'ورودی', 'opening');
+    $targets = [['product_id' => $a->id, 'variant_id' => null], ['product_id' => $b->id, 'variant_id' => null]];
+    expect(fn () => $service->bulk($actor, $targets, 3, 'decrease', 'خروجی', 'rollback'))->toThrow(ValidationException::class);
+    expect($a->fresh()->stock)->toBe(5);
+    expect($b->fresh()->stock)->toBe(0);
+    expect(DB::table('stock_adjustments')->count())->toBe(1);
+    expect(DB::table('stock_operations')->count())->toBe(1);
+    expect(ActivityLog::where('action', 'stock.adjust')->count())->toBe(1);
 });

@@ -1,4 +1,4 @@
-# Shopnext — L1 foundation and L2 financial core
+# Shopnext — Persian storefront and L3a catalog administration
 
 Persian RTL React/Vite storefront with Laravel 12, Sanctum and Filament 5 for
 PHP shared hosting. **L1 and L2 implementations are CI-verified.**
@@ -31,11 +31,23 @@ The PHP8.2/MySQL job also builds/extracts the real ZIP and runs HTTP/runner smok
 [CI links and evidence](docs/CI_RESULTS.md) · [Architecture](docs/ARCHITECTURE.md)
 · [Schema](docs/DATABASE.md) · [Security](docs/SECURITY.md).
 
-## L3a admin panel — in progress
+## L3a catalog administration — final verification in progress
 
-Current slice: Persian/RTL shell, explicit local Vazirmatn and permission-gated
-cron heartbeat. Shell code98cfd43 passed all7 jobs in CI39724414478 (226 backend tests per job);
-catalog/media/stock/Jalali controls are not complete. [Screen/action/test inventory](docs/ADMIN_PANEL.md). No L3a tag yet.
+Real policy-gated Persian/RTL category/brand/attribute/term/product/content/variant/
+matrix/bulk editors; sanitized descriptions, gallery/alt/main, specs/FAQ/relations,
+SEO and Tehran/Jalali scheduling backed by Gregorian UTC. No direct stock setter.
+Media library (`/admin/media-library`) supports virtual folders, alt, stable-URL
+replace, live usage and protected deletion, actual queued WebP/thumb output and
+bounded ≤1MP no-worker fallback retaining safe canonical PNG. Stock page
+(`/admin/stock-adjustment`) provides reason+actor single and atomic50-SKU bulk
+adjustments with append-only SQL ledger, audit and request replay protection.
+
+Latest executed fast regression7fdeff4:427 tests/9879 assertions, Pint +
+PHP8.3/MariaDB10.6 and all5 real financial races. New real database-queue and
+large-list/partial-batch tests pending fresh CI. Full six-way SQL/frontend final
+verification and `l3a-complete` tag **not yet executed**. See
+[REAL/action/test inventory](docs/ADMIN_PANEL.md) and [CI evidence](docs/CI_RESULTS.md).
+No L3b–L3e work or deployment authorization.
 
 ## L2 financial implementation
 
