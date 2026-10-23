@@ -1,4 +1,4 @@
-# L3a catalog/media/stock implementation — final verification pending
+# L3a catalog/media/stock implementation — FULL CI verified
 
 Catalog mutations serialize through actor + shared taxonomy mutex, then bounded
 sorted records, with fresh per-action policies and same-transaction redacted audit.
@@ -24,7 +24,7 @@ adjustments, not fabricated historic checkout movements. Available-stock checkou
 reservations/release remain the existing financial implementation. Date storage is
 Gregorian UTC; forms/display retain the ONE verified Jalali library.
 
-Final full matrix/frontend pending. Historical L1/L2 architecture follows.
+Full matrix/frontend CI39892158598 passed all8 jobs,432 tests per SQL target. Historical L1/L2 architecture follows.
 
 # Architecture — L1 and L2 implemented; deployment unverified
 

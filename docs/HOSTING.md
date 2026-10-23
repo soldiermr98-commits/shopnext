@@ -263,9 +263,9 @@ limits simply to suppress a memory warning. Application memory remains bounded
 even if CLI `memory_limit=-1`. Each decode frees its image resource; Imagick reads
 frame zero only. Configured derived outputs are capped at three,64–2048px each.
 
-Queue conversion, no-WebP original retention, synchronous no-worker fallback and
-in-use deletion protection must be verified with the media-library implementation;
-this safety prerequisite alone does not claim those features are delivered.
+Queue conversion, safe-canonical no-WebP retention, bounded no-worker fallback
+and in-use deletion protection are now implemented and FULL CI-verified in
+CI39892158598. This is not verification of the actual host or its resource limits.
 
 
 ## Media library operation

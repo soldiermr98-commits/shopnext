@@ -1,4 +1,4 @@
-# L3a schema additions — final matrix pending
+# L3a schema additions — FULL CI verified
 
 - `media_assets`: unique canonical filename, virtual folder/alt, content SHA256,
 conversion state/variant filenames; folder/id index, no private receipt metadata.

@@ -3,7 +3,7 @@
 Persian RTL React/Vite storefront with Laravel 12, Sanctum and Filament 5 for
 PHP shared hosting. **L1 and L2 implementations are CI-verified.**
 The `l2-complete` tag points to `5120dad`; this is NOT production launch approval.
-L3a foundation/catalog is now authorized and IN PROGRESS; later sub-phases need approval. [Financial coverage and limits](docs/L2_ACCEPTANCE.md).
+L3a catalog/media/stock implementation is FULL CI-verified; later sub-phases need approval. [Financial coverage and limits](docs/L2_ACCEPTANCE.md).
 Actual host/browser/TLS acceptance is **UNVERIFIED**: [run the checklist](docs/ACCEPTANCE.md).
 
 ## Implemented and executed
@@ -31,7 +31,7 @@ The PHP8.2/MySQL job also builds/extracts the real ZIP and runs HTTP/runner smok
 [CI links and evidence](docs/CI_RESULTS.md) · [Architecture](docs/ARCHITECTURE.md)
 · [Schema](docs/DATABASE.md) · [Security](docs/SECURITY.md).
 
-## L3a catalog administration — final verification in progress
+## L3a catalog administration — full verification complete
 
 Real policy-gated Persian/RTL category/brand/attribute/term/product/content/variant/
 matrix/bulk editors; sanitized descriptions, gallery/alt/main, specs/FAQ/relations,
@@ -42,11 +42,13 @@ bounded ≤1MP no-worker fallback retaining safe canonical PNG. Stock page
 (`/admin/stock-adjustment`) provides reason+actor single and atomic50-SKU bulk
 adjustments with append-only SQL ledger, audit and request replay protection.
 
-Latest executed fast regression7fdeff4:427 tests/9879 assertions, Pint +
-PHP8.3/MariaDB10.6 and all5 real financial races. New real database-queue and
-large-list/partial-batch tests pending fresh CI. Full six-way SQL/frontend final
-verification and `l3a-complete` tag **not yet executed**. See
-[REAL/action/test inventory](docs/ADMIN_PANEL.md) and [CI evidence](docs/CI_RESULTS.md).
+Full [CI39892158598](https://github.com/soldiermr98-commits/shopnext/actions/runs/39892158598)
+passed all8 jobs: six real SQL/PHP combinations (432 tests,9925–9926 assertions
+EACH, all5 real financial races), independent Pint and frontend typecheck/tests/
+build. Actual database conversion worker, both WebP codecs, cache generation and
+extracted no-dev package smoke passed. Release reference: `l3a-complete`, gated
+by the tag workflow; see [exact evidence](docs/ci/l3a-complete-verified-matrix.json)
+and [REAL/action/test inventory](docs/ADMIN_PANEL.md).
 No L3b–L3e work or deployment authorization.
 
 ## L2 financial implementation

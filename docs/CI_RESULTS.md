@@ -1,3 +1,23 @@
+# L3a final verification evidence
+
+## Current L3a acceptance — FULL VERIFIED
+
+Implementation6a951755e03a79e99dafd6c73afd5cac8dae5097 passed [full CI39892158598](https://github.com/soldiermr98-commits/shopnext/actions/runs/39892158598):
+**all8 jobs SUCCESS** — independent Pint, all6 PHP8.2/8.3 × MySQL8.0/MariaDB10.6/
+MariaDB11.4 targets, frontend typecheck/tests/build. Every SQL target: **432 tests,
+9925–9926 assertions**, all5 real separate-process financial races. Exact per-job
+counts/IDs: [asserted matrix](ci/l3a-complete-verified-matrix.json).
+The PHP8.2/MySQL8.0 job additionally executed the retained Jalali midnight test
+and actual no-dev ZIP extraction/HTTP/migration-runner/cache smoke.
+
+**UNVERIFIED:** real host/TLS, browser visual RTL/a11y, live backup/restore and
+process-kill DB/filesystem crash recovery, production migration/import/deployment.
+CI HTTP/TLS simulation is not host/browser approval. No L3b–L3e work authorized.
+Release reference: `l3a-complete`; tag workflow must independently be green before
+handoff. [Tag CI index](https://github.com/soldiermr98-commits/shopnext/actions?query=branch%3Al3a-complete).
+
+## Historical progress notes (superseded by current acceptance above)
+
 # Product metadata VERIFIED; numeric slug identity guard pending CI
 
 85bea48 / [push CI39746880119](https://github.com/soldiermr98-commits/shopnext/actions/runs/39746880119)

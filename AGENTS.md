@@ -1,3 +1,26 @@
+# CURRENT — L3a implementation FULL VERIFIED; approval boundary is L3b
+
+- Active fixed branch arena/0f9a69e5-shopnext; PR3 OPEN (do not merge unless asked):
+https://github.com/soldiermr98-commits/shopnext/pull/3
+- Implementation6a951755e03a79e99dafd6c73afd5cac8dae5097 FULL PR39892158598
+ALL8 SUCCESS: six PHP8.2/8.3×MySQL8/MariaDB10.6/11.4 jobs432 tests each,
+9925–9926 assertions, all5 real financial races each, independent Pint/frontend.
+Exact asserted proof docs/ci/l3a-complete-verified-matrix.json. MySQL8/PHP8.2 also
+actual retained Jalali midnight + no-dev ZIP/cache/HTTP/runner smoke passed.
+- Actual media virtual folders/replace/alt/live usage/protected deletion, registered
+catalog/API uploads, queued and bounded ≤1MP sync WebP/thumb, no-codec retention,
+retry, real DBworker + forcedGD/Imagick tests; reason/actor append-only stockledger,
+single/atomic50-SKU bulk, replay-key/fresh6-role/query/audit/late-batch rollback.
+- Seven docs + REAL/tested table updated with executed full evidence, historical
+notes clearly superseded. No mock/fake runtime claims or hidden bypasses.
+- RELEASE PROCEDURE: wait docs HEAD PR full8 green, then create immutable annotated
+l3a-complete pointing that exact HEAD and push tag. Wait tag full8 green; report
+both CI links + tag/PR and UNVERIFIED; STOP for user's L3b approval. Never move tag.
+- Actual host/TLS/browser RTL/a11y/live restore/process-kill crash recovery and
+production import/deployment UNVERIFIED. No L3b–L3e/credentials/deploy authorization.
+
+## Historical execution notes (current evidence above supersedes old pending labels)
+
 # CURRENT — remaining L3a implemented; final regression/full verification NEXT
 
 - 7fdeff4 fast39890670001 green Pint/backend427/9879/all5 real financial

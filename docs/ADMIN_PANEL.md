@@ -1,3 +1,61 @@
+# L3a REAL/tested administration inventory
+
+## Current L3a acceptance — FULL VERIFIED
+
+Implementation6a951755e03a79e99dafd6c73afd5cac8dae5097 passed [full CI39892158598](https://github.com/soldiermr98-commits/shopnext/actions/runs/39892158598):
+**all8 jobs SUCCESS** — independent Pint, all6 PHP8.2/8.3 × MySQL8.0/MariaDB10.6/
+MariaDB11.4 targets, frontend typecheck/tests/build. Every SQL target: **432 tests,
+9925–9926 assertions**, all5 real separate-process financial races. Exact per-job
+counts/IDs: [asserted matrix](ci/l3a-complete-verified-matrix.json).
+The PHP8.2/MySQL8.0 job additionally executed the retained Jalali midnight test
+and actual no-dev ZIP extraction/HTTP/migration-runner/cache smoke.
+
+**UNVERIFIED:** real host/TLS, browser visual RTL/a11y, live backup/restore and
+process-kill DB/filesystem crash recovery, production migration/import/deployment.
+CI HTTP/TLS simulation is not host/browser approval. No L3b–L3e work authorized.
+Release reference: `l3a-complete`; tag workflow must independently be green before
+handoff. [Tag CI index](https://github.com/soldiermr98-commits/shopnext/actions?query=branch%3Al3a-complete).
+
+All rows below are **REAL / FULL tested in CI39892158598**, not placeholder
+buttons. Six-role/revoked-actor cases are named in each corresponding test file.
+Folders are virtual labels on files (not arbitrary filesystem paths). Private
+receipts and existing L2 financial invariants remain outside the media library.
+
+| Screen/action | Persisted behavior | Executed named Pest test / file |
+|---|---|---|
+| Categories | Tree, SEO/image, reorder, protected deletion | `L3a category screen persists edit image SEO tree navigation both reorder directions and guarded deletion` — CategoryEditorTest |
+| Brands | Logo/metadata, referenced-delete guard | `L3a brand screen persists safe logos preserves existing logos and blocks product referenced deletion` — BrandEditorTest |
+| Attributes/terms | CRUD, ownership, image/hex swatches | `L3a attribute and term screens gate six roles recheck every action and persist CRUD audit and swatches` — AttributeEditorTest |
+| Product metadata | Four product types, SKU/slug, prices, SEO/publication, trash/restore | `L3a product screen persists all four draft types and maps real service price SKU and publication errors` — ProductEditorTest |
+| Product content | Sanitized descriptions, ordered gallery/alt/main, specs/FAQ, related/upsell/cross-sell | `L3a content page safely uploads persists ordered gallery alt main and all three relationship selectors` — ProductContentEditorTest; ProductContentTest |
+| Tehran/Jalali schedules | Gregorian UTC persistence/reload; Persian presentation | `L3a renders the retained Jalali picker saves selected state as Gregorian UTC and reloads at Tehran midnight` — AdminDatesTest; ProductEditorTest |
+| Variations | Parent-scoped CRUD/trash, image/options/metadata | `L3a variation page uploads real safe images and scopes edits and restores to its locked variable parent` — VariantEditorTest |
+| Cartesian matrix | Owned combinations, duplicate/idempotent generation | `L3a matrix page independently gates six roles reauthorizes generation and idempotently persists owned combinations` — VariantMatrixEditorTest |
+| Bulk price/category | Exact integer price ratios and real replace/clear memberships | `L3a bulk page independently gates six roles and revoked actions while persisting price category and clear` — ProductBulkEditorTest |
+| Media upload/folders/alt/replace | Automatic new catalog/API registration, virtual-folder move, stable URL and actual fresh bytes | `L3a media real upload folder alt replace stable references usage and protected deletion persist audited changes` — MediaLibraryTest |
+| Media live usage/delete | Scalar/JSON refs including drafts/trash, derivative guard, quarantine/rollback | Same real upload/protected-delete test; replacement audit rollback case — MediaLibraryTest |
+| Queued WebP/thumb | Real database job and bounded worker, both GD/Imagick codecs and bounded sizes | `L3a healthy worker persists a real database conversion job and bounded worker creates WebP outputs`; `L3a media WebP output is real and bounded with each configured GD and Imagick driver` — MediaLibraryTest |
+| Media fallback/retry | ≤1MP no-worker sync, large pending queue, no-WebP/codec-failure canonical retention, stale jobs, explicit authorized retry | `L3a missing worker synchronously converts only small images queues larger ones and ignores stale replacement jobs`; no-WebP and partial-output cases — MediaLibraryTest |
+| Shared-host image guard | Predecode byte/pixel/live memory checks, bomb/corrupt/truncated rejection, Persian feedback, CLI/dashboard health | ImageBudgetTest (all named cases); MediaLibraryTest |
+| Single stock action | Available-stock delta, required reason/actor, append-only ledger and policy | `L3a stock single and bulk actions gate six roles and refreshed revoked actors` — StockAdjustmentTest |
+| Bulk stock action | Up to50 explicit SKUs, all-or-nothing, replay key, reason/actor, no direct setter | `L3a bulk stock UI persists reason actor immutable ledger and replay-safe atomic increments`; `L3a bulk decrease rolls back earlier successful rows when a later SKU has insufficient stock` — StockAdjustmentTest |
+| Stock audit/ledger integrity | Same-transaction audit rollback, SQL immutability, variant parent, integer bounds | `L3a stock mutation rolls back every row ledger operation and audit on audit failure`; variant validation case — StockAdjustmentTest |
+| Bounded media/stock lists | Media1000→30/12queries,9 batch usage queries; stock50 adjustment6 SELECTs and ledger30/50 in3 queries | MediaLibraryTest1000-list case; StockAdjustmentTest50-row case |
+| Deploy/cache readiness | Real optimize/Filament/icon caches, missing-cache fail-closed production, queue/cron probes | OperationsTest named actual deploy-check case; extracted no-dev package smoke |
+
+### Operational boundaries
+
+Use canonical PNG URLs for catalog references. A codec failure keeps the sanitized
+canonical image, not an unvalidated original upload. Synchronous work is capped
+at1MP and only allowed with PHP execution time0/unlimited or≥15s; larger images
+remain safe/pending until the minute database worker processes them. Host-specific
+resource recommendations are warnings, not exemptions from readiness failures.
+Stock ledger records adjustments, not invented historic checkout entries; checkout
+reservation/release remains unchanged. Form request key stays locked for retries;
+«درخواست جدید» explicitly starts a different adjustment intent.
+
+## Historical implementation notes (superseded by current REAL table)
+
 # Filament admin panel — L3a execution inventory
 
 2026-10-22. Owner authorized L3a ONLY on arena/b4d40ed7-shopnext, based on main686e57f.
