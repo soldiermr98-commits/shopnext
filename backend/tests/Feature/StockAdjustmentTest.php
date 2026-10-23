@@ -9,6 +9,7 @@ use App\Services\Products;
 use App\Services\StockAdjustment;
 use App\Services\Variants;
 use Filament\Facades\Filament;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -33,14 +34,16 @@ it('L3a stock single and bulk actions gate six roles and refreshed revoked actor
         Livewire::test(StockAdjustmentEditor::class)->fillForm(['targets' => ['p:'.$product->id], 'amount' => '۵', 'direction' => 'increase', 'reason' => 'شمارش انبار'])->call('adjustOne')->assertHasNoErrors();
         expect($product->fresh()->stock)->toBe(5);
         expect(DB::table('stock_adjustments')->value('actor_id'))->toBe($actor->id);
+        Livewire::test(StockAdjustmentEditor::class)->fillForm(['targets' => ['p:'.$product->id], 'amount' => 1, 'direction' => 'increase', 'reason' => 'تعدیل گروهی'])->call('adjustMany')->assertHasNoErrors();
+        expect($product->fresh()->stock)->toBe(6);
     } else {
         Livewire::test(StockAdjustmentEditor::class)->assertForbidden();
-        expect(fn () => app(StockAdjustment::class)->adjust($actor, $product->id, null, 5, 'increase', 'دلیل', 'denied'))->toThrow(HttpException::class);
+        expect(fn () => app(StockAdjustment::class)->adjust($actor, $product->id, null, 5, 'increase', 'دلیل', 'denied'))->toThrow(AuthorizationException::class);
     }
     foreach (['adjustOne', 'adjustMany', 'newRequest'] as $method) {
         $this->actingAs($staff, 'web');
         $page = Livewire::test(StockAdjustmentEditor::class);
-        DB::table('users')->where('id', $staff->id)->update(['role' => 'support']);
+        DB::table('users')->where('id', $staff->id)->update(['role' => $allowed ? 'support' : $role]);
         $page->call($method)->assertForbidden();
         DB::table('users')->where('id', $staff->id)->update(['role' => 'admin']);
     }

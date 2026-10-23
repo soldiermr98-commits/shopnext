@@ -624,3 +624,12 @@ all-or-nothing decrease, audit transaction,6-role and six-SELECT50-row tests.
 Media prerequisite194c83b formatter red (ordered imports + qualified DB migration),
 fix055ba32 fast39890033715 SUCCESS Pint/backend:415/9765; frontend skipped.
 New stock files not yet runtime tested. Full matrix/tag still NOT done.
+
+Newest refinement PENDING: catalog/API images now schedule conversion only AFTER
+successful metadata persistence, safe scheduling failures retain canonical, retry
+UI action (fresh policy), actual-role stale-action tests, replacement rollback
+and partial conversion cleanup tests, unsupported original and ≤1MP fallback.
+Stockbd7fa7f fast39890410998 Pint green/backend3 failed422 passed: direct Gate
+throws AuthorizationException vs mistakenly asserted HttpException for3 denied
+roles; corrected test type without changing authorization. Need fast rerun, then
+FULL new PR SQL6+frontend, all final docs/tag CI. No completion tag yet.

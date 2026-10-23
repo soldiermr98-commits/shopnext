@@ -78,8 +78,9 @@ final class MediaLibrary
         $new = null;
         $backup = null;
         $oldPath = null;
+        $obsolete = [];
         try {
-            $asset = DB::transaction(function () use ($actor, $id, $file, &$new, &$backup, &$oldPath): MediaAsset {
+            $asset = DB::transaction(function () use ($actor, $id, $file, &$new, &$backup, &$oldPath, &$obsolete): MediaAsset {
                 $actor = app(CatalogAccess::class)->lock($actor, MediaAsset::class);
                 $asset = MediaAsset::whereKey($id)->lockForUpdate()->firstOrFail();
                 Gate::forUser($actor)->authorize('update', $asset);
@@ -91,6 +92,7 @@ final class MediaLibrary
                     throw new \RuntimeException('Unable to atomically replace media.');
                 }
                 $before = $asset->getAttributes();
+                $obsolete = array_values($asset->variants ?? []);
                 // Stable canonical URL preserves every reference; old derivatives remain until cleanup.
                 $asset->forceFill(['sha256' => $replacement->sha256, 'variants' => [], 'conversion_status' => 'pending'])->save();
                 $replacement->delete();
@@ -110,9 +112,34 @@ final class MediaLibrary
         if ($backup !== null && is_file($backup)) {
             unlink($backup);
         }
+        if ($obsolete !== []) {
+            $paths = array_map(fn (string $name): string => '/media/'.$name, $obsolete);
+            $usage = app(MediaUsage::class)->counts($paths);
+            foreach ($obsolete as $name) {
+                if ($usage['/media/'.$name] === 0) {
+                    Storage::disk('local')->delete('media/'.$name);
+                }
+            }
+        }
         app(MediaConversions::class)->schedule($asset);
 
         return $asset->refresh();
+    }
+
+    public function retry(User $actor, int $id): void
+    {
+        $asset = DB::transaction(function () use ($actor, $id): MediaAsset {
+            $actor = app(CatalogAccess::class)->lock($actor, MediaAsset::class);
+            $asset = MediaAsset::whereKey($id)->lockForUpdate()->firstOrFail();
+            Gate::forUser($actor)->authorize('update', $asset);
+            if ($asset->conversion_status !== 'ready') {
+                $asset->forceFill(['conversion_status' => 'pending'])->save();
+            }
+            app(CatalogAudit::class)->write($actor, $asset, 'media.retry', [], ['id' => $asset->id]);
+
+            return $asset;
+        });
+        app(MediaConversions::class)->schedule($asset);
     }
 
     public function delete(User $actor, int $id): void
@@ -154,7 +181,9 @@ final class MediaLibrary
 
     public function discardNew(string $filename): void
     {
-        MediaAsset::where('filename', $filename)->delete();
-        Storage::disk('local')->delete('media/'.$filename);
+        $asset = MediaAsset::where('filename', $filename)->first();
+        $files = array_merge([$filename], array_values($asset?->variants ?? []));
+        $asset?->delete();
+        Storage::disk('local')->delete(array_map(fn (string $name): string => 'media/'.$name, $files));
     }
 }

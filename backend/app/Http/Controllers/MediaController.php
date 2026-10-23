@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MediaRequest;
 use App\Http\Requests\ReadRequest;
 use App\Models\ActivityLog;
+use App\Models\MediaAsset;
+use App\Services\MediaConversions;
 use App\Services\MediaLibrary;
 use App\Services\SafeUpload;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +31,8 @@ final class MediaController
             app(MediaLibrary::class)->discardNew($name);
             throw $exception;
         }
+
+        app(MediaConversions::class)->schedule(MediaAsset::where('filename', $name)->firstOrFail());
 
         return response()->json(['url' => '/media/'.$name], 201);
     }

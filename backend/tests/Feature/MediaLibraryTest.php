@@ -38,13 +38,13 @@ it('L3a media page six roles gates upload metadata replace delete and refreshed 
     if (! $allowed) {
         Livewire::test(MediaLibraryEditor::class)->assertForbidden();
     } else {
-        Livewire::test(MediaLibraryEditor::class)->call('select', $asset->id)->set('folder', 'کالا/جدید')->set('alt', 'متن تازه')->call('saveMetadata')->assertHasNoErrors();
+        Livewire::test(MediaLibraryEditor::class)->call('select', $asset->id)->set('folder', 'کالا/جدید')->set('alt', 'متن تازه')->call('saveMetadata')->assertHasNoErrors()->call('retryConversions')->assertHasNoErrors();
         expect($asset->fresh()->folder)->toBe('کالا/جدید');
     }
-    foreach (['saveUpload', 'saveMetadata', 'replace', 'deleteSelected', 'select'] as $method) {
+    foreach (['saveUpload', 'saveMetadata', 'replace', 'deleteSelected', 'retryConversions', 'select'] as $method) {
         $this->actingAs($staff, 'web');
         $page = Livewire::test(MediaLibraryEditor::class)->call('select', $asset->id);
-        DB::table('users')->where('id', $staff->id)->update(['role' => 'support']);
+        DB::table('users')->where('id', $staff->id)->update(['role' => $allowed ? 'support' : $role]);
         $page->call($method, $asset->id)->assertForbidden();
         DB::table('users')->where('id', $staff->id)->update(['role' => 'admin']);
     }
@@ -121,4 +121,39 @@ it('L3a media paginated usage has fixed aggregate query count and codec failures
     app(MediaUsage::class)->counts(array_map(fn (int $i): string => '/media/'.str_pad((string) $i, 48, '0', STR_PAD_LEFT).'.png', range(1, 30)));
     expect(DB::getQueryLog())->toHaveCount(9);
     DB::disableQueryLog();
+});
+
+it('L3a media replacement restores canonical bytes metadata and files if its audit cannot commit', function () {
+    $actor = User::factory()->create(['role' => 'admin']);
+    $asset = app(MediaLibrary::class)->upload($actor, UploadedFile::fake()->image('old.png', 8, 8), []);
+    $before = Storage::disk('local')->get('media/'.$asset->filename);
+    $files = Storage::disk('local')->files('media');
+    ActivityLog::saving(function ($log): void {
+        if ($log->action === 'media.replace') {
+            throw new RuntimeException('Injected media audit failure.');
+        }
+    });
+    try {
+        expect(fn () => app(MediaLibrary::class)->replace($actor, $asset->id, UploadedFile::fake()->image('new.png', 16, 16)))->toThrow(RuntimeException::class);
+    } finally {
+        ActivityLog::flushEventListeners();
+    }
+    expect(Storage::disk('local')->get('media/'.$asset->filename))->toBe($before);
+    expect($asset->fresh()->sha256)->toBe(hash('sha256', $before));
+    expect(Storage::disk('local')->files('media'))->toBe($files);
+    expect(MediaAsset::count())->toBe(1);
+});
+
+it('L3a media partially encoded variants are removed on failure and original survives', function () {
+    Queue::fake();
+    $actor = User::factory()->create(['role' => 'admin']);
+    $asset = app(MediaLibrary::class)->upload($actor, UploadedFile::fake()->image('large.png', 1100, 1000), []);
+    $renderer = Mockery::mock(WebpRenderer::class);
+    $renderer->shouldReceive('available')->once()->andReturn(true);
+    $renderer->shouldReceive('render')->once()->ordered()->andReturn('temporary encoded output');
+    $renderer->shouldReceive('render')->once()->ordered()->andThrow(ValidationException::withMessages(['file' => 'منابع کافی نیست.']));
+    app()->instance(WebpRenderer::class, $renderer);
+    app(MediaConversions::class)->run($asset->id, $asset->sha256);
+    expect($asset->fresh()->conversion_status)->toBe('original');
+    expect(Storage::disk('local')->files('media'))->toBe(['media/'.$asset->filename]);
 });

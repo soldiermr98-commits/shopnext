@@ -627,3 +627,14 @@ compatible with existing checkout reservation/release paths; this adjustment
 ledger is not falsely described as a reconstruction of pre-existing order stock
 movements. Simple roots or explicit variants only. The form uses a locked request
 key; retries do not duplicate stock. Click «درخواست جدید» for a new intent.
+
+Media first implementation REAL fast39890033715:415 tests/9765 assertions on
+PHP8.3/MariaDB10.6 + Pint. Subsequent refinements PENDING: catalog/API uploads
+schedule conversions after successful persistence; explicit policy-gated retry
+button; scheduling failure never discards committed canonical reference; skip
+inline conversion if actual PHP time limit is under15 seconds; replacement audit
+rollback and partially rendered derivative cleanup tests. New named tests:
+`L3a media replacement restores canonical bytes metadata and files if its audit
+cannot commit`; `L3a media partially encoded variants are removed on failure and
+original survives`. Stock direct-service denied-role exception assertions corrected
+from HTTP exception to actual Laravel AuthorizationException; runtime recheck pending.

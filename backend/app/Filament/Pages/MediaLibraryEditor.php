@@ -100,6 +100,15 @@ final class MediaLibraryEditor extends Page
         $this->notice = 'تصویر جایگزین شد؛ نشانی ارجاع‌ها ثابت ماند.';
     }
 
+    public function retryConversions(): void
+    {
+        $actor = $this->actor();
+        $this->notice = '';
+        abort_unless($this->selected !== null, 422);
+        app(MediaLibrary::class)->retry($actor, $this->selected);
+        $this->notice = 'تلاش پردازش ثبت شد؛ اصل امن حفظ می‌شود.';
+    }
+
     public function deleteSelected(): void
     {
         $actor = $this->actor();

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Concerns;
 
 use App\Exceptions\ImageProcessingException;
+use App\Models\MediaAsset;
 use App\Models\User;
+use App\Services\MediaConversions;
 use App\Services\MediaLibrary;
 use App\Services\SafeUpload;
 use Closure;
@@ -39,7 +41,7 @@ trait HandlesCatalogImage
                 $state[$field] = '/media/'.$newImage;
             }
 
-            return $persist($state);
+            $result = $persist($state);
         } catch (Throwable $exception) {
             if ($newImage !== null) {
                 app(MediaLibrary::class)->discardNew($newImage);
@@ -57,6 +59,12 @@ trait HandlesCatalogImage
             }
             throw $exception;
         }
+        if ($newImage !== null) {
+            $asset = MediaAsset::where('filename', $newImage)->firstOrFail();
+            app(MediaConversions::class)->schedule($asset);
+        }
+
+        return $result;
     }
 
     public function updatedImageUpload(): void

@@ -648,3 +648,12 @@ decoder Persian rejection and no unnecessary Imagick blob copy verified; this is
 not unsupported-WebP library fallback. Frontend and other5 SQL not run. The
 shared-host safety/reporting prerequisite is fast verified; media library/queue/
 no-worker fallback/no-WebP retention/protected deletion acceptance still pending.
+
+Media194c83b fast39889926070: formatter RED; SQL correctly skipped. Fixed ordered
+imports/qualified migration DB reference in055ba32. Fast39890033715 SUCCESS:
+Pint120207318598/backend120207448329,415 tests/9765 assertions; frontend skipped.
+Stockbd7fa7f fast39890410998: Pint SUCCESS; backend3 failed/422 passed. Three
+negative-role direct-service tests expected HttpException but actual Gate correctly
+throws AuthorizationException. Correcting assertion type only; no guard bypass.
+Further media catalog/API scheduling, public retry, audit rollback/partial-output
+cleanup and all-action actual-role revocation refinements PENDING new fast CI.
