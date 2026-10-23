@@ -609,3 +609,9 @@ page runs are recorded above; no red runs bypassed or candidate Jalali re-trials
 Media library/queued conversion+sync fallback and stock reason+actor ledger/actions/
 bulk stock remain pending. Final handoff and l3a-complete remain blocked until
 complete scope plus a genuine full six-way PR run (and subsequent tag verification).
+
+
+Shared-host image safety addendum: preflight/resource/reporting implementation and
+new ImageBudgetTest cases PENDING actual fast CI. Local git diff --check only;
+no local PHP/Pest runtime available. Product pages5542046 retained byte-for-byte.
+No queue/original-fallback/delete-protection acceptance claim at this prerequisite.

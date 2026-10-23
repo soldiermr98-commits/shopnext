@@ -60,6 +60,17 @@ final class DeployHealth
         $linked = is_link(public_path('storage')) && realpath(public_path('storage')) === realpath(storage_path('app/public'));
         $checks['storage.delivery'] = [$linked || (Route::has('media.show') && is_writable(storage_path('app/private'))), $linked ? 'storage symlink' : 'validated /media fallback (no symlink required)'];
 
+        $image = app(ImageHostHealth::class)->report();
+        foreach ($image['values'] as $name => $value) {
+            $checks['image.ini.'.$name] = [true, $value];
+        }
+        $checks['image.webp.gd'] = [true, $image['gd_webp'] ? 'supported' : 'unsupported'];
+        $checks['image.webp.imagick'] = [true, $image['imagick_webp'] ? 'supported' : 'unsupported'];
+        // Recommendations are warnings, not readiness failures for safe small uploads.
+        foreach ($image['warnings'] as $index => $warning) {
+            $checks['image.warning.'.$index] = [true, 'WARN — '.$warning];
+        }
+
         return $checks;
     }
 }

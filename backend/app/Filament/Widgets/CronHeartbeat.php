@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Widgets;
 
 use App\Services\Heartbeat;
+use App\Services\ImageHostHealth;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,7 +15,16 @@ final class CronHeartbeat extends Widget
 
     public static function canView(): bool
     {
-        return Gate::allows('dashboard');
+        $actor = auth('web')->user()?->fresh();
+
+        return $actor !== null && Gate::forUser($actor)->allows('dashboard');
+    }
+
+    public function imageHealth(): array
+    {
+        abort_unless(self::canView(), 403);
+
+        return app(ImageHostHealth::class)->report();
     }
 
     public function status(): array

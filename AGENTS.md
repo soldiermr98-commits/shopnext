@@ -1,3 +1,19 @@
+# Current continuation — shared-host media safety prerequisite PENDING runtime
+
+- Workspace git metadata was stale at base39b64b4; verified EVERY remote5542046
+ file hash equals workspace, then reset --mixed5542046 (no files changed) on same
+ active arena/0f9a69e5-shopnext. Existing product pages preserved exactly.
+- NEW ImageBudget header-only preflight before SafeUpload decodes, pixel/file caps,
+ width*height*8 + input*2 memory estimate vs live memory/INI/app ceiling + reserve,
+ Persian rejections, max3 derivative config slots. Existing 2MiB/2048 legacy upload
+ and receipt rules remain stricter. Imagick reads frame0 and frees resources.
+- NEW ImageHostHealth pure report/evaluator, CLI deploy-check limit/WebP info and
+ WARN (recommendations nonfatal), same report on lazy dashboard with fresh six-role
+ access checks. Hosting operator INI note added. New tests PENDING actual fast CI.
+- This is prerequisite only: media asset/folder/usage/delete/conversion/queue/sync
+ fallback features and tests still NEXT; no claim they are implemented by config.
+ Then reason+actor stock and bulk, final docs/full PR matrix/tag/approval stop.
+
 # Current continuation — all product pages fast VERIFIED; media NEXT
 
 - Active branch arena/0f9a69e5-shopnext, base39b64b4 (merged PR2). No active new PR

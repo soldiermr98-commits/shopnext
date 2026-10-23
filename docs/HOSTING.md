@@ -232,3 +232,37 @@ media backup-and-restore drill. Static asset headers must also be configured on
 the real web server; PHP middleware cannot decorate files served directly by it.
 If any check fails or is not executed, keep it UNVERIFIED/NO-GO. No L2 work follows
 without explicit owner approval, regardless of the l1-complete implementation tag.
+
+## Image processing on shared hosting (L3a)
+
+Ask the host to set these **web/FPM** values in the hosting panel, `php.ini`, or
+`.user.ini` (CLI PHP may use a different INI):
+
+```ini
+upload_max_filesize = 8M
+post_max_size = 10M
+memory_limit = 256M
+max_execution_time = 60
+```
+
+Do not request unlimited memory/time. `.user.ini` changes can take several minutes;
+verify the actual web PHP values as an authorized dashboard user, not just CLI.
+`php artisan deploy-check` reports these same limits, GD/Imagick WebP capabilities
+and Persian warnings. Recommendations do not waive hard readiness failures.
+Enable GD with WebP or Imagick with WEBP format support; do not enable SVG delegates.
+
+Processing rejects oversized input **before decoding**, using `getimagesize` and a
+conservative estimate `width × height × 4 × 2 + input bytes × 2`, less live PHP
+usage and a 32 MiB reserve. Absolute defaults: `MEDIA_MAX_PIXELS=24000000`,
+`MEDIA_MAX_FILE_BYTES=8388608`, `MEDIA_PROCESSING_MEMORY_BYTES=268435456`.
+They are ceilings, not promises that a 24 MP image fits an already busy 256M
+process. Existing upload/receipt forms still enforce their stricter 2 MiB/2048px
+limits; this change does not widen private receipt or HTTP-body limits. Reduce
+images locally when a Persian size/memory rejection appears. Never raise pixel
+limits simply to suppress a memory warning. Application memory remains bounded
+even if CLI `memory_limit=-1`. Each decode frees its image resource; Imagick reads
+frame zero only. Configured derived outputs are capped at three,64–2048px each.
+
+Queue conversion, no-WebP original retention, synchronous no-worker fallback and
+in-use deletion protection must be verified with the media-library implementation;
+this safety prerequisite alone does not claim those features are delivered.

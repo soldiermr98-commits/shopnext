@@ -561,3 +561,19 @@ claiming browser execution. Stock remains read-only; **media library and stock
 ledger/adjustment/bulk-stock actions are still not delivered**. Those, remaining
 branding/nav/cache/deploy checks and final consolidated handoff are next. No
 l3a-complete tag, L3b work or deployment approval has been made.
+
+
+## Shared-host media addendum — safety prerequisite PENDING
+
+| Screen/domain | Action | REAL/tested | Test (ImageBudgetTest) |
+|---|---|---|---|
+| SafeUpload | Header-first oversized/decompression-bomb dimensions rejection without decode | Implemented; runtime UNVERIFIED | L3a image headers reject oversized and bomb dimensions before any decoder or storage write |
+| SafeUpload | Corrupt data/file-size ceilings, Persian errors, no stored files | Implemented; runtime UNVERIFIED | L3a image preflight rejects corrupt data and configured byte ceilings with Persian errors |
+| Image resource budget | Two RGBA buffers/input/reserve vs actual PHP headroom; overflow-safe dimensions; application cap even with unlimited PHP | Implemented; runtime UNVERIFIED | L3a memory estimates use both RGBA buffers input overhead reserve and live PHP headroom without decoding |
+| Derivative config | At most3 small integer-size outputs | Implemented; runtime UNVERIFIED | L3a media variant configuration has a small hard cap and bounded integer dimensions |
+| Deploy-check/dashboard | Same limits/WebP report and nonfatal low-resource warnings, zero SQL evaluator | Implemented; runtime UNVERIFIED | L3a image host recommendations report all limits WebP capabilities and warnings without SQL or failing small-upload readiness |
+| Dashboard | Six roles and fresh revoked-role gate | Implemented; runtime UNVERIFIED | L3a dashboard image warnings independently gate six roles and refresh revoked actors |
+
+This implements pre-decode safety and host reporting only. Media library,
+conversion/queue/original fallback/usage/delete protection tests are still pending.
+No configuration entry is represented as a delivered conversion action.

@@ -17,6 +17,11 @@ final class DeployCheck extends Command
     {
         $ok = true;
         foreach ($health->checks() as $name => [$passed, $detail]) {
+            if (str_starts_with($name, 'image.warning.')) {
+                $this->warn($name.': '.$detail);
+
+                continue;
+            }
             $this->line($name.': '.($passed ? 'PASS' : 'FAIL').' — '.$detail);
             $ok = $ok && $passed;
         }
