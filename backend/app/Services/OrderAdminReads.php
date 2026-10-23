@@ -34,7 +34,7 @@ final class OrderAdminReads
             'payment_method' => ['nullable', 'in:'.implode(',', self::METHODS)],
             'shipping_method_id' => ['nullable', 'string', 'max:64'],
             'from' => ['nullable', 'date_format:Y-m-d H:i:s'],
-            'until' => ['nullable', 'date_format:Y-m-d H:i:s', 'after_or_equal:from'],
+            'until' => array_merge(['nullable', 'date_format:Y-m-d H:i:s'], empty($filters['from']) ? [] : ['after_or_equal:from']),
         ], [
             'string' => 'متن معتبر وارد کنید.', 'max' => 'متن جستجو بیش از حد مجاز است.',
             'in' => 'گزینه معتبر انتخاب کنید.', 'date_format' => 'تاریخ معتبر انتخاب کنید.',

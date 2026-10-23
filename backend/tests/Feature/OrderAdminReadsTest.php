@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\OrderAdminReads;
 use App\Support\Persian;
 use Filament\Facades\Filament;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
@@ -53,7 +54,12 @@ it('L3b order detail keeps immutable item prices masks support PII and never ser
     $item = DB::table('order_items')->where('order_id', $order->id)->first();
     $snapshot = json_decode($item->snapshot, true);
     $snapshot['private_token'] = $secret;
-    DB::table('order_items')->where('id', $item->id)->update(['snapshot' => json_encode($snapshot)]);
+    expect(fn () => DB::table('order_items')->where('id', $item->id)->update(['snapshot' => json_encode($snapshot)]))->toThrow(QueryException::class);
+    // Seed a separate malformed historical snapshot at INSERT; never bypass the immutable-update trigger.
+    $seed = (array) $item;
+    unset($seed['id']);
+    $seed['snapshot'] = json_encode($snapshot);
+    DB::table('order_items')->insert($seed);
     DB::table('products')->where('id', $product)->update(['title' => 'عنوان جدید', 'price' => 999]);
     $support = User::factory()->create(['role' => 'support']);
     $this->actingAs($support, 'web');
@@ -77,6 +83,9 @@ it('L3b five thousand order list stays at three queries and detail stays at six 
             $rows = [];
         }
     }
+    $lastId = DB::table('orders')->max('id');
+    DB::table('order_items')->insert(['order_id' => $lastId, 'product_id' => F::product(), 'title' => 'قلم ثابت', 'sku' => 'BIG-ITEM', 'quantity' => 1, 'unit_price' => 100, 'line_total' => 100, 'snapshot' => '{}']);
+    DB::table('order_events')->insert(['order_id' => $lastId, 'actor_user_id' => $actor->id, 'actor_name' => $actor->name, 'actor_role' => 'admin', 'action' => 'created', 'created_at' => now('UTC')]);
     DB::enableQueryLog();
     DB::flushQueryLog();
     $page = app(OrderAdminReads::class)->listing($actor, []);

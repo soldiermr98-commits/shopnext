@@ -722,3 +722,9 @@ credential access and dedicated orders login redirect. Dashboard/catalog/setting
 remain denied forSupport. Updated staffauth role fixture only for new permitted
 Support login. AdminCapabilities revocation dataset corrected to nested array
 arguments (not production authorization change). All new runtime pending CI.
+
+6f89d15 fast39897674004 Pintgreen/448pass2fail: immutable item snapshot UPDATE
+was correctly blocked; fixture now asserts rejection then seeds unknown-key row
+at INSERT without disabling trigger. Nonempty detail6query assertion now seeds
+item+event (empty paginator optimized4queries). Fixupper-onlydate filtervalidation.
+Need re-runfast; no financial mutations implemented yet, no PR/tag.

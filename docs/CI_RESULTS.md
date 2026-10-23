@@ -700,3 +700,15 @@ which opens a second SQL connection unable to see RefreshDatabase heartbeat
 fixtures. Test restores its original real app/facade container after actual cache
 commands and explicitly asserts production env; no mocked cache/cron status or
 readiness requirement bypass. Extracted package subprocess check remains separate.
+
+## L3b first slices (fast selected target only)
+
+- b3ac1cb/run39897474767: Pint SUCCESS, backend failed on malformed test dataset
+  (Unknown named parameter role). Nested-array dataset corrected, no guard change.
+- 6f89d15/run39897674004: Pint SUCCESS;448 passed/2 failed. Existing immutable
+  snapshot trigger correctly rejected test UPDATE. Fixture now explicitly asserts
+  rejection and inserts a separate malformed snapshot at creation, without disabling
+  any trigger. Large-list detail fixture was empty: pagination correctly ran only
+  four queries; now seeds item/event to assert the intended six-query nonempty case.
+- New Orders/Capabilities implementation still PENDING re-verification; frontend
+  and other five SQL targets intentionally not executed. No L3b completion claim.
