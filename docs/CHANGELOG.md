@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-23 — L3b started after approval
+
+- Defined separate Orders/Customers panel capabilities and six-role matrix.
+- Fresh authorization prevents stale-role/active/password-state bypasses.
+- Legacy customer API and financial domain authorization unchanged.
+- Foundation tests pending fast CI; no L3b UI completion/tag claim.
+
 ## 2026-10-23 — L3a media and stock FULL CI verified
 
 - Real media library virtual folders/alt/stable URL replace/live usage/protected

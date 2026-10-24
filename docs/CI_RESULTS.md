@@ -1,3 +1,12 @@
+# L3b foundation/orders read fast VERIFIED — remaining scope pending
+
+1350cbc/run39897964545 SUCCESS: Pint120232784702 + PHP8.3/MariaDB10.6
+check120232894921,450 tests10112 assertions. All5 actual financial race worker
+lines asserted from readable annotations (one prefix split across chunk boundary;
+matched stable FINANCIAL_RACE+workers content). Exact evidence:
+`ci/l3b-orders-read-fast-verified.json`. Frontend skipped; other5 SQL not executed.
+No L3b full-matrix/completion/host/browser/TLS/restore claim. Historical notes follow.
+
 # L3a final verification evidence
 
 ## Current L3a acceptance — FULL VERIFIED
@@ -700,3 +709,15 @@ which opens a second SQL connection unable to see RefreshDatabase heartbeat
 fixtures. Test restores its original real app/facade container after actual cache
 commands and explicitly asserts production env; no mocked cache/cron status or
 readiness requirement bypass. Extracted package subprocess check remains separate.
+
+## L3b first slices (fast selected target only)
+
+- b3ac1cb/run39897474767: Pint SUCCESS, backend failed on malformed test dataset
+  (Unknown named parameter role). Nested-array dataset corrected, no guard change.
+- 6f89d15/run39897674004: Pint SUCCESS;448 passed/2 failed. Existing immutable
+  snapshot trigger correctly rejected test UPDATE. Fixture now explicitly asserts
+  rejection and inserts a separate malformed snapshot at creation, without disabling
+  any trigger. Large-list detail fixture was empty: pagination correctly ran only
+  four queries; now seeds item/event to assert the intended six-query nonempty case.
+- New Orders/Capabilities implementation still PENDING re-verification; frontend
+  and other five SQL targets intentionally not executed. No L3b completion claim.

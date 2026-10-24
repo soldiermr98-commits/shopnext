@@ -188,3 +188,9 @@ bound to1970-01-02 inclusive through2038-01-19 exclusive for all SQL versions.
 Scheduled status becomes effectively visible at published_at without rewriting
 status. Both public catalog and authoritative pricing reject trashed/not-yet-live
 products. No monetary/stock schema, ledger or financial calculation changed.
+
+## L3b first read slice
+
+No schema change yet. Reads existing orders/order_items/order_events, with bounded
+projections and pagination. No live totals recalculation or inventory/wallet write.
+New notes/notifications/presentation/customer metadata tables remain pending.

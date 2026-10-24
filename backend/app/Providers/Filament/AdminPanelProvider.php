@@ -11,6 +11,7 @@ use App\Filament\Pages\AttributeTermEditor;
 use App\Filament\Pages\BrandEditor;
 use App\Filament\Pages\CategoryEditor;
 use App\Filament\Pages\MediaLibraryEditor;
+use App\Filament\Pages\OrdersEditor;
 use App\Filament\Pages\ProductBulkEditor;
 use App\Filament\Pages\ProductContentEditor;
 use App\Filament\Pages\ProductEditor;
@@ -41,7 +42,7 @@ final class AdminPanelProvider extends PanelProvider
     {
         return $panel->default()->id('admin')->path('admin')->authGuard('web')
             ->brandName('Shopnext')->font('Vazirmatn', url: fn (): string => asset('fonts/vazirmatn.css'), provider: LocalFontProvider::class)->login(StaffLogin::class)->profile(StaffProfile::class, isSimple: true)
-            ->pages([StockAdjustmentEditor::class, MediaLibraryEditor::class, StaffDashboard::class, SecureSettings::class, CategoryEditor::class, BrandEditor::class, AttributeEditor::class, AttributeTermEditor::class, ProductContentEditor::class, ProductEditor::class, ProductBulkEditor::class, VariantEditor::class, VariantMatrixEditor::class])->widgets([CronHeartbeat::class])
+            ->pages([OrdersEditor::class, StockAdjustmentEditor::class, MediaLibraryEditor::class, StaffDashboard::class, SecureSettings::class, CategoryEditor::class, BrandEditor::class, AttributeEditor::class, AttributeTermEditor::class, ProductContentEditor::class, ProductEditor::class, ProductBulkEditor::class, VariantEditor::class, VariantMatrixEditor::class])->widgets([CronHeartbeat::class])
             // Only the locale middleware persists onto Livewire; no remote font provider.
             ->middleware([AdminLocale::class], isPersistent: true)
             ->middleware([

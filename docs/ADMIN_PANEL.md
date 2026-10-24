@@ -1,3 +1,48 @@
+# L3b Orders/Customers — permission contract and implementation progress
+
+L3a approved at immutable `l3a-complete`1e1d8aa; PR3 merged9671ee8.
+L3b active branch `arena/5024cc01-shopnext`. No L3b completion tag yet.
+
+## Exact six-role panel matrix
+
+A=super_admin/admin, M=shop_manager, E=content_editor, S=support, C=customer.
+Each capability is independently asserted for all six roles. These are panel-only
+permissions; they do not widen customer API policies or domain financial powers.
+Unknown abilities, inactive and must-change-password actors deny by default.
+
+| Panel capability | super_admin | admin | shop_manager | content_editor | support | customer |
+|---|---|---|---|---|---|---|
+| Orders/customers view | yes | yes | yes | no | masked | no |
+| Change shipping/status | yes | yes | yes | no | no | no |
+| Cancel/refund | yes | yes | no | no | no | no |
+| Read/approve/reject private receipts | yes | yes | no | no | no | no |
+| Mark COD collected | yes | yes | no | no | no | no |
+| Manual checkout | yes | yes | no | no | no | no |
+| Tracking/carrier and order notes | yes | yes | yes | no | no | no |
+| Invoice/packing-slip print | yes | yes | yes | no | no | no |
+| Order/customer CSV export | yes | yes | no | no | no | no |
+| Display-only status labels/colors | yes | yes | no | no | no | no |
+| Customer notes/tags/segments | yes | yes | yes | no | no | no |
+| Block/unblock customer | yes | yes | no | no | no | no |
+| Wallet adjustment | yes | yes | no | no | no | no |
+| Full business phone/address | yes | yes | yes | no | no | no |
+
+Support read-only access is restricted to masked DTOs: no full phone/address,
+receipt paths, raw snapshots/notes or financial action payloads. Dashboard,
+settings, catalog and existing legacy role/action matrix stay unchanged.
+Shipping/status permission NEVER implies arbitrary status assignment: lifecycle
+state machine and its stricter per-action permissions remain authoritative.
+
+## L3b REAL/tested status
+
+| Slice | Status | Named tests |
+|---|---|---|
+| Panel capability contract, all108 cells (18×6) | REAL — fast39897964545 | `L3b independently defines every cell of the six role panel capability matrix` — AdminCapabilitiesTest |
+| Fresh role/active/password-state revocation | REAL — fast39897964545 | `L3b fresh capability authorization rejects revoked roles inactive and first login actors` — AdminCapabilitiesTest |
+| Orders/Customers UI, exports/print/financial actions | NOT IMPLEMENTED in this first slice | No REAL claim |
+
+Everything below is historical L3a evidence, not L3b delivery.
+
 # L3a REAL/tested administration inventory
 
 ## Current L3a acceptance — FULL VERIFIED
@@ -719,3 +764,25 @@ PENDING: named `L3a media WebP output is real and bounded with each configured G
 and Imagick driver` forces both codecs (not just default GD). Stable canonical
 URL response now revalidates (`no-cache`); actual response bytes after replacement
 are checked. Content-address-independent WebP filenames remain immutable-cacheable.
+
+## L3b read-side increment — fast VERIFIED
+
+| Screen/action | Status | Named tests (OrderAdminReadsTest) |
+|---|---|---|
+| `/admin/orders` list/search/status/payment/shipping/Jalali date filters | REAL — fast39897964545 | `L3b order list filters status payment shipping UTC date and all four searchable identities without exposing snapshots` |
+| Detail immutable item snapshots, totals/rounding, addresses, paginated actor timeline | REAL — fast39897964545 | `L3b order detail keeps immutable item prices masks support PII and never serializes private paths or unknown snapshot keys` |
+| 5001 orders →30 rows/3 queries; paginated detail6 queries | REAL — fast39897964545 | `L3b five thousand order list stays at three queries and detail stays at six with independent pagination` |
+| Six roles, independent stale-action checks | REAL — fast39897964545 | `L3b orders page gates six roles and independently reauthorizes each stale read action` |
+
+Support now admits to the panel credential boundary and redirects to orders,
+NOT the dashboard. Existing dashboard/catalog/settings permissions stay denied.
+Only masked DTOs are hydrated; full address is not selected for Support. Raw
+receipt/storage paths, user models, arbitrary snapshot keys never reach Livewire.
+No order mutations/receipts/print/CSV/customers UI are claimed in this read slice.
+
+
+Read-slice proof:1350cbc/run39897964545 SUCCESS,450 tests10112 assertions,
+Pint + PHP8.3/MariaDB10.6 only. Exact proof `ci/l3b-orders-read-fast-verified.json`.
+All108 capability cells, restricted Support login, six-role reads, immutable/masked
+DTOs,5001-order3query listing and nonempty6query detail executed. L3b is NOT
+complete: mutations/Customers/CSV/print/private receipts/notifications remain NEXT.
